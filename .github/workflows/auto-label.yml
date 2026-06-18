@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   label-by-files:
-    if: github.event.action == 'opened' || github.event.action == 'synchronize'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/labeler@v5
@@ -19,7 +18,6 @@ jobs:
           sync-labels: false
 
   label-by-prefix:
-    if: github.event.action == 'opened' || github.event.action == 'edited'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v7
