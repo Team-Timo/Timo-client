@@ -10,7 +10,7 @@ Claude Code / Codex 공통 진입점입니다.
 
 - Product: Timo 클라이언트
 - 도구: Claude Code, Codex
-- 스택: (확정 후 기입)
+- 스택: Next.js 16 (App Router) · TypeScript · Tailwind CSS · Zustand · TanStack React Query · pnpm · Turborepo
 
 ---
 
