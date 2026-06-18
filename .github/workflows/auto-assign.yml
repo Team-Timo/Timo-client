@@ -1,0 +1,41 @@
+name: Auto Assign
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const candidates = ['ehye1', 'jjangminii', 'yumin-kim2'];
+            const author = context.payload.pull_request.user.login;
+            const prNumber = context.payload.pull_request.number;
+
+            // 1 random from candidates (exclude PR author)
+            const eligible = candidates.filter(c => c !== author);
+            const random = eligible[Math.floor(Math.random() * eligible.length)];
+
+            // kimminna + random (exclude PR author from both)
+            const reviewers = [...new Set(['kimminna', random])].filter(r => r !== author);
+
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              reviewers,
+            });
+
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              assignees: [author],
+            });

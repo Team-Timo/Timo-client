@@ -1,0 +1,52 @@
+name: Auto Label
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label-by-files:
+    if: github.event.action == 'opened' || github.event.action == 'synchronize'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sync-labels: false
+
+  label-by-prefix:
+    if: github.event.action == 'opened' || github.event.action == 'edited'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const prefixMap = {
+              '[FEAT]':     '✨ Feature',
+              '[FIX]':      '🐛 Bug',
+              '[CHORE]':    '🧹 CHORE',
+              '[INIT]':     '🛠️ Setup',
+              '[DOCS]':     '📝 Docs',
+              '[CI]':       '😎 DevOps',
+              '[TEST]':     '🌊 TEST',
+              '[REFACTOR]': '🧹 CHORE',
+              '[UI]':       '⌚ Timo-Design-system',
+              '[STYLE]':    '⌚ Timo-Design-system',
+              '[PERF]':     '✨ Feature',
+              '[API]':      '🌟 API',
+            };
+
+            const match = Object.entries(prefixMap).find(([prefix]) => title.startsWith(prefix));
+            if (!match) return;
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: [match[1]],
+            });
