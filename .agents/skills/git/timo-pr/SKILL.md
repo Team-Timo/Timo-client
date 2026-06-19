@@ -23,7 +23,8 @@
 
 ## Phase 1 — 커밋 계획
 
-PR 생성 전, 실제 diff를 기능/작업 단위로 분해한다.
+PR 생성 전, 실제 diff를 기능/작업 단위로 분해한다.  
+**커밋 실행은 반드시 `timo-commit` 스킬을 따른다** (메시지 형식, secret guard, 승인 절차 포함).
 
 ```bash
 git log develop...HEAD --oneline --reverse
