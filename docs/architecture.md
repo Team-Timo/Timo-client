@@ -74,6 +74,24 @@ pages (app/)
 
 ---
 
+## 코드 스캐폴딩
+
+`@turbo/gen` 기반 generator로 보일러플레이트를 자동 생성한다.
+
+```bash
+pnpm gen react-component   # packages/ui에 컴포넌트 추가
+pnpm gen page              # apps/timo-web에 App Router 페이지 추가
+```
+
+| Generator | 출력 경로 | 템플릿 위치 |
+|-----------|-----------|------------|
+| `react-component` | `packages/ui/src/<name>.tsx` | `turbo/generators/templates/component/` |
+| `page` | `apps/timo-web/app/<route>/page.tsx` | `turbo/generators/templates/page/` |
+
+생성되는 파일 형식은 `docs/conventions.md` 코드 스타일 규칙을 따른다 (arrow function, named export).
+
+---
+
 ## 모듈 경계
 
 - `apps/timo-web` → `packages/ui` 참조 가능
