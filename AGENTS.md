@@ -1,4 +1,4 @@
-﻿# Timo Agent Guide
+# Timo Agent Guide
 
 Claude Code / Codex 공통 진입점입니다.
 규칙 원문은 `docs/`에 있습니다 — 이 파일에 직접 넣지 마세요.

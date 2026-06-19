@@ -1,4 +1,4 @@
-﻿# timo-refactor
+# timo-refactor
 
 ## 트리거
 

@@ -1,4 +1,4 @@
-﻿# Architecture
+# Architecture
 
 ## 기술 스택
 

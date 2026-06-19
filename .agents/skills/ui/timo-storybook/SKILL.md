@@ -1,4 +1,4 @@
-﻿# timo-storybook
+# timo-storybook
 
 ## 트리거
 

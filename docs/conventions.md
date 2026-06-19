@@ -1,4 +1,4 @@
-﻿# Conventions
+# Conventions
 
 ## 이슈 & PR 제목 컨벤션
 

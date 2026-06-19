@@ -1,4 +1,4 @@
-﻿# timo-figma
+# timo-figma
 
 > 피그마 MCP 연동 후 활성화되는 스킬입니다.
 

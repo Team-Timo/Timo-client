@@ -1,4 +1,4 @@
-﻿# timo-manage
+# timo-manage
 
 ## 트리거
 

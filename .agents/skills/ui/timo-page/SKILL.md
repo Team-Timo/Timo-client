@@ -1,4 +1,4 @@
-﻿# timo-page
+# timo-page
 
 ## 트리거
 

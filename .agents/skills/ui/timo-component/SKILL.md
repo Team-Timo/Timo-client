@@ -1,4 +1,4 @@
-﻿# timo-component
+# timo-component
 
 ## 트리거
 

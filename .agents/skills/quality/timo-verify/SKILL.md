@@ -1,4 +1,4 @@
-﻿# timo-verify
+# timo-verify
 
 ## 트리거
 
