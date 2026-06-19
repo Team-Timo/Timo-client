@@ -19,7 +19,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
     actions: [
       {
         type: "add",
-        path: "packages/ui/src/{{camelCase name}}.tsx",
+        path: "packages/ui/src/{{pascalCase name}}.tsx",
         templateFile: "templates/component/component.tsx.hbs",
       },
     ],
@@ -34,14 +34,16 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         message: "라우트 경로를 입력하세요 (예: auth/login, dashboard):",
         validate: (value: string) => {
           if (!value) return "라우트 경로는 필수입니다.";
-          if (/\s/.test(value)) return "공백 없이 입력해주세요 (예: auth/login).";
+          if (/\s/.test(value))
+            return "공백 없이 입력해주세요 (예: auth/login).";
           return true;
         },
       },
       {
         type: "input",
         name: "name",
-        message: "페이지 컴포넌트 이름을 입력하세요 (PascalCase, 예: LoginPage):",
+        message:
+          "페이지 컴포넌트 이름을 입력하세요 (PascalCase, 예: LoginPage):",
         validate: (value: string) => {
           if (!value) return "컴포넌트 이름은 필수입니다.";
           if (!/^[A-Z][a-zA-Z0-9]*$/.test(value))
