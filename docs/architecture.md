@@ -88,7 +88,9 @@ pnpm gen page              # apps/timo-web에 App Router 페이지 추가
 | `react-component` | `packages/ui/src/<name>.tsx` | `turbo/generators/templates/component/` |
 | `page` | `apps/timo-web/app/<route>/page.tsx` | `turbo/generators/templates/page/` |
 
-생성되는 파일 형식은 `docs/conventions.md` 코드 스타일 규칙을 따른다 (arrow function, named export).
+생성되는 파일 형식은 `docs/conventions.md` 코드 스타일 규칙을 따른다.
+- **컴포넌트**: arrow function, named export (`export const`)
+- **페이지**: `export default function` (Next.js App Router 라우팅 규칙)
 
 ---
 
