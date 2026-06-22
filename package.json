@@ -1,0 +1,26 @@
+{
+  "name": "timo",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=timo-web",
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=timo-web",
+    "lint": "turbo run lint",
+    "lint:web": "turbo run lint --filter=timo-web",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "check-types:web": "turbo run check-types --filter=timo-web",
+    "gen": "turbo gen"
+  },
+  "devDependencies": {
+    "@turbo/gen": "^2.9.18",
+    "prettier": "^3.7.4",
+    "turbo": "^2.9.18",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
