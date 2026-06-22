@@ -13,12 +13,20 @@
 ## 워크플로우
 
 ### Phase 1 — 범위 파악
-- 앱 전용인지, 여러 앱에서 공유할지 판단
-- UI 컴포넌트(표현만)인지 feature 컴포넌트(로직 포함)인지 구분
+- 여러 앱에서 공유할지, 앱 전역에서 공유할지, 특정 도메인에만 쓰일지 판단
+- 순수 UI(props만 받음)인지, 클라이언트 로직(상태·쿼리) 포함인지 구분
 - 파일 위치 결정:
-  - 공유 범용 → `packages/ui/src/`
-  - 앱 전용 UI → `apps/timo-web/components/ui/`
-  - 도메인 로직 포함 → `apps/timo-web/components/feature/`
+
+| 유형 | 위치 |
+|------|------|
+| 패키지 공유 범용 UI | `packages/timo-design-system/src/` |
+| 앱 전역 공유 UI | `apps/timo-web/components/` |
+| 도메인 종속 순수 UI | `apps/timo-web/app/(domain)/_components/` |
+| 도메인 종속 클라이언트 컨테이너 | `apps/timo-web/app/(domain)/_containers/` |
+
+**`_components` vs `_containers` 구분 기준:**
+- `_components/` — `'use client'` 없이도 동작 가능한 순수 표현 컴포넌트. props만 받고 외부 상태·사이드이펙트 없음
+- `_containers/` — `'use client'` 필수. useQuery, zustand store, useState 등 외부 상태와 결합된 컨테이너
 
 ### Phase 2 — Props 설계
 - `interface XxxProps` 로 props 타입 정의

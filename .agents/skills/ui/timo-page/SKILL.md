@@ -33,7 +33,7 @@
 ### Phase 4 — 컴포넌트 조합
 - `page.tsx`는 데이터 페칭 + 레이아웃 조합만 담당
 - 도메인 로직은 feature 컴포넌트로 분리
-- 재사용 가능한 UI는 ui 컴포넌트 또는 `@repo/ui` 활용
+- 재사용 가능한 UI는 ui 컴포넌트 또는 `@repo/timo-design-system` 활용
 
 ### Phase 5 — 자가 검토
 - [ ] `page.tsx` 50줄 이하 (비대해지면 컴포넌트 분리)
