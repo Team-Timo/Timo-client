@@ -2,7 +2,7 @@ name: Auto Issue
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened, edited, reopened]
 
 permissions:
   issues: write
@@ -30,7 +30,26 @@ jobs:
               '[API]':      '🌟 API',
             };
 
+            const allPrefixLabels = [...new Set(Object.values(prefixMap))];
             const match = Object.entries(prefixMap).find(([prefix]) => title.startsWith(prefix));
+
+            const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+            });
+
+            for (const label of currentLabels) {
+              if (allPrefixLabels.includes(label.name)) {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.issue.number,
+                  name: label.name,
+                });
+              }
+            }
+
             if (!match) return;
 
             await github.rest.issues.addLabels({

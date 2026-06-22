@@ -1,9 +1,9 @@
 "⏰ Timo-web":
   - changed-files:
-    - any-glob-to-any-file:
-      - "apps/timo-web/**"
+      - any-glob-to-any-file:
+          - "apps/timo-web/**"
 
 "⌚ Timo-Design-system":
   - changed-files:
-    - any-glob-to-any-file:
-      - "packages/ui/**"
+      - any-glob-to-any-file:
+          - "packages/timo-design-system/**"
