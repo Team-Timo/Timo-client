@@ -40,6 +40,9 @@ jobs:
               '[API]':      '🌟 API',
             };
 
+            // edited 이벤트는 본문 수정만으로도 트리거되므로 제목 변경 여부를 확인
+            if (context.payload.action === 'edited' && !context.payload.changes?.title) return;
+
             const allPrefixLabels = [...new Set(Object.values(prefixMap))];
             const match = Object.entries(prefixMap).find(([prefix]) => title.startsWith(prefix));
 
