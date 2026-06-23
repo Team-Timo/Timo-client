@@ -10,6 +10,7 @@ on:
 
 jobs:
   notify:
+    permissions: {}
     runs-on: ubuntu-latest
 
     steps:
