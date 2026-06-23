@@ -72,7 +72,7 @@ jobs:
             URL="$(jq -r '.issue.html_url // ""' "$GITHUB_EVENT_PATH")"
             DESC="$(jq -r '.issue.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
             AUTHOR="$(jq -r '.issue.user.login // ""' "$GITHUB_EVENT_PATH")"
-            COLOR=10289148
+            COLOR=7275516
 
             FIELDS=$(jq -n \
               --arg repo "${{ github.repository }}" \
