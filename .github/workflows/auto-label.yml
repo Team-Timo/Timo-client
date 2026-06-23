@@ -33,7 +33,7 @@ jobs:
               '[DOCS]':     '📝 Docs',
               '[CI]':       '😎 DevOps',
               '[TEST]':     '🌊 TEST',
-              '[REFACTOR]': '🧹 CHORE',
+              '[REFACTOR]': '♻ Refactor',
               '[UI]':       '⌚ Timo-Design-system',
               '[STYLE]':    '⌚ Timo-Design-system',
               '[PERF]':     '✨ Feature',
@@ -70,4 +70,33 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
               labels: [match[1]],
+            });
+
+  label-by-author:
+    if: github.event.action == 'opened' || github.event.action == 'reopened'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const authorMap = {
+              'kimminna':   '♦️ 민아',
+              'ehye1':      '♥️ 혜원',
+              'jjangminii': '♠️ 정민',
+              'yumin-kim2': '♣️ 유민',
+            };
+
+            const author = context.payload.pull_request.user.login;
+            const label = authorMap[author];
+
+            if (!label) {
+              console.log(`"${author}"에 대한 라벨 매핑이 없습니다.`);
+              return;
+            }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: [label],
             });
