@@ -1,0 +1,128 @@
+name: Automated Discord Notification
+
+on:
+  pull_request:
+    types: [opened, reopened, closed]
+  pull_request_review:
+    types: [submitted]
+  issues:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Detailed Discord Message
+        shell: bash
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+        run: |
+          EVENT_NAME="${{ github.event_name }}"
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            TITLE="[PR] $(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
+            URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
+            DESC="$(jq -r '.pull_request.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
+            AUTHOR="$(jq -r '.pull_request.user.login // ""' "$GITHUB_EVENT_PATH")"
+            COLOR=16711782
+
+            FIELDS=$(jq -n \
+              --arg repo "${{ github.repository }}" \
+              --arg event "${{ github.event.action }}" \
+              '[
+                {
+                  name: "Repository",
+                  value: $repo,
+                  inline: true
+                },
+                {
+                  name: "Event",
+                  value: $event,
+                  inline: true
+                }
+              ]')
+
+          elif [ "$EVENT_NAME" = "pull_request_review" ]; then
+            TITLE="[PR Review] $(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
+            URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
+            DESC="$(jq -r '.review.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
+            AUTHOR="$(jq -r '.review.user.login // ""' "$GITHUB_EVENT_PATH")"
+            COLOR=11796224
+
+            FIELDS=$(jq -n \
+              --arg repo "${{ github.repository }}" \
+              --arg reviewState "$(jq -r '.review.state // ""' "$GITHUB_EVENT_PATH" | tr '[:lower:]' '[:upper:]')" \
+              '[
+                {
+                  name: "Repository",
+                  value: $repo,
+                  inline: true
+                },
+                {
+                  name: "Review Status",
+                  value: $reviewState,
+                  inline: true
+                }
+              ]')
+
+          else
+            TITLE="[Issue] $(jq -r '.issue.title // ""' "$GITHUB_EVENT_PATH")"
+            URL="$(jq -r '.issue.html_url // ""' "$GITHUB_EVENT_PATH")"
+            DESC="$(jq -r '.issue.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
+            AUTHOR="$(jq -r '.issue.user.login // ""' "$GITHUB_EVENT_PATH")"
+            COLOR=10289148
+
+            FIELDS=$(jq -n \
+              --arg repo "${{ github.repository }}" \
+              --arg event "${{ github.event.action }}" \
+              '[
+                {
+                  name: "Repository",
+                  value: $repo,
+                  inline: true
+                },
+                {
+                  name: "Event",
+                  value: $event,
+                  inline: true
+                }
+              ]')
+          fi
+
+          CLEAN_DESC="${DESC:0:200}"
+
+          jq -n \
+            --arg title "$TITLE" \
+            --arg url "$URL" \
+            --arg desc "$CLEAN_DESC..." \
+            --arg author "$AUTHOR" \
+            --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --argjson color "$COLOR" \
+            --argjson fields "$FIELDS" \
+            '{
+              embeds: [
+                {
+                  title: $title,
+                  url: $url,
+                  description: $desc,
+                  color: $color,
+                  author: {
+                    name: $author,
+                    icon_url: ("https://github.com/" + $author + ".png")
+                  },
+                  fields: $fields,
+                  footer: {
+                    text: "GitHub Actions Automation"
+                  },
+                  timestamp: $timestamp
+                }
+              ]
+            }' > payload.json
+
+          curl \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d @payload.json \
+            "$DISCORD_WEBHOOK_URL"
