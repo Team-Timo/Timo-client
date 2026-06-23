@@ -15,11 +15,13 @@ jobs:
 
     steps:
       - name: Send Detailed Discord Message
+        if: ${{ secrets.DISCORD_WEBHOOK_URL != '' }}
         shell: bash
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
         run: |
+          set -euo pipefail
           EVENT_NAME="${{ github.event_name }}"
 
           if [ "$EVENT_NAME" = "pull_request" ]; then
@@ -129,6 +131,12 @@ jobs:
             }' > payload.json
 
           curl \
+            --fail-with-body \
+            --silent --show-error \
+            --connect-timeout 5 \
+            --max-time 20 \
+            --retry 3 \
+            --retry-all-errors \
             -H "Content-Type: application/json" \
             -X POST \
             -d @payload.json \
