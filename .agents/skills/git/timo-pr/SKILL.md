@@ -8,7 +8,7 @@
 ## 참조
 
 - 템플릿: `.github/PULL_REQUEST_TEPLATE.md`
-- 제목 컨벤션: `docs/conventions.md` → 이슈 & PR 제목 컨벤션
+- 제목 컨벤션: `docs/conventions/issue-pr.md`
 
 ## 핵심 원칙
 
