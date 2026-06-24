@@ -23,9 +23,9 @@ importers:
 
   apps/timo-web:
     dependencies:
-      '@repo/ui':
+      '@repo/timo-design-system':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../packages/timo-design-system
       next:
         specifier: 16.2.0
         version: 16.2.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -94,9 +94,7 @@ importers:
         specifier: ^8.50.0
         version: 8.50.0(eslint@9.39.1)(typescript@5.9.2)
 
-  packages/typescript-config: {}
-
-  packages/ui:
+  packages/timo-design-system:
     dependencies:
       react:
         specifier: ^19.2.0
@@ -126,6 +124,8 @@ importers:
       typescript:
         specifier: 5.9.2
         version: 5.9.2
+
+  packages/typescript-config: {}
 
 packages:
 
