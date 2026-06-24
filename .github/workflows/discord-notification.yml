@@ -124,12 +124,16 @@ jobs:
               ]')
           fi
 
-          CLEAN_DESC="${DESC:0:200}"
+          if [ ${#DESC} -gt 200 ]; then
+            CLEAN_DESC="${DESC:0:200}..."
+          else
+            CLEAN_DESC="$DESC"
+          fi
 
           jq -n \
             --arg title "$TITLE" \
             --arg url "$URL" \
-            --arg desc "$CLEAN_DESC..." \
+            --arg desc "$CLEAN_DESC" \
             --arg author "$AUTHOR" \
             --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             --argjson color "$COLOR" \
