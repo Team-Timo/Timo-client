@@ -5,7 +5,7 @@ on:
     types: [opened, reopened, closed]
   pull_request_review:
     types: [submitted]
-  pull_request_review_comment:   
+  pull_request_review_comment:
     types: [created]
   issues:
     types: [opened]
@@ -17,19 +17,19 @@ jobs:
 
     steps:
       - name: Send Detailed Discord Message
-        if: ${{ secrets.DISCORD_WEBHOOK_URL != '' }}
         shell: bash
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
         run: |
           set -euo pipefail
-          EVENT_NAME="${{ github.event_name }}"
 
-          case "$EVENT_NAME" in
-            pull_request|pull_request_review|pull_request_review_comment|issues) ;;
-            *) exit 0 ;;
-          esac
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "DISCORD_WEBHOOK_URL not set, skipping"
+            exit 0
+          fi
+
+          EVENT_NAME="${{ github.event_name }}"
 
           if [ "$EVENT_NAME" = "pull_request" ]; then
             TITLE="[PR] $(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
@@ -56,11 +56,11 @@ jobs:
 
           elif [ "$EVENT_NAME" = "pull_request_review" ]; then
             AUTHOR="$(jq -r '.review.user.login // ""' "$GITHUB_EVENT_PATH")"
-  
+
             if [ "$AUTHOR" = "coderabbitai" ]; then
               exit 0
             fi
-            
+
             TITLE="[PR Review] $(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
             URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
             DESC="$(jq -r '.review.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
