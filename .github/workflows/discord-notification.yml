@@ -26,6 +26,11 @@ jobs:
           set -euo pipefail
           EVENT_NAME="${{ github.event_name }}"
 
+          case "$EVENT_NAME" in
+            pull_request|pull_request_review|pull_request_review_comment|issues) ;;
+            *) exit 0 ;;
+          esac
+
           if [ "$EVENT_NAME" = "pull_request" ]; then
             TITLE="[PR] $(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
             URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
