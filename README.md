@@ -20,17 +20,17 @@
     <a href="README_ko.md"><strong>한국어</strong></a>
   </p>
 
-  <!-- Uncomment once a screenshot is ready -->
-  <!-- <p align="center">
-    <img src="assets/screenshot.png" alt="Timo screenshot" width="960">
-  </p> -->
 </div>
 
 ---
 
 ## What Is Timo?
 
-Timo is a timebox-based to-do service that converts tasks into actionable, time-bound blocks — so you actually finish what you plan. Unlike traditional to-do lists, Timo asks you to estimate how long each task will take, then builds your day around those time blocks. As you use it, Timo learns your time patterns and helps you plan more realistically with AI-powered time recommendations.
+Timo is a timebox-based to-do service that converts tasks into actionable, time-bound blocks — so you actually finish what you plan.
+
+Unlike traditional to-do lists, Timo asks you to estimate how long each task will take, then builds your day around those time blocks.
+
+As you use it, Timo learns your time patterns and helps you plan more realistically with AI-powered time recommendations.
 
 ## Why We Built It
 
@@ -40,21 +40,13 @@ Timo is a timebox-based to-do service that converts tasks into actionable, time-
 
 ## Features
 
-### ✏️ Todo + Time Estimate
+- **✏️ Todo + Time Estimate**: Add tasks with an expected duration and optional tags. The estimate becomes the foundation of your daily schedule.
 
-Add tasks with an expected duration and optional tags. The estimate becomes the foundation of your daily schedule.
+- **📦 Automatic Timebox Scheduling**: Each task is automatically converted into a time block on your schedule — turning a flat to-do list into an executable plan.
 
-### 📦 Automatic Timebox Scheduling
+- **⏱️ Timer-Based Execution**: Start a timebox and a timer begins. Pause, extend, or go full-screen to stay focused. When time is up, you get a notification. Actual time spent is recorded automatically.
 
-Each task is automatically converted into a time block on your schedule — turning a flat to-do list into an executable plan.
-
-### ⏱️ Timer-Based Execution
-
-Start a timebox and a timer begins. Pause, extend, or go full-screen to stay focused. When time is up, you get a notification. Actual time spent is recorded automatically.
-
-### 🤖 AI Time Recommendations
-
-Timo learns how long similar tasks actually take you, then recommends more accurate time estimates — making future plans increasingly realistic.
+- **🤖 AI Time Recommendations**: Timo learns how long similar tasks actually take you, then recommends more accurate time estimates — making future plans increasingly realistic.
 
 ## Getting Started
 
