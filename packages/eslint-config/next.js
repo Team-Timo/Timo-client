@@ -10,6 +10,13 @@ import pluginNext from "@next/eslint-plugin-next";
 import { config as baseConfig } from "./base.js";
 
 /**
+ * Next.js App Router는 page/layout 등 예약 파일에서 `export default function Page() {}`
+ * 형식의 함수 선언을 표준으로 사용하므로, 해당 파일들은 arrow-function 강제 규칙에서 제외한다.
+ */
+const APP_ROUTER_SPECIAL_FILES =
+  "**/app/**/{page,layout,loading,error,global-error,not-found,template,default,route}.{js,jsx,ts,tsx}";
+
+/**
  * A custom ESLint configuration for libraries that use Next.js.
  *
  * @type {import("eslint").Linter.Config[]}
@@ -65,4 +72,10 @@ export const nextJsConfig = [
     },
   },
   pluginJsxA11y.flatConfigs.recommended,
+  {
+    files: [APP_ROUTER_SPECIAL_FILES],
+    rules: {
+      "react/function-component-definition": "off",
+    },
+  },
 ];
