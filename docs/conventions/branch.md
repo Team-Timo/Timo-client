@@ -2,7 +2,7 @@
 
 ## 브랜치 구조
 
-```
+```text
 main ── develop ──────────────── feat
  └── !HOTFIX    └── release/x.x.x  └── fix
                                     └── refactor
@@ -17,12 +17,14 @@ main ── develop ──────────────── feat
 | `feat` | 기능 단위 개발 |
 | `fix` | 버그/에러 수정 |
 | `refactor` | 코드 구조 개선 |
+| `ci` | CI/CD 설정 변경 |
+| `docs` | 문서 작업 |
 | `release` | 릴리즈 준비 |
 | `!HOTFIX` | 서비스 중 긴급 수정 (main에서 분기) |
 
 ## 브랜치 형식
 
-```
+```text
 prefix/scope/이슈번호-작업내용
 (띄어쓰기는 -로 대체, kebab-case)
 

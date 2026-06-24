@@ -35,7 +35,8 @@ pnpm lint          # ESLint (--max-warnings 0)
 pnpm build         # 빌드 성공 (TURBO_UI=false 환경에서 실행)
 ```
 
-빌드 성공 시 번들 크기 이상 여부도 확인한다 (CI와 같은 기준: 200 kB gzip 경고 / 350 kB gzip 오류).
+빌드 성공 시 번들 크기 이상 여부도 확인한다 (CI와 같은 기준: 200 kB gzip 경고 / 350 kB gzip 오류).  
+`pnpm build` 출력의 `First Load JS` 수치로 판단하며, CI에서는 bundle-size 워크플로우 아티팩트(PR 코멘트)로 확인한다.
 
 ---
 

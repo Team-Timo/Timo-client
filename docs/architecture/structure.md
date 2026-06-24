@@ -1,6 +1,6 @@
 # 모노레포 구조
 
-```
+```text
 timo-client/
 ├── apps/
 │   └── timo-web/          # Next.js 앱 (port 3000)

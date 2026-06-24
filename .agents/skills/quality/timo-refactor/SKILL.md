@@ -42,7 +42,8 @@
 ### 컴포넌트 분리
 
 `_components` → `_containers` 분리가 필요한 경우:
-```
+
+```text
 Before: _components/LoginForm.tsx (useQuery, zustand 혼재)
 After:  _components/LoginForm.tsx (props만 받는 순수 UI)
         _containers/LoginFormContainer.tsx ('use client', useQuery 담당)
@@ -51,7 +52,8 @@ After:  _components/LoginForm.tsx (props만 받는 순수 UI)
 ### 쿼리 코로케이션
 
 여러 도메인에서 쓰이지 않는 쿼리는 도메인 내부로:
-```
+
+```text
 Before: queries/useLoginMutation.ts
 After:  app/auth/_queries/useLoginMutation.ts
 ```
@@ -59,7 +61,8 @@ After:  app/auth/_queries/useLoginMutation.ts
 ### 훅 추출
 
 컴포넌트 내 로직이 복잡할 때:
-```
+
+```text
 Before: 컴포넌트 안에 useEffect, 상태, 파생 계산이 뒤섞임
 After:  _hooks/useLoginForm.ts 로 분리, 컴포넌트는 JSX만 반환
 ```
@@ -67,7 +70,8 @@ After:  _hooks/useLoginForm.ts 로 분리, 컴포넌트는 JSX만 반환
 ### 공통 유틸 추출
 
 같은 변환·포맷 로직이 3곳 이상이면:
-```
+
+```text
 Before: 각 컴포넌트 안에 동일한 날짜 포맷 함수
 After:  lib/format.ts 로 추출 후 임포트
 ```
@@ -78,7 +82,7 @@ After:  lib/format.ts 로 추출 후 임포트
 
 변경할 파일, 추출할 단위, 커밋 분리 계획을 제안하고 승인 후 실행한다.
 
-```
+```text
 ## 리팩터링 계획
 
 대상: apps/timo-web/app/auth/_components/LoginForm.tsx

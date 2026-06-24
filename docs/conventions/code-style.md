@@ -54,4 +54,4 @@
 - 텍스트 없는 버튼에 `aria-label` 필수
 - `outline: none`으로 포커스 테두리 제거 금지
 - 버튼은 `<button>` 태그 사용
-- `<input>`에 `id` 부여 후 `<label for>` 연결
+- `<input>`에 `id` 부여 후 `<label htmlFor>` 연결 (JSX 속성명)
