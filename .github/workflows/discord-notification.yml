@@ -38,6 +38,13 @@ jobs:
             AUTHOR="$(jq -r '.pull_request.user.login // ""' "$GITHUB_EVENT_PATH")"
             COLOR=16711782
 
+            MERGED="$(jq -r '.pull_request.merged // false' "$GITHUB_EVENT_PATH")"
+            if [ "${{ github.event.action }}" = "closed" ] && [ "$MERGED" = "true" ]; then
+              COLOR=5763719
+            elif [ "${{ github.event.action }}" = "closed" ]; then
+              COLOR=15548997
+            fi
+
             FIELDS=$(jq -n \
               --arg repo "${{ github.repository }}" \
               --arg event "${{ github.event.action }}" \
@@ -57,7 +64,7 @@ jobs:
           elif [ "$EVENT_NAME" = "pull_request_review" ]; then
             AUTHOR="$(jq -r '.review.user.login // ""' "$GITHUB_EVENT_PATH")"
 
-            if [ "$AUTHOR" = "coderabbitai" ]; then
+            if [ "$AUTHOR" = "coderabbitai" ] || [ "$AUTHOR" = "coderabbitai[bot]" ]; then
               exit 0
             fi
 
@@ -86,7 +93,7 @@ jobs:
           elif [ "$EVENT_NAME" = "pull_request_review_comment" ]; then
             AUTHOR="$(jq -r '.comment.user.login // ""' "$GITHUB_EVENT_PATH")"
 
-            if [ "$AUTHOR" = "coderabbitai" ]; then
+            if [ "$AUTHOR" = "coderabbitai" ] || [ "$AUTHOR" = "coderabbitai[bot]" ]; then
               exit 0
             fi
 
