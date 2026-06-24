@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
 
 const BUILD_DIR = path.join(process.cwd(), 'apps/timo-web/.next');
 
@@ -13,20 +14,23 @@ const formatBytes = (bytes) => {
 
 const toKb = (bytes) => bytes / 1024;
 
-const safeStatSize = (filePath) => {
-  try { return fs.statSync(filePath).size; } catch { return 0; }
+const safeGzipSize = (filePath) => {
+  try {
+    const content = fs.readFileSync(filePath);
+    return zlib.gzipSync(content).length;
+  } catch { return 0; }
 };
 
 const readJson = (filePath) => {
   try { return JSON.parse(fs.readFileSync(filePath, 'utf8')); } catch { return null; }
 };
 
-const sumDirSize = (dirPath) => {
+const sumDirGzipSize = (dirPath) => {
   if (!fs.existsSync(dirPath)) return 0;
   return fs.readdirSync(dirPath).reduce((sum, file) => {
     const full = path.join(dirPath, file);
     const stat = fs.statSync(full);
-    return sum + (stat.isFile() ? stat.size : 0);
+    return sum + (stat.isFile() ? safeGzipSize(full) : 0);
   }, 0);
 };
 
@@ -40,10 +44,13 @@ const analyzeBuild = (buildDir) => {
 
   if (!buildManifest) return { routes: [], sharedSize: null };
 
-  // 공유 번들 크기 (rootMainFiles)
+  // 내부 Next.js 라우트 필터 (사용자 정의 라우트가 아님)
+  const INTERNAL_ROUTES = new Set(['/_not-found', '/_global-error']);
+
+  // 공유 번들 gzip 크기 (rootMainFiles)
   const rootMainFiles = buildManifest.rootMainFiles ?? [];
   const sharedBytes = rootMainFiles.reduce(
-    (sum, chunk) => sum + safeStatSize(path.join(buildDir, chunk)),
+    (sum, chunk) => sum + safeGzipSize(path.join(buildDir, chunk)),
     0
   );
 
@@ -53,10 +60,10 @@ const analyzeBuild = (buildDir) => {
     // webpack 모드: app-build-manifest.json으로 라우트별 청크 매핑
     const pages = appBuildManifest.pages ?? {};
     routes = Object.entries(pages)
-      .filter(([route]) => route !== '/_not-found')
+      .filter(([route]) => !INTERNAL_ROUTES.has(route))
       .map(([route, chunks]) => {
         const pageBytes = chunks.reduce(
-          (sum, chunk) => sum + safeStatSize(path.join(buildDir, chunk)),
+          (sum, chunk) => sum + safeGzipSize(path.join(buildDir, chunk)),
           0
         );
         const firstLoadBytes = pageBytes + sharedBytes;
@@ -69,7 +76,6 @@ const analyzeBuild = (buildDir) => {
       });
   } else {
     // Turbopack 모드: routes-manifest.json으로 라우트 목록 구성
-    // 라우트별 클라이언트 청크는 static/chunks/app/ 하위에서 탐색
     const staticRoutes = [
       ...(routesManifest?.staticRoutes ?? []),
       ...(routesManifest?.dynamicRoutes ?? []),
@@ -78,12 +84,11 @@ const analyzeBuild = (buildDir) => {
     const appChunksDir = path.join(buildDir, 'static', 'chunks', 'app');
 
     routes = staticRoutes
-      .filter(({ page }) => page !== '/_not-found')
+      .filter(({ page }) => !INTERNAL_ROUTES.has(page))
       .map(({ page }) => {
-        // static/chunks/app/[page-segment]/ 디렉토리 크기를 페이지 크기로 사용
         const segment = page === '/' ? '' : page;
         const pageChunkDir = path.join(appChunksDir, segment);
-        const pageBytes = sumDirSize(pageChunkDir);
+        const pageBytes = sumDirGzipSize(pageChunkDir);
 
         const firstLoadBytes = pageBytes + sharedBytes;
         return {
@@ -156,7 +161,7 @@ module.exports = async ({ github, context, core }) => {
     return;
   }
 
-  const legend = `> 🟢 정상 (<${WARN_THRESHOLD_KB}kB)  🟡 주의 (<${ERROR_THRESHOLD_KB}kB)  🔴 초과 (≥${ERROR_THRESHOLD_KB}kB) — First Load JS 기준 (비압축 크기)`;
+  const legend = `> 🟢 정상 (<${WARN_THRESHOLD_KB}kB)  🟡 주의 (<${ERROR_THRESHOLD_KB}kB)  🔴 초과 (≥${ERROR_THRESHOLD_KB}kB) — First Load JS 기준 (gzip 크기)`;
 
   const body = `## 📦 번들 사이즈 리포트
 
