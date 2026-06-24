@@ -52,12 +52,12 @@
 
 ## 스코프 판정 기준
 
-| 스코프 | 기준 |
-|--------|------|
-| `web` | `apps/timo-web/**` 변경 |
-| `ui` | `packages/ui/**` 변경 |
-| `root` | 루트 설정 (`turbo.json`, `pnpm-workspace.yaml`, 루트 `package.json` 등) |
-| `config` | `packages/eslint-config/**`, `packages/typescript-config/**` 변경 |
+| 스코프   | 기준                                                                    |
+| -------- | ----------------------------------------------------------------------- |
+| `web`    | `apps/timo-web/**` 변경                                                 |
+| `ui`     | `packages/ui/**` 변경                                                   |
+| `root`   | 루트 설정 (`turbo.json`, `pnpm-workspace.yaml`, 루트 `package.json` 등) |
+| `config` | `packages/eslint-config/**`, `packages/typescript-config/**` 변경       |
 
 ---
 
@@ -81,18 +81,18 @@
 
 ### 타입 목록
 
-| 타입 | 쓰는 경우 |
-|------|----------|
-| `feat` | 새로운 기능 추가 |
-| `fix` | 버그 수정 |
-| `refactor` | 동작 변경 없는 코드 정리 |
-| `style` | 포맷·세미콜론 등 동작 무관 스타일 |
-| `docs` | 문서 추가·수정·삭제 |
-| `chore` | 빌드, 설정, 의존성 |
-| `name` | 변수·파일·함수 이름 변경 |
-| `file` | 파일 이동·삭제·구조 변경 |
-| `comment` | 주석 추가·수정 |
-| `remove` | 파일 삭제만 수행 |
+| 타입       | 쓰는 경우                         |
+| ---------- | --------------------------------- |
+| `feat`     | 새로운 기능 추가                  |
+| `fix`      | 버그 수정                         |
+| `refactor` | 동작 변경 없는 코드 정리          |
+| `style`    | 포맷·세미콜론 등 동작 무관 스타일 |
+| `docs`     | 문서 추가·수정·삭제               |
+| `chore`    | 빌드, 설정, 의존성                |
+| `name`     | 변수·파일·함수 이름 변경          |
+| `file`     | 파일 이동·삭제·구조 변경          |
+| `comment`  | 주석 추가·수정                    |
+| `remove`   | 파일 삭제만 수행                  |
 
 ### 메시지 규칙
 

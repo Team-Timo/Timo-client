@@ -2,22 +2,22 @@
 
 ## 기술 스택
 
-| 분류 | 도구 | 비고 |
-|------|------|------|
-| Monorepo | Turborepo + pnpm workspace | 빌드 캐싱, 파이프라인 최적화 |
-| Framework | Next.js 16 (App Router) | SSR/SSG, Server Components |
-| Language | TypeScript 5.9 | strict 모드 |
-| Styling | Tailwind CSS | 유틸리티 클래스 기반 |
-| State — 전역 | Zustand | 클라이언트 전역 상태 |
-| State — 서버 | TanStack React Query | API 캐싱, 동기화 |
-| API Client | swagger-typescript-api | OpenAPI 스펙 → 타입 자동 생성 |
-| Monitoring | Sentry | 런타임 에러 및 성능 추적 |
-| Formatter | Prettier | 팀 컨벤션 자동 적용 |
-| Linter | ESLint 9 (flat config) | `--max-warnings 0` |
-| Git Hooks | Husky | 커밋 전 lint/format |
-| Code Review | CodeRabbit | PR마다 AI 리뷰 |
-| Assets | SVG sprite | SVG → React 컴포넌트 |
-| Deployment | Vercel | Turborepo Remote Cache 연동 |
+| 분류         | 도구                       | 비고                          |
+| ------------ | -------------------------- | ----------------------------- |
+| Monorepo     | Turborepo + pnpm workspace | 빌드 캐싱, 파이프라인 최적화  |
+| Framework    | Next.js 16 (App Router)    | SSR/SSG, Server Components    |
+| Language     | TypeScript 5.9             | strict 모드                   |
+| Styling      | Tailwind CSS               | 유틸리티 클래스 기반          |
+| State — 전역 | Zustand                    | 클라이언트 전역 상태          |
+| State — 서버 | TanStack React Query       | API 캐싱, 동기화              |
+| API Client   | swagger-typescript-api     | OpenAPI 스펙 → 타입 자동 생성 |
+| Monitoring   | Sentry                     | 런타임 에러 및 성능 추적      |
+| Formatter    | Prettier                   | 팀 컨벤션 자동 적용           |
+| Linter       | ESLint 9 (flat config)     | `--max-warnings 0`            |
+| Git Hooks    | Husky                      | 커밋 전 lint/format           |
+| Code Review  | CodeRabbit                 | PR마다 AI 리뷰                |
+| Assets       | SVG sprite                 | SVG → React 컴포넌트          |
+| Deployment   | Vercel                     | Turborepo Remote Cache 연동   |
 
 ---
 
@@ -83,15 +83,16 @@ app/
 
 ## 상태 관리 전략
 
-| 상태 종류 | 도구 | 위치 |
-|----------|------|------|
-| 서버 데이터 (API) | TanStack React Query | `queries/` |
-| 클라이언트 전역 | Zustand | `stores/` |
-| URL / 필터 / 페이지네이션 | Next.js searchParams | `app/` 라우트 |
-| 폼 | React Hook Form (로컬) | 각 feature 컴포넌트 |
-| 컴포넌트 로컬 | useState / useReducer | 컴포넌트 내부 |
+| 상태 종류                 | 도구                   | 위치                |
+| ------------------------- | ---------------------- | ------------------- |
+| 서버 데이터 (API)         | TanStack React Query   | `queries/`          |
+| 클라이언트 전역           | Zustand                | `stores/`           |
+| URL / 필터 / 페이지네이션 | Next.js searchParams   | `app/` 라우트       |
+| 폼                        | React Hook Form (로컬) | 각 feature 컴포넌트 |
+| 컴포넌트 로컬             | useState / useReducer  | 컴포넌트 내부       |
 
 **규칙:**
+
 - 서버 상태를 Zustand에 복사하지 않는다 — React Query가 단일 출처
 - 파생 값은 store에 저장하지 않고 selector로 계산
 - URL로 공유 가능한 상태(필터, 탭)는 searchParams에 먼저 고려
@@ -107,12 +108,13 @@ pnpm gen react-component   # packages/timo-design-system에 컴포넌트 추가
 pnpm gen page              # apps/timo-web에 App Router 페이지 추가
 ```
 
-| Generator | 출력 경로 | 템플릿 위치 |
-|-----------|-----------|------------|
+| Generator         | 출력 경로                                    | 템플릿 위치                             |
+| ----------------- | -------------------------------------------- | --------------------------------------- |
 | `react-component` | `packages/timo-design-system/src/<name>.tsx` | `turbo/generators/templates/component/` |
-| `page` | `apps/timo-web/app/<route>/page.tsx` | `turbo/generators/templates/page/` |
+| `page`            | `apps/timo-web/app/<route>/page.tsx`         | `turbo/generators/templates/page/`      |
 
 생성되는 파일 형식은 `docs/conventions.md` 코드 스타일 규칙을 따른다.
+
 - **컴포넌트**: arrow function, named export (`export const`)
 - **페이지**: `export default function` (Next.js App Router 라우팅 규칙)
 

@@ -37,18 +37,18 @@
 
 ### 커밋 타입
 
-| 타입 | 설명 |
-|------|------|
-| `feat` | 새로운 기능 추가 |
-| `fix` | 버그 수정 |
-| `refactor` | 코드 리팩토링 (기능 변경 없음) |
-| `style` | 코드 포맷팅, 세미콜론 누락 등 코드 자체 변경 없는 경우 |
-| `name` | 파일/폴더명 변경 |
-| `file` | 파일/폴더 이동 |
-| `remove` | 파일 삭제만 수행 |
-| `comment` | 주석 추가 및 변경 |
-| `docs` | 문서 수정 |
-| `chore` | 패키지 매니저 수정, .gitignore 등 기타 |
+| 타입       | 설명                                                   |
+| ---------- | ------------------------------------------------------ |
+| `feat`     | 새로운 기능 추가                                       |
+| `fix`      | 버그 수정                                              |
+| `refactor` | 코드 리팩토링 (기능 변경 없음)                         |
+| `style`    | 코드 포맷팅, 세미콜론 누락 등 코드 자체 변경 없는 경우 |
+| `name`     | 파일/폴더명 변경                                       |
+| `file`     | 파일/폴더 이동                                         |
+| `remove`   | 파일 삭제만 수행                                       |
+| `comment`  | 주석 추가 및 변경                                      |
+| `docs`     | 문서 수정                                              |
+| `chore`    | 패키지 매니저 수정, .gitignore 등 기타                 |
 
 ### 커밋 형식
 
@@ -89,15 +89,15 @@ main ── develop ──────────────── feat
 
 ### 브랜치 타입
 
-| 브랜치 | 설명 |
-|--------|------|
-| `main` | 실제 서비스 브랜치 |
-| `develop` | 배포 전 작업 기준 브랜치 (default) |
-| `feat` | 기능 단위 개발 |
-| `fix` | 버그/에러 수정 |
-| `refactor` | 코드 구조 개선 |
-| `release` | 릴리즈 준비 |
-| `!HOTFIX` | 서비스 중 긴급 수정 (main에서 분기) |
+| 브랜치     | 설명                                |
+| ---------- | ----------------------------------- |
+| `main`     | 실제 서비스 브랜치                  |
+| `develop`  | 배포 전 작업 기준 브랜치 (default)  |
+| `feat`     | 기능 단위 개발                      |
+| `fix`      | 버그/에러 수정                      |
+| `refactor` | 코드 구조 개선                      |
+| `release`  | 릴리즈 준비                         |
+| `!HOTFIX`  | 서비스 중 긴급 수정 (main에서 분기) |
 
 ### 브랜치 형식
 
@@ -117,12 +117,12 @@ ex) feat/web/1-add-searching-result
 
 ## 파일/폴더 네이밍
 
-| 대상 | 컨벤션 | 예시 |
-|------|--------|------|
-| 폴더 | `kebab-case` | `user-profile/` |
-| 컴포넌트 파일 | `PascalCase` | `UserCard.tsx` |
+| 대상               | 컨벤션       | 예시                                           |
+| ------------------ | ------------ | ---------------------------------------------- |
+| 폴더               | `kebab-case` | `user-profile/`                                |
+| 컴포넌트 파일      | `PascalCase` | `UserCard.tsx`                                 |
 | Hook / API / Utils | `kebab-case` | `use-auth.ts`, `auth-api.ts`, `format-date.ts` |
-| TanStack Query | `kebab-case` | `use-user-query.ts`, `use-user-mutation.ts` |
+| TanStack Query     | `kebab-case` | `use-user-query.ts`, `use-user-mutation.ts`    |
 
 ---
 
@@ -154,16 +154,16 @@ ex) feat/web/1-add-searching-result
 
 동사+명사 형식, 화살표 함수 사용:
 
-| 접두사 | 용도 |
-|--------|------|
-| `get` | 값을 가져와 반환 |
-| `create` | 새로운 값/변수 생성 |
-| `check` | 내부 로직 확인 |
-| `convert` | 특정 형태로 변환 |
-| `add` / `minus` | 더하거나 빼는 연산 |
-| `filter` | 배열 필터링 후 반환 |
-| `handle` | 이벤트 핸들러 전용 (ex. `handleResetClick`) |
-| `has` | boolean 반환 유틸 (ex. `hasEmail`) |
+| 접두사          | 용도                                        |
+| --------------- | ------------------------------------------- |
+| `get`           | 값을 가져와 반환                            |
+| `create`        | 새로운 값/변수 생성                         |
+| `check`         | 내부 로직 확인                              |
+| `convert`       | 특정 형태로 변환                            |
+| `add` / `minus` | 더하거나 빼는 연산                          |
+| `filter`        | 배열 필터링 후 반환                         |
+| `handle`        | 이벤트 핸들러 전용 (ex. `handleResetClick`) |
+| `has`           | boolean 반환 유틸 (ex. `hasEmail`)          |
 
 - `handle` 접두사는 이벤트 핸들러에만 사용
 - `key` prop: 정적 리스트 → `index` 허용 / 동적 리스트 → 반드시 고유 `id`

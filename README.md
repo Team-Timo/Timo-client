@@ -46,7 +46,7 @@
 ## 팀원
 
 | 이름 | 역할 | GitHub |
-|------|------|--------|
+| ---- | ---- | ------ |
 | -    | -    | [@-]() |
 | -    | -    | [@-]() |
 | -    | -    | [@-]() |
@@ -55,21 +55,21 @@
 
 ## 문서
 
-| 내용 | 경로 |
-|------|------|
-| Git·코드·폴더 구조 컨벤션 | [docs/conventions.md](./docs/conventions.md) |
+| 내용                              | 경로                                           |
+| --------------------------------- | ---------------------------------------------- |
+| Git·코드·폴더 구조 컨벤션         | [docs/conventions.md](./docs/conventions.md)   |
 | 기술 스택·컴포넌트 계층·상태 전략 | [docs/architecture.md](./docs/architecture.md) |
-| 디자인 토큰·피그마 연동 | [docs/design.md](./docs/design.md) |
+| 디자인 토큰·피그마 연동           | [docs/design.md](./docs/design.md)             |
 
 ## AI 협업
 
 Claude Code·Codex 공통 진입점은 [AGENTS.md](./AGENTS.md)입니다.
 
-| 내용 | 경로 |
-|------|------|
-| 작업별 스킬 라우팅 | [AGENTS.md](./AGENTS.md) |
-| 스킬 목록 | [docs/agent/skill-index.md](./docs/agent/skill-index.md) |
-| 스킬 추가 방법 | [docs/agent/how-to-add-skill.md](./docs/agent/how-to-add-skill.md) |
+| 내용               | 경로                                                               |
+| ------------------ | ------------------------------------------------------------------ |
+| 작업별 스킬 라우팅 | [AGENTS.md](./AGENTS.md)                                           |
+| 스킬 목록          | [docs/agent/skill-index.md](./docs/agent/skill-index.md)           |
+| 스킬 추가 방법     | [docs/agent/how-to-add-skill.md](./docs/agent/how-to-add-skill.md) |
 
 ---
 
