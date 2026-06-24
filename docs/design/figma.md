@@ -13,7 +13,15 @@ Claude Code의 Figma MCP를 통해 피그마 디자인을 직접 참조하면서
 2. Personal access tokens → `Create new token`
 3. 이름 입력 후 토큰 복사
 
-### 2. MCP 서버 등록
+### 2. 환경 변수 설정
+
+`.env.local`에 토큰을 추가한다 (커밋하지 않는다):
+
+```text
+FIGMA_API_KEY=your_personal_access_token
+```
+
+### 3. MCP 서버 등록
 
 프로젝트 루트 `.mcp.json` 또는 `~/.claude/settings.json`에 추가:
 
@@ -22,15 +30,16 @@ Claude Code의 Figma MCP를 통해 피그마 디자인을 직접 참조하면서
   "mcpServers": {
     "figma": {
       "command": "npx",
-      "args": ["-y", "figma-developer-mcp", "--figma-api-key", "<YOUR_TOKEN>"]
+      "args": ["-y", "figma-developer-mcp"],
+      "env": {
+        "FIGMA_API_KEY": "${FIGMA_API_KEY}"
+      }
     }
   }
 }
 ```
 
-토큰은 코드에 직접 넣지 않는다. 환경 변수(`FIGMA_API_KEY`)로 관리하고 `.env.local`에 저장한다.
-
-### 3. 연결 확인
+### 4. 연결 확인
 
 Claude Code 세션에서 피그마 파일 URL을 공유하면 MCP가 자동으로 디자인 데이터를 로드한다.
 
