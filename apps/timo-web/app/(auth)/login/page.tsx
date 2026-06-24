@@ -1,3 +1,5 @@
-export default function LoginPage() {
+const LoginPage = () => {
   return <></>;
-}
+};
+
+export default LoginPage;

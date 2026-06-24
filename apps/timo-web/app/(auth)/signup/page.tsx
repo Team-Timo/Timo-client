@@ -1,3 +1,5 @@
-export default function SignupPage() {
+const SignupPage = () => {
   return <></>;
-}
+};
+
+export default SignupPage;
