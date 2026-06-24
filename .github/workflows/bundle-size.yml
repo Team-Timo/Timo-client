@@ -24,13 +24,16 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build timo-web
+        env:
+          TURBO_UI: false
+          NO_COLOR: '1'
         run: pnpm turbo run build --filter=timo-web --log-output=full 2>&1 | tee /tmp/timo-web-build.txt
         continue-on-error: true
 
