@@ -179,25 +179,25 @@ ${legend}
     issue_number: prNumber,
   });
 
-  for (const comment of comments) {
-    if (
-      comment.user?.type === 'Bot' &&
-      comment.body?.includes('번들 사이즈 리포트')
-    ) {
-      await github.rest.issues.deleteComment({
-        owner,
-        repo,
-        comment_id: comment.id,
-      });
-    }
-  }
+  const existing = comments.find(
+    (c) => c.user?.type === 'Bot' && c.body?.includes('번들 사이즈 리포트')
+  );
 
-  await github.rest.issues.createComment({
-    owner,
-    repo,
-    issue_number: prNumber,
-    body,
-  });
+  if (existing) {
+    await github.rest.issues.updateComment({
+      owner,
+      repo,
+      comment_id: existing.id,
+      body,
+    });
+  } else {
+    await github.rest.issues.createComment({
+      owner,
+      repo,
+      issue_number: prNumber,
+      body,
+    });
+  }
 
   core.info('번들 사이즈 리포트 PR 코멘트 게시 완료');
 };
