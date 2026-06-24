@@ -21,37 +21,89 @@ const readJson = (filePath) => {
   try { return JSON.parse(fs.readFileSync(filePath, 'utf8')); } catch { return null; }
 };
 
+const sumDirSize = (dirPath) => {
+  if (!fs.existsSync(dirPath)) return 0;
+  return fs.readdirSync(dirPath).reduce((sum, file) => {
+    const full = path.join(dirPath, file);
+    const stat = fs.statSync(full);
+    return sum + (stat.isFile() ? stat.size : 0);
+  }, 0);
+};
+
 const analyzeBuild = (buildDir) => {
   if (!fs.existsSync(buildDir)) return { routes: [], sharedSize: null };
 
-  const appBuildManifest = readJson(path.join(buildDir, 'app-build-manifest.json'));
   const buildManifest = readJson(path.join(buildDir, 'build-manifest.json'));
+  const routesManifest = readJson(path.join(buildDir, 'routes-manifest.json'));
+  // webpack 빌드에서만 생성됨
+  const appBuildManifest = readJson(path.join(buildDir, 'app-build-manifest.json'));
 
-  if (!appBuildManifest && !buildManifest) return { routes: [], sharedSize: null };
+  if (!buildManifest) return { routes: [], sharedSize: null };
 
-  // rootMainFiles 경로는 .next/ 기준 상대 경로
-  const rootMainFiles = buildManifest?.rootMainFiles ?? [];
+  // 공유 번들 크기 (rootMainFiles)
+  const rootMainFiles = buildManifest.rootMainFiles ?? [];
   const sharedBytes = rootMainFiles.reduce(
     (sum, chunk) => sum + safeStatSize(path.join(buildDir, chunk)),
     0
   );
 
-  const pages = appBuildManifest?.pages ?? {};
-  const routes = Object.entries(pages)
-    .filter(([route]) => route !== '/_not-found')
-    .map(([route, chunks]) => {
-      const pageBytes = chunks.reduce(
-        (sum, chunk) => sum + safeStatSize(path.join(buildDir, chunk)),
-        0
-      );
-      const firstLoadBytes = pageBytes + sharedBytes;
-      return {
-        path: route,
-        size: formatBytes(pageBytes),
-        firstLoad: formatBytes(firstLoadBytes),
-        firstLoadKb: toKb(firstLoadBytes),
-      };
-    });
+  let routes = [];
+
+  if (appBuildManifest) {
+    // webpack 모드: app-build-manifest.json으로 라우트별 청크 매핑
+    const pages = appBuildManifest.pages ?? {};
+    routes = Object.entries(pages)
+      .filter(([route]) => route !== '/_not-found')
+      .map(([route, chunks]) => {
+        const pageBytes = chunks.reduce(
+          (sum, chunk) => sum + safeStatSize(path.join(buildDir, chunk)),
+          0
+        );
+        const firstLoadBytes = pageBytes + sharedBytes;
+        return {
+          path: route,
+          size: formatBytes(pageBytes),
+          firstLoad: formatBytes(firstLoadBytes),
+          firstLoadKb: toKb(firstLoadBytes),
+        };
+      });
+  } else {
+    // Turbopack 모드: routes-manifest.json으로 라우트 목록 구성
+    // 라우트별 클라이언트 청크는 static/chunks/app/ 하위에서 탐색
+    const staticRoutes = [
+      ...(routesManifest?.staticRoutes ?? []),
+      ...(routesManifest?.dynamicRoutes ?? []),
+    ];
+
+    const appChunksDir = path.join(buildDir, 'static', 'chunks', 'app');
+
+    routes = staticRoutes
+      .filter(({ page }) => page !== '/_not-found')
+      .map(({ page }) => {
+        // static/chunks/app/[page-segment]/ 디렉토리 크기를 페이지 크기로 사용
+        const segment = page === '/' ? '' : page;
+        const pageChunkDir = path.join(appChunksDir, segment);
+        const pageBytes = sumDirSize(pageChunkDir);
+
+        const firstLoadBytes = pageBytes + sharedBytes;
+        return {
+          path: page,
+          size: formatBytes(pageBytes),
+          firstLoad: formatBytes(firstLoadBytes),
+          firstLoadKb: toKb(firstLoadBytes),
+        };
+      });
+
+    // 라우트가 없으면 공유 번들만이라도 / 라우트로 표시
+    if (routes.length === 0 && sharedBytes > 0) {
+      routes = [{
+        path: '/',
+        size: '0 B',
+        firstLoad: formatBytes(sharedBytes),
+        firstLoadKb: toKb(sharedBytes),
+      }];
+    }
+  }
 
   return { routes, sharedSize: formatBytes(sharedBytes) };
 };
