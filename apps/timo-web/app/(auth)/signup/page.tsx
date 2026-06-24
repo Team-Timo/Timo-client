@@ -1,5 +1,3 @@
-export const SignupPage = () => {
+export default function SignupPage() {
   return <></>;
-};
-
-export default SignupPage;
+}

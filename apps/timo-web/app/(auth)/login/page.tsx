@@ -1,5 +1,3 @@
-export const LoginPage = () => {
+export default function LoginPage() {
   return <></>;
-};
-
-export default LoginPage;
+}
