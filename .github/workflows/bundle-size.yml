@@ -37,11 +37,15 @@ jobs:
         run: pnpm turbo run build --filter=timo-web --output-logs=full 2>&1 | tee /tmp/timo-web-build.txt
         continue-on-error: true
 
-      - name: Debug - 빌드 출력 확인
+      - name: Debug - 빌드 결과 확인
         if: always()
         run: |
-          echo "=== timo-web (마지막 50줄) ==="
-          tail -50 /tmp/timo-web-build.txt 2>/dev/null || echo "(파일 없음)"
+          echo "=== .next 디렉토리 ==="
+          ls apps/timo-web/.next/ 2>/dev/null || echo "(.next 없음)"
+          echo "=== app-build-manifest.json ==="
+          cat apps/timo-web/.next/app-build-manifest.json 2>/dev/null || echo "(없음)"
+          echo "=== build-manifest rootMainFiles ==="
+          node -e "const m=require('./apps/timo-web/.next/build-manifest.json');console.log(JSON.stringify(m.rootMainFiles,null,2))" 2>/dev/null || echo "(없음)"
 
       - name: 번들 사이즈 PR 코멘트 게시
         uses: actions/github-script@v7

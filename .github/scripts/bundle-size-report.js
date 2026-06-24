@@ -1,70 +1,79 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 
-/**
- * Next.js 빌드 출력에서 라우트별 번들 크기를 파싱합니다.
- * turbo run 출력 형식 (앱명:build: 접두사 포함/미포함 모두 처리)
- */
-const parseBuildOutput = (rawOutput) => {
-  const output = rawOutput
-    .split('\n')
-    .map((line) => line.replace(/\x1b\[[0-9;]*m/g, ''))
-    .map((line) => line.replace(/^[^\s]+:build:\s?/, ''))
-    .join('\n');
+const BUILD_DIR = path.join(process.cwd(), 'apps/timo-web/.next');
 
-  const routes = [];
-  const routeRegex =
-    /[┌├└│]\s+[○●λ◑ƒ]\s+(\/\S*)\s+([\d.]+\s*[kMGT]?B)\s+([\d.]+\s*[kMGT]?B)/g;
-
-  let match;
-  while ((match = routeRegex.exec(output)) !== null) {
-    routes.push({
-      path: match[1],
-      size: match[2].trim(),
-      firstLoad: match[3].trim(),
-    });
-  }
-
-  const sharedMatch = output.match(
-    /First Load JS shared by all\s+([\d.]+\s*[kMGT]?B)/
-  );
-
-  return { routes, sharedSize: sharedMatch?.[1]?.trim() ?? null };
+const formatBytes = (bytes) => {
+  if (bytes >= 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+  if (bytes >= 1024) return `${(bytes / 1024).toFixed(2)} kB`;
+  return `${bytes} B`;
 };
 
-/**
- * First Load JS 크기 문자열을 kB 단위 숫자로 변환합니다.
- */
-const toKb = (sizeStr) => {
-  const match = sizeStr.match(/([\d.]+)\s*([kMG]?B)/);
-  if (!match) return 0;
-  const value = parseFloat(match[1]);
-  const unit = match[2];
-  if (unit === 'MB') return value * 1024;
-  if (unit === 'kB') return value;
-  return value / 1024;
+const toKb = (bytes) => bytes / 1024;
+
+const safeStatSize = (filePath) => {
+  try { return fs.statSync(filePath).size; } catch { return 0; }
+};
+
+const readJson = (filePath) => {
+  try { return JSON.parse(fs.readFileSync(filePath, 'utf8')); } catch { return null; }
+};
+
+const analyzeBuild = (buildDir) => {
+  if (!fs.existsSync(buildDir)) return { routes: [], sharedSize: null };
+
+  const appBuildManifest = readJson(path.join(buildDir, 'app-build-manifest.json'));
+  const buildManifest = readJson(path.join(buildDir, 'build-manifest.json'));
+
+  if (!appBuildManifest && !buildManifest) return { routes: [], sharedSize: null };
+
+  // rootMainFiles 경로는 .next/ 기준 상대 경로
+  const rootMainFiles = buildManifest?.rootMainFiles ?? [];
+  const sharedBytes = rootMainFiles.reduce(
+    (sum, chunk) => sum + safeStatSize(path.join(buildDir, chunk)),
+    0
+  );
+
+  const pages = appBuildManifest?.pages ?? {};
+  const routes = Object.entries(pages)
+    .filter(([route]) => route !== '/_not-found')
+    .map(([route, chunks]) => {
+      const pageBytes = chunks.reduce(
+        (sum, chunk) => sum + safeStatSize(path.join(buildDir, chunk)),
+        0
+      );
+      const firstLoadBytes = pageBytes + sharedBytes;
+      return {
+        path: route,
+        size: formatBytes(pageBytes),
+        firstLoad: formatBytes(firstLoadBytes),
+        firstLoadKb: toKb(firstLoadBytes),
+      };
+    });
+
+  return { routes, sharedSize: formatBytes(sharedBytes) };
 };
 
 const WARN_THRESHOLD_KB = 200;
 const ERROR_THRESHOLD_KB = 350;
 
-const sizeIcon = (firstLoadStr) => {
-  const kb = toKb(firstLoadStr);
-  if (kb >= ERROR_THRESHOLD_KB) return '🔴';
-  if (kb >= WARN_THRESHOLD_KB) return '🟡';
+const sizeIcon = (firstLoadKb) => {
+  if (firstLoadKb >= ERROR_THRESHOLD_KB) return '🔴';
+  if (firstLoadKb >= WARN_THRESHOLD_KB) return '🟡';
   return '🟢';
 };
 
 const formatRouteTable = (appLabel, { routes, sharedSize }) => {
   if (!routes.length) {
-    return `### ${appLabel}\n\n> ⚠️ 빌드 출력을 파싱하지 못했습니다.\n`;
+    return `### ${appLabel}\n\n> ⚠️ 번들 크기 데이터를 가져오지 못했습니다 (.next 디렉토리를 확인하세요).\n`;
   }
 
   const rows = routes
     .map(
       (r) =>
-        `| \`${r.path}\` | ${r.size} | ${r.firstLoad} | ${sizeIcon(r.firstLoad)} |`
+        `| \`${r.path}\` | ${r.size} | ${r.firstLoad} | ${sizeIcon(r.firstLoadKb)} |`
     )
     .join('\n');
 
@@ -87,22 +96,15 @@ module.exports = async ({ github, context, core }) => {
 
   const { owner, repo } = context.repo;
 
-  const readBuild = (filePath) => {
-    try {
-      return fs.readFileSync(filePath, 'utf8');
-    } catch {
-      return '';
-    }
-  };
-
-  const timoWebBuild = parseBuildOutput(readBuild('/tmp/timo-web-build.txt'));
+  core.info(`번들 분석 경로: ${BUILD_DIR}`);
+  const timoWebBuild = analyzeBuild(BUILD_DIR);
 
   if (!timoWebBuild.routes.length) {
-    core.warning('번들 크기 데이터를 파싱하지 못했습니다. 빌드 출력을 확인하세요.');
+    core.warning(`번들 크기 데이터를 파싱하지 못했습니다. ${BUILD_DIR} 를 확인하세요.`);
     return;
   }
 
-  const legend = `> 🟢 정상 (<${WARN_THRESHOLD_KB}kB)  🟡 주의 (<${ERROR_THRESHOLD_KB}kB)  🔴 초과 (≥${ERROR_THRESHOLD_KB}kB) — First Load JS 기준`;
+  const legend = `> 🟢 정상 (<${WARN_THRESHOLD_KB}kB)  🟡 주의 (<${ERROR_THRESHOLD_KB}kB)  🔴 초과 (≥${ERROR_THRESHOLD_KB}kB) — First Load JS 기준 (비압축 크기)`;
 
   const body = `## 📦 번들 사이즈 리포트
 
