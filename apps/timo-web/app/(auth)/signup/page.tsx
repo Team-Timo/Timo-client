@@ -1,4 +1,4 @@
-const SignupPage = () => {
+export const SignupPage = () => {
   return <></>;
 };
 

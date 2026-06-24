@@ -5,11 +5,11 @@ export const metadata: Metadata = {
   description: "Timo web",
 };
 
-const RootLayout = ({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) => {
+}
+
+export const RootLayout = ({ children }: Readonly<RootLayoutProps>) => {
   return (
     <html lang="en">
       <body>{children}</body>

@@ -1,4 +1,4 @@
-const Home = () => {
+export const Home = () => {
   return <>Hi Timo</>;
 };
 
