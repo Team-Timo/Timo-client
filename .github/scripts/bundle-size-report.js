@@ -18,7 +18,9 @@ const safeGzipSize = (filePath) => {
   try {
     const content = fs.readFileSync(filePath);
     return zlib.gzipSync(content).length;
-  } catch { return 0; }
+  } catch (err) {
+    throw new Error(`번들 파일 처리 실패: ${filePath} — ${err.message}`);
+  }
 };
 
 const readJson = (filePath) => {
