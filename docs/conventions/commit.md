@@ -2,29 +2,29 @@
 
 ## 커밋 타입
 
-| 타입 | 설명 |
-|------|------|
-| `feat` | 새로운 기능 추가 |
-| `fix` | 버그 수정 |
-| `refactor` | 코드 리팩토링 (기능 변경 없음) |
-| `style` | 코드 포맷팅, 세미콜론 누락 등 코드 자체 변경 없는 경우 |
-| `name` | 파일/폴더명 변경 |
-| `file` | 파일/폴더 이동 |
-| `remove` | 파일 삭제만 수행 |
-| `comment` | 주석 추가 및 변경 |
-| `docs` | 문서 수정 |
-| `chore` | 패키지 매니저 수정, .gitignore 등 기타 |
+| 타입       | 설명                                                   |
+| ---------- | ------------------------------------------------------ |
+| `feat`     | 새로운 기능 추가                                       |
+| `fix`      | 버그 수정                                              |
+| `refactor` | 코드 리팩토링 (기능 변경 없음)                         |
+| `style`    | 코드 포맷팅, 세미콜론 누락 등 코드 자체 변경 없는 경우 |
+| `name`     | 파일/폴더명 변경                                       |
+| `file`     | 파일/폴더 이동                                         |
+| `remove`   | 파일 삭제만 수행                                       |
+| `comment`  | 주석 추가 및 변경                                      |
+| `docs`     | 문서 수정                                              |
+| `chore`    | 패키지 매니저 수정, .gitignore 등 기타                 |
 
 ## 커밋 스코프
 
 변경된 파일 위치에 따라 스코프를 결정한다.
 
-| 스코프 | 기준 |
-|--------|------|
-| `web` | `apps/timo-web/**` 변경 |
-| `ui` | `packages/timo-design-system/**` 변경 |
-| `root` | 루트 설정 파일 (`turbo.json`, `pnpm-workspace.yaml`, 루트 `package.json` 등) |
-| `config` | `packages/eslint-config/**`, `packages/typescript-config/**` 변경 |
+| 스코프   | 기준                                                                         |
+| -------- | ---------------------------------------------------------------------------- |
+| `web`    | `apps/timo-web/**` 변경                                                      |
+| `ui`     | `packages/timo-design-system/**` 변경                                        |
+| `root`   | 루트 설정 파일 (`turbo.json`, `pnpm-workspace.yaml`, 루트 `package.json` 등) |
+| `config` | `packages/eslint-config/**`, `packages/typescript-config/**` 변경            |
 
 ## 커밋 형식
 

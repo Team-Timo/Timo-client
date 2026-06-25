@@ -1,7 +1,13 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
-  "globalEnv": ["NEXT_RUNTIME", "NEXT_PUBLIC_SENTRY_DSN", "NEXT_PUBLIC_SENTRY_ENVIRONMENT", "CI"],
+  "globalEnv": [
+    "NODE_ENV",
+    "NEXT_RUNTIME",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "NEXT_PUBLIC_SENTRY_ENVIRONMENT",
+    "CI"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

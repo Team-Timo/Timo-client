@@ -24,13 +24,13 @@
 
 ## 자주 쓰는 스킬 체인
 
-| 상황 | 실행 순서 |
-|------|----------|
-| 새 기능 처음부터 끝까지 | `timo-issue` → 구현 스킬 → `timo-review` → `timo-verify` → `timo-commit` → `timo-pr` |
-| 피그마 디자인 → 컴포넌트 + 스토리 | `timo-figma` → `timo-component` → `timo-storybook` → `timo-commit` |
-| 코드 구조 개선 후 PR | `timo-refactor` → `timo-review` → `timo-verify` → `timo-commit` → `timo-pr` |
-| 이슈 없이 빠른 버그 픽스 | `timo-component` 또는 `timo-page` → `timo-verify` → `timo-commit` |
-| 페이지 + 데이터 연동 | `timo-issue` → `timo-page` → `timo-review` → `timo-commit` |
+| 상황                              | 실행 순서                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------ |
+| 새 기능 처음부터 끝까지           | `timo-issue` → 구현 스킬 → `timo-review` → `timo-verify` → `timo-commit` → `timo-pr` |
+| 피그마 디자인 → 컴포넌트 + 스토리 | `timo-figma` → `timo-component` → `timo-storybook` → `timo-commit`                   |
+| 코드 구조 개선 후 PR              | `timo-refactor` → `timo-review` → `timo-verify` → `timo-commit` → `timo-pr`          |
+| 이슈 없이 빠른 버그 픽스          | `timo-component` 또는 `timo-page` → `timo-verify` → `timo-commit`                    |
+| 페이지 + 데이터 연동              | `timo-issue` → `timo-page` → `timo-review` → `timo-commit`                           |
 
 구현 스킬은 작업 유형에 따라 `timo-component` / `timo-page` / `timo-figma` 중 하나를 선택한다.
 
