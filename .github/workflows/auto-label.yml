@@ -64,6 +64,24 @@ jobs:
             });
             const currentLabelNames = new Set(currentLabels.map(l => l.name));
 
+            // labeler.yml이 파일 경로 기준으로 관리하는 라벨은 파일 변경 여부로 보호
+            // label-by-files job이 추가했을 수 있으므로 prefix 기반 제거 대상에서 제외
+            const changedFiles = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              per_page: 100,
+            });
+            const fileLabelProtection = new Map([
+              ['⌚ Timo-Design-system', 'packages/timo-design-system/'],
+              ['⏰ Timo-web',           'apps/timo-web/'],
+            ]);
+            const protectedByFiles = new Set(
+              [...fileLabelProtection.entries()]
+                .filter(([, pathPrefix]) => changedFiles.some(f => f.filename.startsWith(pathPrefix)))
+                .map(([label]) => label)
+            );
+
             // --- prefix 라벨 ---
             // edited 이벤트는 본문 수정만으로도 트리거되므로 제목 변경 여부를 확인
             if (action !== 'edited' || context.payload.changes?.title) {
@@ -73,6 +91,8 @@ jobs:
 
               for (const label of currentLabels) {
                 if (allPrefixLabels.includes(label.name) && label.name !== desiredLabel) {
+                  // 파일 변경으로 인해 label-by-files가 추가한 라벨은 제거하지 않음
+                  if (protectedByFiles.has(label.name)) continue;
                   await github.rest.issues.removeLabel({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
