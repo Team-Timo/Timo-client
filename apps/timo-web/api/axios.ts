@@ -7,8 +7,7 @@ export const instance = axios.create({
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    const status = error?.response?.status;
-    // 추후 인증 방식 확정 후 에러 핸들링 추가
+    // TODO: 추후 인증 방식 확정 후 error.response.status 기반 에러 핸들링 추가
     return Promise.reject(error);
   },
 );
