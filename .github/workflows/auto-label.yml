@@ -66,7 +66,7 @@ jobs:
 
             // labeler.yml이 파일 경로 기준으로 관리하는 라벨은 파일 변경 여부로 보호
             // label-by-files job이 추가했을 수 있으므로 prefix 기반 제거 대상에서 제외
-            const { data: changedFiles } = await github.rest.pulls.listFiles({
+            const changedFiles = await github.paginate(github.rest.pulls.listFiles, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
