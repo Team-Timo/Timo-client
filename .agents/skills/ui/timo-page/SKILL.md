@@ -7,8 +7,10 @@
 
 ## 참조
 
-- `docs/architecture.md` → 컴포넌트 계층, 상태 관리 전략
-- `docs/conventions.md` → 파일 네이밍, 코드 스타일
+- `docs/architecture/components.md` → 컴포넌트 계층
+- `docs/architecture/state.md` → 상태 관리 전략
+- `docs/conventions/naming.md` → 파일 네이밍
+- `docs/conventions/code-style.md` → 코드 스타일
 
 ## 워크플로우
 

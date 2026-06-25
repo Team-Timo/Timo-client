@@ -8,7 +8,7 @@
 ## 참조
 
 - 대상 컴포넌트의 `XxxProps` 인터페이스
-- `docs/conventions.md` → 파일 네이밍
+- `docs/conventions/naming.md` → 파일 네이밍
 
 ## 워크플로우
 

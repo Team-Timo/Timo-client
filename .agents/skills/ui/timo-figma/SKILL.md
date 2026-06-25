@@ -9,8 +9,9 @@
 
 ## 참조
 
-- `docs/design.md` → 디자인 토큰, 피그마 MCP 연동 방식
-- `docs/conventions.md` → 컴포넌트 규칙
+- `docs/design/tokens.md` → 디자인 토큰
+- `docs/design/figma.md` → 피그마 MCP 연동 방식
+- `docs/conventions/code-style.md` → 컴포넌트 규칙
 
 ## 워크플로우
 
@@ -22,7 +23,7 @@
 
 ### Phase 2 — 디자인 토큰 매핑
 
-읽어온 값을 `docs/design.md` 의 토큰에 매핑한다.  
+읽어온 값을 `docs/design/tokens.md` 의 토큰에 매핑한다.  
 토큰에 없는 값이 있으면 사용자에게 토큰 추가 여부 확인한다.
 
 ### Phase 3 — 컴포넌트 생성

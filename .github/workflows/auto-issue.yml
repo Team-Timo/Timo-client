@@ -23,7 +23,7 @@ jobs:
               '[DOCS]':     '📝 Docs',
               '[CI]':       '😎 DevOps',
               '[TEST]':     '🌊 TEST',
-              '[REFACTOR]': '🧹 CHORE',
+              '[REFACTOR]': '♻ Refactor',
               '[UI]':       '⌚ Timo-Design-system',
               '[STYLE]':    '⌚ Timo-Design-system',
               '[PERF]':     '✨ Feature',

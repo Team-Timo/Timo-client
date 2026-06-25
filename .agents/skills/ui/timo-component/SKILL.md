@@ -7,8 +7,8 @@
 
 ## 참조
 
-- `docs/conventions.md` → 컴포넌트·타입·A11y 규칙
-- `docs/architecture.md` → 컴포넌트 계층
+- `docs/conventions/code-style.md` → 컴포넌트·타입·A11y 규칙
+- `docs/architecture/components.md` → 컴포넌트 계층
 
 ## 워크플로우
 

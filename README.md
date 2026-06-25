@@ -2,77 +2,142 @@
   <h1 align="center">Timo</h1>
 
   <p align="center">
-    <strong>(서비스 한 줄 소개를 여기에 작성하세요)</strong>
+    <strong>A timebox-based to-do service that turns your tasks into executable time blocks.</strong><br>
+    Plan what you want to do. Timo helps you actually finish it.
   </p>
 
   <p align="center">
-    <img src="https://img.shields.io/badge/License-MIT-f97316.svg" alt="License MIT">&nbsp;
-    <img src="https://img.shields.io/badge/Next.js-15-000000?logo=next.js" alt="Next.js">&nbsp;
-    <img src="https://img.shields.io/badge/Turborepo-EF4444?logo=turborepo&logoColor=white" alt="Turborepo">
+    <a href="https://github.com/Team-Timo/Timo-client/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-f97316.svg" alt="License MIT"></a>&nbsp;
+    <img src="https://img.shields.io/badge/Next.js-16-000000?logo=next.js" alt="Next.js 16">&nbsp;
+    <img src="https://img.shields.io/badge/Turborepo-EF4444?logo=turborepo&logoColor=white" alt="Turborepo">&nbsp;
+    <img src="https://img.shields.io/badge/platform-Desktop%20Web-2563eb" alt="Desktop Web">
   </p>
 
   <p align="center">
-    <a href="./docs/conventions.md"><strong>컨벤션</strong></a> ·
-    <a href="./docs/architecture.md"><strong>아키텍처</strong></a> ·
-    <a href="./AGENTS.md"><strong>AI 협업</strong></a>
+    <a href="./docs/conventions/"><strong>Conventions</strong></a> ·
+    <a href="./docs/architecture/"><strong>Architecture</strong></a> ·
+    <a href="./AGENTS.md"><strong>AI Collab</strong></a> ·
+    <a href="README_ko.md"><strong>한국어</strong></a>
   </p>
 
-  <!-- 스크린샷 준비 후 아래 주석 해제 -->
-  <!-- <p align="center">
-    <img src="assets/screenshot.png" alt="Timo 스크린샷" width="960">
-  </p> -->
 </div>
 
 ---
 
-## Timo란?
+## What Is Timo?
 
-(서비스 배경, 핵심 기능, 타겟 사용자를 2~3문장으로 작성하세요)
+Timo is a timebox-based to-do service that converts tasks into actionable, time-bound blocks — so you actually finish what you plan.
 
-## 왜 만들었나요?
+Unlike traditional to-do lists, Timo asks you to estimate how long each task will take, then builds your day around those time blocks.
 
-- **이유 1**: 설명
-- **이유 2**: 설명
-- **이유 3**: 설명
+As you use it, Timo learns your time patterns and helps you plan more realistically with AI-powered time recommendations.
 
-## 주요 기능
+## Why We Built It
 
-- **기능 1**: 설명
-- **기능 2**: 설명
-- **기능 3**: 설명
+- **To-do lists aren't enough**: Writing tasks down feels productive, but without a time structure, most lists stay unfinished at end of day.
+- **Time estimates make plans real**: A task without a duration is just a wish. Timo pairs every task with a time block from the start.
+- **Feedback closes the loop**: The gap between planned and actual time is where most tools stop. Timo closes that loop by recording real execution time and feeding it back into future planning.
+
+## Features
+
+- **✏️ Todo + Time Estimate**: Add tasks with an expected duration and optional tags. The estimate becomes the foundation of your daily schedule.
+
+- **📦 Automatic Timebox Scheduling**: Each task is automatically converted into a time block on your schedule — turning a flat to-do list into an executable plan.
+
+- **⏱️ Timer-Based Execution**: Start a timebox and a timer begins. Pause, extend, or go full-screen to stay focused. When time is up, you get a notification. Actual time spent is recorded automatically.
+
+- **🤖 AI Time Recommendations**: Timo learns how long similar tasks actually take you, then recommends more accurate time estimates — making future plans increasingly realistic.
+
+## Getting Started
+
+**Prerequisites**
+
+- Node.js 18+
+- pnpm 9+
+
+```bash
+# Clone the repository
+git clone https://github.com/Team-Timo/Timo-client.git
+cd Timo-client
+
+# Install dependencies
+pnpm install
+
+# Start all packages in development mode
+pnpm dev
+
+# Or start only the web app
+pnpm dev:web
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Platform
+
+| Platform    | Status       |
+| ----------- | ------------ |
+| Desktop Web | ✅ Supported |
+| Mobile Web  | 🚧 Planned   |
+
+Timo is optimized for desktop use — designed for students and job seekers who self-manage long, focused work sessions.
+
+## Team
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/kimminna">
+        <img src="https://github.com/kimminna.png" width="80" alt="김민아"/>
+      </a>
+      <br/>
+      <strong>김민아</strong>
+      <br/>
+      <sub>Frontend Leader</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/yumin-kim2">
+        <img src="https://github.com/yumin-kim2.png" width="80" alt="김유민"/>
+      </a>
+      <br/>
+      <strong>김유민</strong>
+      <br/>
+      <sub>Frontend Dev</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/jjangminii">
+        <img src="https://github.com/jjangminii.png" width="80" alt="김정민"/>
+      </a>
+      <br/>
+      <strong>김정민</strong>
+      <br/>
+      <sub>Frontend Dev</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/ehye1">
+        <img src="https://github.com/ehye1.png" width="80" alt="이혜원"/>
+      </a>
+      <br/>
+      <strong>이혜원</strong>
+      <br/>
+      <sub>Frontend Dev</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 팀원
+## Documentation
 
-| 이름 | 역할 | GitHub |
-| ---- | ---- | ------ |
-| -    | -    | [@-]() |
-| -    | -    | [@-]() |
-| -    | -    | [@-]() |
+| Content                                               | Path                                       |
+| ----------------------------------------------------- | ------------------------------------------ |
+| Conventions (commit · branch · code style · naming)   | [docs/conventions/](./docs/conventions/)   |
+| Architecture (stack · structure · components · state) | [docs/architecture/](./docs/architecture/) |
+| Design (tokens · Figma)                               | [docs/design/](./docs/design/)             |
 
----
+## AI Collaboration
 
-## 문서
+Claude Code and Codex share a common entry point at [AGENTS.md](./AGENTS.md). All AI work follows the skill-based workflow defined there.
 
-| 내용                              | 경로                                           |
-| --------------------------------- | ---------------------------------------------- |
-| Git·코드·폴더 구조 컨벤션         | [docs/conventions.md](./docs/conventions.md)   |
-| 기술 스택·컴포넌트 계층·상태 전략 | [docs/architecture.md](./docs/architecture.md) |
-| 디자인 토큰·피그마 연동           | [docs/design.md](./docs/design.md)             |
+## License
 
-## AI 협업
-
-Claude Code·Codex 공통 진입점은 [AGENTS.md](./AGENTS.md)입니다.
-
-| 내용               | 경로                                                               |
-| ------------------ | ------------------------------------------------------------------ |
-| 작업별 스킬 라우팅 | [AGENTS.md](./AGENTS.md)                                           |
-| 스킬 목록          | [docs/agent/skill-index.md](./docs/agent/skill-index.md)           |
-| 스킬 추가 방법     | [docs/agent/how-to-add-skill.md](./docs/agent/how-to-add-skill.md) |
-
----
-
-## 라이선스
-
-MIT © Timo Team
+[MIT](LICENSE) © Timo Team

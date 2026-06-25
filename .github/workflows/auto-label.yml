@@ -3,13 +3,18 @@ name: Auto Label
 on:
   pull_request:
     types: [opened, synchronize, edited, reopened]
+  issues:
+    types: [opened]
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
   label-by-files:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/labeler@v5
@@ -17,14 +22,20 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           sync-labels: false
 
-  label-by-prefix:
-    if: github.event.action != 'synchronize'
+  label-pr:
+    if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
+    needs: label-by-files
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v7
         with:
           script: |
-            const title = context.payload.pull_request.title;
+            const pr = context.payload.pull_request;
+            const action = context.payload.action;
+            const prNumber = pr.number;
+
             const prefixMap = {
               '[FEAT]':     '✨ Feature',
               '[FIX]':      '🐛 Bug',
@@ -39,41 +50,84 @@ jobs:
               '[PERF]':     '✨ Feature',
               '[API]':      '🌟 API',
             };
-
-            // edited 이벤트는 본문 수정만으로도 트리거되므로 제목 변경 여부를 확인
-            if (context.payload.action === 'edited' && !context.payload.changes?.title) return;
-
-            const allPrefixLabels = [...new Set(Object.values(prefixMap))];
-            const match = Object.entries(prefixMap).find(([prefix]) => title.startsWith(prefix));
+            const authorMap = {
+              'kimminna':   '♦️ 민아',
+              'ehye1':      '♥️ 혜원',
+              'jjangminii': '♠️ 정민',
+              'yumin-kim2': '♣️ 유민',
+            };
 
             const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
+              issue_number: prNumber,
             });
+            const currentLabelNames = new Set(currentLabels.map(l => l.name));
 
-            for (const label of currentLabels) {
-              if (allPrefixLabels.includes(label.name)) {
-                await github.rest.issues.removeLabel({
+            // labeler.yml이 파일 경로 기준으로 관리하는 라벨은 파일 변경 여부로 보호
+            // label-by-files job이 추가했을 수 있으므로 prefix 기반 제거 대상에서 제외
+            const changedFiles = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              per_page: 100,
+            });
+            const fileLabelProtection = new Map([
+              ['⌚ Timo-Design-system', 'packages/timo-design-system/'],
+              ['⏰ Timo-web',           'apps/timo-web/'],
+            ]);
+            const protectedByFiles = new Set(
+              [...fileLabelProtection.entries()]
+                .filter(([, pathPrefix]) => changedFiles.some(f => f.filename.startsWith(pathPrefix)))
+                .map(([label]) => label)
+            );
+
+            // --- prefix 라벨 ---
+            // edited 이벤트는 본문 수정만으로도 트리거되므로 제목 변경 여부를 확인
+            if (action !== 'edited' || context.payload.changes?.title) {
+              const allPrefixLabels = [...new Set(Object.values(prefixMap))];
+              const match = Object.entries(prefixMap).find(([prefix]) => pr.title.startsWith(prefix));
+              const desiredLabel = match ? match[1] : null;
+
+              for (const label of currentLabels) {
+                if (allPrefixLabels.includes(label.name) && label.name !== desiredLabel) {
+                  // 파일 변경으로 인해 label-by-files가 추가한 라벨은 제거하지 않음
+                  if (protectedByFiles.has(label.name)) continue;
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: prNumber,
+                    name: label.name,
+                  });
+                }
+              }
+              if (desiredLabel && !currentLabelNames.has(desiredLabel)) {
+                await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  issue_number: context.payload.pull_request.number,
-                  name: label.name,
+                  issue_number: prNumber,
+                  labels: [desiredLabel],
                 });
               }
             }
 
-            if (!match) return;
+            // --- 작성자 라벨 (opened / reopened 시에만, 이미 있으면 생략) ---
+            if (action === 'opened' || action === 'reopened') {
+              const label = authorMap[pr.user.login];
+              if (label && !currentLabelNames.has(label)) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  labels: [label],
+                });
+              }
+            }
 
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              labels: [match[1]],
-            });
-
-  label-by-author:
-    if: github.event.action == 'opened' || github.event.action == 'reopened'
+  label-issues:
+    if: github.event_name == 'issues'
+    permissions:
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v7
@@ -86,17 +140,12 @@ jobs:
               'yumin-kim2': '♣️ 유민',
             };
 
-            const author = context.payload.pull_request.user.login;
-            const label = authorMap[author];
-
-            if (!label) {
-              console.log(`"${author}"에 대한 라벨 매핑이 없습니다.`);
-              return;
-            }
+            const label = authorMap[context.payload.issue.user.login];
+            if (!label) return;
 
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
+              issue_number: context.payload.issue.number,
               labels: [label],
             });
