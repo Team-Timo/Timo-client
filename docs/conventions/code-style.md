@@ -10,6 +10,7 @@
 
 - Arrow function으로 선언: `export const Component = () => {}`
 - Named export 사용 (default export 지양)
+  - **예외**: Next.js App Router 예약 파일(`app/**/page.tsx`, `app/**/layout.tsx`, `app/**/loading.tsx` 등)은 프레임워크 요구에 따라 `export default function Page() {}` 형식을 사용한다. → `docs/architecture/scaffolding.md` 참조
 - 자식 없으면 self-closing: `<Component />`
 - 최상단 래퍼는 Fragment: `<>…</>`
 
