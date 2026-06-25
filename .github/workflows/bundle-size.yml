@@ -31,6 +31,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build timo-web
+        id: build
         env:
           TURBO_UI: false
           NO_COLOR: '1'
@@ -38,7 +39,7 @@ jobs:
         continue-on-error: true
 
       - name: Debug - 빌드 결과 확인
-        if: always()
+        if: steps.build.outcome == 'failure'
         run: |
           echo "=== .next 디렉토리 ==="
           ls apps/timo-web/.next/ 2>/dev/null || echo "(.next 없음)"
