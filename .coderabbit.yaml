@@ -34,7 +34,7 @@ reviews:
   path_instructions:
     - path: "**/*.{ts,tsx}"
       instructions: |
-        ## TypeScript / React 컨벤션 (docs/conventions.md 기준)
+        ## TypeScript / React 컨벤션 (docs/conventions/code-style.md 기준)
 
         ### 타입 안전성
         - `any` 타입 사용 절대 금지 → `unknown` 사용 후 타입 narrowing 필수
@@ -70,7 +70,7 @@ reviews:
 
     - path: "apps/timo-web/app/**"
       instructions: |
-        ## Next.js App Router 계층 규칙 (docs/architecture.md 기준)
+        ## Next.js App Router 계층 규칙 (docs/architecture/components.md 기준)
 
         - `page.tsx`: 라우팅·레이아웃 조합만 담당 (Server Component), 비즈니스 로직 포함 금지
         - `_components/`: props만 받는 순수 UI — `'use client'` 없이 동작 가능해야 함

@@ -65,6 +65,6 @@ Claude Code / Codex 공통 진입점입니다.
 
 | 내용 | 경로 |
 |---|---|
-| Git·코드 스타일·폴더 구조 규칙 | `docs/conventions.md` |
-| 기술 스택·컴포넌트 계층·상태 전략 | `docs/architecture.md` |
-| 디자인 토큰·피그마 MCP 연동 | `docs/design.md` |
+| 커밋·브랜치·이슈·코드 스타일·네이밍 컨벤션 | `docs/conventions/` |
+| 기술 스택·컴포넌트 계층·상태 전략·스캐폴딩 | `docs/architecture/` |
+| 디자인 토큰·피그마 MCP 연동 | `docs/design/` |
