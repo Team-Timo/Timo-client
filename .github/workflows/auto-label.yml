@@ -24,6 +24,7 @@ jobs:
 
   label-pr:
     if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
+    needs: label-by-files
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
@@ -56,19 +57,22 @@ jobs:
               'yumin-kim2': '♣️ 유민',
             };
 
+            const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+            const currentLabelNames = new Set(currentLabels.map(l => l.name));
+
             // --- prefix 라벨 ---
             // edited 이벤트는 본문 수정만으로도 트리거되므로 제목 변경 여부를 확인
             if (action !== 'edited' || context.payload.changes?.title) {
               const allPrefixLabels = [...new Set(Object.values(prefixMap))];
               const match = Object.entries(prefixMap).find(([prefix]) => pr.title.startsWith(prefix));
+              const desiredLabel = match ? match[1] : null;
 
-              const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-              });
               for (const label of currentLabels) {
-                if (allPrefixLabels.includes(label.name)) {
+                if (allPrefixLabels.includes(label.name) && label.name !== desiredLabel) {
                   await github.rest.issues.removeLabel({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
@@ -77,20 +81,20 @@ jobs:
                   });
                 }
               }
-              if (match) {
+              if (desiredLabel && !currentLabelNames.has(desiredLabel)) {
                 await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: prNumber,
-                  labels: [match[1]],
+                  labels: [desiredLabel],
                 });
               }
             }
 
-            // --- 작성자 라벨 (opened / reopened 시에만) ---
+            // --- 작성자 라벨 (opened / reopened 시에만, 이미 있으면 생략) ---
             if (action === 'opened' || action === 'reopened') {
               const label = authorMap[pr.user.login];
-              if (label) {
+              if (label && !currentLabelNames.has(label)) {
                 await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
