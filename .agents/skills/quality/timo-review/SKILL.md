@@ -21,6 +21,7 @@ git diff develop...HEAD --stat
 ```
 
 파일 분류 후 각 카테고리별로 집중 체크한다:
+
 - `app/` 하위 → 라우트·컴포넌트 계층
 - `stores/`, `queries/` → 상태 관리 패턴
 - `packages/timo-design-system/` → 모듈 경계
@@ -86,12 +87,15 @@ git diff develop...HEAD --stat
 ## 리뷰 결과
 
 ### BLOCK (머지 전 수정 필수)
+
 - ...
 
 ### SUGGEST (권장 개선)
+
 - ...
 
 ### NOTE (참고)
+
 - ...
 ```
 

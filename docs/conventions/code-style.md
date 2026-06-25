@@ -10,6 +10,7 @@
 
 - Arrow function으로 선언: `export const Component = () => {}`
 - Named export 사용 (default export 지양)
+  - **예외**: Next.js App Router 예약 파일(`app/**/page.tsx`, `app/**/layout.tsx`, `app/**/loading.tsx` 등)은 프레임워크 요구에 따라 `export default function Page() {}` 형식을 사용한다. → `docs/architecture/scaffolding.md` 참조
 - 자식 없으면 self-closing: `<Component />`
 - 최상단 래퍼는 Fragment: `<>…</>`
 
@@ -26,16 +27,16 @@
 
 동사+명사 형식, 화살표 함수 사용:
 
-| 접두사 | 용도 |
-|--------|------|
-| `get` | 값을 가져와 반환 |
-| `create` | 새로운 값/변수 생성 |
-| `check` | 내부 로직 확인 |
-| `convert` | 특정 형태로 변환 |
-| `add` / `minus` | 더하거나 빼는 연산 |
-| `filter` | 배열 필터링 후 반환 |
-| `handle` | 이벤트 핸들러 전용 (ex. `handleResetClick`) |
-| `has` | boolean 반환 유틸 (ex. `hasEmail`) |
+| 접두사          | 용도                                        |
+| --------------- | ------------------------------------------- |
+| `get`           | 값을 가져와 반환                            |
+| `create`        | 새로운 값/변수 생성                         |
+| `check`         | 내부 로직 확인                              |
+| `convert`       | 특정 형태로 변환                            |
+| `add` / `minus` | 더하거나 빼는 연산                          |
+| `filter`        | 배열 필터링 후 반환                         |
+| `handle`        | 이벤트 핸들러 전용 (ex. `handleResetClick`) |
+| `has`           | boolean 반환 유틸 (ex. `hasEmail`)          |
 
 - `handle` 접두사는 이벤트 핸들러에만 사용
 - `key` prop: 정적 리스트 → `index` 허용 / 동적 리스트 → 반드시 고유 `id`

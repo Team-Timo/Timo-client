@@ -14,5 +14,6 @@ yarn.lock
 # misc
 public
 .github
+.turbo
 
 turbo/generators/templates/**
