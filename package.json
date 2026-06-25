@@ -6,6 +6,8 @@
     "build:web": "turbo run build --filter=timo-web",
     "dev": "turbo run dev",
     "dev:web": "turbo run dev --filter=timo-web",
+    "storybook": "pnpm --filter @repo/timo-design-system storybook",
+    "build-storybook": "pnpm --filter @repo/timo-design-system build-storybook",
     "lint": "turbo run lint",
     "lint:web": "turbo run lint --filter=timo-web",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
