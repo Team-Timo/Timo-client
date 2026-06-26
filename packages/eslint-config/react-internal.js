@@ -3,6 +3,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginReact from "eslint-plugin-react";
+import pluginJsxA11y from "eslint-plugin-jsx-a11y";
 import globals from "globals";
 import { config as baseConfig } from "./base.js";
 
@@ -34,6 +35,16 @@ export const config = [
       ...pluginReactHooks.configs.recommended.rules,
       // React scope no longer necessary with new JSX transform.
       "react/react-in-jsx-scope": "off",
+      "react/function-component-definition": [
+        "error",
+        {
+          namedComponents: "arrow-function",
+          unnamedComponents: "arrow-function",
+        },
+      ],
+      "react/jsx-fragments": ["error", "syntax"],
+      "react/self-closing-comp": "error",
     },
   },
+  pluginJsxA11y.flatConfigs.recommended,
 ];
