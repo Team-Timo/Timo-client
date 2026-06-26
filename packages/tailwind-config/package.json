@@ -4,5 +4,8 @@
   "private": true,
   "exports": {
     "./theme.css": "./theme.css"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.3.1"
   }
 }

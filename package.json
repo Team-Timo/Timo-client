@@ -15,12 +15,10 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.1",
     "@turbo/gen": "^2.9.18",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.8",
     "prettier": "^3.7.4",
-    "tailwindcss": "^4.3.1",
     "turbo": "^2.9.18",
     "typescript": "5.9.2"
   },
