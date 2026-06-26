@@ -50,15 +50,13 @@ jobs:
           COLOR_COMMENT=9807270   # PR 코멘트
           COLOR_ISSUE=7275516     # 이슈
 
-          # PR/이슈 본문에서 보일러플레이트 제거 후 첫 150자 반환
+          # PR/이슈 본문에서 보일러플레이트 제거 후 반환 (DESC에서 400자로 제한)
           clean_body() {
             echo "$1" \
               | sed 's/<br>//gi' \
-              | grep -vE '^\s*(#|close[sd]? #[0-9]+|fixes? #[0-9]+|resolves? #[0-9]+)' || true \
-              | sed '/^\s*$/d' \
+              | { grep -vE '^\s*(#|close[sd]? #[0-9]+|fixes? #[0-9]+|resolves? #[0-9]+)' || true; } \
               | tr '\n' ' ' \
-              | sed 's/  */ /g' \
-              | cut -c1-200
+              | sed 's/  */ /g'
           }
 
           # 라벨·리뷰어를 받아 fields JSON 배열 반환
@@ -80,7 +78,6 @@ jobs:
           if [ "$EVENT_NAME" = "pull_request" ]; then
             PR_TITLE="$(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
             URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
-            DESC="$(jq -r '.pull_request.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
             RAW_AUTHOR="$(jq -r '.pull_request.user.login // ""' "$GITHUB_EVENT_PATH")"
             AUTHOR="$(resolve_name "$RAW_AUTHOR")"
             LABELS="$(jq -r '[.pull_request.labels[].name] | join(", ")' "$GITHUB_EVENT_PATH")"
@@ -119,7 +116,8 @@ jobs:
               exit 0
             fi
 
-            DESC="**$PR_TITLE**\n$CLEAN_BODY"
+            DESC="**${PR_TITLE}**"$'\n'"${CLEAN_BODY}"
+            DESC="${DESC:0:400}"
             FIELDS="$(build_fields "$LABELS" "$REVIEWER")"
 
           elif [ "$EVENT_NAME" = "pull_request_review" ]; then
@@ -132,7 +130,6 @@ jobs:
             AUTHOR="$(resolve_name "$RAW_AUTHOR")"
             PR_TITLE="$(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
             URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
-            DESC="$(jq -r '.review.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
             REVIEW_STATE="$(jq -r '.review.state // ""' "$GITHUB_EVENT_PATH")"
             LABELS="$(jq -r '[.pull_request.labels[].name] | join(", ")' "$GITHUB_EVENT_PATH")"
 
@@ -149,7 +146,8 @@ jobs:
 
             RAW_BODY="$(jq -r '.review.body // ""' "$GITHUB_EVENT_PATH")"
             CLEAN_BODY="$(clean_body "$RAW_BODY")"
-            DESC="**$PR_TITLE**\n$CLEAN_BODY"
+            DESC="**${PR_TITLE}**"$'\n'"${CLEAN_BODY}"
+            DESC="${DESC:0:400}"
             FIELDS="$(build_fields "$LABELS" "")"
 
           elif [ "$EVENT_NAME" = "pull_request_review_comment" ]; then
@@ -165,7 +163,8 @@ jobs:
             URL="$(jq -r '.comment.html_url // ""' "$GITHUB_EVENT_PATH")"
             RAW_BODY="$(jq -r '.comment.body // ""' "$GITHUB_EVENT_PATH")"
             CLEAN_BODY="$(clean_body "$RAW_BODY")"
-            DESC="**$PR_TITLE**\n$CLEAN_BODY"
+            DESC="**${PR_TITLE}**"$'\n'"${CLEAN_BODY}"
+            DESC="${DESC:0:400}"
             COLOR=$COLOR_COMMENT
             FIELDS='[]'
 
@@ -177,7 +176,8 @@ jobs:
             URL="$(jq -r '.issue.html_url // ""' "$GITHUB_EVENT_PATH")"
             RAW_BODY="$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH")"
             CLEAN_BODY="$(clean_body "$RAW_BODY")"
-            DESC="**$ISSUE_TITLE**\n$CLEAN_BODY"
+            DESC="**${ISSUE_TITLE}**"$'\n'"${CLEAN_BODY}"
+            DESC="${DESC:0:400}"
             COLOR=$COLOR_ISSUE
             LABELS="$(jq -r '[.issue.labels[].name] | join(", ")' "$GITHUB_EVENT_PATH")"
             FIELDS="$(build_fields "$LABELS" "")"
