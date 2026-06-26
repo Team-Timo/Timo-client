@@ -1,4 +1,4 @@
-name: ⚡ 성능 리포트
+name: ✨ Performance Report
 
 on:
   pull_request:
