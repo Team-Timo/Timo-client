@@ -12,9 +12,7 @@ on:
 
 jobs:
   notify:
-    permissions:
-      contents: read
-      pull-requests: read
+    permissions: {}
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +20,8 @@ jobs:
         shell: bash
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTION: ${{ github.event.action }}
 
         run: |
           set -euo pipefail
@@ -43,12 +43,12 @@ jobs:
           }
 
           # Discord embed 색상
-          COLOR_GREEN=5763719   # 머지, 승인
-          COLOR_BLUE=16711782   # PR 열림
-          COLOR_YELLOW=16776960 # 리뷰 요청, 리뷰 코멘트
-          COLOR_RED=15548997    # PR 닫힘, 변경 요청
-          COLOR_GRAY=9807270    # PR 코멘트
-          COLOR_PURPLE=7275516  # 이슈
+          COLOR_SUCCESS=5763719   # 머지, 승인
+          COLOR_OPEN=16711782     # PR 열림
+          COLOR_REVIEW=16776960   # 리뷰 요청, 리뷰 코멘트
+          COLOR_CLOSED=15548997   # PR 닫힘, 변경 요청
+          COLOR_COMMENT=9807270   # PR 코멘트
+          COLOR_ISSUE=7275516     # 이슈
 
           # PR/이슈 본문에서 보일러플레이트 제거 후 첫 150자 반환
           clean_body() {
@@ -77,9 +77,6 @@ jobs:
             echo "$fields"
           }
 
-          EVENT_NAME="${{ github.event_name }}"
-          ACTION="${{ github.event.action }}"
-
           if [ "$EVENT_NAME" = "pull_request" ]; then
             PR_TITLE="$(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
             URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
@@ -95,24 +92,24 @@ jobs:
 
             if [ "$ACTION" = "opened" ]; then
               TITLE="PR이 열렸습니다"
-              COLOR=$COLOR_BLUE
+              COLOR=$COLOR_OPEN
             elif [ "$ACTION" = "reopened" ]; then
               TITLE="PR이 다시 열렸습니다"
-              COLOR=$COLOR_BLUE
+              COLOR=$COLOR_OPEN
             elif [ "$ACTION" = "ready_for_review" ]; then
               TITLE="PR이 리뷰 준비됐습니다"
-              COLOR=$COLOR_BLUE
+              COLOR=$COLOR_OPEN
             elif [ "$ACTION" = "review_requested" ]; then
               TITLE="리뷰 요청이 왔습니다"
               RAW_REVIEWER="$(jq -r '.requested_reviewer.login // ""' "$GITHUB_EVENT_PATH")"
               REVIEWER="$(resolve_name "$RAW_REVIEWER")"
-              COLOR=$COLOR_YELLOW
+              COLOR=$COLOR_REVIEW
             elif [ "$ACTION" = "closed" ] && [ "$MERGED" = "true" ]; then
               TITLE="PR이 머지됐습니다"
-              COLOR=$COLOR_GREEN
+              COLOR=$COLOR_SUCCESS
             elif [ "$ACTION" = "closed" ]; then
               TITLE="PR이 닫혔습니다"
-              COLOR=$COLOR_RED
+              COLOR=$COLOR_CLOSED
             else
               exit 0
             fi
@@ -136,13 +133,13 @@ jobs:
 
             if [ "$REVIEW_STATE" = "approved" ]; then
               TITLE="리뷰가 승인됐습니다"
-              COLOR=$COLOR_GREEN
+              COLOR=$COLOR_SUCCESS
             elif [ "$REVIEW_STATE" = "changes_requested" ]; then
               TITLE="변경 요청이 왔습니다"
-              COLOR=$COLOR_RED
+              COLOR=$COLOR_CLOSED
             else
               TITLE="리뷰 코멘트가 달렸습니다"
-              COLOR=$COLOR_YELLOW
+              COLOR=$COLOR_REVIEW
             fi
 
             RAW_BODY="$(jq -r '.review.body // ""' "$GITHUB_EVENT_PATH")"
@@ -164,7 +161,7 @@ jobs:
             RAW_BODY="$(jq -r '.comment.body // ""' "$GITHUB_EVENT_PATH")"
             CLEAN_BODY="$(clean_body "$RAW_BODY")"
             DESC="**$PR_TITLE**\n$CLEAN_BODY"
-            COLOR=$COLOR_GRAY
+            COLOR=$COLOR_COMMENT
             FIELDS='[]'
 
           else
@@ -176,7 +173,7 @@ jobs:
             RAW_BODY="$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH")"
             CLEAN_BODY="$(clean_body "$RAW_BODY")"
             DESC="**$ISSUE_TITLE**\n$CLEAN_BODY"
-            COLOR=$COLOR_PURPLE
+            COLOR=$COLOR_ISSUE
             LABELS="$(jq -r '[.issue.labels[].name] | join(", ")' "$GITHUB_EVENT_PATH")"
             FIELDS="$(build_fields "$LABELS" "")"
           fi
