@@ -2,7 +2,7 @@ name: Automated Discord Notification
 
 on:
   pull_request:
-    types: [opened, reopened, closed]
+    types: [opened, reopened, closed, review_requested, ready_for_review]
   pull_request_review:
     types: [submitted]
   pull_request_review_comment:
@@ -12,7 +12,9 @@ on:
 
 jobs:
   notify:
-    permissions: {}
+    permissions:
+      contents: read
+      pull-requests: read
     runs-on: ubuntu-latest
 
     steps:
@@ -29,111 +31,132 @@ jobs:
             exit 0
           fi
 
+          # GitHub ID → 한국어 이름 매핑
+          resolve_name() {
+            case "$1" in
+              kimminna)   echo "민아" ;;
+              ehye1)      echo "혜원" ;;
+              jjangminii) echo "정민" ;;
+              yumin-kim2) echo "유민" ;;
+              *)          echo "$1" ;;
+            esac
+          }
+
+          # Discord embed 색상
+          COLOR_GREEN=5763719   # 머지, 승인
+          COLOR_BLUE=16711782   # PR 열림
+          COLOR_YELLOW=16776960 # 리뷰 요청, 리뷰 코멘트
+          COLOR_RED=15548997    # PR 닫힘, 변경 요청
+          COLOR_GRAY=9807270    # PR 코멘트
+          COLOR_PURPLE=7275516  # 이슈
+
+          # 라벨·리뷰어를 받아 fields JSON 배열 반환
+          build_fields() {
+            local labels="$1"
+            local reviewer="$2"
+            local fields='[]'
+
+            if [ -n "$labels" ]; then
+              fields=$(echo "$fields" | jq --arg v "$labels" '. + [{ name: "라벨", value: $v, inline: true }]')
+            fi
+            if [ -n "$reviewer" ]; then
+              fields=$(echo "$fields" | jq --arg v "$reviewer" '. + [{ name: "리뷰어", value: $v, inline: true }]')
+            fi
+
+            echo "$fields"
+          }
+
           EVENT_NAME="${{ github.event_name }}"
+          ACTION="${{ github.event.action }}"
 
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            TITLE="[PR] $(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
+            PR_TITLE="$(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
             URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
             DESC="$(jq -r '.pull_request.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
-            AUTHOR="$(jq -r '.pull_request.user.login // ""' "$GITHUB_EVENT_PATH")"
-            COLOR=16711782
-
+            RAW_AUTHOR="$(jq -r '.pull_request.user.login // ""' "$GITHUB_EVENT_PATH")"
+            AUTHOR="$(resolve_name "$RAW_AUTHOR")"
+            LABELS="$(jq -r '[.pull_request.labels[].name] | join(", ")' "$GITHUB_EVENT_PATH")"
             MERGED="$(jq -r '.pull_request.merged // false' "$GITHUB_EVENT_PATH")"
-            if [ "${{ github.event.action }}" = "closed" ] && [ "$MERGED" = "true" ]; then
-              COLOR=5763719
-            elif [ "${{ github.event.action }}" = "closed" ]; then
-              COLOR=15548997
+            REVIEWER=""
+
+            if [ "$ACTION" = "opened" ]; then
+              TITLE="PR이 열렸습니다 — $PR_TITLE"
+              COLOR=$COLOR_BLUE
+            elif [ "$ACTION" = "reopened" ]; then
+              TITLE="PR이 다시 열렸습니다 — $PR_TITLE"
+              COLOR=$COLOR_BLUE
+            elif [ "$ACTION" = "ready_for_review" ]; then
+              TITLE="PR이 리뷰 준비됐습니다 — $PR_TITLE"
+              COLOR=$COLOR_BLUE
+            elif [ "$ACTION" = "review_requested" ]; then
+              TITLE="리뷰 요청이 왔습니다 — $PR_TITLE"
+              RAW_REVIEWER="$(jq -r '.requested_reviewer.login // ""' "$GITHUB_EVENT_PATH")"
+              REVIEWER="$(resolve_name "$RAW_REVIEWER")"
+              COLOR=$COLOR_YELLOW
+            elif [ "$ACTION" = "closed" ] && [ "$MERGED" = "true" ]; then
+              TITLE="PR이 머지됐습니다 — $PR_TITLE"
+              COLOR=$COLOR_GREEN
+            elif [ "$ACTION" = "closed" ]; then
+              TITLE="PR이 닫혔습니다 — $PR_TITLE"
+              COLOR=$COLOR_RED
+            else
+              exit 0
             fi
 
-            FIELDS=$(jq -n \
-              --arg repo "${{ github.repository }}" \
-              --arg event "${{ github.event.action }}" \
-              '[
-                {
-                  name: "Repository",
-                  value: $repo,
-                  inline: true
-                },
-                {
-                  name: "Event",
-                  value: $event,
-                  inline: true
-                }
-              ]')
+            FIELDS="$(build_fields "$LABELS" "$REVIEWER")"
 
           elif [ "$EVENT_NAME" = "pull_request_review" ]; then
-            AUTHOR="$(jq -r '.review.user.login // ""' "$GITHUB_EVENT_PATH")"
+            RAW_AUTHOR="$(jq -r '.review.user.login // ""' "$GITHUB_EVENT_PATH")"
 
-            if [ "$AUTHOR" = "coderabbitai" ] || [ "$AUTHOR" = "coderabbitai[bot]" ]; then
+            if [ "$RAW_AUTHOR" = "coderabbitai" ] || [ "$RAW_AUTHOR" = "coderabbitai[bot]" ]; then
               exit 0
             fi
 
-            TITLE="[PR Review] $(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
+            AUTHOR="$(resolve_name "$RAW_AUTHOR")"
+            PR_TITLE="$(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
             URL="$(jq -r '.pull_request.html_url // ""' "$GITHUB_EVENT_PATH")"
             DESC="$(jq -r '.review.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
-            AUTHOR="$(jq -r '.review.user.login // ""' "$GITHUB_EVENT_PATH")"
-            COLOR=11796224
+            REVIEW_STATE="$(jq -r '.review.state // ""' "$GITHUB_EVENT_PATH")"
+            LABELS="$(jq -r '[.pull_request.labels[].name] | join(", ")' "$GITHUB_EVENT_PATH")"
 
-            FIELDS=$(jq -n \
-              --arg repo "${{ github.repository }}" \
-              --arg reviewState "$(jq -r '.review.state // ""' "$GITHUB_EVENT_PATH" | tr '[:lower:]' '[:upper:]')" \
-              '[
-                {
-                  name: "Repository",
-                  value: $repo,
-                  inline: true
-                },
-                {
-                  name: "Review Status",
-                  value: $reviewState,
-                  inline: true
-                }
-              ]')
+            if [ "$REVIEW_STATE" = "approved" ]; then
+              TITLE="리뷰가 승인됐습니다 — $PR_TITLE"
+              COLOR=$COLOR_GREEN
+            elif [ "$REVIEW_STATE" = "changes_requested" ]; then
+              TITLE="변경 요청이 왔습니다 — $PR_TITLE"
+              COLOR=$COLOR_RED
+            else
+              TITLE="리뷰 코멘트가 달렸습니다 — $PR_TITLE"
+              COLOR=$COLOR_YELLOW
+            fi
+
+            FIELDS="$(build_fields "$LABELS" "")"
 
           elif [ "$EVENT_NAME" = "pull_request_review_comment" ]; then
-            AUTHOR="$(jq -r '.comment.user.login // ""' "$GITHUB_EVENT_PATH")"
+            RAW_AUTHOR="$(jq -r '.comment.user.login // ""' "$GITHUB_EVENT_PATH")"
 
-            if [ "$AUTHOR" = "coderabbitai" ] || [ "$AUTHOR" = "coderabbitai[bot]" ]; then
+            if [ "$RAW_AUTHOR" = "coderabbitai" ] || [ "$RAW_AUTHOR" = "coderabbitai[bot]" ]; then
               exit 0
             fi
 
-            TITLE="[PR Comment] $(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
+            AUTHOR="$(resolve_name "$RAW_AUTHOR")"
+            PR_TITLE="$(jq -r '.pull_request.title // ""' "$GITHUB_EVENT_PATH")"
+            TITLE="PR 코멘트가 달렸습니다 — $PR_TITLE"
             URL="$(jq -r '.comment.html_url // ""' "$GITHUB_EVENT_PATH")"
             DESC="$(jq -r '.comment.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
-            COLOR=3447003
-
-            FIELDS=$(jq -n \
-              --arg repo "${{ github.repository }}" \
-              '[
-                {
-                  name: "Repository",
-                  value: $repo,
-                  inline: true
-                }
-              ]')
+            COLOR=$COLOR_GRAY
+            FIELDS='[]'
 
           else
-            TITLE="[Issue] $(jq -r '.issue.title // ""' "$GITHUB_EVENT_PATH")"
+            RAW_AUTHOR="$(jq -r '.issue.user.login // ""' "$GITHUB_EVENT_PATH")"
+            AUTHOR="$(resolve_name "$RAW_AUTHOR")"
+            ISSUE_TITLE="$(jq -r '.issue.title // ""' "$GITHUB_EVENT_PATH")"
+            TITLE="이슈가 열렸습니다 — $ISSUE_TITLE"
             URL="$(jq -r '.issue.html_url // ""' "$GITHUB_EVENT_PATH")"
             DESC="$(jq -r '.issue.body // "내용 없음"' "$GITHUB_EVENT_PATH")"
-            AUTHOR="$(jq -r '.issue.user.login // ""' "$GITHUB_EVENT_PATH")"
-            COLOR=7275516
-
-            FIELDS=$(jq -n \
-              --arg repo "${{ github.repository }}" \
-              --arg event "${{ github.event.action }}" \
-              '[
-                {
-                  name: "Repository",
-                  value: $repo,
-                  inline: true
-                },
-                {
-                  name: "Event",
-                  value: $event,
-                  inline: true
-                }
-              ]')
+            COLOR=$COLOR_PURPLE
+            LABELS="$(jq -r '[.issue.labels[].name] | join(", ")' "$GITHUB_EVENT_PATH")"
+            FIELDS="$(build_fields "$LABELS" "")"
           fi
 
           if [ ${#DESC} -gt 200 ]; then
@@ -147,6 +170,7 @@ jobs:
             --arg url "$URL" \
             --arg desc "$CLEAN_DESC" \
             --arg author "$AUTHOR" \
+            --arg avatar_user "$RAW_AUTHOR" \
             --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             --argjson color "$COLOR" \
             --argjson fields "$FIELDS" \
@@ -159,11 +183,11 @@ jobs:
                   color: $color,
                   author: {
                     name: $author,
-                    icon_url: ("https://github.com/" + $author + ".png")
+                    icon_url: ("https://github.com/" + $avatar_user + ".png")
                   },
                   fields: $fields,
                   footer: {
-                    text: "GitHub Actions Automation"
+                    text: "GitHub Actions"
                   },
                   timestamp: $timestamp
                 }
