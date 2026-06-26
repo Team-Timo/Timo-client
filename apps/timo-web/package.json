@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@repo/timo-design-system": "workspace:*",
+    "@tanstack/react-query": "^5.101.1",
+    "@tanstack/react-query-devtools": "^5.101.1",
+    "axios": "^1.18.1",
     "next": "16.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
