@@ -15,6 +15,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@storybook/addon-a11y": "^10.4.6",
     "@storybook/addon-links": "^10.4.6",
     "@storybook/react-vite": "^10.4.6",
     "@types/node": "^22.15.3",
