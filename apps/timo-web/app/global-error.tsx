@@ -14,7 +14,7 @@ export const GlobalError = ({ error, reset }: GlobalErrorProps) => {
   }, [error]);
 
   return (
-    <html>
+    <html lang="ko">
       <body>
         <button onClick={reset}>다시 시도</button>
       </body>
