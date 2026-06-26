@@ -1,4 +1,4 @@
-name: Auto Label
+name: 👽 Auto Label
 
 on:
   pull_request:

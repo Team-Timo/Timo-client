@@ -1,4 +1,4 @@
-name: Automated Discord Notification
+name: 🎵 Automated Discord Notification
 
 on:
   pull_request:

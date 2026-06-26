@@ -1,0 +1,65 @@
+name: ✨ Performance Report
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: performance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  performance:
+    name: 성능 분석
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: timo-web 빌드
+        env:
+          TURBO_UI: false
+          NO_COLOR: '1'
+        run: pnpm turbo run build --filter=timo-web
+
+      - name: Next.js 서버 시작
+        run: pnpm --filter=timo-web start &
+
+      - name: 서버 준비 대기
+        run: npx wait-on@8 http://localhost:3000 --timeout 60000
+
+      - name: Lighthouse CI 실행
+        run: npx @lhci/cli@0.14.x autorun --config=apps/timo-web/lighthouserc.cjs
+        continue-on-error: true
+
+      - name: 성능 리포트 PR 코멘트 게시
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fn = require('./.github/scripts/performance-report.js')
+            await fn({ github, context, core })
+
+      - name: Lighthouse 결과 아티팩트 업로드
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 30
