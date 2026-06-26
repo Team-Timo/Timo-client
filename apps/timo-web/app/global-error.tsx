@@ -16,6 +16,8 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   return (
     <html lang="ko">
       <body>
+        <h1>문제가 발생했어요</h1>
+        <p>잠시 후 다시 시도해주세요.</p>
         <button onClick={reset}>다시 시도</button>
       </body>
     </html>
