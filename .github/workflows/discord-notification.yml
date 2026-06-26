@@ -54,7 +54,7 @@ jobs:
           clean_body() {
             echo "$1" \
               | sed 's/<br>//gi' \
-              | grep -vE '^\s*(#|close[sd]? #[0-9]+|fixes? #[0-9]+|resolves? #[0-9]+)' \
+              | grep -vE '^\s*(#|close[sd]? #[0-9]+|fixes? #[0-9]+|resolves? #[0-9]+)' || true \
               | sed '/^\s*$/d' \
               | tr '\n' ' ' \
               | sed 's/  */ /g' \
@@ -102,7 +102,12 @@ jobs:
             elif [ "$ACTION" = "review_requested" ]; then
               TITLE="리뷰 요청이 왔습니다"
               RAW_REVIEWER="$(jq -r '.requested_reviewer.login // ""' "$GITHUB_EVENT_PATH")"
-              REVIEWER="$(resolve_name "$RAW_REVIEWER")"
+              if [ -z "$RAW_REVIEWER" ]; then
+                RAW_REVIEWER="$(jq -r '.requested_team.name // .requested_team.slug // ""' "$GITHUB_EVENT_PATH")"
+                REVIEWER="$RAW_REVIEWER"
+              else
+                REVIEWER="$(resolve_name "$RAW_REVIEWER")"
+              fi
               COLOR=$COLOR_REVIEW
             elif [ "$ACTION" = "closed" ] && [ "$MERGED" = "true" ]; then
               TITLE="PR이 머지됐습니다"
