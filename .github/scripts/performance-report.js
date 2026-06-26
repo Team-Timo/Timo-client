@@ -233,10 +233,10 @@ module.exports = async ({ github, context, core }) => {
   const existing = comments.find((c) => c.user?.type === 'Bot' && c.body?.includes(COMMENT_MARKER));
 
   if (existing) {
-    await github.rest.issues.deleteComment({ owner, repo, comment_id: existing.id });
-    core.info('기존 성능 리포트 삭제 완료');
+    await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+    core.info('성능 리포트 업데이트 완료');
+  } else {
+    await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body });
+    core.info('성능 리포트 게시 완료');
   }
-
-  await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body });
-  core.info('성능 리포트 게시 완료');
 };

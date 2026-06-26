@@ -5,8 +5,7 @@ module.exports = {
   ci: {
     collect: {
       url: [
-        'http://localhost:3000/login',
-        'http://localhost:3000/signup',
+        'http://localhost:3000',
       ],
       numberOfRuns: 3,
       settings: {
