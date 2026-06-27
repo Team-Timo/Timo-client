@@ -6,6 +6,7 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
+        text: /(title|label|name|placeholder|text)$/i,
       },
     },
     viewport: {
@@ -23,6 +24,22 @@ const preview: Preview = {
       defaultViewport: "desktop",
     },
     layout: "centered",
+    backgrounds: {
+      default: "white",
+      values: [
+        { name: "white", value: "#ffffff" },
+        { name: "gray", value: "#f5f5f5" },
+        { name: "dark", value: "#1f1f1f" },
+      ],
+    },
+    options: {
+      storySort: {
+        order: ["Guides", "Introduction", "Components", "Icons"],
+      },
+    },
+    actions: {
+      argTypesRegex: "^on[A-Z].*",
+    },
   },
 };
 
