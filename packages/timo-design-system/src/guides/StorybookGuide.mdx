@@ -1,0 +1,74 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guides/Storybook Guide" />
+
+# Storybook Guide
+
+Timo Design System의 공통 UI 컴포넌트는 Storybook을 통해 상태별 예시와 사용 방법을 문서화합니다.
+
+## Story 위치
+
+컴포넌트 story는 컴포넌트와 같은 폴더에 작성합니다.
+
+```txt
+components/
+  Button/
+    Button.tsx
+    Button.stories.tsx
+    index.ts
+```
+
+## 파일 네이밍
+
+Story 파일은 `ComponentName.stories.tsx` 형식을 사용합니다.
+
+```txt
+Button.stories.tsx
+Input.stories.tsx
+```
+
+## 기본 Story 작성 예시
+
+```tsx
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "./Button";
+
+const meta: Meta<typeof Button> = {
+  title: "Components/Button",
+  component: Button,
+  tags: ["autodocs"],
+};
+
+export default meta;
+
+type Story = StoryObj<typeof Button>;
+
+export const Default: Story = {
+  args: {
+    children: "Button",
+  },
+};
+```
+
+## Autodocs
+
+컴포넌트 문서를 자동 생성하려면 story meta에 `tags: ["autodocs"]`를 추가합니다.
+
+```tsx
+const meta: Meta<typeof Button> = {
+  title: "Components/Button",
+  component: Button,
+  tags: ["autodocs"],
+};
+```
+
+## Accessibility
+
+접근성 검사는 Storybook 하단 패널의 `Accessibility` 탭에서 확인합니다.
+
+## Storybook 화면 구성
+
+- Sidebar: 등록된 story 목록을 확인합니다.
+- Canvas: 선택한 story가 렌더링되는 영역입니다.
+- Toolbar: viewport, zoom 등을 조정합니다.
+- Addons panel: Controls, Actions, Accessibility 결과를 확인합니다.
