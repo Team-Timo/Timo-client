@@ -73,6 +73,11 @@ export const nextJsConfig = [
   },
   pluginJsxA11y.flatConfigs.recommended,
   {
+    rules: {
+      "import/no-relative-parent-imports": "error",
+    },
+  },
+  {
     files: [APP_ROUTER_SPECIAL_FILES],
     rules: {
       "react/function-component-definition": "off",
