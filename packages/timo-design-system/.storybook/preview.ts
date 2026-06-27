@@ -6,7 +6,6 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
-        text: /(title|label|name|placeholder|text)$/i,
       },
     },
     viewport: {
@@ -34,7 +33,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ["Guides", "Introduction", "Components", "Icons"],
+        order: ["Guides", "Components", "Icons"],
       },
     },
     actions: {
