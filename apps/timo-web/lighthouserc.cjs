@@ -4,7 +4,17 @@
 module.exports = {
   ci: {
     collect: {
-      url: ["http://localhost:3000"],
+      url: [
+        "http://localhost:3000",
+        "http://localhost:3000/home",
+        "http://localhost:3000/today",
+        "http://localhost:3000/focus",
+        "http://localhost:3000/statistics",
+        "http://localhost:3000/onboarding",
+        "http://localhost:3000/settings",
+        "http://localhost:3000/settings/account",
+        "http://localhost:3000/settings/term",
+      ],
       numberOfRuns: 3,
       settings: {
         chromeFlags:
