@@ -2,7 +2,7 @@ import type { PlopTypes } from "@turbo/gen";
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
   plop.setGenerator("react-component", {
-    description: "packages/ui에 새 React 컴포넌트 추가",
+    description: "packages/timo-design-system에 새 React 컴포넌트 추가",
     prompts: [
       {
         type: "input",
@@ -19,8 +19,13 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
     actions: [
       {
         type: "add",
-        path: "packages/ui/src/{{pascalCase name}}.tsx",
+        path: "packages/timo-design-system/src/components/{{kebabCase name}}/{{pascalCase name}}.tsx",
         templateFile: "templates/component/component.tsx.hbs",
+      },
+      {
+        type: "append",
+        path: "packages/timo-design-system/src/components/index.ts",
+        template: 'export { {{pascalCase name}} } from "./{{kebabCase name}}/{{pascalCase name}}";',
       },
     ],
   });
