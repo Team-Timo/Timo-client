@@ -1,5 +1,5 @@
 @theme {
-  --font-pretendard: Pretendard;
+  --font-pretendard: Pretendard, sans-serif;
 
   /* Headline */
   --text-headline-b-30: 3rem;
