@@ -8,6 +8,11 @@
   font-style: normal;
   font-display: swap;
 }
+@layer base {
+  * {
+    font-family: var(--font-family-pretendard), sans-serif;
+  }
+}
 
 :root {
   --font-family-pretendard: "Pretendard";
