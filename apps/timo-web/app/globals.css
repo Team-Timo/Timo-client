@@ -1,8 +1,2 @@
 @import "tailwindcss";
 @import "@repo/tailwind-config/theme.css";
-
-@layer base {
-  html {
-    font-size: 62.5%;
-  }
-}

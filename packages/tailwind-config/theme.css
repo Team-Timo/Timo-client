@@ -1,3 +1,9 @@
 @import "./tokens/colors.css";
 @import "./tokens/typography.css";
 @import "./tokens/radius.css";
+
+@layer base {
+  html {
+    font-size: 62.5%;
+  }
+}
