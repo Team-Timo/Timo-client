@@ -1,1 +1,2 @@
-export {};
+export { Color } from "./color/Color";
+export { Typography } from "./typography/Typography";
