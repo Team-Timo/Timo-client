@@ -2,27 +2,27 @@
   --font-pretendard: var(--font-family-pretendard), sans-serif;
 
   /* Headline */
-  --text-headline-b-30: 3rem;
+  --text-headline-b-30: 7.5;
   --text-headline-b-30--line-height: 1.5;
   --text-headline-b-30--letter-spacing: -0.03em;
   --text-headline-b-30--font-weight: 700;
 
-  --text-headline-b-24: 2.4rem;
+  --text-headline-b-24: 6;
   --text-headline-b-24--line-height: 1.5;
   --text-headline-b-24--letter-spacing: -0.03em;
   --text-headline-b-24--font-weight: 700;
 
-  --text-headline-b-22: 2.2rem;
+  --text-headline-b-22: 5.5;
   --text-headline-b-22--line-height: 1.5;
   --text-headline-b-22--letter-spacing: -0.03em;
   --text-headline-b-22--font-weight: 700;
 
-  --text-headline-b-20: 2rem;
+  --text-headline-b-20: 5;
   --text-headline-b-20--line-height: 1.5;
   --text-headline-b-20--letter-spacing: -0.03em;
   --text-headline-b-20--font-weight: 700;
 
-  --text-headline-b-18: 1.8rem;
+  --text-headline-b-18: 4.5;
   --text-headline-b-18--line-height: 1.5;
   --text-headline-b-18--letter-spacing: -0.03em;
   --text-headline-b-18--font-weight: 700;
@@ -32,54 +32,54 @@
   --text-headline-b-16--letter-spacing: -0.03em;
   --text-headline-b-16--font-weight: 700;
 
-  --text-headline-m-16: 1.6rem;
+  --text-headline-m-16: 4;
   --text-headline-m-16--line-height: 1.5;
   --text-headline-m-16--letter-spacing: -0.03em;
   --text-headline-m-16--font-weight: 500;
 
-  --text-headline-b-14: 1.4rem;
+  --text-headline-b-14: 3.5;
   --text-headline-b-14--line-height: 1.5;
   --text-headline-b-14--letter-spacing: -0.03em;
   --text-headline-b-14--font-weight: 700;
 
-  --text-headline-m-14: 1.4rem;
+  --text-headline-m-14: 3.5;
   --text-headline-m-14--line-height: 1.5;
   --text-headline-m-14--letter-spacing: -0.03em;
   --text-headline-m-14--font-weight: 500;
 
-  --text-headline-r-14: 1.4rem;
+  --text-headline-r-14: 3.5;
   --text-headline-r-14--line-height: 1.5;
   --text-headline-r-14--letter-spacing: -0.03em;
   --text-headline-r-14--font-weight: 400;
 
   /* Body */
-  --text-body-b-12: 1.2rem;
+  --text-body-b-12: 3;
   --text-body-b-12--line-height: 1.5;
   --text-body-b-12--letter-spacing: -0.03em;
   --text-body-b-12--font-weight: 700;
 
-  --text-body-sb-12: 1.2rem;
+  --text-body-sb-12: 3;
   --text-body-sb-12--line-height: 1.5;
   --text-body-sb-12--letter-spacing: -0.03em;
   --text-body-sb-12--font-weight: 600;
 
-  --text-body-m-12: 1.2rem;
+  --text-body-m-12: 3;
   --text-body-m-12--line-height: 1.5;
   --text-body-m-12--letter-spacing: -0.03em;
   --text-body-m-12--font-weight: 500;
 
-  --text-body-r-12: 1.2rem;
+  --text-body-r-12: 3;
   --text-body-r-12--line-height: 1.5;
   --text-body-r-12--letter-spacing: -0.03em;
   --text-body-r-12--font-weight: 400;
 
-  --text-body-sb-11: 1.1rem; 
+  --text-body-sb-11: 2.75; 
   --text-body-sb-11--line-height: 1.5;
   --text-body-sb-11--letter-spacing: -0.03em;
   --text-body-sb-11--font-weight: 600;
 
   /* Caption */
-  --text-caption-r-10: 1rem;
+  --text-caption-r-10: 2.5;
   --text-caption-r-10--line-height: 1.5;
   --text-caption-r-10--letter-spacing: -0.03em;
   --text-caption-r-10--font-weight: 400;
