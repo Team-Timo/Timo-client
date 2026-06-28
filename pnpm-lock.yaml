@@ -151,6 +151,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
+      '@repo/tailwind-config':
+        specifier: workspace:*
+        version: link:../tailwind-config
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
@@ -175,6 +178,9 @@ importers:
       '@storybook/react-vite':
         specifier: ^8.6.14
         version: 8.6.14(@storybook/test@8.6.14(storybook@8.6.14(prettier@3.7.4)))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.62.2)(storybook@8.6.14(prettier@3.7.4))(typescript@5.9.2)(vite@8.1.0(@types/node@22.15.3)(esbuild@0.25.12)(jiti@2.7.0)(terser@5.48.0)(yaml@2.9.0))
+      '@tailwindcss/postcss':
+        specifier: ^4.3.1
+        version: 4.3.1
       '@types/node':
         specifier: ^22.15.3
         version: 22.15.3
@@ -193,6 +199,9 @@ importers:
       storybook:
         specifier: ^8.6.14
         version: 8.6.14(prettier@3.7.4)
+      tailwindcss:
+        specifier: ^4.3.1
+        version: 4.3.1
       typescript:
         specifier: 5.9.2
         version: 5.9.2
