@@ -39,3 +39,7 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Storybook build output
+packages/timo-design-system/storybook-static/
+packages/timo-design-system/build-storybook.log
