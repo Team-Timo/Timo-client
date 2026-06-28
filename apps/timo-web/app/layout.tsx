@@ -1,4 +1,6 @@
 import "./globals.css";
+import { pretendard } from "./fonts";
+
 import type { Metadata } from "next";
 
 import { QueryProvider } from "@/providers/QueryProvider";
@@ -14,7 +16,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
-    <html lang="en">
+    <html lang="en" className={pretendard.variable}>
       <body>
         <QueryProvider>{children}</QueryProvider>
       </body>
