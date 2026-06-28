@@ -17,16 +17,7 @@ export const Typography = ({
         borderBottom: "1px solid #f0f0f0",
       }}
     >
-      <div
-        style={{
-          fontSize: size,
-          fontWeight: weight,
-          lineHeight,
-          letterSpacing,
-          minWidth: "200px",
-          color: "#171717",
-        }}
-      >
+      <div className={token} style={{ minWidth: "200px", color: "#171717" }}>
         가나다라마 Aa
       </div>
       <div>

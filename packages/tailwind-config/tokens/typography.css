@@ -2,85 +2,92 @@
   --font-pretendard: var(--font-family-pretendard), sans-serif;
 
   /* Headline */
-  --text-headline-b-30: 7.5;
-  --text-headline-b-30--line-height: 1.5;
-  --text-headline-b-30--letter-spacing: -0.03em;
-  --text-headline-b-30--font-weight: 700;
+  --typo-size-headline-b-30: 30px;
+  --typo-line-height-headline-b-30: 1.5;
+  --typo-letter-spacing-headline-b-30: -0.03em;
+  --typo-font-weight-headline-b-30: 700;
 
-  --text-headline-b-24: 6;
-  --text-headline-b-24--line-height: 1.5;
-  --text-headline-b-24--letter-spacing: -0.03em;
-  --text-headline-b-24--font-weight: 700;
+  --typo-size-headline-b-24: 24px;
+  --typo-line-height-headline-b-24: 1.5;
+  --typo-letter-spacing-headline-b-24: -0.03em;
+  --typo-font-weight-headline-b-24: 700;
 
-  --text-headline-b-22: 5.5;
-  --text-headline-b-22--line-height: 1.5;
-  --text-headline-b-22--letter-spacing: -0.03em;
-  --text-headline-b-22--font-weight: 700;
+  --typo-size-headline-b-22: 22px;
+  --typo-line-height-headline-b-22: 1.5;
+  --typo-letter-spacing-headline-b-22: -0.03em;
+  --typo-font-weight-headline-b-22: 700;
 
-  --text-headline-b-20: 5;
-  --text-headline-b-20--line-height: 1.5;
-  --text-headline-b-20--letter-spacing: -0.03em;
-  --text-headline-b-20--font-weight: 700;
+  --typo-size-headline-b-20: 20px;
+  --typo-line-height-headline-b-20: 1.5;
+  --typo-letter-spacing-headline-b-20: -0.03em;
+  --typo-font-weight-headline-b-20: 700;
 
-  --text-headline-b-18: 4.5;
-  --text-headline-b-18--line-height: 1.5;
-  --text-headline-b-18--letter-spacing: -0.03em;
-  --text-headline-b-18--font-weight: 700;
+  --typo-size-headline-b-18: 18px;
+  --typo-line-height-headline-b-18: 1.5;
+  --typo-letter-spacing-headline-b-18: -0.03em;
+  --typo-font-weight-headline-b-18: 700;
 
-  --text-headline-b-16: 1.6rem;
-  --text-headline-b-16--line-height: 1.5;
-  --text-headline-b-16--letter-spacing: -0.03em;
-  --text-headline-b-16--font-weight: 700;
+  --typo-size-headline-b-16: 16px;
+  --typo-line-height-headline-b-16: 1.5;
+  --typo-letter-spacing-headline-b-16: -0.03em;
+  --typo-font-weight-headline-b-16: 700;
 
-  --text-headline-m-16: 4;
-  --text-headline-m-16--line-height: 1.5;
-  --text-headline-m-16--letter-spacing: -0.03em;
-  --text-headline-m-16--font-weight: 500;
+  --typo-size-headline-m-16: 16px;
+  --typo-line-height-headline-m-16: 1.5;
+  --typo-letter-spacing-headline-m-16: -0.03em;
+  --typo-font-weight-headline-m-16: 500;
 
-  --text-headline-b-14: 3.5;
-  --text-headline-b-14--line-height: 1.5;
-  --text-headline-b-14--letter-spacing: -0.03em;
-  --text-headline-b-14--font-weight: 700;
+  --typo-size-headline-b-14: 14px;
+  --typo-line-height-headline-b-14: 1.5;
+  --typo-letter-spacing-headline-b-14: -0.03em;
+  --typo-font-weight-headline-b-14: 700;
 
-  --text-headline-m-14: 3.5;
-  --text-headline-m-14--line-height: 1.5;
-  --text-headline-m-14--letter-spacing: -0.03em;
-  --text-headline-m-14--font-weight: 500;
+  --typo-size-headline-m-14: 14px;
+  --typo-line-height-headline-m-14: 1.5;
+  --typo-letter-spacing-headline-m-14: -0.03em;
+  --typo-font-weight-headline-m-14: 500;
 
-  --text-headline-r-14: 3.5;
-  --text-headline-r-14--line-height: 1.5;
-  --text-headline-r-14--letter-spacing: -0.03em;
-  --text-headline-r-14--font-weight: 400;
+  --typo-size-headline-r-14: 14px;
+  --typo-line-height-headline-r-14: 1.5;
+  --typo-letter-spacing-headline-r-14: -0.03em;
+  --typo-font-weight-headline-r-14: 400;
 
   /* Body */
-  --text-body-b-12: 3;
-  --text-body-b-12--line-height: 1.5;
-  --text-body-b-12--letter-spacing: -0.03em;
-  --text-body-b-12--font-weight: 700;
+  --typo-size-body-b-12: 12px;
+  --typo-line-height-body-b-12: 1.5;
+  --typo-letter-spacing-body-b-12: -0.03em;
+  --typo-font-weight-body-b-12: 700;
 
-  --text-body-sb-12: 3;
-  --text-body-sb-12--line-height: 1.5;
-  --text-body-sb-12--letter-spacing: -0.03em;
-  --text-body-sb-12--font-weight: 600;
+  --typo-size-body-sb-12: 12px;
+  --typo-line-height-body-sb-12: 1.5;
+  --typo-letter-spacing-body-sb-12: -0.03em;
+  --typo-font-weight-body-sb-12: 600;
 
-  --text-body-m-12: 3;
-  --text-body-m-12--line-height: 1.5;
-  --text-body-m-12--letter-spacing: -0.03em;
-  --text-body-m-12--font-weight: 500;
+  --typo-size-body-m-12: 12px;
+  --typo-line-height-body-m-12: 1.5;
+  --typo-letter-spacing-body-m-12: -0.03em;
+  --typo-font-weight-body-m-12: 500;
 
-  --text-body-r-12: 3;
-  --text-body-r-12--line-height: 1.5;
-  --text-body-r-12--letter-spacing: -0.03em;
-  --text-body-r-12--font-weight: 400;
+  --typo-size-body-r-12: 12px;
+  --typo-line-height-body-r-12: 1.5;
+  --typo-letter-spacing-body-r-12: -0.03em;
+  --typo-font-weight-body-r-12: 400;
 
-  --text-body-sb-11: 2.75; 
-  --text-body-sb-11--line-height: 1.5;
-  --text-body-sb-11--letter-spacing: -0.03em;
-  --text-body-sb-11--font-weight: 600;
+  --typo-size-body-sb-11: 11px;
+  --typo-line-height-body-sb-11: 1.5;
+  --typo-letter-spacing-body-sb-11: -0.03em;
+  --typo-font-weight-body-sb-11: 600;
 
   /* Caption */
-  --text-caption-r-10: 2.5;
-  --text-caption-r-10--line-height: 1.5;
-  --text-caption-r-10--letter-spacing: -0.03em;
-  --text-caption-r-10--font-weight: 400;
+  --typo-size-caption-r-10: 10px;
+  --typo-line-height-caption-r-10: 1.5;
+  --typo-letter-spacing-caption-r-10: -0.03em;
+  --typo-font-weight-caption-r-10: 400;
+}
+
+@utility typo-* {
+  font-size: --value(--typo-size-*);
+  line-height: --value(--typo-line-height-*);
+  letter-spacing: --value(--typo-letter-spacing-*);
+  font-weight: --value(--typo-font-weight-*);
 }
