@@ -33,7 +33,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ["Guides", "Components", "Icons"],
+        order: ["Guides", "Tokens", "Components", "Icons"],
       },
     },
     actions: {
