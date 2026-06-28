@@ -12,3 +12,9 @@
 :root {
   --font-family-pretendard: "Pretendard";
 }
+
+@layer base {
+  * {
+    font-family: var(--font-family-pretendard), sans-serif;
+  }
+}
