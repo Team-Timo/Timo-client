@@ -19,9 +19,7 @@ export const All: Story = {
     <div
       style={{ fontFamily: "var(--font-family-pretendard)", maxWidth: "600px" }}
     >
-      <p style={{ fontSize: "12px", color: "#999", marginBottom: "16px" }}>
-        ⚠️ 피그마 MCP 연동 후 실제 값으로 업데이트 예정입니다.
-      </p>
+      <p style={{ fontSize: "12px", color: "#999", marginBottom: "16px" }} />
       {COLOR_TOKENS.map((token) => (
         <Color key={token.name} {...token} />
       ))}

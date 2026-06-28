@@ -18,9 +18,7 @@ export const Scale: Story = {
     <div
       style={{ fontFamily: "var(--font-family-pretendard)", maxWidth: "700px" }}
     >
-      <p style={{ fontSize: "12px", color: "#999", marginBottom: "24px" }}>
-        ⚠️ 피그마 MCP 연동 후 실제 값으로 업데이트 예정입니다.
-      </p>
+      <p style={{ fontSize: "12px", color: "#999", marginBottom: "24px" }} />
       {TYPOGRAPHY_TOKENS.map((row) => (
         <Typography key={row.token} {...row} />
       ))}
