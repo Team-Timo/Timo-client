@@ -6,7 +6,7 @@ import "../src/styles/globals.css";
 
 const preview: Preview = {
   decorators: [
-    (Story: () => React.ReactNode) =>
+    (Story) =>
       React.createElement(
         "div",
         {
