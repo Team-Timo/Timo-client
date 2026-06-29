@@ -1,6 +1,12 @@
 import { TypographyToken } from "../../tokens/typography-token";
 
-export const Typography = ({ token, size, weight, usage }: TypographyToken) => {
+export const Typography = ({
+  token,
+  size,
+  weight,
+  lineHeight,
+  letterSpacing,
+}: TypographyToken) => {
   return (
     <div
       style={{
@@ -11,14 +17,7 @@ export const Typography = ({ token, size, weight, usage }: TypographyToken) => {
         borderBottom: "1px solid #f0f0f0",
       }}
     >
-      <div
-        style={{
-          fontSize: size,
-          fontWeight: weight,
-          minWidth: "200px",
-          color: "#171717",
-        }}
-      >
+      <div className={token} style={{ minWidth: "200px", color: "#171717" }}>
         가나다라마 Aa
       </div>
       <div>
@@ -28,7 +27,7 @@ export const Typography = ({ token, size, weight, usage }: TypographyToken) => {
           {token}
         </div>
         <div style={{ fontSize: "12px", color: "#888" }}>
-          {size} / {weight} — {usage}
+          {size} / {weight} / {lineHeight} / {letterSpacing}
         </div>
       </div>
     </div>

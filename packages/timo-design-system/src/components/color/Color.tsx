@@ -1,6 +1,6 @@
-import { ColorToken } from "../../tokens/colort-token";
+import { ColorToken } from "../../tokens/color-token";
 
-export const Color = ({ name, cssVar, value, usage }: ColorToken) => {
+export const Color = ({ name, cssVar, value }: ColorToken) => {
   return (
     <div
       style={{
@@ -32,9 +32,6 @@ export const Color = ({ name, cssVar, value, usage }: ColorToken) => {
           style={{ fontSize: "12px", color: "#666", fontFamily: "monospace" }}
         >
           {value}
-        </div>
-        <div style={{ fontSize: "12px", color: "#888", marginTop: "2px" }}>
-          {usage}
         </div>
       </div>
     </div>

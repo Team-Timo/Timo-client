@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "@repo/tailwind-config/theme.css";
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../assets/fonts/PretendardVariable.woff2") format("woff2");
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+@layer base {
+  * {
+    font-family: var(--font-family-pretendard), sans-serif;
+  }
+}
+
+:root {
+  --font-family-pretendard: "Pretendard";
+}

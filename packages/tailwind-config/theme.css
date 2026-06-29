@@ -1,5 +1,3 @@
-@theme {
-  --color-primary: #111111;
-  --color-background: #ffffff;
-  --color-foreground: #171717;
-}
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/radius.css";
