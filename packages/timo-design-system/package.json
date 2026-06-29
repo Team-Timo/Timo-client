@@ -14,7 +14,11 @@
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --only-changed --exit-zero-on-changes"
+    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --only-changed --exit-zero-on-changes",
+    "icons:optimize": "svgo -f src/icons/source --config=./svgo.config.mjs --multipass",
+    "icons:sprite": "tsx src/icons/generate-sprite.ts",
+    "icons:names": "tsx src/icons/generate-icon-names.ts && prettier --write src/icons/iconNames.ts",
+    "icons": "pnpm icons:optimize && pnpm icons:sprite && pnpm icons:names"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -31,10 +35,14 @@
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
+    "@types/svg-sprite": "^0.0.39",
     "chromatic": "^17.7.2",
     "eslint": "^9.39.1",
     "storybook": "^8.6.14",
+    "svg-sprite": "^2.0.4",
+    "svgo": "^4.0.1",
     "tailwindcss": "^4.3.1",
+    "tsx": "^4.22.4",
     "typescript": "5.9.2"
   },
   "dependencies": {
