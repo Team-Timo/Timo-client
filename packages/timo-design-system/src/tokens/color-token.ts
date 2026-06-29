@@ -6,6 +6,7 @@ export interface ColorToken {
 
 export const COLOR_TOKENS: ColorToken[] = [
   { name: "timo-blue-50", cssVar: "--color-timo-blue-50", value: "#F1F6FE" },
+  { name: "timo-blue-65", cssVar: "--color-timo-blue-65", value: "#DEE9FF" },
   { name: "timo-blue-75", cssVar: "--color-timo-blue-75", value: "#C6D8FC" },
   { name: "timo-blue-100", cssVar: "--color-timo-blue-100", value: "#AEC8FB" },
   { name: "timo-blue-200", cssVar: "--color-timo-blue-200", value: "#8CB0F9" },
