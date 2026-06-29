@@ -8,9 +8,23 @@ export interface TypographyToken {
 
 export const TYPOGRAPHY_TOKENS: TypographyToken[] = [
   {
+    token: "typo-headline-b-50",
+    size: "50px",
+    weight: "700",
+    lineHeight: "150%",
+    letterSpacing: "-0.03em",
+  },
+  {
     token: "typo-headline-b-30",
     size: "30px",
     weight: "700",
+    lineHeight: "150%",
+    letterSpacing: "-0.03em",
+  },
+  {
+    token: "typo-headline-m-26",
+    size: "26px",
+    weight: "500",
     lineHeight: "150%",
     letterSpacing: "-0.03em",
   },
@@ -32,6 +46,13 @@ export const TYPOGRAPHY_TOKENS: TypographyToken[] = [
     token: "typo-headline-b-20",
     size: "20px",
     weight: "700",
+    lineHeight: "150%",
+    letterSpacing: "-0.03em",
+  },
+  {
+    token: "typo-headline-m-20",
+    size: "20px",
+    weight: "500",
     lineHeight: "150%",
     letterSpacing: "-0.03em",
   },
