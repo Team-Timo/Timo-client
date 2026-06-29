@@ -6,49 +6,89 @@
 ## 네이밍 규칙
 
 - Tailwind CSS 클래스명과 1:1 대응을 원칙으로 한다
-- CSS 변수명: `--timo-{category}-{scale}`
+- CSS 변수명: `--color-timo-{category}-{scale}`
 - 컴포넌트 내에서는 Tailwind 클래스를 직접 사용하고, 커스텀 값은 `tailwind.config`에 등록한다
 
 ## Color
 
-<!-- | 토큰 | CSS 변수 | 용도 |
-|------|---------|------|
-| `primary-500` | `--timo-primary-500` | 브랜드 메인 (버튼, 강조) |
-| `primary-100` | `--timo-primary-100` | 브랜드 라이트 (배경 강조) |
-| `gray-900` | `--timo-gray-900` | 텍스트 기본 |
-| `gray-500` | `--timo-gray-500` | 텍스트 보조 |
-| `gray-200` | `--timo-gray-200` | 구분선·비활성 |
-| `gray-100` | `--timo-gray-100` | 배경 서피스 |
-| `error-500` | `--timo-error-500` | 에러·경고 상태 |
-| `success-500` | `--timo-success-500` | 완료·성공 상태 | -->
+소스: `packages/tailwind-config/tokens/colors.css`  
+Tailwind 클래스 사용 예: `bg-timo-blue-50`, `text-timo-gray-900`
+
+### Blue
+
+| 토큰            | CSS 변수                | 값        |
+| --------------- | ----------------------- | --------- |
+| `timo-blue-50`  | `--color-timo-blue-50`  | `#f1f6fe` |
+| `timo-blue-65`  | `--color-timo-blue-65`  | `#dee9ff` |
+| `timo-blue-75`  | `--color-timo-blue-75`  | `#c6d8fc` |
+| `timo-blue-100` | `--color-timo-blue-100` | `#aec8fb` |
+| `timo-blue-200` | `--color-timo-blue-200` | `#8cb0f9` |
+| `timo-blue-300` | `--color-timo-blue-300` | `#74a0f8` |
+
+### Gray
+
+| 토큰            | CSS 변수                | 값        |
+| --------------- | ----------------------- | --------- |
+| `timo-gray-300` | `--color-timo-gray-300` | `#f5f5f5` |
+| `timo-gray-500` | `--color-timo-gray-500` | `#e6e8e8` |
+| `timo-gray-600` | `--color-timo-gray-600` | `#d8d8d8` |
+| `timo-gray-700` | `--color-timo-gray-700` | `#9f9f9f` |
+| `timo-gray-800` | `--color-timo-gray-800` | `#757575` |
+| `timo-gray-900` | `--color-timo-gray-900` | `#3f3f3f` |
+| `timo-gray`     | `--color-timo-gray`     | `#bebebe` |
+
+### Accent
+
+| 토큰              | CSS 변수                  | 값        |
+| ----------------- | ------------------------- | --------- |
+| `timo-yellow-300` | `--color-timo-yellow-300` | `#f2fc9f` |
+| `timo-red`        | `--color-timo-red`        | `#ff6650` |
+| `timo-orange`     | `--color-timo-orange`     | `#ffb157` |
+
+### Base
+
+| 토큰         | CSS 변수             | 값        |
+| ------------ | -------------------- | --------- |
+| `timo-black` | `--color-timo-black` | `#121212` |
 
 ## Typography
 
-<!-- | 토큰 | 크기 / 굵기 | 용도 |
-|------|------------|------|
-| `text-2xl` | 24px / 700 | 페이지 제목 |
-| `text-xl` | 20px / 600 | 섹션 제목 |
-| `text-lg` | 18px / 500 | 카드 제목 |
-| `text-base` | 16px / 400 | 본문 기본 |
-| `text-sm` | 14px / 400 | 보조 텍스트 |
-| `text-xs` | 12px / 400 | 캡션·레이블 | -->
+소스: `packages/tailwind-config/tokens/typography.css`  
+Tailwind 클래스 사용 예: `typo-headline-b-24`, `typo-body-r-12`  
+모든 토큰의 `line-height: 1.5`, `letter-spacing: -0.03em`은 공통 적용됩니다.
 
-## Spacing
+웨이트 약어: `b` = Bold(700) · `sb` = SemiBold(600) · `m` = Medium(500) · `r` = Regular(400)
 
-<!-- | 토큰 | 값 | 용도 |
-|------|-----|------|
-| `space-1` | 4px | 아이콘·텍스트 사이 최소 간격 |
-| `space-2` | 8px | 컴포넌트 내부 패딩 |
-| `space-4` | 16px | 기본 간격 |
-| `space-6` | 24px | 섹션 내부 간격 |
-| `space-8` | 32px | 카드·패널 간격 |
-| `space-12` | 48px | 페이지 상하 여백 | -->
+### Headline
 
-## Border Radius
+| 토큰            | 클래스               | 크기 | 굵기 |
+| --------------- | -------------------- | ---- | ---- |
+| `headline-b-50` | `typo-headline-b-50` | 50px | 700  |
+| `headline-b-30` | `typo-headline-b-30` | 30px | 700  |
+| `headline-m-26` | `typo-headline-m-26` | 26px | 500  |
+| `headline-b-24` | `typo-headline-b-24` | 24px | 700  |
+| `headline-b-22` | `typo-headline-b-22` | 22px | 700  |
+| `headline-b-20` | `typo-headline-b-20` | 20px | 700  |
+| `headline-m-20` | `typo-headline-m-20` | 20px | 500  |
+| `headline-b-18` | `typo-headline-b-18` | 18px | 700  |
+| `headline-b-16` | `typo-headline-b-16` | 16px | 700  |
+| `headline-m-16` | `typo-headline-m-16` | 16px | 500  |
+| `headline-b-14` | `typo-headline-b-14` | 14px | 700  |
+| `headline-m-14` | `typo-headline-m-14` | 14px | 500  |
+| `headline-r-14` | `typo-headline-r-14` | 14px | 400  |
 
-<!-- | 토큰 | 값 | 용도 |
-|------|-----|------|
-| `radius-sm` | 4px | 인풋·태그 |
-| `radius-md` | 8px | 버튼·카드 |
-| `radius-lg` | 12px | 모달·바텀시트 |
-| `radius-full` | 9999px | 뱃지·아바타 | -->
+### Body
+
+| 토큰         | 클래스            | 크기 | 굵기 |
+| ------------ | ----------------- | ---- | ---- |
+| `body-b-12`  | `typo-body-b-12`  | 12px | 700  |
+| `body-sb-12` | `typo-body-sb-12` | 12px | 600  |
+| `body-m-12`  | `typo-body-m-12`  | 12px | 500  |
+| `body-r-12`  | `typo-body-r-12`  | 12px | 400  |
+| `body-sb-11` | `typo-body-sb-11` | 11px | 600  |
+
+### Caption
+
+| 토큰           | 클래스              | 크기 | 굵기 |
+| -------------- | ------------------- | ---- | ---- |
+| `caption-r-10` | `typo-caption-r-10` | 10px | 400  |
