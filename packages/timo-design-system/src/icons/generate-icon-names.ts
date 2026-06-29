@@ -7,7 +7,8 @@ const outputFile = path.resolve(process.cwd(), "src/icons/iconNames.ts");
 const names = fs
   .readdirSync(sourceDir)
   .filter((f) => f.endsWith(".svg"))
-  .map((f) => path.basename(f, ".svg"));
+  .map((f) => path.basename(f, ".svg"))
+  .sort();
 
 const content = `// auto-generated
 export type IconName =\n  | ${names.map((n) => `'${n}'`).join("\n  | ")};\n`;
