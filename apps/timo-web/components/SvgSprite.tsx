@@ -1,16 +1,21 @@
 import fs from "fs";
 import path from "path";
 
+const spritePath = path.resolve(process.cwd(), "public/sprite.svg");
+let cachedSprite: string | null | undefined;
+
 export const SvgSprite = () => {
-  const spritePath = path.resolve(process.cwd(), "public/sprite.svg");
+  if (cachedSprite === undefined) {
+    cachedSprite = fs.existsSync(spritePath)
+      ? fs.readFileSync(spritePath, "utf-8")
+      : null;
+  }
 
-  if (!fs.existsSync(spritePath)) return null;
-
-  const sprite = fs.readFileSync(spritePath, "utf-8");
+  if (!cachedSprite) return null;
 
   return (
     <div
-      dangerouslySetInnerHTML={{ __html: sprite }}
+      dangerouslySetInnerHTML={{ __html: cachedSprite }}
       style={{ display: "none" }}
     />
   );
