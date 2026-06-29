@@ -58,6 +58,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: pnpm/action-setup@v4
 
@@ -71,9 +72,11 @@ jobs:
 
       - name: Check affected packages
         id: affected
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           set +e
-          pnpm turbo query affected --base origin/${{ github.base_ref }} --head HEAD --exit-code
+          pnpm turbo query affected --base "origin/$BASE_REF" --head HEAD --exit-code
           CODE=$?
           set -e
           echo "has_changes=$([ $CODE -eq 1 ] && echo true || echo false)" >> $GITHUB_OUTPUT
