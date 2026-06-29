@@ -36,4 +36,4 @@ yarn-error.log*
 next-env.d.ts
 
 #icons
-apps/timo-web/public/sprite.svg
+/public/sprite.svg
