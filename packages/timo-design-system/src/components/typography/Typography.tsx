@@ -18,7 +18,7 @@ export const Typography = ({
       }}
     >
       <div className={token} style={{ minWidth: "200px", color: "#171717" }}>
-        가나다라마 Aa
+        계획 실행의 과정을 함께하는 Timo
       </div>
       <div>
         <div
