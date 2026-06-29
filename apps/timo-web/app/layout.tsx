@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 
 import type { Metadata } from "next";
 
+import { SvgSprite } from "@/components/SvgSprite";
 import { QueryProvider } from "@/providers/QueryProvider";
 
 const pretendard = localFont({
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="en" className={pretendard.variable}>
       <body>
+        <SvgSprite />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
