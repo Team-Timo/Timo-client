@@ -13,6 +13,7 @@
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "build:storybook": "storybook build",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --only-changed --exit-zero-on-changes"
   },
   "devDependencies": {

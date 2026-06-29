@@ -56,6 +56,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -67,5 +69,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check affected packages
+        id: affected
+        run: |
+          set +e
+          pnpm turbo query affected --base origin/${{ github.base_ref }} --head HEAD --exit-code
+          CODE=$?
+          set -e
+          echo "has_changes=$([ $CODE -eq 1 ] && echo true || echo false)" >> $GITHUB_OUTPUT
+
       - name: Build
+        if: steps.affected.outputs.has_changes == 'true'
         run: pnpm build
