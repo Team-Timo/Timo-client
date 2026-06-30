@@ -14,7 +14,8 @@
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --only-changed --exit-zero-on-changes"
+    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --only-changed --exit-zero-on-changes",
+    "icons:generate": "node generate-icons.mjs"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -27,6 +28,7 @@
     "@storybook/addon-links": "^8.6.14",
     "@storybook/react": "8.6.14",
     "@storybook/react-vite": "^8.6.14",
+    "@svgr/cli": "^8.1.0",
     "@tailwindcss/postcss": "^4.3.1",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
