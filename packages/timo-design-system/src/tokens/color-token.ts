@@ -12,6 +12,7 @@ export const COLOR_TOKENS: ColorToken[] = [
   { name: "timo-blue-200", cssVar: "--color-timo-blue-200", value: "#8CB0F9" },
   { name: "timo-blue-300", cssVar: "--color-timo-blue-300", value: "#74A0F8" },
 
+  { name: "timo-gray-200", cssVar: "--color-timo-gray-200", value: "#FBFBFB" },
   { name: "timo-gray-300", cssVar: "--color-timo-gray-300", value: "#F5F5F5" },
   { name: "timo-gray-500", cssVar: "--color-timo-gray-500", value: "#E6E8E8" },
   { name: "timo-gray-600", cssVar: "--color-timo-gray-600", value: "#D8D8D8" },
