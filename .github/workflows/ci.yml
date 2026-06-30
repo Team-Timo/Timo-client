@@ -79,7 +79,14 @@ jobs:
           pnpm turbo query affected --base "origin/$BASE_REF" --head HEAD --exit-code
           CODE=$?
           set -e
-          echo "has_changes=$([ $CODE -eq 1 ] && echo true || echo false)" >> $GITHUB_OUTPUT
+          if [ $CODE -eq 0 ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          elif [ $CODE -eq 1 ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "turbo query failed with exit code $CODE"
+            exit $CODE
+          fi
 
       - name: Build
         if: steps.affected.outputs.has_changes == 'true'
