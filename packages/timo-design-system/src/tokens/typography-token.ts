@@ -15,6 +15,13 @@ export const TYPOGRAPHY_TOKENS: TypographyToken[] = [
     letterSpacing: "-0.03em",
   },
   {
+    token: "typo-headline-b-40",
+    size: "40px",
+    weight: "700",
+    lineHeight: "150%",
+    letterSpacing: "-0.03em",
+  },
+  {
     token: "typo-headline-b-30",
     size: "30px",
     weight: "700",
