@@ -14,7 +14,7 @@ export interface PriorityIconProps {
   priority: Priority;
 }
 
-export const PriorityIcon = ({ priority = "매우중요" }: PriorityIconProps) => {
+export const PriorityIcon = ({ priority }: PriorityIconProps) => {
   return (
     <div
       className={cn("size-4.5 shrink-0 rounded-full", PRIORITY_COLOR[priority])}
