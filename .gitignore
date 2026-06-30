@@ -43,3 +43,6 @@ yarn-error.log*
 # Storybook build output
 packages/timo-design-system/storybook-static/
 packages/timo-design-system/build-storybook.log
+
+# Icon generated files
+packages/timo-design-system/src/icons/generated/

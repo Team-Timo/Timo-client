@@ -15,7 +15,8 @@
     "check-types": "turbo run check-types",
     "check-types:web": "turbo run check-types --filter=timo-web",
     "gen": "turbo gen",
-    "prepare": "husky"
+    "prepare": "husky",
+    "icons:generate": "pnpm --filter @repo/timo-design-system icons:generate"
   },
   "devDependencies": {
     "@turbo/gen": "^2.9.18",

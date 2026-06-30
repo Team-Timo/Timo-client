@@ -9,8 +9,12 @@
     "CI"
   ],
   "tasks": {
+    "icons:generate": {
+      "inputs": ["src/icons/source/**"],
+      "outputs": ["src/icons/generated/**", "src/icons/index.ts"]
+    },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "^icons:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
       "passThroughEnv": ["SENTRY_AUTH_TOKEN"]
