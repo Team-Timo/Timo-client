@@ -23,7 +23,7 @@
       "dependsOn": ["^lint"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["^check-types", "icons:generate"]
     },
     "dev": {
       "cache": false,
