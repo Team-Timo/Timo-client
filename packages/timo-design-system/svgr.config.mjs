@@ -29,11 +29,9 @@ const config = {
     return tpl`
 ${variables.imports};
 
-const ${name} = (${variables.props}) => (
+export const ${name} = (${variables.props}) => (
   ${variables.jsx}
 );
-
-export { ${name} };
 `;
   },
 };
