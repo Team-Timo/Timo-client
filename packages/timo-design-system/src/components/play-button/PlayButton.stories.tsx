@@ -15,10 +15,10 @@ const meta = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["play", "stop", "disabled"],
+      options: ["play", "stop"],
       description: "버튼 상태",
       table: {
-        type: { summary: "play | stop | disabled" },
+        type: { summary: "play | stop" },
       },
     },
     size: {
@@ -28,6 +28,14 @@ const meta = {
       table: {
         type: { summary: "sm | lg" },
         defaultValue: { summary: "sm" },
+      },
+    },
+    disabled: {
+      control: "boolean",
+      description: "비활성화 여부",
+      table: {
+        type: { summary: "boolean" },
+        defaultValue: { summary: "false" },
       },
     },
   },
@@ -61,7 +69,7 @@ export const Stop: Story = {
 };
 
 export const Disabled: Story = {
-  args: { variant: "disabled", size: "sm" },
+  args: { variant: "play", size: "sm", disabled: true },
   render: (args) => (
     <PlayButton {...args}>
       <PlayDisabledIcon
@@ -84,7 +92,7 @@ export const AllVariants: Story = {
         <PlayButton variant="stop" size="sm">
           <StopIcon width={12} height={12} />
         </PlayButton>
-        <PlayButton variant="disabled" size="sm">
+        <PlayButton variant="play" size="sm" disabled>
           <PlayDisabledIcon width={12} height={12} />
         </PlayButton>
       </div>
@@ -95,7 +103,7 @@ export const AllVariants: Story = {
         <PlayButton variant="stop" size="lg">
           <StopIcon width={24} height={24} />
         </PlayButton>
-        <PlayButton variant="disabled" size="lg">
+        <PlayButton variant="play" size="lg" disabled>
           <PlayDisabledIcon width={24} height={24} />
         </PlayButton>
       </div>
