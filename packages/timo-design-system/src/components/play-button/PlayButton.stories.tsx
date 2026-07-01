@@ -1,7 +1,7 @@
 import { PlayButton } from "./PlayButton";
-import { PauseIcon } from "../../icons/generated/Pause";
 import { PlayIcon } from "../../icons/generated/Play";
 import { PlayDisabledIcon } from "../../icons/generated/PlayDisabled";
+import { StopIcon } from "../../icons/generated/Stop";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
@@ -21,6 +21,15 @@ const meta = {
         type: { summary: "play | stop | disabled" },
       },
     },
+    size: {
+      control: "select",
+      options: ["sm", "lg"],
+      description: "버튼 크기 (sm: 24×24, lg: 40×40)",
+      table: {
+        type: { summary: "sm | lg" },
+        defaultValue: { summary: "sm" },
+      },
+    },
   },
 } satisfies Meta<typeof PlayButton>;
 
@@ -28,45 +37,72 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Play: Story = {
-  args: { variant: "play" },
+  args: { variant: "play", size: "sm" },
   render: (args) => (
     <PlayButton {...args}>
-      <PlayIcon />
+      <PlayIcon
+        width={args.size === "lg" ? 24 : 12}
+        height={args.size === "lg" ? 24 : 12}
+      />
     </PlayButton>
   ),
 };
 
 export const Stop: Story = {
-  args: { variant: "stop" },
+  args: { variant: "stop", size: "sm" },
   render: (args) => (
     <PlayButton {...args}>
-      <PauseIcon />
+      <StopIcon
+        width={args.size === "lg" ? 24 : 12}
+        height={args.size === "lg" ? 24 : 12}
+      />
     </PlayButton>
   ),
 };
 
 export const Disabled: Story = {
-  args: { variant: "disabled" },
+  args: { variant: "disabled", size: "sm" },
   render: (args) => (
     <PlayButton {...args}>
-      <PlayDisabledIcon />
+      <PlayDisabledIcon
+        width={args.size === "lg" ? 24 : 12}
+        height={args.size === "lg" ? 24 : 12}
+      />
     </PlayButton>
   ),
 };
 
-export const All: Story = {
-  name: "All Variants",
-  args: { variant: "play" },
+export const AllSmall: Story = {
+  name: "All Variants — sm",
+  args: { variant: "play", size: "sm" },
   render: () => (
     <div className="flex items-center gap-4">
-      <PlayButton variant="play">
-        <PlayIcon />
+      <PlayButton variant="play" size="sm">
+        <PlayIcon width={12} height={12} />
       </PlayButton>
-      <PlayButton variant="stop">
-        <PauseIcon />
+      <PlayButton variant="stop" size="sm">
+        <StopIcon width={12} height={12} />
       </PlayButton>
-      <PlayButton variant="disabled">
-        <PlayDisabledIcon />
+      <PlayButton variant="disabled" size="sm">
+        <PlayDisabledIcon width={12} height={12} />
+      </PlayButton>
+    </div>
+  ),
+};
+
+export const AllLarge: Story = {
+  name: "All Variants — lg",
+  args: { variant: "play", size: "lg" },
+  render: () => (
+    <div className="flex items-center gap-4">
+      <PlayButton variant="play" size="lg">
+        <PlayIcon width={24} height={24} />
+      </PlayButton>
+      <PlayButton variant="stop" size="lg">
+        <StopIcon width={24} height={24} />
+      </PlayButton>
+      <PlayButton variant="disabled" size="lg">
+        <PlayDisabledIcon width={24} height={24} />
       </PlayButton>
     </div>
   ),
