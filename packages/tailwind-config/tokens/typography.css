@@ -2,10 +2,26 @@
   --font-pretendard: var(--font-family-pretendard), sans-serif;
 
   /* Headline */
+
+  --typo-size-headline-b-50: 50px;
+  --typo-line-height-headline-b-50: 1.5;
+  --typo-letter-spacing-headline-b-50: -0.03em;
+  --typo-font-weight-headline-b-50: 700;
+
+  --typo-size-headline-b-40: 40px;
+  --typo-line-height-headline-b-40: 1.5;
+  --typo-letter-spacing-headline-b-40: -0.03em;
+  --typo-font-weight-headline-b-40: 700;
+
   --typo-size-headline-b-30: 30px;
   --typo-line-height-headline-b-30: 1.5;
   --typo-letter-spacing-headline-b-30: -0.03em;
   --typo-font-weight-headline-b-30: 700;
+
+  --typo-size-headline-m-26: 26px;
+  --typo-line-height-headline-m-26: 1.5;
+  --typo-letter-spacing-headline-m-26: -0.03em;
+  --typo-font-weight-headline-m-26: 500;
 
   --typo-size-headline-b-24: 24px;
   --typo-line-height-headline-b-24: 1.5;
@@ -21,6 +37,11 @@
   --typo-line-height-headline-b-20: 1.5;
   --typo-letter-spacing-headline-b-20: -0.03em;
   --typo-font-weight-headline-b-20: 700;
+
+  --typo-size-headline-m-20: 20px;
+  --typo-line-height-headline-m-20: 1.5;
+  --typo-letter-spacing-headline-m-20: -0.03em;
+  --typo-font-weight-headline-m-20: 500;
 
   --typo-size-headline-b-18: 18px;
   --typo-line-height-headline-b-18: 1.5;
