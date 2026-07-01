@@ -36,10 +36,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate icons
-        working-directory: packages/timo-design-system
-        run: pnpm run icons:generate
-
       - name: Publish to Chromatic
         id: chromatic
         uses: chromaui/action@latest
