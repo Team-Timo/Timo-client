@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta = {
   title: "Components/CreateButton",
   component: CreateButton,
-  tags: ["autodocs"],
   parameters: {
     layout: "centered",
   },
