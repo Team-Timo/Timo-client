@@ -37,10 +37,8 @@ export const AddTaskButton = ({
 
       <span
         className={cn(
-          "text-timo-gray-700 whitespace-nowrap",
-          isWeekly
-            ? "min-w-0 flex-1 overflow-hidden text-ellipsis"
-            : "shrink-0",
+          "text-timo-gray-700",
+          isWeekly ? "min-w-0 flex-1 truncate" : "shrink-0 whitespace-nowrap",
         )}
       >
         {text}
