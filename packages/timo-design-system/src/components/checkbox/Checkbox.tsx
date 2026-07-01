@@ -44,7 +44,7 @@ export const Checkbox = ({
             overflow="visible"
             fill="none"
             aria-hidden="true"
-            className={cn(disabled ? "text-white" : "text-timo-yellow-300")}
+            className="text-timo-yellow-300"
           >
             <path
               d="M0.75 3.5L3.5 6.25L9.25 0.75"
