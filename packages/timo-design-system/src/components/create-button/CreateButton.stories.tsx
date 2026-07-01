@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta = {
   title: "Components/CreateButton",
   component: CreateButton,
+  tags: ["autodocs"],
   parameters: {
     layout: "centered",
   },
@@ -12,14 +13,17 @@ const meta = {
     label: {
       control: "text",
       description: "버튼에 표시될 텍스트",
+      table: {
+        type: { summary: "string" },
+      },
     },
     disabled: {
       control: "boolean",
       description: "버튼 비활성화 여부",
-    },
-    onClick: {
-      action: "clicked",
-      description: "클릭 이벤트 핸들러",
+      table: {
+        type: { summary: "boolean" },
+        defaultValue: { summary: "false" },
+      },
     },
   },
 } satisfies Meta<typeof CreateButton>;
@@ -28,7 +32,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: { label: "생성하기", disabled: false },
+  args: { label: "생성하기" },
 };
 
 export const Disabled: Story = {
