@@ -1,6 +1,5 @@
+import { cn } from "@lib";
 import { ReactNode } from "react";
-
-import { cn } from "../../lib";
 
 export type PlayButtonVariant = "play" | "stop" | "disabled";
 export type PlayButtonSize = "sm" | "lg";
