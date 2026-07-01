@@ -1,7 +1,6 @@
 import { cn } from "@lib";
 import { useId } from "react";
 
-
 export interface CheckboxProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
