@@ -1,8 +1,5 @@
-import { ReactElement } from "react";
+import { ReactNode } from "react";
 
-import { PauseIcon } from "../../icons/generated/Pause";
-import { PlayIcon } from "../../icons/generated/Play";
-import { PlayDisabledIcon } from "../../icons/generated/PlayDisabled";
 import { cn } from "../../lib";
 
 export type PlayButtonVariant = "play" | "stop" | "disabled";
@@ -10,31 +7,36 @@ export type PlayButtonVariant = "play" | "stop" | "disabled";
 export interface PlayButtonProps {
   variant: PlayButtonVariant;
   onClick?: () => void;
+  children?: ReactNode;
 }
 
-const VARIANT_MAP: Record<
-  PlayButtonVariant,
-  { icon: ReactElement; className: string }
-> = {
-  play: { icon: <PlayIcon />, className: "cursor-pointer bg-timo-blue-50" },
-  stop: { icon: <PauseIcon />, className: "cursor-pointer bg-timo-blue-50" },
-  disabled: { icon: <PlayDisabledIcon />, className: "bg-timo-gray-500" },
+const VARIANT_MAP: Record<PlayButtonVariant, { className: string }> = {
+  play: { className: "cursor-pointer bg-timo-blue-50" },
+  stop: { className: "cursor-pointer bg-timo-blue-50" },
+  disabled: { className: "bg-timo-gray-500" },
 };
 
-export const PlayButton = ({ variant, onClick }: PlayButtonProps) => {
-  const { icon, className } = VARIANT_MAP[variant];
+const ARIA_LABEL_MAP: Record<PlayButtonVariant, string> = {
+  play: "재생",
+  stop: "정지",
+  disabled: "재생 불가",
+};
+
+export const PlayButton = ({ variant, onClick, children }: PlayButtonProps) => {
+  const { className } = VARIANT_MAP[variant];
 
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={variant === "disabled"}
+      aria-label={ARIA_LABEL_MAP[variant]}
       className={cn(
         "inline-flex size-6 items-center justify-center rounded-full",
         className,
       )}
     >
-      {icon}
+      {children}
     </button>
   );
 };

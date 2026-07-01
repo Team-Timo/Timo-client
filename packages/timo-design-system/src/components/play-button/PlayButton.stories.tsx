@@ -1,4 +1,7 @@
 import { PlayButton } from "./PlayButton";
+import { PauseIcon } from "../../icons/generated/Pause";
+import { PlayIcon } from "../../icons/generated/Play";
+import { PlayDisabledIcon } from "../../icons/generated/PlayDisabled";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
@@ -26,14 +29,29 @@ type Story = StoryObj<typeof meta>;
 
 export const Play: Story = {
   args: { variant: "play" },
+  render: (args) => (
+    <PlayButton {...args}>
+      <PlayIcon />
+    </PlayButton>
+  ),
 };
 
 export const Stop: Story = {
   args: { variant: "stop" },
+  render: (args) => (
+    <PlayButton {...args}>
+      <PauseIcon />
+    </PlayButton>
+  ),
 };
 
 export const Disabled: Story = {
   args: { variant: "disabled" },
+  render: (args) => (
+    <PlayButton {...args}>
+      <PlayDisabledIcon />
+    </PlayButton>
+  ),
 };
 
 export const All: Story = {
@@ -41,9 +59,15 @@ export const All: Story = {
   args: { variant: "play" },
   render: () => (
     <div className="flex items-center gap-4">
-      <PlayButton variant="play" />
-      <PlayButton variant="stop" />
-      <PlayButton variant="disabled" />
+      <PlayButton variant="play">
+        <PlayIcon />
+      </PlayButton>
+      <PlayButton variant="stop">
+        <PauseIcon />
+      </PlayButton>
+      <PlayButton variant="disabled">
+        <PlayDisabledIcon />
+      </PlayButton>
     </div>
   ),
 };
