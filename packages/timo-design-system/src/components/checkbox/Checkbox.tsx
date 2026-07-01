@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 import { cn } from "../../lib/cn";
 
 export interface CheckboxProps {
@@ -13,8 +15,10 @@ export const Checkbox = ({
   disabled = false,
   className,
 }: CheckboxProps) => {
+  const id = useId();
   return (
     <label
+      htmlFor={id}
       className={cn(
         "relative inline-flex h-6 w-6 shrink-0 items-center justify-center",
         disabled ? "cursor-not-allowed" : "cursor-pointer",
@@ -22,15 +26,16 @@ export const Checkbox = ({
       )}
     >
       <input
+        id={id}
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
         disabled={disabled}
-        className="sr-only"
+        className="peer sr-only"
       />
       <span
         className={cn(
-          "flex h-[18px] w-[18px] items-center justify-center rounded-[4px] border transition-colors",
+          "peer-focus-visible:ring-timo-blue-300 flex h-[18px] w-[18px] items-center justify-center rounded-[4px] border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-1",
           !checked && "border-timo-gray-500",
           checked && !disabled && "border-timo-blue-300 bg-timo-blue-300",
           checked && disabled && "bg-timo-blue-100 border-timo-blue-100",
