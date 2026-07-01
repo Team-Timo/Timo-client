@@ -10,13 +10,13 @@ const ADD_TASK_BUTTON_VARIANT: Record<AddTaskButtonVariant, string> = {
 };
 
 export interface AddTaskButtonProps {
-  text?: string;
+  text: string;
   variant?: AddTaskButtonVariant;
   onClick?: () => void;
 }
 
 export const AddTaskButton = ({
-  text = "할 일을 추가하세요",
+  text,
   variant = "default",
   onClick,
 }: AddTaskButtonProps) => {
