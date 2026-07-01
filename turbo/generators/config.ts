@@ -23,9 +23,15 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         templateFile: "templates/component/component.tsx.hbs",
       },
       {
+        type: "add",
+        path: "packages/timo-design-system/src/components/{{kebabCase name}}/{{pascalCase name}}.stories.tsx",
+        templateFile: "templates/component/component.stories.tsx.hbs",
+      },
+      {
         type: "append",
         path: "packages/timo-design-system/src/components/index.ts",
-        template: 'export { {{pascalCase name}} } from "./{{kebabCase name}}/{{pascalCase name}}";',
+        template:
+          'export { {{pascalCase name}} } from "./{{kebabCase name}}/{{pascalCase name}}";',
       },
     ],
   });

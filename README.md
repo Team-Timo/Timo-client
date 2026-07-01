@@ -132,7 +132,7 @@ Timo is optimized for desktop use — designed for students and job seekers who 
 | ----------------------------------------------------- | ------------------------------------------ |
 | Conventions (commit · branch · code style · naming)   | [docs/conventions/](./docs/conventions/)   |
 | Architecture (stack · structure · components · state) | [docs/architecture/](./docs/architecture/) |
-| Design (tokens · Figma)                               | [docs/design/](./docs/design/)             |
+| Design (tokens · Figma · Storybook)                   | [docs/design/](./docs/design/)             |
 
 ## AI Collaboration
 

@@ -21,7 +21,7 @@ app/
   auth/
     _components/    # LoginForm, SocialLoginButton 등 순수 UI
     _containers/    # LoginFormContainer (useQuery·zustand 결합)
-    _queries/       # useLoginMutation, useUserProfileQuery 등
+    _queries/       # use-login-mutation, use-user-profile-query 등
     page.tsx        # 레이아웃 조합만 (Server Component)
     layout.tsx
 ```

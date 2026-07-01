@@ -1,3 +1,4 @@
+
 language: "ko-KR"
 early_access: false
 
@@ -45,7 +46,7 @@ reviews:
         - 컴포넌트는 반드시 Arrow function + Named export: `export const Component = () => {}`
         - `default export`는 `page.tsx`, `layout.tsx` 등 Next.js 필수 파일에만 허용
         - 자식 없으면 self-closing: `<Component />`
-        - 최상단 래퍼는 Fragment: `<>…</>`
+        - 불필요한 div 래핑 금지 — 컴포넌트 자체가 시각적 컨테이너(배경색·크기·border-radius 등 스타일을 정의)인 경우는 div 허용, 그 외 단순 그룹핑 목적이면 Fragment `<>…</>` 사용
 
         ### Import
         - 절대 경로 import 사용 (상대 경로 `../../` 지양)

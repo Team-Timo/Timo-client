@@ -9,19 +9,31 @@
     "CI"
   ],
   "tasks": {
+    "icons:generate": {
+      "inputs": ["src/icons/source/**"],
+      "outputs": ["src/icons/generated/**", "src/icons/index.ts"]
+    },
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "description": "Next.js 앱 빌드 및 패키지 컴파일",
+      "dependsOn": ["^build", "^icons:generate"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "!**/*.stories.{tsx,mdx}"],
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
       "passThroughEnv": ["SENTRY_AUTH_TOKEN"]
     },
+    "build:storybook": {
+      "description": "Storybook 정적 파일 빌드",
+      "outputs": ["storybook-static/**"]
+    },
     "lint": {
+      "description": "ESLint로 코드 스타일 및 오류 검사",
       "dependsOn": ["^lint"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "description": "TypeScript 타입 검사",
+      "dependsOn": ["^check-types", "icons:generate"]
     },
     "dev": {
+      "description": "개발 서버 실행",
       "cache": false,
       "persistent": true
     }
