@@ -35,7 +35,7 @@ export const Checkbox = ({
       />
       <span
         className={cn(
-          "peer-focus-visible:ring-timo-blue-300 flex h-[18px] w-[18px] items-center justify-center rounded-[4px] border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-1",
+          "peer-focus-visible:ring-timo-blue-300 flex h-4.5 w-4.5 items-center justify-center rounded-[4px] border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-1",
           !checked && "border-timo-gray-500",
           checked && !disabled && "border-timo-blue-300 bg-timo-blue-300",
           checked && disabled && "bg-timo-blue-100 border-timo-blue-100",
