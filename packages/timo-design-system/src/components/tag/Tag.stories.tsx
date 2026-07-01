@@ -1,0 +1,33 @@
+import { Tag } from "./Tag";
+
+import type { Meta, StoryObj } from "@storybook/react";
+
+const meta = {
+  title: "Components/Tag",
+  component: Tag,
+  parameters: {
+    layout: "centered",
+  },
+  argTypes: {
+    text: {
+      control: "text",
+      description: "태그에 표시될 텍스트",
+    },
+    variant: {
+      control: "select",
+      options: ["default", "blue"],
+      description: "태그 스타일 베리언트",
+    },
+  },
+} satisfies Meta<typeof Tag>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: { text: "과제", variant: "default" },
+};
+
+export const Blue: Story = {
+  args: { text: "과제", variant: "blue" },
+};

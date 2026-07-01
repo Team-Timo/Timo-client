@@ -1,7 +1,26 @@
+import React from "react";
+
+import type { Preview } from "@storybook/react";
+
 import "../src/styles/globals.css";
-import type { Preview } from "@storybook/react-vite";
 
 const preview: Preview = {
+  decorators: [
+    (Story) =>
+      React.createElement(
+        "div",
+        {
+          style: {
+            padding: "2rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "120px",
+          },
+        },
+        React.createElement(Story),
+      ),
+  ],
   parameters: {
     controls: {
       matchers: {
@@ -21,7 +40,7 @@ const preview: Preview = {
           styles: { width: "1280px", height: "900px" },
         },
       },
-      defaultViewport: "desktop",
+      defaultViewport: "responsive",
     },
     layout: "centered",
     backgrounds: {
