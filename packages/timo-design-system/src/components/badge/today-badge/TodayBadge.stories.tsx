@@ -1,4 +1,4 @@
-import { TodayBadge } from "./TodayBadge";
+import { TodayBadge } from "@components/badge/today-badge/TodayBadge";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
