@@ -6,69 +6,190 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 Timo Design System의 공통 UI 컴포넌트는 Storybook을 통해 상태별 예시와 사용 방법을 문서화합니다.
 
-## Story 위치
+---
 
-컴포넌트 story는 컴포넌트와 같은 폴더에 작성합니다.
+## 파일 위치
 
-```txt
-components/
-  Button/
-    Button.tsx
-    Button.stories.tsx
-    index.ts
+Story 파일은 컴포넌트와 **같은 폴더**에 둡니다.
+
+```
+src/components/
+  tag/
+    Tag.tsx
+    Tag.stories.tsx
 ```
 
-## 파일 네이밍
+---
 
-Story 파일은 `ComponentName.stories.tsx` 형식을 사용합니다.
+## 사이드바 구조
 
-```txt
-Button.stories.tsx
-Input.stories.tsx
-```
+`title`로 사이드바 카테고리를 제어합니다. 프로젝트 정렬 순서는 다음과 같습니다:
 
-## 기본 Story 작성 예시
+| 카테고리 | title 형식 | 용도 |
+|---------|-----------|------|
+| Guides | `"Guides/{이름}"` | 가이드 문서 |
+| Tokens | `"Tokens/{이름}"` | 색상·타이포 토큰 전시 |
+| Components | `"Components/{이름}"` | UI 컴포넌트 |
+| Icons | `"Icons/{이름}"` | 아이콘 |
+
+---
+
+## Story 작성 패턴
+
+### 패턴 A — variant별 개별 Story
+
+유니언 타입 variant prop이 있는 컴포넌트. variant마다 Story를 따로 export합니다.
 
 ```tsx
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "./Button";
+import { PriorityIcon } from "./PriorityIcon";
+import type { Meta, StoryObj } from "@storybook/react";
 
-const meta: Meta<typeof Button> = {
+const meta = {
+  title: "Components/PriorityIcon",
+  component: PriorityIcon,
+  parameters: { layout: "centered" },
+  argTypes: {
+    priority: {
+      control: "select",
+      options: ["매우중요", "중요", "보통", "낮음", "Disable"],
+    },
+  },
+} satisfies Meta<typeof PriorityIcon>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const 매우중요: Story = { args: { priority: "매우중요" } };
+export const 중요: Story = { args: { priority: "중요" } };
+export const 보통: Story = { args: { priority: "보통" } };
+export const 낮음: Story = { args: { priority: "낮음" } };
+export const Disable: Story = { args: { priority: "Disable" } };
+```
+
+### 패턴 B — Default 단일 Story
+
+string 등 자유 입력 prop을 받는 컴포넌트. Controls 패널에서 직접 수정합니다.
+
+```tsx
+import { Tag } from "./Tag";
+import type { Meta, StoryObj } from "@storybook/react";
+
+const meta = {
+  title: "Components/Tag",
+  component: Tag,
+  parameters: { layout: "centered" },
+  argTypes: {
+    text: {
+      control: "text",
+      description: "태그에 표시될 텍스트",
+    },
+  },
+} satisfies Meta<typeof Tag>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: { text: "과제" },
+};
+```
+
+### 패턴 C — render() 전시 Story
+
+색상·타이포그래피 등 토큰을 전체 나열하는 전시용. `component`를 meta에서 생략하고 `render()`로 직접 렌더링합니다.
+
+```tsx
+import { Color } from "./Color";
+import { COLOR_TOKENS } from "../../tokens/color-token";
+import type { Meta, StoryObj } from "@storybook/react";
+
+const meta = {
+  title: "Tokens/Color",
+  parameters: { layout: "padded" },
+} satisfies Meta;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const All: Story = {
+  name: "All Colors",
+  render: () => (
+    <div style={{ fontFamily: "var(--font-family-pretendard)", maxWidth: "600px" }}>
+      {COLOR_TOKENS.map((token) => (
+        <Color key={token.name} {...token} />
+      ))}
+    </div>
+  ),
+};
+```
+
+---
+
+## argTypes control 종류
+
+| prop 타입 | control |
+|-----------|---------|
+| 유니언 타입 (variant) | `"select"` + `options: [...]` |
+| string | `"text"` |
+| boolean | `"boolean"` |
+| number | `"number"` |
+| 색상 | `"color"` |
+
+---
+
+## Autodocs
+
+`tags: ["autodocs"]`를 meta에 추가하면 Docs 탭이 자동 생성됩니다.
+
+```tsx
+const meta = {
   title: "Components/Button",
   component: Button,
   tags: ["autodocs"],
-};
+} satisfies Meta<typeof Button>;
+```
 
-export default meta;
+---
 
-type Story = StoryObj<typeof Button>;
+## play 함수 — 인터랙션 테스트
 
-export const Default: Story = {
-  args: {
-    children: "Button",
+버튼 클릭, 폼 입력 등 상태 변화가 있는 컴포넌트에 사용합니다.
+
+```tsx
+import { userEvent, within, expect } from "@storybook/test";
+
+export const Filled: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole("textbox"), "입력값");
+    await expect(canvas.getByRole("textbox")).toHaveValue("입력값");
   },
 };
 ```
 
-## Autodocs
+---
 
-컴포넌트 문서를 자동 생성하려면 story meta에 `tags: ["autodocs"]`를 추가합니다.
+## 배경·뷰포트 전환
+
+Toolbar에서 배경과 뷰포트를 전환할 수 있습니다.
+
+**배경**: white / gray / dark  
+**뷰포트**: Mobile(375px) / Tablet(768px) / Desktop(1280px)
+
+Story별 기본값 지정:
 
 ```tsx
-const meta: Meta<typeof Button> = {
-  title: "Components/Button",
-  component: Button,
-  tags: ["autodocs"],
+export const DarkMobile: Story = {
+  parameters: {
+    backgrounds: { default: "dark" },
+    viewport: { defaultViewport: "mobile" },
+  },
 };
 ```
 
-## Accessibility
+---
 
-접근성 검사는 Storybook 하단 패널의 `Accessibility` 탭에서 확인합니다.
+## 접근성 검사
 
-## Storybook 화면 구성
-
-- Sidebar: 등록된 story 목록을 확인합니다.
-- Canvas: 선택한 story가 렌더링되는 영역입니다.
-- Toolbar: viewport, zoom 등을 조정합니다.
-- Addons panel: Controls, Actions, Accessibility 결과를 확인합니다.
+하단 Addons 패널 → **Accessibility** 탭에서 자동 검사 결과를 확인합니다.  
+Violations(위반)이 있으면 컴포넌트 구현을 수정하세요.

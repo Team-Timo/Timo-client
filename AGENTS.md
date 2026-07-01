@@ -21,7 +21,7 @@ Claude Code / Codex 공통 진입점입니다.
 
 - Product: Timo 클라이언트
 - 도구: Claude Code, Codex
-- 스택: Next.js 16 (App Router) · TypeScript · Tailwind CSS · Zustand · TanStack React Query · pnpm · Turborepo
+- 스택: Next.js 16 (App Router) · TypeScript · Tailwind CSS · Zustand · TanStack React Query · pnpm · Turborepo · Storybook
 
 ---
 
@@ -67,4 +67,4 @@ Claude Code / Codex 공통 진입점입니다.
 | ------------------------------------------ | -------------------- |
 | 커밋·브랜치·이슈·코드 스타일·네이밍 컨벤션 | `docs/conventions/`  |
 | 기술 스택·컴포넌트 계층·상태 전략·스캐폴딩 | `docs/architecture/` |
-| 디자인 토큰·피그마 MCP 연동                | `docs/design/`       |
+| 디자인 토큰·피그마 MCP 연동·스토리북       | `docs/design/`       |
