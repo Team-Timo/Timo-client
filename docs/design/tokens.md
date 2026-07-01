@@ -6,7 +6,7 @@
 ## 네이밍 규칙
 
 - Tailwind CSS 클래스명과 1:1 대응을 원칙으로 한다
-- CSS 변수명: `--color-timo-{category}-{scale}`
+- CSS 변수명: `--color-timo-{category}[-{scale}]` (단색 토큰은 scale 생략)
 - 컴포넌트 내에서는 Tailwind 클래스를 직접 사용하고, 커스텀 값은 `tailwind.config`에 등록한다
 
 ## Color
@@ -29,6 +29,7 @@ Tailwind 클래스 사용 예: `bg-timo-blue-50`, `text-timo-gray-900`
 
 | 토큰            | CSS 변수                | 값        |
 | --------------- | ----------------------- | --------- |
+| `timo-gray-200` | `--color-timo-gray-200` | `#fbfbfb` |
 | `timo-gray-300` | `--color-timo-gray-300` | `#f5f5f5` |
 | `timo-gray-500` | `--color-timo-gray-500` | `#e6e8e8` |
 | `timo-gray-600` | `--color-timo-gray-600` | `#d8d8d8` |
@@ -64,6 +65,7 @@ Tailwind 클래스 사용 예: `typo-headline-b-24`, `typo-body-r-12`
 | 토큰            | 클래스               | 크기 | 굵기 |
 | --------------- | -------------------- | ---- | ---- |
 | `headline-b-50` | `typo-headline-b-50` | 50px | 700  |
+| `headline-b-40` | `typo-headline-b-40` | 40px | 700  |
 | `headline-b-30` | `typo-headline-b-30` | 30px | 700  |
 | `headline-m-26` | `typo-headline-m-26` | 26px | 500  |
 | `headline-b-24` | `typo-headline-b-24` | 24px | 700  |
