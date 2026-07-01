@@ -1,4 +1,4 @@
-import { TypographyToken } from "../../tokens/typography-token";
+import { TypographyToken } from "@tokens/typography-token";
 
 export const Typography = ({
   token,

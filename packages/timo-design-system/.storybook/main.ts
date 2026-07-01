@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import type { StorybookConfig } from "@storybook/react-vite";
 
 const config: StorybookConfig = {
@@ -14,6 +16,20 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: "tag",
+  },
+  viteFinal: async (config) => {
+    config.resolve ??= {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@components": path.resolve(__dirname, "../src/components"),
+      "@tokens": path.resolve(__dirname, "../src/tokens"),
+      "@icons": path.resolve(__dirname, "../src/icons"),
+      "@lib": path.resolve(__dirname, "../src/lib"),
+      "@styles": path.resolve(__dirname, "../src/styles"),
+      "@assets": path.resolve(__dirname, "../src/assets"),
+      "@guides": path.resolve(__dirname, "../src/guides"),
+    };
+    return config;
   },
 };
 
