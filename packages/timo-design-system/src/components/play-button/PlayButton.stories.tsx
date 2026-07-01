@@ -8,7 +8,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta = {
   title: "Components/PlayButton",
   component: PlayButton,
-  tags: ["autodocs"],
   parameters: {
     layout: "centered",
   },

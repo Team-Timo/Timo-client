@@ -15,7 +15,7 @@ export interface PlayButtonProps {
 const VARIANT_CLASS: Record<PlayButtonVariant, string> = {
   play: "cursor-pointer bg-timo-blue-50",
   stop: "cursor-pointer bg-timo-blue-50",
-  disabled: "bg-timo-gray-500",
+  disabled: "cursor-not-allowed bg-timo-gray-500",
 };
 
 const SIZE_CLASS: Record<PlayButtonSize, string> = {
