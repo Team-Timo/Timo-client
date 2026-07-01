@@ -22,6 +22,7 @@
     },
     "build:storybook": {
       "description": "Storybook 정적 파일 빌드",
+      "dependsOn": ["icons:generate"],
       "outputs": ["storybook-static/**"]
     },
     "lint": {
