@@ -1,5 +1,5 @@
-import { PlusIcon } from "../../../icons";
-import { cn } from "../../../lib";
+import { PlusIcon } from "@icons";
+import { cn } from "@lib";
 
 export type AddTaskButtonVariant = "default" | "weekly" | "big";
 
