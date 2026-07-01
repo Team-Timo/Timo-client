@@ -1,4 +1,4 @@
-import { ColorToken } from "../../tokens/color-token";
+import { ColorToken } from "@tokens/color-token";
 
 export const Color = ({ name, cssVar, value }: ColorToken) => {
   return (
