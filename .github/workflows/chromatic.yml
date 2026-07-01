@@ -38,9 +38,13 @@ jobs:
 
       - name: Publish to Chromatic
         id: chromatic
-        run: pnpm chromatic
-        env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: packages/timo-design-system
+          buildScriptName: build:storybook
+          onlyChanged: true
+          exitZeroOnChanges: true
 
       - name: Comment Storybook preview link on PR
         if: success()

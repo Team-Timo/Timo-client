@@ -1,21 +1,23 @@
 @theme {
-    --color-timo-blue-50: #F1F6FE;
-    --color-timo-blue-75: #C6D8FC;
-    --color-timo-blue-100: #AEC8FB;
-    --color-timo-blue-200: #8CB0F9;
-    --color-timo-blue-300: #74A0F8;
+  --color-timo-blue-50: #f1f6fe;
+  --color-timo-blue-65: #dee9ff;
+  --color-timo-blue-75: #c6d8fc;
+  --color-timo-blue-100: #aec8fb;
+  --color-timo-blue-200: #8cb0f9;
+  --color-timo-blue-300: #74a0f8;
 
-    --color-timo-gray-300: #F5F5F5;
-    --color-timo-gray-500: #E6E8E8;
-    --color-timo-gray-600: #D8D8D8;
-    --color-timo-gray-700: #9F9F9F;
-    --color-timo-gray-800: #757575;
-    --color-timo-gray-900: #3F3F3F;
+  --color-timo-gray-200: #fbfbfb;
+  --color-timo-gray-300: #f5f5f5;
+  --color-timo-gray-500: #e6e8e8;
+  --color-timo-gray-600: #d8d8d8;
+  --color-timo-gray-700: #9f9f9f;
+  --color-timo-gray-800: #757575;
+  --color-timo-gray-900: #3f3f3f;
 
-    --color-timo-yellow-300: #F2FC9F;
-    
-    --color-timo-black: #121212;
-    --color-timo-red: #FF6650;
-    --color-timo-orange: #FFB157;
-    --color-timo-green: #9FDDA9;
+  --color-timo-yellow-300: #f2fc9f;
+
+  --color-timo-black: #121212;
+  --color-timo-red: #ff6650;
+  --color-timo-orange: #ffb157;
+  --color-timo-gray: #bebebe;
 }
