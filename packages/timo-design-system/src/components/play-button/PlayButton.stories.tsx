@@ -72,38 +72,33 @@ export const Disabled: Story = {
   ),
 };
 
-export const AllSmall: Story = {
-  name: "All Variants — sm",
+export const AllVariants: Story = {
+  name: "All Variants",
   args: { variant: "play", size: "sm" },
   render: () => (
-    <div className="flex items-center gap-4">
-      <PlayButton variant="play" size="sm">
-        <PlayIcon width={12} height={12} />
-      </PlayButton>
-      <PlayButton variant="stop" size="sm">
-        <StopIcon width={12} height={12} />
-      </PlayButton>
-      <PlayButton variant="disabled" size="sm">
-        <PlayDisabledIcon width={12} height={12} />
-      </PlayButton>
-    </div>
-  ),
-};
-
-export const AllLarge: Story = {
-  name: "All Variants — lg",
-  args: { variant: "play", size: "lg" },
-  render: () => (
-    <div className="flex items-center gap-4">
-      <PlayButton variant="play" size="lg">
-        <PlayIcon width={24} height={24} />
-      </PlayButton>
-      <PlayButton variant="stop" size="lg">
-        <StopIcon width={24} height={24} />
-      </PlayButton>
-      <PlayButton variant="disabled" size="lg">
-        <PlayDisabledIcon width={24} height={24} />
-      </PlayButton>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center gap-4">
+        <PlayButton variant="play" size="sm">
+          <PlayIcon width={12} height={12} />
+        </PlayButton>
+        <PlayButton variant="stop" size="sm">
+          <StopIcon width={12} height={12} />
+        </PlayButton>
+        <PlayButton variant="disabled" size="sm">
+          <PlayDisabledIcon width={12} height={12} />
+        </PlayButton>
+      </div>
+      <div className="flex items-center gap-4">
+        <PlayButton variant="play" size="lg">
+          <PlayIcon width={24} height={24} />
+        </PlayButton>
+        <PlayButton variant="stop" size="lg">
+          <StopIcon width={24} height={24} />
+        </PlayButton>
+        <PlayButton variant="disabled" size="lg">
+          <PlayDisabledIcon width={24} height={24} />
+        </PlayButton>
+      </div>
     </div>
   ),
 };
