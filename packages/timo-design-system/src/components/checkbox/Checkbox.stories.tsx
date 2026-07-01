@@ -11,11 +11,11 @@ const meta: Meta<typeof Checkbox> = {
   argTypes: {
     checked: { control: "boolean" },
     disabled: { control: "boolean" },
-    onChange: { action: "changed" },
   },
   args: {
     checked: false,
     disabled: false,
+    onChange: () => {},
   },
 };
 
@@ -24,16 +24,7 @@ type Story = StoryObj<typeof Checkbox>;
 
 const PlaygroundCheckbox = (args: React.ComponentProps<typeof Checkbox>) => {
   const [checked, setChecked] = useState(args.checked);
-  return (
-    <Checkbox
-      {...args}
-      checked={checked}
-      onChange={(value) => {
-        setChecked(value);
-        args.onChange?.(value);
-      }}
-    />
-  );
+  return <Checkbox {...args} checked={checked} onChange={setChecked} />;
 };
 
 export const Playground: Story = {

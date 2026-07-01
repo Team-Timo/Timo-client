@@ -31,9 +31,9 @@ export const Checkbox = ({
       <span
         className={cn(
           "flex h-[18px] w-[18px] items-center justify-center rounded-[4px] border transition-colors",
-          !checked && "border-timo-gray-600 bg-timo-gray-300",
+          !checked && "border-timo-gray-500",
           checked && !disabled && "border-timo-blue-300 bg-timo-blue-300",
-          checked && disabled && "bg-timo-blue-300/40 border-transparent",
+          checked && disabled && "bg-timo-blue-100 border-timo-blue-100",
         )}
       >
         {(checked || disabled) && (
