@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta = {
-  title: "Tokens/Scrollbar",
+  title: "Components/Layout/Scrollbar",
   parameters: {
     layout: "padded",
   },
