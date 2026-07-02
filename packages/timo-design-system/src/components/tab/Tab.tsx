@@ -14,7 +14,7 @@ export interface TabProps {
   icon: ReactNode;
   hoverIcon?: ReactNode;
   isSelected?: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export const Tab = ({
