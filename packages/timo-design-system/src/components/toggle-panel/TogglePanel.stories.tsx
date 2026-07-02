@@ -1,8 +1,9 @@
-import { useState } from "react";
+import {
+  TogglePanel,
+  TogglePanelValue,
+} from "@components/toggle-panel/TogglePanel";
+import { useEffect, useState } from "react";
 
-import { TogglePanel } from "./TogglePanel";
-
-import type { TogglePanelValue } from "./TogglePanel";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
@@ -25,6 +26,11 @@ const PlaygroundTogglePanel = ({
   ...args
 }: React.ComponentProps<typeof TogglePanel> & { width: string }) => {
   const [value, setValue] = useState<TogglePanelValue>(args.value);
+
+  useEffect(() => {
+    setValue(args.value);
+  }, [args.value]);
+
   return (
     <div className={width}>
       <TogglePanel {...args} value={value} onChange={setValue} />
