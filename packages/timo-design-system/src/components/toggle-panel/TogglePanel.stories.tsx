@@ -49,6 +49,51 @@ export const Big: Story = {
   render: (args) => <PlaygroundTogglePanel {...args} width="w-101" />,
 };
 
+const TogglePanelWithPanel = (
+  args: React.ComponentProps<typeof TogglePanel>,
+) => {
+  const [value, setValue] = useState<TogglePanelValue>(args.value);
+
+  useEffect(() => {
+    setValue(args.value);
+  }, [args.value]);
+
+  return (
+    <div className="w-67">
+      <TogglePanel
+        {...args}
+        id="toggle-panel-demo"
+        value={value}
+        onChange={setValue}
+        timeboxControls="toggle-panel-demo-timebox-panel"
+        timerControls="toggle-panel-demo-timer-panel"
+      />
+      <div
+        id="toggle-panel-demo-timebox-panel"
+        role="tabpanel"
+        aria-labelledby="toggle-panel-demo-timebox-tab"
+        hidden={value !== "timebox"}
+        className="bg-timo-blue-100 mt-4 rounded-lg p-4 text-sm"
+      >
+        Timebox 관련 콘텐츠 영역
+      </div>
+      <div
+        id="toggle-panel-demo-timer-panel"
+        role="tabpanel"
+        aria-labelledby="toggle-panel-demo-timer-tab"
+        hidden={value !== "timer"}
+        className="border-timo-gray-500 mt-4 rounded-lg border p-4 text-sm"
+      >
+        Timer 관련 콘텐츠 영역
+      </div>
+    </div>
+  );
+};
+
+export const WithPanel: Story = {
+  render: (args) => <TogglePanelWithPanel {...args} />,
+};
+
 export const AllSizes: Story = {
   render: () => (
     <div className="flex flex-col items-start gap-6">
