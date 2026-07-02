@@ -47,9 +47,19 @@ const DropdownRoot = ({ children, className }: DropdownProps) => {
       }
     };
 
-    document.addEventListener("mousedown", handleOutsideClick);
+    const handleEscapeKeydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
 
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleEscapeKeydown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscapeKeydown);
+    };
   }, [isOpen]);
 
   const toggle = () => setIsOpen((prev) => !prev);
