@@ -25,12 +25,10 @@ src/components/
 
 `title`로 사이드바 카테고리를 제어합니다. 프로젝트 정렬 순서는 다음과 같습니다:
 
-| 카테고리 | title 형식 | 용도 |
-|---------|-----------|------|
-| Guides | `"Guides/{이름}"` | 가이드 문서 |
-| Tokens | `"Tokens/{이름}"` | 색상·타이포 토큰 전시 |
-| Components | `"Components/{이름}"` | UI 컴포넌트 |
-| Icons | `"Icons/{이름}"` | 아이콘 |
+- **Guides** — `"Guides/{이름}"` : 가이드 문서
+- **Tokens** — `"Tokens/{이름}"` : 색상·타이포 토큰 전시
+- **Components** — `"Components/{이름}"` : UI 컴포넌트
+- **Icons** — `"Icons/{이름}"` : 아이콘
 
 ---
 
@@ -139,14 +137,15 @@ export const All: Story = {
 
 ## Autodocs
 
-`tags: ["autodocs"]`를 meta에 추가하면 Docs 탭이 자동 생성됩니다.
+`.storybook/preview.ts`에서 `tags: ["autodocs"]`를 전역으로 설정해, 모든 Story 파일에 Docs 탭이 기본으로 생성됩니다. 개별 파일에서 따로 추가할 필요는 없습니다.
+
+`component`가 없는 전시용 Story(패턴 C, 예: Color·Typography)는 Docs 탭이 생성되긴 하지만 컴포넌트 introspection 정보가 없어 내용이 빈약할 수 있습니다. 특정 Story에서 Docs 탭을 끄고 싶다면 해당 파일의 meta에 `tags: []`를 명시해 전역 설정을 덮어씁니다.
 
 ```tsx
 const meta = {
-  title: "Components/Button",
-  component: Button,
-  tags: ["autodocs"],
-} satisfies Meta<typeof Button>;
+  title: "Tokens/Color",
+  tags: [],
+} satisfies Meta;
 ```
 
 ---
