@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@lib";
 import {
   createContext,
@@ -7,6 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type ButtonHTMLAttributes,
   type ReactNode,
 } from "react";
 
@@ -102,24 +101,18 @@ const DropdownPanel = ({ children, className }: DropdownPanelProps) => {
   );
 };
 
-export interface DropdownItemProps {
-  children: ReactNode;
-  className?: string;
-  onClick?: () => void;
-}
+export type DropdownItemProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-const DropdownItem = ({ children, className, onClick }: DropdownItemProps) => {
+const DropdownItem = ({ className, ...rest }: DropdownItemProps) => {
   return (
     <button
       type="button"
-      onClick={onClick}
+      {...rest}
       className={cn(
         "rounded-4 flex w-full items-center transition-colors duration-200 ease-in-out",
         className,
       )}
-    >
-      {children}
-    </button>
+    />
   );
 };
 

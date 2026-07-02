@@ -38,6 +38,7 @@ export const PrioritySelector = ({
             <Dropdown.Item
               key={priority}
               onClick={() => onSelect?.(priority)}
+              aria-pressed={isSelected}
               className={cn(
                 "gap-2.25 py-0.5 pr-1 pl-2.75",
                 isSelected && PRIORITY_BG_COLOR[priority],

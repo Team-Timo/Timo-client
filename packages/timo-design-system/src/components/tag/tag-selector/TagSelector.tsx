@@ -4,19 +4,17 @@ import { cn } from "@lib";
 
 import type { ReactNode } from "react";
 
-export type Tag = "일상" | "운동" | "업무" | "기타";
-
-const TAGS: Tag[] = ["일상", "운동", "업무", "기타"];
-
 export interface TagSelectorProps {
   trigger: ReactNode;
-  selected?: Tag;
-  onSelect?: (tag: Tag) => void;
+  tags: string[];
+  selected?: string;
+  onSelect?: (tag: string) => void;
   onAddClick?: () => void;
 }
 
 export const TagSelector = ({
   trigger,
+  tags,
   selected,
   onSelect,
   onAddClick,
@@ -26,13 +24,14 @@ export const TagSelector = ({
       <Dropdown.Trigger>{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel>
-        {TAGS.map((tag) => {
+        {tags.map((tag) => {
           const isSelected = tag === selected;
 
           return (
             <Dropdown.Item
               key={tag}
               onClick={() => onSelect?.(tag)}
+              aria-pressed={isSelected}
               className={cn("px-1.5 py-1", isSelected && "bg-timo-gray-500")}
             >
               <span

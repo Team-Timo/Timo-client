@@ -33,22 +33,24 @@ const TRIGGER = (
   </span>
 );
 
+const TAGS = ["일상", "운동", "업무", "기타"];
+
 export const Default: Story = {
-  args: { trigger: TRIGGER },
+  args: { trigger: TRIGGER, tags: TAGS },
 };
 
 export const 일상: Story = {
-  args: { trigger: TRIGGER, selected: "일상" },
+  args: { trigger: TRIGGER, tags: TAGS, selected: "일상" },
 };
 
 export const 운동: Story = {
-  args: { trigger: TRIGGER, selected: "운동" },
+  args: { trigger: TRIGGER, tags: TAGS, selected: "운동" },
 };
 
 export const 업무: Story = {
-  args: { trigger: TRIGGER, selected: "업무" },
+  args: { trigger: TRIGGER, tags: TAGS, selected: "업무" },
 };
 
 export const 기타: Story = {
-  args: { trigger: TRIGGER, selected: "기타" },
+  args: { trigger: TRIGGER, tags: TAGS, selected: "기타" },
 };
