@@ -27,22 +27,28 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const TRIGGER = (
+  <span className="typo-headline-r-14 text-timo-black rounded-4 bg-timo-gray-300 px-3 py-1.5">
+    태그
+  </span>
+);
+
 export const Default: Story = {
-  args: {},
+  args: { trigger: TRIGGER },
 };
 
 export const 일상: Story = {
-  args: { selected: "일상" },
+  args: { trigger: TRIGGER, selected: "일상" },
 };
 
 export const 운동: Story = {
-  args: { selected: "운동" },
+  args: { trigger: TRIGGER, selected: "운동" },
 };
 
 export const 업무: Story = {
-  args: { selected: "업무" },
+  args: { trigger: TRIGGER, selected: "업무" },
 };
 
 export const 기타: Story = {
-  args: { selected: "기타" },
+  args: { trigger: TRIGGER, selected: "기타" },
 };

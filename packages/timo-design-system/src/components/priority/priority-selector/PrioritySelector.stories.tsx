@@ -27,22 +27,28 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const TRIGGER = (
+  <span className="typo-headline-r-14 text-timo-black rounded-4 bg-timo-gray-300 px-3 py-1.5">
+    우선순위
+  </span>
+);
+
 export const Default: Story = {
-  args: {},
+  args: { trigger: TRIGGER },
 };
 
 export const 매우중요: Story = {
-  args: { selected: "매우중요" },
+  args: { trigger: TRIGGER, selected: "매우중요" },
 };
 
 export const 중요: Story = {
-  args: { selected: "중요" },
+  args: { trigger: TRIGGER, selected: "중요" },
 };
 
 export const 보통: Story = {
-  args: { selected: "보통" },
+  args: { trigger: TRIGGER, selected: "보통" },
 };
 
 export const 낮음: Story = {
-  args: { selected: "낮음" },
+  args: { trigger: TRIGGER, selected: "낮음" },
 };
