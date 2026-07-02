@@ -3,7 +3,7 @@ import { PriorityIcon, type Priority } from "./PriorityIcon";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: "Components/PriorityIcon",
+  title: "Components/Priority/PriorityIcon",
   component: PriorityIcon,
   parameters: {
     layout: "centered",
