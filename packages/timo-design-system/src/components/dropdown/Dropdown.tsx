@@ -16,25 +16,31 @@ export const Dropdown = ({
   placeholder = "기본",
   className,
 }: DropdownProps) => {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const handleSelect = (item: string) => {
     onChange(item);
-    setOpen(false);
+    setIsOpen(false);
+  };
+
+  const closeWithFocus = () => {
+    setIsOpen(false);
+    triggerRef.current?.focus();
   };
 
   useEffect(() => {
-    if (!open) return;
+    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") closeWithFocus();
     };
     const handleClickOutside = (e: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
-        setOpen(false);
+        closeWithFocus();
       }
     };
     document.addEventListener("keydown", handleKeyDown);
@@ -43,22 +49,23 @@ export const Dropdown = ({
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [open]);
+  }, [isOpen]);
 
   return (
     <div
       ref={containerRef}
-      className={cn("inline-flex flex-col", open && "shadow-timo", className)}
+      className={cn("inline-flex flex-col", isOpen && "shadow-timo", className)}
     >
       <button
+        ref={triggerRef}
         type="button"
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => setIsOpen((prev) => !prev)}
         aria-haspopup="listbox"
-        aria-expanded={open}
+        aria-expanded={isOpen}
         className={cn(
           "flex h-8 items-center gap-2.5 bg-white px-2",
           "border-timo-gray-500 border",
-          open ? "rounded-t-[4px]" : "rounded-[4px]",
+          isOpen ? "rounded-t-[4px]" : "rounded-[4px]",
         )}
       >
         <span className="typo-headline-m-14 text-timo-gray-900 whitespace-nowrap">
@@ -74,7 +81,7 @@ export const Dropdown = ({
             className="text-timo-gray-900"
           >
             <path
-              d={open ? "M1 7L8 1L15 7" : "M1 1L8 7L15 1"}
+              d={isOpen ? "M1 7L8 1L15 7" : "M1 1L8 7L15 1"}
               stroke="currentColor"
               strokeWidth="1.5"
               strokeLinecap="round"
@@ -84,7 +91,7 @@ export const Dropdown = ({
         </div>
       </button>
 
-      {open && (
+      {isOpen && (
         <ul
           role="listbox"
           className="border-timo-gray-500 flex flex-col gap-1.5 rounded-b-[4px] border-x border-b bg-white px-2 py-1"
