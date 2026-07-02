@@ -1,6 +1,6 @@
+import { Dropdown } from "@components/layout/dropdown/Dropdown";
+import { PriorityIcon } from "@components/priority/priority-icon/PriorityIcon";
 import { cn } from "@lib";
-
-import { PriorityIcon } from "../priority-icon/PriorityIcon";
 
 export type PriorityLevel = "매우중요" | "중요" | "보통" | "낮음";
 
@@ -23,17 +23,16 @@ export const PrioritySelector = ({
   onSelect,
 }: PrioritySelectorProps) => {
   return (
-    <div className="rounded-4 flex flex-col items-start gap-1 bg-white p-2">
+    <Dropdown className="gap-1">
       {PRIORITY_LEVELS.map((priority) => {
         const isSelected = priority === selected;
 
         return (
-          <button
+          <Dropdown.Item
             key={priority}
-            type="button"
             onClick={() => onSelect?.(priority)}
             className={cn(
-              "rounded-4 flex w-full items-center gap-2.25 py-0.5 pr-1 pl-2.75 transition-colors duration-200 ease-in-out",
+              "gap-2.25 py-0.5 pr-1 pl-2.75",
               isSelected && PRIORITY_BG_COLOR[priority],
             )}
           >
@@ -47,9 +46,9 @@ export const PrioritySelector = ({
             >
               {priority}
             </span>
-          </button>
+          </Dropdown.Item>
         );
       })}
-    </div>
+    </Dropdown>
   );
 };
