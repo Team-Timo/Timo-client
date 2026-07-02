@@ -7,6 +7,7 @@ export interface TagProps {
 
 export const Tag = ({ text, variant = "default" }: TagProps) => {
   const isBlue = variant === "blue";
+
   return (
     <div
       className={`flex h-4 items-center justify-center rounded-[4px] px-[6.5px] ${
