@@ -1,7 +1,8 @@
 export { Checkbox } from "@components/checkbox/Checkbox";
 export { Color } from "@components/tokens/color/Color";
 export { Typography } from "@components/tokens/typography/Typography";
-export { Tag } from "@components/tag/Tag";
+export { TagIcon } from "@components/tag/tag-icon/TagIcon";
+export { TagSelector } from "@components/tag/tag-selector/TagSelector";
 export { PriorityIcon } from "@components/priority/priority-icon/PriorityIcon";
 export { PrioritySelector } from "@components/priority/priority-selector/PrioritySelector";
 export { CreateButton } from "@components/button/create-button/CreateButton";
