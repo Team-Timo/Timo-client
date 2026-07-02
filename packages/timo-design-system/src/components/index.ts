@@ -4,4 +4,5 @@ export { Typography } from "@components/typography/Typography";
 export { Tag } from "@components/tag/Tag";
 export { PriorityIcon } from "@components/priority-icon/PriorityIcon";
 export { CreateButton } from "@components/button/create-button/CreateButton";
+export { DeleteButton } from "@components/button/delete-button/DeleteButton";
 export { TodayBadge } from "@components/badge/today-badge/TodayBadge";
