@@ -1,11 +1,11 @@
 export type TagVariant = "default" | "blue";
 
-export interface TagProps {
+export interface TagIconProps {
   text: string;
   variant?: TagVariant;
 }
 
-export const Tag = ({ text, variant = "default" }: TagProps) => {
+export const TagIcon = ({ text, variant = "default" }: TagIconProps) => {
   const isBlue = variant === "blue";
 
   return (
