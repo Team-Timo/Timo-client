@@ -3,7 +3,7 @@ import { DeleteButton } from "./DeleteButton";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: "Components/DeleteButton",
+  title: "Components/Button/DeleteButton",
   component: DeleteButton,
   parameters: {
     layout: "centered",
