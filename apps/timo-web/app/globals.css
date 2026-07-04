@@ -1,3 +1,13 @@
 @import "tailwindcss";
 @import "@repo/tailwind-config/theme.css";
 @import "@repo/timo-design-system/styles";
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}

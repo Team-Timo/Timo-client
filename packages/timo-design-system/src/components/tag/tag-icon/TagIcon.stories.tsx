@@ -1,10 +1,10 @@
-import { Tag } from "./Tag";
+import { TagIcon } from "@components/tag/tag-icon/TagIcon";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: "Components/Tag",
-  component: Tag,
+  title: "Components/Tag/TagIcon",
+  component: TagIcon,
   parameters: {
     layout: "centered",
   },
@@ -19,7 +19,7 @@ const meta = {
       description: "태그 스타일 베리언트",
     },
   },
-} satisfies Meta<typeof Tag>;
+} satisfies Meta<typeof TagIcon>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
