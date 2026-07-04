@@ -6,4 +6,6 @@ export { TagSelector } from "@components/tag/tag-selector/TagSelector";
 export { PriorityIcon } from "@components/priority/priority-icon/PriorityIcon";
 export { PrioritySelector } from "@components/priority/priority-selector/PrioritySelector";
 export { CreateButton } from "@components/button/create-button/CreateButton";
+export { AddTaskButton } from "@components/button/add-task-button/AddTaskButton";
 export { TodayBadge } from "@components/badge/today-badge/TodayBadge";
+export { PlayButton } from "@components/button/play-button/PlayButton";
