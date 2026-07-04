@@ -1,4 +1,4 @@
-import { Dropdown } from "./Dropdown";
+import { Dropdown } from "@components/layout/dropdown/Dropdown";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
