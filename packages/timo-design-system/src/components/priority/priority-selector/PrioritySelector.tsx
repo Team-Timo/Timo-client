@@ -35,7 +35,7 @@ export const PrioritySelector = ({
 }: PrioritySelectorProps) => {
   return (
     <Dropdown>
-      <Dropdown.Trigger>{trigger}</Dropdown.Trigger>
+      <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel className="gap-1">
         {PRIORITY_LEVELS.map((priority) => {

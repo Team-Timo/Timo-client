@@ -76,18 +76,19 @@ const DropdownRoot = ({ children, className }: DropdownProps) => {
   );
 };
 
-export interface DropdownTriggerProps {
-  children: ReactNode;
-  className?: string;
-}
+export type DropdownTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-const DropdownTrigger = ({ children, className }: DropdownTriggerProps) => {
-  const { toggle } = useDropdownContext();
+const DropdownTrigger = ({ className, ...rest }: DropdownTriggerProps) => {
+  const { isOpen, toggle } = useDropdownContext();
 
   return (
-    <button type="button" onClick={toggle} className={className}>
-      {children}
-    </button>
+    <button
+      type="button"
+      {...rest}
+      onClick={toggle}
+      aria-expanded={isOpen}
+      className={className}
+    />
   );
 };
 

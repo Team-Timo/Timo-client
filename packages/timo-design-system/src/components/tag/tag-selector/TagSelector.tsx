@@ -21,7 +21,7 @@ export const TagSelector = ({
 }: TagSelectorProps) => {
   return (
     <Dropdown>
-      <Dropdown.Trigger>{trigger}</Dropdown.Trigger>
+      <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel>
         {tags.map((tag) => {
