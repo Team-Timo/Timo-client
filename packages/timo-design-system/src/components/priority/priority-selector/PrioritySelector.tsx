@@ -4,15 +4,22 @@ import { cn } from "@lib";
 
 import type { ReactNode } from "react";
 
-export type PriorityLevel = "매우중요" | "중요" | "보통" | "낮음";
+export type PriorityLevel = "urgent" | "high" | "medium" | "low";
 
-const PRIORITY_LEVELS: PriorityLevel[] = ["매우중요", "중요", "보통", "낮음"];
+const PRIORITY_LEVELS: PriorityLevel[] = ["urgent", "high", "medium", "low"];
+
+const PRIORITY_LABEL: Record<PriorityLevel, string> = {
+  urgent: "매우중요",
+  high: "중요",
+  medium: "보통",
+  low: "낮음",
+};
 
 const PRIORITY_BG_COLOR: Record<PriorityLevel, string> = {
-  매우중요: "bg-timo-red",
-  중요: "bg-timo-orange",
-  보통: "bg-timo-gray",
-  낮음: "bg-timo-gray-900",
+  urgent: "bg-timo-red",
+  high: "bg-timo-orange",
+  medium: "bg-timo-gray",
+  low: "bg-timo-gray-900",
 };
 
 export interface PrioritySelectorProps {
@@ -52,7 +59,7 @@ export const PrioritySelector = ({
                   isSelected ? "text-white" : "text-timo-black",
                 )}
               >
-                {priority}
+                {PRIORITY_LABEL[priority]}
               </span>
             </Dropdown.Item>
           );

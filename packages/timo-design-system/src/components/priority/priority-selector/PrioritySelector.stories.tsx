@@ -19,7 +19,7 @@ const meta = {
   argTypes: {
     selected: {
       control: "select",
-      options: ["매우중요", "중요", "보통", "낮음"],
+      options: ["urgent", "high", "medium", "low"],
     },
   },
 } satisfies Meta<typeof PrioritySelector>;
@@ -38,17 +38,17 @@ export const Default: Story = {
 };
 
 export const 매우중요: Story = {
-  args: { trigger: TRIGGER, selected: "매우중요" },
+  args: { trigger: TRIGGER, selected: "urgent" },
 };
 
 export const 중요: Story = {
-  args: { trigger: TRIGGER, selected: "중요" },
+  args: { trigger: TRIGGER, selected: "high" },
 };
 
 export const 보통: Story = {
-  args: { trigger: TRIGGER, selected: "보통" },
+  args: { trigger: TRIGGER, selected: "medium" },
 };
 
 export const 낮음: Story = {
-  args: { trigger: TRIGGER, selected: "낮음" },
+  args: { trigger: TRIGGER, selected: "low" },
 };

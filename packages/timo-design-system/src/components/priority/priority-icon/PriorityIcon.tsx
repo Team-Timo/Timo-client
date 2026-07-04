@@ -1,19 +1,19 @@
 import { cn } from "@lib";
 
 export type Priority =
-  | "매우중요"
-  | "중요"
-  | "보통"
-  | "낮음"
+  | "urgent"
+  | "high"
+  | "medium"
+  | "low"
   | "Disable"
   | "white"
   | "blue";
 
 const PRIORITY_COLOR: Record<Priority, string> = {
-  매우중요: "bg-timo-red",
-  중요: "bg-timo-orange",
-  보통: "bg-timo-gray-600",
-  낮음: "bg-timo-black",
+  urgent: "bg-timo-red",
+  high: "bg-timo-orange",
+  medium: "bg-timo-gray-600",
+  low: "bg-timo-black",
   Disable: "bg-timo-gray-500",
   white: "bg-white",
   blue: "bg-timo-blue-300",
