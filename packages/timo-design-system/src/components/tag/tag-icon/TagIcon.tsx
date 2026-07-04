@@ -1,12 +1,13 @@
 export type TagVariant = "default" | "blue";
 
-export interface TagProps {
+export interface TagIconProps {
   text: string;
   variant?: TagVariant;
 }
 
-export const Tag = ({ text, variant = "default" }: TagProps) => {
+export const TagIcon = ({ text, variant = "default" }: TagIconProps) => {
   const isBlue = variant === "blue";
+
   return (
     <div
       className={`flex h-4 items-center justify-center rounded-[4px] px-[6.5px] ${

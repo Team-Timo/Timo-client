@@ -31,7 +31,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         type: "append",
         path: "packages/timo-design-system/src/components/index.ts",
         template:
-          'export { {{pascalCase name}} } from "./{{kebabCase name}}/{{pascalCase name}}";',
+          'export { {{pascalCase name}} } from "@components/{{kebabCase name}}/{{pascalCase name}}";',
       },
     ],
   });
