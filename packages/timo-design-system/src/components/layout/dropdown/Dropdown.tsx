@@ -129,9 +129,16 @@ const DropdownPanel = ({
   );
 };
 
-export type DropdownItemProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export interface DropdownItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  closeOnSelect?: boolean;
+}
 
-const DropdownItem = ({ className, onClick, ...rest }: DropdownItemProps) => {
+const DropdownItem = ({
+  className,
+  onClick,
+  closeOnSelect = true,
+  ...rest
+}: DropdownItemProps) => {
   const { close } = useDropdownContext();
 
   return (
@@ -140,7 +147,7 @@ const DropdownItem = ({ className, onClick, ...rest }: DropdownItemProps) => {
       {...rest}
       onClick={(e) => {
         onClick?.(e);
-        close();
+        if (closeOnSelect) close();
       }}
       className={cn(
         "rounded-4 flex w-full items-center transition-colors duration-200 ease-in-out",
