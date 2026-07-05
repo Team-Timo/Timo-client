@@ -58,7 +58,7 @@ export const TimeSelector = ({
             onChange={(event) => onTimeChange?.(event.target.value)}
             aria-label="예상 시간 직접 입력"
             className={cn(
-              "typo-headline-r-14 min-w-0 flex-1 bg-transparent text-right outline-none",
+              "typo-headline-r-14 focus-visible:ring-timo-blue-300 min-w-0 flex-1 rounded-xs bg-transparent text-right outline-none focus-visible:ring-2",
               isAiSelected ? "text-white" : "text-timo-black",
             )}
           />
