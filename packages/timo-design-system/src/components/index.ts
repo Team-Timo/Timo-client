@@ -1,5 +1,6 @@
 export { Checkbox } from "@components/checkbox/Checkbox";
-export { Dropdown } from "@components/dropdown/Dropdown";
+export { Dropdown } from "@components/layout/dropdown/Dropdown";
+export { DropdownView } from "@components/dropdown-view/DropdownView";
 export { Color } from "@components/tokens/color/Color";
 export { Typography } from "@components/tokens/typography/Typography";
 export { TagIcon } from "@components/tag/tag-icon/TagIcon";
