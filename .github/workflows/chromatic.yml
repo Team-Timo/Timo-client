@@ -45,6 +45,7 @@ jobs:
           buildScriptName: build:storybook
           onlyChanged: true
           exitZeroOnChanges: true
+          exitOnceUploaded: true
 
       - name: Comment Storybook preview link on PR
         if: success()
