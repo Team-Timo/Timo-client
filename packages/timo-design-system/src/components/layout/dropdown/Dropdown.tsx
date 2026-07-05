@@ -105,7 +105,7 @@ const DropdownPanel = ({ children, className }: DropdownPanelProps) => {
   return (
     <div
       className={cn(
-        "rounded-4 absolute top-full left-0 z-10 mt-1 flex flex-col items-start bg-white p-2",
+        "rounded-4 absolute top-full left-0 z-10 flex flex-col items-start bg-white p-2",
         className,
       )}
     >
