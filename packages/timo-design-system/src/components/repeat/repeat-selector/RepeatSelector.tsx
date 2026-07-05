@@ -68,6 +68,7 @@ const RepeatFrequencyList = ({
           )}
           <Dropdown.Item
             onClick={() => onSelect(value)}
+            closeOnSelect={false}
             aria-pressed={value === selectedFrequency}
           >
             <span className="typo-headline-r-14 text-timo-black whitespace-nowrap">
@@ -140,12 +141,15 @@ export const RepeatSelector = ({
   monthly,
 }: RepeatSelectorProps) => {
   const [isPicking, setIsPicking] = useState(true);
+  const [selectedFrequency, setSelectedFrequency] =
+    useState<RepeatFrequency>(frequency);
 
   const selectedLabel = options.find(
-    (option) => option.frequency === frequency,
+    (option) => option.frequency === selectedFrequency,
   )?.label;
 
   const handleSelectFrequency = (value: RepeatFrequency) => {
+    setSelectedFrequency(value);
     onFrequencyChange?.(value);
     setIsPicking(false);
   };
@@ -155,44 +159,50 @@ export const RepeatSelector = ({
       <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel className="w-32.5 gap-1 p-0">
-        <button
-          type="button"
-          onClick={() => setIsPicking((prev) => !prev)}
-          aria-expanded={isPicking}
-          className="flex w-full items-center justify-between px-3.5 py-2"
-        >
-          <span className="typo-headline-m-14 text-timo-black whitespace-nowrap">
-            {selectedLabel}
+        <div className="flex w-full flex-col gap-1 px-3.5 py-2">
+          <span className="typo-body-r-12 text-timo-gray-700 w-full whitespace-nowrap">
+            반복 일정
           </span>
-          <ChevronDownIcon
-            className={cn(
-              "shrink-0 transition-transform duration-200 ease-in-out",
-              isPicking && "rotate-180",
-            )}
-          />
-        </button>
+
+          <button
+            type="button"
+            onClick={() => setIsPicking((prev) => !prev)}
+            aria-expanded={isPicking}
+            className="flex w-full items-center justify-between"
+          >
+            <span className="typo-headline-m-14 text-timo-black whitespace-nowrap">
+              {selectedLabel}
+            </span>
+            <ChevronDownIcon
+              className={cn(
+                "shrink-0 transition-transform duration-200 ease-in-out",
+                isPicking && "rotate-180",
+              )}
+            />
+          </button>
+        </div>
 
         {isPicking ? (
           <RepeatFrequencyList
             options={options}
-            selectedFrequency={frequency}
+            selectedFrequency={selectedFrequency}
             onSelect={handleSelectFrequency}
           />
         ) : (
           <div
             className={cn(
               "border-timo-gray-500 flex w-full flex-col gap-2 border-t px-3.5 py-1.5",
-              DETAIL_ALIGN[frequency],
+              DETAIL_ALIGN[selectedFrequency],
             )}
           >
             <span className="typo-body-r-12 text-timo-gray-700 w-full whitespace-nowrap">
               {detailHeading}
             </span>
 
-            {frequency === "weekly" && (
+            {selectedFrequency === "weekly" && (
               <RepeatWeeklyDetailSection {...weekly} />
             )}
-            {frequency === "monthly" && (
+            {selectedFrequency === "monthly" && (
               <RepeatMonthlyDetailSection
                 {...monthly}
                 ariaLabel={detailHeading}
