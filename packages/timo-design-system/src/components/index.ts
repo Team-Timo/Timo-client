@@ -9,4 +9,5 @@ export { CreateButton } from "@components/button/create-button/CreateButton";
 export { AddTaskButton } from "@components/button/add-task-button/AddTaskButton";
 export { TodayBadge } from "@components/badge/today-badge/TodayBadge";
 export { PlayButton } from "@components/button/play-button/PlayButton";
+export { TimeSelector } from "@components/time/time-selector/TimeSelector";
 export { RepeatSelector } from "@components/repeat/repeat-selector/RepeatSelector";
