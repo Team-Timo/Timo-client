@@ -13,3 +13,4 @@ export { AddTaskButton } from "@components/button/add-task-button/AddTaskButton"
 export { TodayBadge } from "@components/badge/today-badge/TodayBadge";
 export { TogglePanel } from "@components/toggle-panel/TogglePanel";
 export { PlayButton } from "@components/button/play-button/PlayButton";
+export { TabButton } from "@components/button/tab-button/TabButton";
