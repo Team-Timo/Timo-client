@@ -14,3 +14,4 @@ export { TodayBadge } from "./badge/today-badge/TodayBadge";
 export { TogglePanel } from "./toggle-panel/TogglePanel";
 export { PlayButton } from "./button/play-button/PlayButton";
 export { TabButton } from "./button/tab-button/TabButton";
+export { Toast } from "./toast/Toast";
