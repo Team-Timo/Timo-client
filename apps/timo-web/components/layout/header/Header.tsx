@@ -39,13 +39,13 @@ export interface HeaderWeeklyNavProps {
 const HeaderWeeklyNav = ({ onPrev, onNext, label }: HeaderWeeklyNavProps) => {
   return (
     <div className="flex items-center gap-2">
-      <WeeklyButton direction="left" onClick={onPrev} />
+      <WeeklyButton variant="left" onClick={onPrev} />
       {label && (
         <span className="typo-headline-m-14 text-timo-gray-900 flex h-8 items-center rounded-[4px] bg-white px-2">
           {label}
         </span>
       )}
-      <WeeklyButton direction="right" onClick={onNext} />
+      <WeeklyButton variant="right" onClick={onNext} />
     </div>
   );
 };

@@ -9,11 +9,11 @@ const meta = {
     layout: "centered",
   },
   argTypes: {
-    direction: { control: "radio", options: ["left", "right"] },
+    variant: { control: "radio", options: ["left", "right"] },
     onClick: { action: "clicked" },
   },
   args: {
-    direction: "left",
+    variant: "left",
   },
 } satisfies Meta<typeof WeeklyButton>;
 
@@ -24,8 +24,8 @@ export const AllStates: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="flex gap-4">
-      <WeeklyButton direction="left" />
-      <WeeklyButton direction="right" />
+      <WeeklyButton variant="left" />
+      <WeeklyButton variant="right" />
     </div>
   ),
 };

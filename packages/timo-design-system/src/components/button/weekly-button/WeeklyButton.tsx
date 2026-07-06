@@ -1,30 +1,40 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "../../../icons";
 import { cn } from "../../../lib";
 
-export type WeeklyButtonDirectionTypes = "left" | "right";
+import type { ReactNode } from "react";
+
+export type WeeklyButtonVariantTypes = "left" | "right";
+
+const WEEKLY_BUTTON_ICON: Record<WeeklyButtonVariantTypes, ReactNode> = {
+  left: <ChevronLeftIcon />,
+  right: <ChevronRightIcon />,
+};
+
+const WEEKLY_BUTTON_ARIA_LABEL: Record<WeeklyButtonVariantTypes, string> = {
+  left: "이전",
+  right: "다음",
+};
 
 export interface WeeklyButtonProps {
-  direction: WeeklyButtonDirectionTypes;
+  variant: WeeklyButtonVariantTypes;
   onClick?: () => void;
   className?: string;
 }
 
 export const WeeklyButton = ({
-  direction,
+  variant,
   onClick,
   className,
-}: WeeklyButtonProps) => {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={direction === "left" ? "이전" : "다음"}
-      className={cn(
-        "border-timo-gray-500 flex size-8 items-center justify-center rounded-[4px] border bg-white",
-        className,
-      )}
-    >
-      {direction === "left" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-    </button>
-  );
-};
+}: WeeklyButtonProps) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-label={WEEKLY_BUTTON_ARIA_LABEL[variant]}
+    className={cn(
+      "border-timo-gray-500 flex size-8 items-center justify-center rounded-[4px] border bg-white",
+      className,
+    )}
+  >
+    {WEEKLY_BUTTON_ICON[variant]}
+  </button>
+);

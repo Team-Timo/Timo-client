@@ -20,6 +20,6 @@ export { TodayButton } from "./button/today-button/TodayButton";
 export type { TodayButtonProps } from "./button/today-button/TodayButton";
 export { WeeklyButton } from "./button/weekly-button/WeeklyButton";
 export type {
-  WeeklyButtonDirectionTypes,
+  WeeklyButtonVariantTypes,
   WeeklyButtonProps,
 } from "./button/weekly-button/WeeklyButton";
