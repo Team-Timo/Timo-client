@@ -20,4 +20,6 @@
   --color-timo-red: #ff6650;
   --color-timo-orange: #ffb157;
   --color-timo-gray: #bebebe;
+
+  --color-timo-overlay: rgb(0 0 0 / 10%);
 }
