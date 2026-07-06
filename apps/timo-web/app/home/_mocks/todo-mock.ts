@@ -63,4 +63,18 @@ export const todoMocks: Todo[] = [
     sortOrder: 3,
     subtasks: [],
   },
+  {
+    todoId: 149,
+    icon: "ICON_5",
+    title: "저녁 약속 준비",
+    completed: false,
+    durationSeconds: 3600,
+    priority: "MEDIUM",
+    tag: { tagId: 2, name: "일상" },
+    hasMemo: false,
+    isRepeated: false,
+    timerStatus: "STOPPED",
+    sortOrder: 4,
+    subtasks: [],
+  },
 ];

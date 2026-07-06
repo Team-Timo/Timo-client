@@ -79,39 +79,41 @@ export const HomeDayTodoContainer = () => {
         <AddTaskButton text="영문영문영문" />
       </div>
 
-      {todos.map((todo) => {
-        const [firstSubtask] = todo.subtasks;
+      <div className="flex max-h-[680px] flex-col gap-2 overflow-y-auto pr-1">
+        {todos.map((todo) => {
+          const [firstSubtask] = todo.subtasks;
 
-        return (
-          <HomeDayTodoCard
-            key={todo.todoId}
-            title={todo.title}
-            completed={todo.completed}
-            durationSeconds={todo.durationSeconds}
-            priority={todo.priority}
-            tagName={todo.tag.name}
-            hasMemo={todo.hasMemo}
-            isRepeated={todo.isRepeated}
-            timerStatus={todo.timerStatus}
-            subtaskTitle={firstSubtask?.content}
-            isSubtaskCompleted={firstSubtask?.completed}
-            onToggleCompleted={(completed) =>
-              handleToggleCompleted(todo.todoId, completed)
-            }
-            onTogglePlay={() => handleTogglePlay(todo.todoId)}
-            onToggleSubtaskCompleted={
-              firstSubtask
-                ? (completed) =>
-                    handleToggleSubtaskCompleted(
-                      todo.todoId,
-                      firstSubtask.subtaskId,
-                      completed,
-                    )
-                : undefined
-            }
-          />
-        );
-      })}
+          return (
+            <HomeDayTodoCard
+              key={todo.todoId}
+              title={todo.title}
+              completed={todo.completed}
+              durationSeconds={todo.durationSeconds}
+              priority={todo.priority}
+              tagName={todo.tag.name}
+              hasMemo={todo.hasMemo}
+              isRepeated={todo.isRepeated}
+              timerStatus={todo.timerStatus}
+              subtaskTitle={firstSubtask?.content}
+              isSubtaskCompleted={firstSubtask?.completed}
+              onToggleCompleted={(completed) =>
+                handleToggleCompleted(todo.todoId, completed)
+              }
+              onTogglePlay={() => handleTogglePlay(todo.todoId)}
+              onToggleSubtaskCompleted={
+                firstSubtask
+                  ? (completed) =>
+                      handleToggleSubtaskCompleted(
+                        todo.todoId,
+                        firstSubtask.subtaskId,
+                        completed,
+                      )
+                  : undefined
+              }
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
