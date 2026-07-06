@@ -23,99 +23,89 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { ROUTES } from "../../../constants/routes";
+
+const NAV_ITEMS = [
+  {
+    href: ROUTES.HOME,
+    label: "홈",
+    OnIcon: HomeOnIcon,
+    OffIcon: HomeOffIcon,
+    HoverIcon: HomeHoverIcon,
+  },
+  {
+    href: ROUTES.TODAY,
+    label: "오늘",
+    OnIcon: TodayOnIcon,
+    OffIcon: TodayOffIcon,
+    HoverIcon: TodayHoverIcon,
+  },
+  {
+    href: ROUTES.FOCUS,
+    label: "집중 모드",
+    OnIcon: TimerOnIcon,
+    OffIcon: TimerOffIcon,
+    HoverIcon: TimerHoverIcon,
+  },
+  {
+    href: ROUTES.STATISTICS,
+    label: "통계",
+    OnIcon: ChartOnIcon,
+    OffIcon: ChartOffIcon,
+    HoverIcon: ChartHoverIcon,
+  },
+];
+
 export const NavigationSidebar = () => {
   const pathname = usePathname();
+  const isSettingsSelected = pathname.startsWith(ROUTES.SETTINGS);
 
   return (
     <aside className="bg-timo-gray-300 flex h-screen w-55 flex-col items-start p-5">
       <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
       <nav className="mt-7.5 flex flex-col gap-2">
-        <Link
-          href="/home"
-          aria-current={pathname === "/home" ? "page" : undefined}
-        >
-          <TabButton
-            label="홈"
-            icon={
-              pathname === "/home" ? (
-                <HomeOnIcon width={24} height={24} />
-              ) : (
-                <HomeOffIcon width={24} height={24} />
-              )
-            }
-            hoverIcon={<HomeHoverIcon width={24} height={24} />}
-            isSelected={pathname === "/home"}
-          />
-        </Link>
-        <Link
-          href="/today"
-          aria-current={pathname === "/today" ? "page" : undefined}
-        >
-          <TabButton
-            label="오늘"
-            icon={
-              pathname === "/today" ? (
-                <TodayOnIcon width={24} height={24} />
-              ) : (
-                <TodayOffIcon width={24} height={24} />
-              )
-            }
-            hoverIcon={<TodayHoverIcon width={24} height={24} />}
-            isSelected={pathname === "/today"}
-          />
-        </Link>
-        <Link
-          href="/focus"
-          aria-current={pathname === "/focus" ? "page" : undefined}
-        >
-          <TabButton
-            label="집중 모드"
-            icon={
-              pathname === "/focus" ? (
-                <TimerOnIcon width={24} height={24} />
-              ) : (
-                <TimerOffIcon width={24} height={24} />
-              )
-            }
-            hoverIcon={<TimerHoverIcon width={24} height={24} />}
-            isSelected={pathname === "/focus"}
-          />
-        </Link>
-        <Link
-          href="/statistics"
-          aria-current={pathname === "/statistics" ? "page" : undefined}
-        >
-          <TabButton
-            label="통계"
-            icon={
-              pathname === "/statistics" ? (
-                <ChartOnIcon width={24} height={24} />
-              ) : (
-                <ChartOffIcon width={24} height={24} />
-              )
-            }
-            hoverIcon={<ChartHoverIcon width={24} height={24} />}
-            isSelected={pathname === "/statistics"}
-          />
-        </Link>
+        {NAV_ITEMS.map(({ href, label, OnIcon, OffIcon, HoverIcon }) => {
+          const isSelected = pathname === href;
+
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-current={isSelected ? "page" : undefined}
+            >
+              <TabButton
+                label={label}
+                icon={
+                  pathname === href ? (
+                    <OnIcon width={24} height={24} />
+                  ) : (
+                    <OffIcon width={24} height={24} />
+                  )
+                }
+                hoverIcon={<HoverIcon width={24} height={24} />}
+                isSelected={isSelected}
+              />
+            </Link>
+          );
+        })}
       </nav>
 
       <Link
-        href="/settings"
+        href={ROUTES.SETTINGS}
         className="mt-auto"
-        aria-current={pathname.startsWith("/settings") ? "page" : undefined}
+        aria-current={isSettingsSelected ? "page" : undefined}
       >
         <TabButton
           label="설정"
           icon={
-            pathname.startsWith("/settings") ? (
+            isSettingsSelected ? (
               <SettingOnIcon width={24} height={24} />
             ) : (
               <SettingOffIcon width={24} height={24} />
             )
           }
           hoverIcon={<SettingHoverIcon width={24} height={24} />}
-          isSelected={pathname.startsWith("/settings")}
+          isSelected={isSettingsSelected}
         />
       </Link>
     </aside>
