@@ -65,12 +65,12 @@ export const TimeSelector = ({
         </div>
 
         <div className="flex w-full flex-col items-start gap-1.5">
-          {times.map(({ minute, value, unit }, index) => {
+          {times.map(({ minute, value, unit }) => {
             const isSelected = minute === selected;
 
             return (
               <Dropdown.Item
-                key={index}
+                key={minute}
                 onClick={() => onSelect?.(minute)}
                 aria-pressed={isSelected}
                 className={cn(
