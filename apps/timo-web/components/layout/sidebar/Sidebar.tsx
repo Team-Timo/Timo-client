@@ -3,9 +3,9 @@
 import { TogglePanel } from "@repo/timo-design-system/ui";
 import { useId, useState } from "react";
 
-import { SidebarHeader } from "@/components/layout/SidebarHeader";
-import { TimeboxPanel } from "@/components/layout/TimeboxPanel";
-import { TimerPanel } from "@/components/layout/TimerPanel";
+import { SidebarHeader } from "@/components/layout/sidebar/SidebarHeader";
+import { TimeboxPanel } from "@/components/layout/sidebar/TimeboxPanel";
+import { TimerPanel } from "@/components/layout/sidebar/TimerPanel";
 
 type SidebarTab = "timebox" | "timer";
 export type SidebarSize = "sm" | "lg";
