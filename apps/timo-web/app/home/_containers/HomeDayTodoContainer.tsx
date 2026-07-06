@@ -20,6 +20,7 @@ export const HomeDayTodoContainer = () => {
   const completedCount = todos.filter((todo) => todo.completed).length;
 
   const handleToggleCompleted = (todoId: number, completed: boolean) => {
+    // TODO: API
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.todoId === todoId ? { ...todo, completed } : todo,
@@ -28,6 +29,7 @@ export const HomeDayTodoContainer = () => {
   };
 
   const handleTogglePlay = (todoId: number) => {
+    // TODO: API
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.todoId === todoId
@@ -35,6 +37,28 @@ export const HomeDayTodoContainer = () => {
               ...todo,
               timerStatus:
                 todo.timerStatus === "RUNNING" ? "STOPPED" : "RUNNING",
+            }
+          : todo,
+      ),
+    );
+  };
+
+  const handleToggleSubtaskCompleted = (
+    todoId: number,
+    subtaskId: number,
+    completed: boolean,
+  ) => {
+    // TODO: API
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.todoId === todoId
+          ? {
+              ...todo,
+              subtasks: todo.subtasks.map((subtask) =>
+                subtask.subtaskId === subtaskId
+                  ? { ...subtask, completed }
+                  : subtask,
+              ),
             }
           : todo,
       ),
@@ -55,23 +79,39 @@ export const HomeDayTodoContainer = () => {
         <AddTaskButton text="영문영문영문" />
       </div>
 
-      {todos.map((todo) => (
-        <HomeDayTodoCard
-          key={todo.todoId}
-          title={todo.title}
-          completed={todo.completed}
-          durationSeconds={todo.durationSeconds}
-          priority={todo.priority}
-          tagName={todo.tag.name}
-          hasMemo={todo.hasMemo}
-          isRepeated={todo.isRepeated}
-          timerStatus={todo.timerStatus}
-          onToggleCompleted={(completed) =>
-            handleToggleCompleted(todo.todoId, completed)
-          }
-          onTogglePlay={() => handleTogglePlay(todo.todoId)}
-        />
-      ))}
+      {todos.map((todo) => {
+        const [firstSubtask] = todo.subtasks;
+
+        return (
+          <HomeDayTodoCard
+            key={todo.todoId}
+            title={todo.title}
+            completed={todo.completed}
+            durationSeconds={todo.durationSeconds}
+            priority={todo.priority}
+            tagName={todo.tag.name}
+            hasMemo={todo.hasMemo}
+            isRepeated={todo.isRepeated}
+            timerStatus={todo.timerStatus}
+            subtaskTitle={firstSubtask?.content}
+            isSubtaskCompleted={firstSubtask?.completed}
+            onToggleCompleted={(completed) =>
+              handleToggleCompleted(todo.todoId, completed)
+            }
+            onTogglePlay={() => handleTogglePlay(todo.todoId)}
+            onToggleSubtaskCompleted={
+              firstSubtask
+                ? (completed) =>
+                    handleToggleSubtaskCompleted(
+                      todo.todoId,
+                      firstSubtask.subtaskId,
+                      completed,
+                    )
+                : undefined
+            }
+          />
+        );
+      })}
     </div>
   );
 };

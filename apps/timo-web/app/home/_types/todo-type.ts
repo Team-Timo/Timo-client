@@ -6,6 +6,12 @@ export interface TodoTag {
   name: string;
 }
 
+export interface TodoSubtask {
+  subtaskId: number;
+  content: string;
+  completed: boolean;
+}
+
 export interface Todo {
   todoId: number;
   icon: string;
@@ -18,6 +24,5 @@ export interface Todo {
   isRepeated: boolean;
   timerStatus: TodoTimerStatus;
   sortOrder: number;
-  subtaskTotalCount: number;
-  subtaskCompletedCount: number;
+  subtasks: TodoSubtask[];
 }

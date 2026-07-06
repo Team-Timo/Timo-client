@@ -13,8 +13,7 @@ export const todoMocks: Todo[] = [
     isRepeated: true,
     timerStatus: "RUNNING",
     sortOrder: 0,
-    subtaskTotalCount: 2,
-    subtaskCompletedCount: 1,
+    subtasks: [],
   },
   {
     todoId: 146,
@@ -28,8 +27,13 @@ export const todoMocks: Todo[] = [
     isRepeated: false,
     timerStatus: "STOPPED",
     sortOrder: 1,
-    subtaskTotalCount: 0,
-    subtaskCompletedCount: 0,
+    subtasks: [
+      {
+        subtaskId: 1,
+        content: "티모 하이파이 열심히 제작하기",
+        completed: false,
+      },
+    ],
   },
   {
     todoId: 147,
@@ -43,8 +47,7 @@ export const todoMocks: Todo[] = [
     isRepeated: true,
     timerStatus: "STOPPED",
     sortOrder: 2,
-    subtaskTotalCount: 0,
-    subtaskCompletedCount: 0,
+    subtasks: [],
   },
   {
     todoId: 148,
@@ -58,7 +61,6 @@ export const todoMocks: Todo[] = [
     isRepeated: false,
     timerStatus: "STOPPED",
     sortOrder: 3,
-    subtaskTotalCount: 1,
-    subtaskCompletedCount: 0,
+    subtasks: [],
   },
 ];
