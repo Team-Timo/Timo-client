@@ -14,7 +14,6 @@ import {
 
 import { cn } from "../../../lib";
 
-
 interface DropdownContextValue {
   isOpen: boolean;
   toggle: () => void;

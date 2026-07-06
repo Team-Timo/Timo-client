@@ -15,3 +15,6 @@ export { TogglePanel } from "./toggle-panel/TogglePanel";
 export type { TogglePanelOption } from "./toggle-panel/TogglePanel";
 export { PlayButton } from "./button/play-button/PlayButton";
 export { TabButton } from "./button/tab-button/TabButton";
+export { SidebarButton } from "./button/sidebar-button/SidebarButton";
+export { TodayButton } from "./button/today-button/TodayButton";
+export { WeeklyButton } from "./button/weekly-button/WeeklyButton";
