@@ -1,4 +1,4 @@
-import { TimeSelector } from "@components/time/time-selector/TimeSelector";
+import { TimeSelector } from "./TimeSelector";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

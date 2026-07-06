@@ -1,8 +1,6 @@
-import {
-  RepeatSelector,
-  type RepeatSelectorProps,
-} from "@components/repeat/repeat-selector/RepeatSelector";
 import { useState } from "react";
+
+import { RepeatSelector, RepeatSelectorProps } from "./RepeatSelector";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
