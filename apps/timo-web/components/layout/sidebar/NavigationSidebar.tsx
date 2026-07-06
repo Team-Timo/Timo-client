@@ -23,7 +23,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { ROUTES } from "../../../constants/routes";
+import { ROUTES } from "@/constants/routes";
 
 const NAV_ITEMS = [
   {
@@ -54,60 +54,55 @@ const NAV_ITEMS = [
     OffIcon: ChartOffIcon,
     HoverIcon: ChartHoverIcon,
   },
+  {
+    href: ROUTES.SETTINGS,
+    label: "설정",
+    OnIcon: SettingOnIcon,
+    OffIcon: SettingOffIcon,
+    HoverIcon: SettingHoverIcon,
+    className: "mt-auto",
+  },
 ];
 
 export const NavigationSidebar = () => {
   const pathname = usePathname();
-  const isSettingsSelected = pathname.startsWith(ROUTES.SETTINGS);
+  const isActivePath = (pathname: string, href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <aside className="bg-timo-gray-300 flex h-screen w-55 flex-col items-start p-5">
-      <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
-      <nav className="mt-7.5 flex flex-col gap-2">
-        {NAV_ITEMS.map(({ href, label, OnIcon, OffIcon, HoverIcon }) => {
-          const isSelected = pathname === href;
+      <div className="flex flex-col gap-7.5">
+        <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
+        <nav className="flex flex-col gap-2">
+          {NAV_ITEMS.map(
+            ({ href, label, OnIcon, OffIcon, HoverIcon, className }) => {
+              const isSelected = isActivePath(pathname, href);
 
-          return (
-            <Link
-              key={href}
-              href={href}
-              aria-current={isSelected ? "page" : undefined}
-            >
-              <TabButton
-                label={label}
-                icon={
-                  pathname === href ? (
-                    <OnIcon width={24} height={24} />
-                  ) : (
-                    <OffIcon width={24} height={24} />
-                  )
-                }
-                hoverIcon={<HoverIcon width={24} height={24} />}
-                isSelected={isSelected}
-              />
-            </Link>
-          );
-        })}
-      </nav>
-
-      <Link
-        href={ROUTES.SETTINGS}
-        className="mt-auto"
-        aria-current={isSettingsSelected ? "page" : undefined}
-      >
-        <TabButton
-          label="설정"
-          icon={
-            isSettingsSelected ? (
-              <SettingOnIcon width={24} height={24} />
-            ) : (
-              <SettingOffIcon width={24} height={24} />
-            )
-          }
-          hoverIcon={<SettingHoverIcon width={24} height={24} />}
-          isSelected={isSettingsSelected}
-        />
-      </Link>
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={className}
+                  aria-current={isSelected ? "page" : undefined}
+                >
+                  <TabButton
+                    label={label}
+                    icon={
+                      isSelected ? (
+                        <OnIcon width={24} height={24} />
+                      ) : (
+                        <OffIcon width={24} height={24} />
+                      )
+                    }
+                    hoverIcon={<HoverIcon width={24} height={24} />}
+                    isSelected={isSelected}
+                  />
+                </Link>
+              );
+            },
+          )}
+        </nav>
+      </div>
     </aside>
   );
 };
