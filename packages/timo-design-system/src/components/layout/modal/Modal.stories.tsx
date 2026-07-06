@@ -78,15 +78,11 @@ export const TimerEnd: Story = {
       </Modal.Trigger>
       <Modal.Overlay />
       <Modal.Panel>
-        <Modal.Content>
-          <Modal.Icon>
-            <TimoTimerIcon />
-          </Modal.Icon>
-          <Modal.TextGroup>
-            <Modal.Title>타이머 종료!</Modal.Title>
-            <Modal.Description>다음 단계를 선택하세요.</Modal.Description>
-          </Modal.TextGroup>
-        </Modal.Content>
+        <Modal.Icon>
+          <TimoTimerIcon />
+        </Modal.Icon>
+        <Modal.Title>타이머 종료!</Modal.Title>
+        <Modal.Description>다음 단계를 선택하세요.</Modal.Description>
         <Modal.Footer>
           <Modal.BorderButton>계속하기</Modal.BorderButton>
           <Modal.FillButton>종료하기</Modal.FillButton>
@@ -105,19 +101,15 @@ export const Withdrawal: Story = {
       </Modal.Trigger>
       <Modal.Overlay />
       <Modal.Panel>
-        <Modal.Content>
-          <Modal.Icon>
-            <TimoTimerIcon />
-          </Modal.Icon>
-          <Modal.TextGroup>
-            <Modal.Title>
-              정말 <span className="text-timo-red">탈퇴</span>하시겠어요?
-            </Modal.Title>
-            <Modal.Description>
-              탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요.
-            </Modal.Description>
-          </Modal.TextGroup>
-        </Modal.Content>
+        <Modal.Icon>
+          <TimoTimerIcon />
+        </Modal.Icon>
+        <Modal.Title>
+          정말 <span className="text-timo-red">탈퇴</span>하시겠어요?
+        </Modal.Title>
+        <Modal.Description>
+          탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요.
+        </Modal.Description>
         <Modal.Footer>
           <Modal.BorderButton>탈퇴하기</Modal.BorderButton>
           <Modal.FillButton>취소하기</Modal.FillButton>
@@ -136,19 +128,15 @@ export const Logout: Story = {
       </Modal.Trigger>
       <Modal.Overlay />
       <Modal.Panel>
-        <Modal.Content>
-          <Modal.Icon>
-            <TimoTimerIcon />
-          </Modal.Icon>
-          <Modal.TextGroup>
-            <Modal.Title>로그아웃할까요?</Modal.Title>
-            <Modal.Description>
-              로그아웃 후에도 데이터는 그대로 유지돼요.
-              <br />
-              다시 로그인하면 이어서 사용할 수 있어요.
-            </Modal.Description>
-          </Modal.TextGroup>
-        </Modal.Content>
+        <Modal.Icon>
+          <TimoTimerIcon />
+        </Modal.Icon>
+        <Modal.Title>로그아웃할까요?</Modal.Title>
+        <Modal.Description>
+          로그아웃 후에도 데이터는 그대로 유지돼요.
+          <br />
+          다시 로그인하면 이어서 사용할 수 있어요.
+        </Modal.Description>
         <Modal.Footer>
           <Modal.BorderButton>취소</Modal.BorderButton>
           <Modal.FillButton>로그아웃</Modal.FillButton>
@@ -167,18 +155,14 @@ export const TimerSwitch: Story = {
       </Modal.Trigger>
       <Modal.Overlay />
       <Modal.Panel>
-        <Modal.Content>
-          <Modal.Icon>
-            <TimoTimerIcon />
-          </Modal.Icon>
-          <Modal.TextGroup>
-            <Modal.Title>새 작업으로 전환할까요?</Modal.Title>
-            <Modal.Description>
-              새 작업을 시작하면 현재 타이머가 중단됩니다.
-            </Modal.Description>
-            <Modal.Description>새로운 작업을 시작하시겠어요?</Modal.Description>
-          </Modal.TextGroup>
-        </Modal.Content>
+        <Modal.Icon>
+          <TimoTimerIcon />
+        </Modal.Icon>
+        <Modal.Title>새 작업으로 전환할까요?</Modal.Title>
+        <Modal.Description>
+          새 작업을 시작하면 현재 타이머가 중단됩니다.
+        </Modal.Description>
+        <Modal.Description>새로운 작업을 시작하시겠어요?</Modal.Description>
         <Modal.Footer>
           <Modal.BorderButton>계속 진행</Modal.BorderButton>
           <Modal.FillButton>전환하기</Modal.FillButton>
@@ -197,19 +181,15 @@ export const TimerStop: Story = {
       </Modal.Trigger>
       <Modal.Overlay />
       <Modal.Panel>
-        <Modal.Content>
-          <Modal.Icon>
-            <TimoTimerIcon />
-          </Modal.Icon>
-          <Modal.TextGroup>
-            <Modal.Title>지금 멈출까요?</Modal.Title>
-            <Modal.Description>
-              지금까지 수행한{" "}
-              <strong className="text-timo-blue-300 font-bold">12분</strong>이
-              타임박스에 기록됩니다.
-            </Modal.Description>
-          </Modal.TextGroup>
-        </Modal.Content>
+        <Modal.Icon>
+          <TimoTimerIcon />
+        </Modal.Icon>
+        <Modal.Title>지금 멈출까요?</Modal.Title>
+        <Modal.Description>
+          지금까지 수행한{" "}
+          <strong className="text-timo-blue-300 font-bold">12분</strong>이
+          타임박스에 기록됩니다.
+        </Modal.Description>
         <Modal.Footer>
           <Modal.BorderButton>계속 진행</Modal.BorderButton>
           <Modal.FillButton>전환하기</Modal.FillButton>
@@ -228,17 +208,13 @@ export const TagDelete: Story = {
       </Modal.Trigger>
       <Modal.Overlay />
       <Modal.Panel>
-        <Modal.Content>
-          <Modal.Icon>
-            <TimoTimerIcon />
-          </Modal.Icon>
-          <Modal.TextGroup>
-            <Modal.Title>일정 태그를 삭제할까요?</Modal.Title>
-            <Modal.Description>
-              해당 태그가 적용된 모든 투두에서 태그가 삭제됩니다.
-            </Modal.Description>
-          </Modal.TextGroup>
-        </Modal.Content>
+        <Modal.Icon>
+          <TimoTimerIcon />
+        </Modal.Icon>
+        <Modal.Title>일정 태그를 삭제할까요?</Modal.Title>
+        <Modal.Description>
+          해당 태그가 적용된 모든 투두에서 태그가 삭제됩니다.
+        </Modal.Description>
         <Modal.Footer>
           <Modal.BorderButton>돌아가기</Modal.BorderButton>
           <Modal.FillButton>삭제하기</Modal.FillButton>
@@ -257,19 +233,15 @@ export const CalendarDisconnect: Story = {
       </Modal.Trigger>
       <Modal.Overlay />
       <Modal.Panel>
-        <Modal.Content>
-          <Modal.Icon>
-            <TimoTimerIcon />
-          </Modal.Icon>
-          <Modal.TextGroup>
-            <Modal.Title>구글 캘린더 연동을 해제할까요?</Modal.Title>
-            <Modal.Description>
-              연동을 해제하면 동기화된 일정이 사라져요.
-              <br />
-              정말 연동을 해제하시겠어요?
-            </Modal.Description>
-          </Modal.TextGroup>
-        </Modal.Content>
+        <Modal.Icon>
+          <TimoTimerIcon />
+        </Modal.Icon>
+        <Modal.Title>구글 캘린더 연동을 해제할까요?</Modal.Title>
+        <Modal.Description>
+          연동을 해제하면 동기화된 일정이 사라져요.
+          <br />
+          정말 연동을 해제하시겠어요?
+        </Modal.Description>
         <Modal.Footer>
           <Modal.BorderButton>돌아가기</Modal.BorderButton>
           <Modal.FillButton>해제하기</Modal.FillButton>
@@ -288,17 +260,13 @@ export const TodoDelete: Story = {
       </Modal.Trigger>
       <Modal.Overlay />
       <Modal.Panel>
-        <Modal.Content>
-          <Modal.Icon>
-            <TimoTimerIcon />
-          </Modal.Icon>
-          <Modal.TextGroup>
-            <Modal.Title>이 할 일을 삭제할까요?</Modal.Title>
-            <Modal.Description>
-              삭제하면 작업과 관련된 정보가 함께 삭제됩니다.
-            </Modal.Description>
-          </Modal.TextGroup>
-        </Modal.Content>
+        <Modal.Icon>
+          <TimoTimerIcon />
+        </Modal.Icon>
+        <Modal.Title>이 할 일을 삭제할까요?</Modal.Title>
+        <Modal.Description>
+          삭제하면 작업과 관련된 정보가 함께 삭제됩니다.
+        </Modal.Description>
         <Modal.Footer>
           <Modal.BorderButton>돌아가기</Modal.BorderButton>
           <Modal.FillButton>삭제하기</Modal.FillButton>

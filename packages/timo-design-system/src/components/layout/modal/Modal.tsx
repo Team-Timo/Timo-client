@@ -6,6 +6,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useId,
   useState,
   type ButtonHTMLAttributes,
   type ReactNode,
@@ -15,6 +16,7 @@ interface ModalContextValue {
   isOpen: boolean;
   open: () => void;
   close: () => void;
+  titleId: string;
 }
 
 const ModalContext = createContext<ModalContextValue | null>(null);
@@ -32,12 +34,13 @@ const useModalContext = (): ModalContextValue => {
 };
 
 export interface ModalProps {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 
 const ModalRoot = ({ children, className }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const titleId = useId();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -55,8 +58,8 @@ const ModalRoot = ({ children, className }: ModalProps) => {
   const close = () => setIsOpen(false);
 
   return (
-    <ModalContext.Provider value={{ isOpen, open, close }}>
-      <div className={cn("relative", className)}>{children}</div>
+    <ModalContext.Provider value={{ isOpen, open, close, titleId }}>
+      <div className={className}>{children}</div>
     </ModalContext.Provider>
   );
 };
@@ -102,7 +105,7 @@ export interface ModalPanelProps {
 }
 
 const ModalPanel = ({ children, className }: ModalPanelProps) => {
-  const { isOpen } = useModalContext();
+  const { isOpen, titleId } = useModalContext();
 
   if (!isOpen) return null;
 
@@ -110,8 +113,9 @@ const ModalPanel = ({ children, className }: ModalPanelProps) => {
     <div
       role="dialog"
       aria-modal="true"
+      aria-labelledby={titleId}
       className={cn(
-        "fixed top-1/2 left-1/2 z-50 flex w-100 -translate-x-1/2 -translate-y-1/2 flex-col gap-6 rounded-[4px] bg-white p-5.5",
+        "fixed top-1/2 left-1/2 z-50 flex w-100 -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-5.5",
         className,
       )}
     >
@@ -120,31 +124,13 @@ const ModalPanel = ({ children, className }: ModalPanelProps) => {
   );
 };
 
-export interface ModalContentProps {
-  children: ReactNode;
-  className?: string;
-}
-
-const ModalContent = ({ children, className }: ModalContentProps) => (
-  <div className={cn("flex w-full flex-col gap-4", className)}>{children}</div>
-);
-
-export interface ModalTextGroupProps {
-  children: ReactNode;
-  className?: string;
-}
-
-const ModalTextGroup = ({ children, className }: ModalTextGroupProps) => (
-  <div className={cn("flex w-full flex-col gap-1", className)}>{children}</div>
-);
-
 export interface ModalIconProps {
   children: ReactNode;
   className?: string;
 }
 
 const ModalIcon = ({ children, className }: ModalIconProps) => (
-  <div className={cn("size-10 shrink-0", className)}>{children}</div>
+  <div className={cn("mb-4 size-10 shrink-0", className)}>{children}</div>
 );
 
 export interface ModalTitleProps {
@@ -152,11 +138,18 @@ export interface ModalTitleProps {
   className?: string;
 }
 
-const ModalTitle = ({ children, className }: ModalTitleProps) => (
-  <p className={cn("typo-headline-b-18 text-timo-black", className)}>
-    {children}
-  </p>
-);
+const ModalTitle = ({ children, className }: ModalTitleProps) => {
+  const { titleId } = useModalContext();
+
+  return (
+    <p
+      id={titleId}
+      className={cn("typo-headline-b-18 text-timo-black", className)}
+    >
+      {children}
+    </p>
+  );
+};
 
 export interface ModalDescriptionProps {
   children: ReactNode;
@@ -164,7 +157,7 @@ export interface ModalDescriptionProps {
 }
 
 const ModalDescription = ({ children, className }: ModalDescriptionProps) => (
-  <p className={cn("typo-headline-r-14 text-timo-gray-900", className)}>
+  <p className={cn("typo-headline-r-14 text-timo-gray-900 mt-1", className)}>
     {children}
   </p>
 );
@@ -175,7 +168,7 @@ export interface ModalFooterProps {
 }
 
 const ModalFooter = ({ children, className }: ModalFooterProps) => (
-  <div className={cn("flex w-full gap-3", className)}>{children}</div>
+  <div className={cn("mt-6 flex w-full gap-3", className)}>{children}</div>
 );
 
 export type ModalBorderButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
@@ -226,8 +219,6 @@ export const Modal = Object.assign(ModalRoot, {
   Trigger: ModalTrigger,
   Overlay: ModalOverlay,
   Panel: ModalPanel,
-  Content: ModalContent,
-  TextGroup: ModalTextGroup,
   Icon: ModalIcon,
   Title: ModalTitle,
   Description: ModalDescription,

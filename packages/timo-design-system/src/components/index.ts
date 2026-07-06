@@ -22,8 +22,6 @@ export type {
   ModalTriggerProps,
   ModalOverlayProps,
   ModalPanelProps,
-  ModalContentProps,
-  ModalTextGroupProps,
   ModalIconProps,
   ModalTitleProps,
   ModalDescriptionProps,
