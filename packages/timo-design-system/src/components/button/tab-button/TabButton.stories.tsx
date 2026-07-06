@@ -1,4 +1,4 @@
-import { TabButton } from "@components/button/tab-button/TabButton";
+import { TabButton } from "./TabButton";
 import {
   ChartHoverIcon,
   ChartOffIcon,
@@ -15,7 +15,7 @@ import {
   TodayHoverIcon,
   TodayOffIcon,
   TodayOnIcon,
-} from "@icons";
+} from "../../../icons";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
