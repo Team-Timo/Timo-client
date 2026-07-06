@@ -1,12 +1,14 @@
-import { SidebarRightIcon } from "@repo/timo-design-system/icons";
+import { SidebarButton } from "@repo/timo-design-system/ui";
 
 export interface SidebarHeaderProps {
   date: Date;
+  isOpen?: boolean;
   onToggleCollapse?: () => void;
 }
 
 export const SidebarHeader = ({
   date,
+  isOpen = true,
   onToggleCollapse,
 }: SidebarHeaderProps) => {
   const day = date.getDate();
@@ -21,14 +23,7 @@ export const SidebarHeader = ({
         <span className="typo-body-m-12 text-timo-gray-700">{weekday}</span>
       </p>
 
-      <button
-        type="button"
-        aria-label="사이드바 접기"
-        onClick={onToggleCollapse}
-        className="border-timo-gray-500 flex size-8 items-center justify-center rounded-[4px] border"
-      >
-        <SidebarRightIcon />
-      </button>
+      <SidebarButton isOpen={isOpen} onClick={onToggleCollapse} />
     </header>
   );
 };
