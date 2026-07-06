@@ -195,25 +195,13 @@ const ModalBorderButton = ({
 
 export type ModalFillButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-const ModalFillButton = ({
-  onClick,
-  className,
-  ...rest
-}: ModalFillButtonProps) => {
-  const { close } = useModalContext();
-
-  return (
-    <ModalButton
-      variant="fill"
-      {...rest}
-      onClick={(e) => {
-        onClick?.(e);
-        close();
-      }}
-      className={cn("flex-1 px-0", className)}
-    />
-  );
-};
+const ModalFillButton = ({ className, ...rest }: ModalFillButtonProps) => (
+  <ModalButton
+    variant="fill"
+    {...rest}
+    className={cn("flex-1 px-0", className)}
+  />
+);
 
 export const Modal = Object.assign(ModalRoot, {
   Trigger: ModalTrigger,
