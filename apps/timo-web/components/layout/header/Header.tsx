@@ -1,8 +1,12 @@
-import { SidebarButton } from "@components/button/sidebar-button/SidebarButton";
-import { TodayButton } from "@components/button/today-button/TodayButton";
-import { WeeklyButton } from "@components/button/weekly-button/WeeklyButton";
-import { DropdownView } from "@components/dropdown-view/DropdownView";
-import { cn } from "@lib";
+"use client";
+
+import {
+  DropdownView,
+  SidebarButton,
+  TodayButton,
+  WeeklyButton,
+} from "@repo/timo-design-system/ui";
+import { cn } from "@repo/timo-design-system/utils";
 
 import type { ReactNode } from "react";
 
@@ -51,4 +55,9 @@ export const Header = Object.assign(HeaderRoot, {
   TodayButton,
   WeeklyNav: HeaderWeeklyNav,
   ViewDropdown: DropdownView,
-});
+}) as typeof HeaderRoot & {
+  SidebarButton: typeof SidebarButton;
+  TodayButton: typeof TodayButton;
+  WeeklyNav: typeof HeaderWeeklyNav;
+  ViewDropdown: typeof DropdownView;
+};
