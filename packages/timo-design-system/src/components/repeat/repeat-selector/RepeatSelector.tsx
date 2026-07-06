@@ -4,7 +4,7 @@ import { Checkbox } from "@components/checkbox/Checkbox";
 import { Dropdown } from "@components/layout/dropdown/Dropdown";
 import { ChevronDownIcon } from "@icons";
 import { cn } from "@lib";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 import type { ReactNode } from "react";
 
@@ -62,7 +62,7 @@ const RepeatFrequencyList = ({
   return (
     <div className="border-timo-gray-500 flex w-full flex-col items-start gap-2 border-t px-3.5 py-2.5">
       {options.map(({ frequency: value, label }, index) => (
-        <div key={value} className="contents">
+        <Fragment key={value}>
           {index > 0 && (
             <div className="border-timo-gray-500 h-px w-full border-t" />
           )}
@@ -75,7 +75,7 @@ const RepeatFrequencyList = ({
               {label}
             </span>
           </Dropdown.Item>
-        </div>
+        </Fragment>
       ))}
     </div>
   );

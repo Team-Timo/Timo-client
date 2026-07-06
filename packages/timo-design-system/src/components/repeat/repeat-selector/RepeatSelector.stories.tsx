@@ -1,32 +1,10 @@
-import { RepeatSelector } from "@components/repeat/repeat-selector/RepeatSelector";
+import {
+  RepeatSelector,
+  type RepeatSelectorProps,
+} from "@components/repeat/repeat-selector/RepeatSelector";
 import { useState } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
-
-const meta = {
-  title: "Components/Repeat/RepeatSelector",
-  component: RepeatSelector,
-  parameters: {
-    layout: "centered",
-    backgrounds: {
-      default: "light-gray",
-      values: [
-        { name: "light-gray", value: "#F5F5F5" },
-        { name: "dark", value: "#333333" },
-        { name: "white", value: "#FFFFFF" },
-      ],
-    },
-  },
-  argTypes: {
-    frequency: {
-      control: "select",
-      options: ["daily", "weekly", "monthly"],
-    },
-  },
-} satisfies Meta<typeof RepeatSelector>;
-
-export default meta;
-type Story = StoryObj<typeof meta>;
 
 const TRIGGER = (
   <span className="typo-headline-r-14 text-timo-black rounded-4 bg-timo-gray-300 px-3 py-1.5">
@@ -50,12 +28,30 @@ const WEEKDAYS_KO = [
   { id: "sun", label: "일요일마다" },
 ];
 
-export const Daily: Story = {
+const meta = {
+  title: "Components/Repeat/RepeatSelector",
+  component: RepeatSelector,
+  parameters: {
+    layout: "centered",
+    backgrounds: {
+      default: "light-gray",
+      values: [
+        { name: "light-gray", value: "#F5F5F5" },
+        { name: "dark", value: "#333333" },
+        { name: "white", value: "#FFFFFF" },
+      ],
+    },
+  },
+  argTypes: {
+    frequency: {
+      control: "select",
+      options: ["daily", "weekly", "monthly"],
+    },
+  },
   args: {
     trigger: TRIGGER,
     detailHeading: "세부 설정",
     options: [...KOREAN_OPTIONS],
-    frequency: "daily",
     weekly: {
       weekdays: WEEKDAYS_KO,
       selectedWeekdayIds: [],
@@ -65,18 +61,26 @@ export const Daily: Story = {
       repeatDay: "3",
     },
   },
+} satisfies Meta<typeof RepeatSelector>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Daily: Story = {
+  args: {
+    frequency: "daily",
+  },
 };
 
-const WeeklyDemo = () => {
+const WeeklyDemo = (args: RepeatSelectorProps) => {
   const [selectedWeekdayIds, setSelectedWeekdayIds] = useState<string[]>([]);
 
   return (
     <RepeatSelector
-      trigger={TRIGGER}
-      detailHeading="세부 설정"
-      options={[...KOREAN_OPTIONS]}
+      {...args}
       frequency="weekly"
       weekly={{
+        ...args.weekly,
         weekdays: WEEKDAYS_KO,
         selectedWeekdayIds,
         onWeekdayToggle: (id) =>
@@ -86,46 +90,26 @@ const WeeklyDemo = () => {
               : [...prev, id],
           ),
       }}
-      monthly={{
-        repeatDayLabel: "일 마다",
-        repeatDay: "3",
-      }}
     />
   );
 };
 
 export const Weekly: Story = {
   args: {
-    trigger: TRIGGER,
-    detailHeading: "세부 설정",
-    options: [...KOREAN_OPTIONS],
     frequency: "weekly",
-    weekly: {
-      weekdays: WEEKDAYS_KO,
-      selectedWeekdayIds: [],
-    },
-    monthly: {
-      repeatDayLabel: "일 마다",
-      repeatDay: "3",
-    },
   },
-  render: () => <WeeklyDemo />,
+  render: (args) => <WeeklyDemo {...args} />,
 };
 
-const MonthlyDemo = () => {
+const MonthlyDemo = (args: RepeatSelectorProps) => {
   const [repeatDay, setRepeatDay] = useState("3");
 
   return (
     <RepeatSelector
-      trigger={TRIGGER}
-      detailHeading="세부 설정"
-      options={[...KOREAN_OPTIONS]}
+      {...args}
       frequency="monthly"
-      weekly={{
-        weekdays: WEEKDAYS_KO,
-        selectedWeekdayIds: [],
-      }}
       monthly={{
+        ...args.monthly,
         repeatDayLabel: "일 마다",
         repeatDay,
         onRepeatDayChange: setRepeatDay,
@@ -136,18 +120,7 @@ const MonthlyDemo = () => {
 
 export const Monthly: Story = {
   args: {
-    trigger: TRIGGER,
-    detailHeading: "세부 설정",
-    options: [...KOREAN_OPTIONS],
     frequency: "monthly",
-    weekly: {
-      weekdays: WEEKDAYS_KO,
-      selectedWeekdayIds: [],
-    },
-    monthly: {
-      repeatDayLabel: "일 마다",
-      repeatDay: "3",
-    },
   },
-  render: () => <MonthlyDemo />,
+  render: (args) => <MonthlyDemo {...args} />,
 };
