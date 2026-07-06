@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useId, useState } from "react";
 
 import { ChevronDownIcon } from "../../../icons";
 import { cn } from "../../../lib";
@@ -114,15 +114,20 @@ const RepeatMonthlyDetailSection = ({
   onRepeatDayChange,
   ariaLabel,
 }: RepeatMonthlyDetailSectionProps) => {
+  const inputId = useId();
+
   return (
     <div className="flex items-center gap-0.5">
+      <label htmlFor={inputId} className="sr-only">
+        {ariaLabel}
+      </label>
       <div className="bg-timo-gray-300 rounded-4 flex h-6.25 w-14.75 items-center justify-end px-1">
         <input
+          id={inputId}
           type="text"
           value={repeatDay}
           onChange={(event) => onRepeatDayChange?.(event.target.value)}
-          aria-label={ariaLabel}
-          className="typo-headline-m-14 text-timo-black w-full bg-transparent text-right outline-none"
+          className="typo-headline-m-14 text-timo-black focus-visible:ring-timo-blue-300 w-full bg-transparent text-right outline-none focus-visible:ring-2"
         />
       </div>
       <span className="typo-headline-r-14 text-timo-black whitespace-nowrap">
