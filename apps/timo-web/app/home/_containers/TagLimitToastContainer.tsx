@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
-export const TagLimitTagContainer = () => {
+export const TagLimitToastContainer = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   // TODO: 영문 ver
