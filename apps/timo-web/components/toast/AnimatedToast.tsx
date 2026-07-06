@@ -2,7 +2,7 @@
 
 import { Toast } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { ReactNode } from "react";
 
@@ -23,6 +23,11 @@ export const AnimatedToast = ({
 }: AnimatedToastProps) => {
   const [shouldRender, setShouldRender] = useState<boolean>(isOpen);
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -48,10 +53,10 @@ export const AnimatedToast = ({
       return;
     }
 
-    const autoCloseTimer = setTimeout(() => onClose?.(), duration);
+    const autoCloseTimer = setTimeout(() => onCloseRef.current?.(), duration);
 
     return () => clearTimeout(autoCloseTimer);
-  }, [isOpen, duration, onClose]);
+  }, [isOpen, duration]);
 
   if (!shouldRender) {
     return null;
