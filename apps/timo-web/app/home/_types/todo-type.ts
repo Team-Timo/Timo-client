@@ -1,5 +1,5 @@
-export type TodoPriority = "URGENT" | "HIGH" | "MEDIUM" | "LOW";
-export type TodoTimerStatus = "RUNNING" | "STOPPED";
+export type TodoPriorityTypes = "URGENT" | "HIGH" | "MEDIUM" | "LOW";
+export type TodoTimerStatusTypes = "RUNNING" | "STOPPED";
 
 export interface TodoTag {
   tagId: number;
@@ -18,11 +18,11 @@ export interface Todo {
   title: string;
   completed: boolean;
   durationSeconds: number;
-  priority: TodoPriority;
+  priority: TodoPriorityTypes;
   tag: TodoTag;
   hasMemo: boolean;
   isRepeated: boolean;
-  timerStatus: TodoTimerStatus;
+  timerStatus: TodoTimerStatusTypes;
   sortOrder: number;
   subtasks: TodoSubtask[];
 }

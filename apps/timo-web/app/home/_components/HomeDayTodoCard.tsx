@@ -16,29 +16,31 @@ import {
 import { cn } from "@repo/timo-design-system/utils";
 
 import type {
-  TodoPriority,
-  TodoTimerStatus,
+  TodoPriorityTypes,
+  TodoTimerStatusTypes,
 } from "@/app/home/_types/todo-type";
 
 import { convertDurationToTimeText } from "@/app/home/_utils/todo-time";
 
-const PRIORITY_MAP: Record<TodoPriority, "urgent" | "high" | "medium" | "low"> =
-  {
-    URGENT: "urgent",
-    HIGH: "high",
-    MEDIUM: "medium",
-    LOW: "low",
-  };
+const PRIORITY_MAP: Record<
+  TodoPriorityTypes,
+  "urgent" | "high" | "medium" | "low"
+> = {
+  URGENT: "urgent",
+  HIGH: "high",
+  MEDIUM: "medium",
+  LOW: "low",
+};
 
 export interface HomeDayTodoCardProps {
   title: string;
-  completed: boolean;
+  isCompleted: boolean;
   durationSeconds: number;
-  priority: TodoPriority;
+  priority: TodoPriorityTypes;
   tagName?: string;
   hasMemo: boolean;
   isRepeated: boolean;
-  timerStatus: TodoTimerStatus;
+  timerStatus: TodoTimerStatusTypes;
   subtaskTitle?: string;
   isSubtaskCompleted?: boolean;
   onToggleCompleted: (completed: boolean) => void;
@@ -48,7 +50,7 @@ export interface HomeDayTodoCardProps {
 
 export const HomeDayTodoCard = ({
   title,
-  completed,
+  isCompleted,
   durationSeconds,
   priority,
   tagName,
@@ -67,14 +69,14 @@ export const HomeDayTodoCard = ({
     <div className="flex w-full items-center justify-between gap-2">
       <div className="flex w-[165px] items-center gap-1">
         <Checkbox
-          checked={completed}
+          checked={isCompleted}
           onChange={onToggleCompleted}
-          disabled={completed}
+          disabled={isCompleted}
         />
         <p
           className={cn(
             "typo-body-sb-12 w-[137px] truncate",
-            completed ? "text-timo-gray-700" : "text-timo-black",
+            isCompleted ? "text-timo-gray-700" : "text-timo-black",
           )}
         >
           {title}
@@ -83,10 +85,10 @@ export const HomeDayTodoCard = ({
       <PlayButton
         variant={isRunning ? "stop" : "play"}
         size="sm"
-        disabled={completed}
+        disabled={isCompleted}
         onClick={onTogglePlay}
       >
-        {completed ? (
+        {isCompleted ? (
           <PlayDisabledIcon />
         ) : isRunning ? (
           <StopIcon />
@@ -101,7 +103,7 @@ export const HomeDayTodoCard = ({
     <article
       className={cn(
         "border-timo-gray-500 flex size-full flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
-        completed ? "bg-timo-gray-200" : "bg-white",
+        isCompleted ? "bg-timo-gray-200" : "bg-white",
       )}
     >
       {subtaskTitle ? (
@@ -111,7 +113,7 @@ export const HomeDayTodoCard = ({
             <Checkbox
               checked={isSubtaskCompleted}
               onChange={(checked) => onToggleSubtaskCompleted?.(checked)}
-              disabled={completed}
+              disabled={isCompleted}
             />
             <p className="typo-body-r-12 text-timo-gray-700">{subtaskTitle}</p>
           </div>
@@ -122,17 +124,17 @@ export const HomeDayTodoCard = ({
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-1">
           <PriorityIcon
-            priority={completed ? "Disable" : PRIORITY_MAP[priority]}
+            priority={isCompleted ? "Disable" : PRIORITY_MAP[priority]}
           />
           {tagName && <TagIcon text={tagName} />}
           {hasMemo &&
-            (completed ? (
+            (isCompleted ? (
               <MemoDisableIcon width={18} height={18} />
             ) : (
               <MemoOnIcon width={18} height={18} />
             ))}
           {isRepeated &&
-            (completed ? (
+            (isCompleted ? (
               <RepeatTodoDisableIcon width={18} height={18} />
             ) : (
               <RepeatTodoOnIcon width={18} height={18} />
@@ -141,7 +143,7 @@ export const HomeDayTodoCard = ({
         <span
           className={cn(
             "typo-body-sb-12 shrink-0 whitespace-nowrap",
-            completed ? "text-timo-gray-700" : "text-timo-gray-900",
+            isCompleted ? "text-timo-gray-700" : "text-timo-gray-900",
           )}
         >
           {convertDurationToTimeText(durationSeconds)}

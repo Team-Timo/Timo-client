@@ -87,7 +87,7 @@ export const HomeDayTodoContainer = () => {
             <HomeDayTodoCard
               key={todo.todoId}
               title={todo.title}
-              completed={todo.completed}
+              isCompleted={todo.completed}
               durationSeconds={todo.durationSeconds}
               priority={todo.priority}
               tagName={todo.tag.name}
