@@ -1,10 +1,10 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@icons";
 import { cn } from "@lib";
 
-export type WeeklyButtonDirection = "left" | "right";
+export type WeeklyButtonDirectionTypes = "left" | "right";
 
 export interface WeeklyButtonProps {
-  direction: WeeklyButtonDirection;
+  direction: WeeklyButtonDirectionTypes;
   onClick?: () => void;
   className?: string;
 }

@@ -22,4 +22,4 @@ export { TabButton } from "@components/button/tab-button/TabButton";
 export { SidebarButton } from "@components/button/sidebar-button/SidebarButton";
 export { TodayButton } from "@components/button/today-button/TodayButton";
 export { WeeklyButton } from "@components/button/weekly-button/WeeklyButton";
-export type { WeeklyButtonDirection } from "@components/button/weekly-button/WeeklyButton";
+export type { WeeklyButtonDirectionTypes } from "@components/button/weekly-button/WeeklyButton";
