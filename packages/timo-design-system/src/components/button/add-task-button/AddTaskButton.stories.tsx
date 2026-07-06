@@ -1,4 +1,4 @@
-import { AddTaskButton } from "@components/button/add-task-button/AddTaskButton";
+import { AddTaskButton } from "./AddTaskButton";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

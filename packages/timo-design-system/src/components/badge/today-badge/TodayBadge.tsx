@@ -1,4 +1,4 @@
-import { cn } from "@lib";
+import { cn } from "../../../lib";
 
 export type TodayBadgeVariant = "default" | "weekly";
 

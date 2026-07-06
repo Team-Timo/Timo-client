@@ -3,19 +3,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "./src",
-    "strictNullChecks": true,
-    "paths": {
-      "@components": ["./src/components/index.ts"],
-      "@components/*": ["./src/components/*"],
-      "@tokens/*": ["./src/tokens/*"],
-      "@icons": ["./src/icons/index.ts"],
-      "@icons/*": ["./src/icons/*"],
-      "@lib": ["./src/lib/index.ts"],
-      "@lib/*": ["./src/lib/*"],
-      "@styles/*": ["./src/styles/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@guides/*": ["./src/guides/*"]
-    }
+    "strictNullChecks": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

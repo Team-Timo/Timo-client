@@ -1,6 +1,6 @@
-import { Dropdown } from "@components/layout/dropdown/Dropdown";
-import { PriorityIcon } from "@components/priority/priority-icon/PriorityIcon";
-import { cn } from "@lib";
+import { cn } from "../../../lib";
+import { Dropdown } from "../../layout/dropdown/Dropdown";
+import { PriorityIcon } from "../priority-icon/PriorityIcon";
 
 import type { ReactNode } from "react";
 
