@@ -1,6 +1,6 @@
-import { Dropdown } from "@components/layout/dropdown/Dropdown";
-import { PlusIcon } from "@icons";
-import { cn } from "@lib";
+import { PlusIcon } from "../../../icons";
+import { cn } from "../../../lib";
+import { Dropdown } from "../../layout/dropdown/Dropdown";
 
 import type { ReactNode } from "react";
 
