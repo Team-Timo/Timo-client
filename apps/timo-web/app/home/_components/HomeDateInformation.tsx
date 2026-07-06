@@ -26,7 +26,7 @@ export const HomeDateInformation = ({
             <h2
               className={cn(
                 "typo-headline-b-30",
-                isHoliday ? "text-timo-" : "text-timo-black",
+                isHoliday ? "text-timo-red" : "text-timo-black",
               )}
             >
               {date}
