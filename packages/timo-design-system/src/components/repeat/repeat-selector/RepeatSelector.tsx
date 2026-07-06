@@ -1,10 +1,11 @@
 "use client";
 
-import { Checkbox } from "@components/checkbox/Checkbox";
-import { Dropdown } from "@components/layout/dropdown/Dropdown";
-import { ChevronDownIcon } from "@icons";
-import { cn } from "@lib";
 import { Fragment, useState } from "react";
+
+import { ChevronDownIcon } from "../../../icons";
+import { cn } from "../../../lib";
+import { Checkbox } from "../../checkbox/Checkbox";
+import { Dropdown } from "../../layout/dropdown/Dropdown";
 
 import type { ReactNode } from "react";
 
