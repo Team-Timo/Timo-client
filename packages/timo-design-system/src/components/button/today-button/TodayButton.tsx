@@ -1,11 +1,16 @@
 import { cn } from "../../../lib";
 
 export interface TodayButtonProps {
+  label?: string;
   onClick?: () => void;
   className?: string;
 }
 
-export const TodayButton = ({ onClick, className }: TodayButtonProps) => {
+export const TodayButton = ({
+  label = "오늘",
+  onClick,
+  className,
+}: TodayButtonProps) => {
   return (
     <button
       type="button"
@@ -15,7 +20,7 @@ export const TodayButton = ({ onClick, className }: TodayButtonProps) => {
         className,
       )}
     >
-      오늘
+      {label}
     </button>
   );
 };
