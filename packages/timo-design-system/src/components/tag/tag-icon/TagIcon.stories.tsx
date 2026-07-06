@@ -1,4 +1,4 @@
-import { TagIcon } from "@components/tag/tag-icon/TagIcon";
+import { TagIcon } from "./TagIcon";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

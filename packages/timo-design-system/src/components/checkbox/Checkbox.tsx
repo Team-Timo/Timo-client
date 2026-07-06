@@ -1,5 +1,6 @@
-import { cn } from "@lib";
 import { useId } from "react";
+
+import { cn } from "../../lib";
 
 export interface CheckboxProps {
   checked: boolean;

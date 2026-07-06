@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@lib";
 import {
   createContext,
   useContext,
@@ -12,6 +11,9 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
+
+import { cn } from "../../../lib";
+
 
 interface DropdownContextValue {
   isOpen: boolean;
