@@ -23,6 +23,7 @@ import {
   TagIcon,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
+import { useState } from "react";
 
 import type { ComponentProps, ReactNode } from "react";
 
@@ -49,6 +50,15 @@ export interface SubTodo {
   isDone?: boolean;
 }
 
+export interface TodayTodoCardToolbar {
+  date?: string;
+  time?: string;
+  priority?: Priority;
+  tag?: string;
+  memo?: boolean;
+  repeat?: boolean;
+}
+
 export interface TodayTodoCardProps {
   title: string;
   isDone?: boolean;
@@ -56,12 +66,7 @@ export interface TodayTodoCardProps {
   icon?: ReactNode;
   onIconClick?: () => void;
   subTodos?: SubTodo[];
-  date?: string;
-  time?: string;
-  priority?: Priority;
-  tag?: string;
-  hasMemo?: boolean;
-  hasRepeat?: boolean;
+  toolbar?: TodayTodoCardToolbar;
   onCheck?: () => void;
   onPlay?: () => void;
   onDelete?: () => void;
@@ -75,21 +80,20 @@ export const TodayTodoCard = ({
   icon,
   onIconClick,
   subTodos,
-  date,
-  time,
-  priority,
-  tag,
-  hasMemo,
-  hasRepeat,
+  toolbar,
   onCheck,
   onPlay,
   onDelete,
   onSubTodoCheck,
 }: TodayTodoCardProps) => {
-  const style = CARD_STYLE[isDone ? "done" : "active"];
+  const [isHovered, setIsHovered] = useState(false);
+  const isDimmed = isDone && !isHovered;
+  const style = CARD_STYLE[isDimmed ? "done" : "active"];
 
   return (
     <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={cn(
         "border-timo-gray-500 flex w-full flex-col gap-1 rounded-[4px] border px-5 py-4",
         style.card,
@@ -98,18 +102,14 @@ export const TodayTodoCard = ({
       {/* Title row */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <Checkbox
-            checked={isDone}
-            onChange={() => onCheck?.()}
-            disabled={isDone}
-          />
+          <Checkbox checked={isDone} onChange={() => onCheck?.()} />
           {isDraggable &&
-            (isDone ? (
+            (isDimmed ? (
               <HamburgerGrayIcon className="shrink-0" />
             ) : (
               <HamburgerIcon className="shrink-0" />
             ))}
-          {(icon || onIconClick) && (
+          {icon && (
             <button
               type="button"
               onClick={onIconClick}
@@ -125,8 +125,13 @@ export const TodayTodoCard = ({
             {title}
           </span>
         </div>
-        <PlayButton variant="play" size="lg" disabled={isDone} onClick={onPlay}>
-          {isDone ? (
+        <PlayButton
+          variant="play"
+          size="lg"
+          disabled={isDimmed}
+          onClick={onPlay}
+        >
+          {isDimmed ? (
             <PlayDisabledIcon width={24} height={24} />
           ) : (
             <PlayIcon width={24} height={24} />
@@ -142,7 +147,6 @@ export const TodayTodoCard = ({
               <Checkbox
                 checked={sub.isDone ?? false}
                 onChange={() => onSubTodoCheck?.(sub.id)}
-                disabled={isDone}
               />
               <span className={cn("typo-body-r-12", style.subText)}>
                 {sub.text}
@@ -154,39 +158,45 @@ export const TodayTodoCard = ({
 
       {/* Toolbar */}
       <div className="flex items-center justify-end gap-2">
-        {date && (
+        {toolbar?.date && (
           <button
             type="button"
             className="flex items-center gap-0.5"
             aria-label="날짜"
           >
-            {isDone ? <CalendarDisableIcon /> : <CalendarOnIcon />}
-            <span className={cn("typo-caption-r-10", style.meta)}>{date}</span>
+            {isDimmed ? <CalendarDisableIcon /> : <CalendarOnIcon />}
+            <span className={cn("typo-caption-r-10", style.meta)}>
+              {toolbar.date}
+            </span>
           </button>
         )}
-        {time && (
+        {toolbar?.time && (
           <button
             type="button"
             className="flex items-center gap-0.5"
             aria-label="시간"
           >
-            {isDone ? <ClockDisableIcon /> : <ClockOnIcon />}
-            <span className={cn("typo-caption-r-10", style.meta)}>{time}</span>
+            {isDimmed ? <ClockDisableIcon /> : <ClockOnIcon />}
+            <span className={cn("typo-caption-r-10", style.meta)}>
+              {toolbar.time}
+            </span>
           </button>
         )}
-        {priority && <PriorityIcon priority={isDone ? "Disable" : priority} />}
-        {tag && <TagIcon text={tag} />}
-        {hasMemo && (isDone ? <MemoDisableIcon /> : <MemoOnIcon />)}
-        {hasRepeat &&
-          (isDone ? <RepeatTodoDisableIcon /> : <RepeatTodoOnIcon />)}
+        {toolbar?.priority && (
+          <PriorityIcon priority={isDimmed ? "Disable" : toolbar.priority} />
+        )}
+        {toolbar?.tag && <TagIcon text={toolbar.tag} />}
+        {toolbar?.memo && (isDimmed ? <MemoDisableIcon /> : <MemoOnIcon />)}
+        {toolbar?.repeat &&
+          (isDimmed ? <RepeatTodoDisableIcon /> : <RepeatTodoOnIcon />)}
         <button
           type="button"
           onClick={onDelete}
-          disabled={isDone}
+          disabled={isDimmed}
           aria-label="삭제"
-          className={cn(isDone && "cursor-not-allowed")}
+          className={cn(isDimmed && "cursor-not-allowed")}
         >
-          {isDone ? <TrashDisableIcon /> : <TrashOnIcon />}
+          {isDimmed ? <TrashDisableIcon /> : <TrashOnIcon />}
         </button>
       </div>
     </div>
