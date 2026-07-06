@@ -8,8 +8,18 @@ import { TimeboxPanel } from "@/components/layout/TimeboxPanel";
 import { TimerPanel } from "@/components/layout/TimerPanel";
 
 type SidebarTab = "timebox" | "timer";
+export type SidebarSize = "sm" | "lg";
 
-export const Sidebar = () => {
+const SIDEBAR_SIZE_WIDTH_CLASS_NAME: Record<SidebarSize, string> = {
+  sm: "w-76",
+  lg: "w-110",
+};
+
+export interface SidebarProps {
+  size?: SidebarSize;
+}
+
+export const Sidebar = ({ size = "sm" }: SidebarProps) => {
   const id = useId();
   const [activeTab, setActiveTab] = useState<SidebarTab>("timebox");
 
@@ -21,7 +31,9 @@ export const Sidebar = () => {
   };
 
   return (
-    <aside className="border-timo-gray-500 flex h-screen w-76 flex-col border-l bg-white">
+    <aside
+      className={`border-timo-gray-500 flex h-screen ${SIDEBAR_SIZE_WIDTH_CLASS_NAME[size]} flex-col border-l bg-white`}
+    >
       <SidebarHeader date={new Date()} />
 
       <div className="px-4.5">
