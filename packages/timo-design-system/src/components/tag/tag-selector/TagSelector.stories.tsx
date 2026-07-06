@@ -1,4 +1,4 @@
-import { TagSelector } from "@components/tag/tag-selector/TagSelector";
+import { TagSelector } from "./TagSelector";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

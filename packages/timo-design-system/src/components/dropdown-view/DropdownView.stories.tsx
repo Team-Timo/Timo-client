@@ -1,5 +1,6 @@
-import { DropdownView } from "@components/dropdown-view/DropdownView";
 import { useState } from "react";
+
+import { DropdownView } from "./DropdownView";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
