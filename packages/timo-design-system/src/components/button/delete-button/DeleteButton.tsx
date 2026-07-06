@@ -1,5 +1,5 @@
-import { TrashOnIcon } from "@icons";
-import { cn } from "@lib";
+import { TrashOnIcon } from "../../../icons";
+import { cn } from "../../../lib";
 
 export interface DeleteButtonProps {
   onClick: () => void;

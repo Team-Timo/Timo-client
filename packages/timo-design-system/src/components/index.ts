@@ -1,22 +1,22 @@
-export { Checkbox } from "@components/checkbox/Checkbox";
-export { Dropdown } from "@components/layout/dropdown/Dropdown";
-export { DropdownView } from "@components/dropdown-view/DropdownView";
-export { Color } from "@components/tokens/color/Color";
-export { Typography } from "@components/tokens/typography/Typography";
-export { TagIcon } from "@components/tag/tag-icon/TagIcon";
-export { TagSelector } from "@components/tag/tag-selector/TagSelector";
-export { PriorityIcon } from "@components/priority/priority-icon/PriorityIcon";
-export { PrioritySelector } from "@components/priority/priority-selector/PrioritySelector";
-export { CreateButton } from "@components/button/create-button/CreateButton";
-export { DeleteButton } from "@components/button/delete-button/DeleteButton";
-export { AddTaskButton } from "@components/button/add-task-button/AddTaskButton";
-export { TodayBadge } from "@components/badge/today-badge/TodayBadge";
-export { TogglePanel } from "@components/toggle-panel/TogglePanel";
-export { PlayButton } from "@components/button/play-button/PlayButton";
-export { TabButton } from "@components/button/tab-button/TabButton";
-export { ModalButton } from "@components/button/modal-button/ModalButton";
-export type { ModalButtonVariantTypes } from "@components/button/modal-button/ModalButton";
-export { Modal } from "@components/layout/modal/Modal";
+export { Checkbox } from "./checkbox/Checkbox";
+export { Dropdown } from "./layout/dropdown/Dropdown";
+export { DropdownView } from "./dropdown-view/DropdownView";
+export { Color } from "./tokens/color/Color";
+export { Typography } from "./tokens/typography/Typography";
+export { TagIcon } from "./tag/tag-icon/TagIcon";
+export { TagSelector } from "./tag/tag-selector/TagSelector";
+export { PriorityIcon } from "./priority/priority-icon/PriorityIcon";
+export { PrioritySelector } from "./priority/priority-selector/PrioritySelector";
+export { CreateButton } from "./button/create-button/CreateButton";
+export { DeleteButton } from "./button/delete-button/DeleteButton";
+export { AddTaskButton } from "./button/add-task-button/AddTaskButton";
+export { TodayBadge } from "./badge/today-badge/TodayBadge";
+export { TogglePanel } from "./toggle-panel/TogglePanel";
+export { PlayButton } from "./button/play-button/PlayButton";
+export { TabButton } from "./button/tab-button/TabButton";
+export { ModalButton } from "./button/modal-button/ModalButton";
+export type { ModalButtonVariantTypes } from "./button/modal-button/ModalButton";
+export { Modal } from "./layout/modal/Modal";
 export type {
   ModalProps,
   ModalTriggerProps,
@@ -28,4 +28,4 @@ export type {
   ModalFooterProps,
   ModalBorderButtonProps,
   ModalFillButtonProps,
-} from "@components/layout/modal/Modal";
+} from "./layout/modal/Modal";

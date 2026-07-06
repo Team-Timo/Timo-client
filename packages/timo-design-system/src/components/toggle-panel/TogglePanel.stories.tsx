@@ -1,8 +1,6 @@
-import {
-  TogglePanel,
-  TogglePanelValue,
-} from "@components/toggle-panel/TogglePanel";
 import { useEffect, useState } from "react";
+
+import { TogglePanel, TogglePanelValue } from "./TogglePanel";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
