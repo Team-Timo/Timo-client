@@ -86,6 +86,7 @@ export const Timer = ({
       </svg>
 
       <div className="flex w-[130px] flex-col items-center gap-[5px]">
+        {/*TODO: 아이콘 핸드오프시 변경 예정 */}
         <span className="bg-timo-yellow-300 flex size-10 items-center justify-center rounded-full p-2">
           {icon}
         </span>
