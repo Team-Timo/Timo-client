@@ -1,4 +1,4 @@
-import { WeeklyButton } from "@components/button/weekly-button/WeeklyButton";
+import { WeeklyButton } from "./WeeklyButton";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

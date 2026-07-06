@@ -1,4 +1,4 @@
-import { TodayButton } from "@components/button/today-button/TodayButton";
+import { TodayButton } from "./TodayButton";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

@@ -1,5 +1,5 @@
-import { SidebarLeftIcon, SidebarRightIcon } from "@icons";
-import { cn } from "@lib";
+import { SidebarLeftIcon, SidebarRightIcon } from "../../../icons";
+import { cn } from "../../../lib";
 
 export interface SidebarButtonProps {
   isOpen?: boolean;

@@ -1,5 +1,5 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@icons";
-import { cn } from "@lib";
+import { ChevronLeftIcon, ChevronRightIcon } from "../../../icons";
+import { cn } from "../../../lib";
 
 export type WeeklyButtonDirectionTypes = "left" | "right";
 

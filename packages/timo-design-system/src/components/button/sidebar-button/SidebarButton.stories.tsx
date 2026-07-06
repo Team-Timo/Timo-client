@@ -1,5 +1,6 @@
-import { SidebarButton } from "@components/button/sidebar-button/SidebarButton";
 import { useState } from "react";
+
+import { SidebarButton } from "./SidebarButton";
 
 import type { Meta, StoryObj } from "@storybook/react";
 import type { ComponentProps } from "react";
