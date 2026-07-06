@@ -7,7 +7,7 @@ import { cn } from "@lib";
 import type { ReactNode } from "react";
 
 export interface HeaderProps {
-  left: ReactNode;
+  left?: ReactNode;
   right?: ReactNode;
   className?: string;
 }
