@@ -1,7 +1,6 @@
 import { Typography } from "./Typography";
 import { TYPOGRAPHY_TOKENS } from "../../../tokens/typography-token";
 
-
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {

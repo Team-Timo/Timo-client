@@ -3,7 +3,6 @@ import { PlayIcon } from "../../../icons/generated/Play";
 import { PlayDisabledIcon } from "../../../icons/generated/PlayDisabled";
 import { StopIcon } from "../../../icons/generated/Stop";
 
-
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
