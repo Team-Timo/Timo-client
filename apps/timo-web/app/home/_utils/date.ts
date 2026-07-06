@@ -13,5 +13,11 @@ export const convertDateToDayOfWeek = (date: Date): string => {
 };
 
 export const convertDateToDateText = (date: Date): string => {
-  return `${date.getMonth() + 1}월 ${date.getDate()}일`;
+  const day = date.getDate();
+
+  if (day === 1) {
+    return `${date.getMonth() + 1}.${day}`;
+  }
+
+  return `${day}`;
 };
