@@ -1,7 +1,9 @@
-import { Dropdown } from "@components/layout/dropdown/Dropdown";
-import { ChevronDownIcon, ChevronUpIcon } from "@icons";
-import { cn } from "@lib";
 import { Fragment } from "react";
+
+import { ChevronDownIcon, ChevronUpIcon } from "../../icons";
+import { cn } from "../../lib";
+import { Dropdown } from "../layout/dropdown/Dropdown";
+
 
 export interface DropdownViewProps {
   items: string[];

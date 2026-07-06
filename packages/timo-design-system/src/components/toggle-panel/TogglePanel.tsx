@@ -1,5 +1,6 @@
-import { cn } from "@lib";
 import { useId, useRef } from "react";
+
+import { cn } from "../../lib";
 
 import type { KeyboardEvent, RefObject } from "react";
 
