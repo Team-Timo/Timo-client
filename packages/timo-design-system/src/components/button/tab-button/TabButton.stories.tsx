@@ -16,10 +16,8 @@ import {
   TodayOffIcon,
   TodayOnIcon,
 } from "@icons";
-import { useState } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
-import type { ComponentProps } from "react";
 
 const meta = {
   title: "Components/Button/TabButton",
@@ -33,9 +31,6 @@ const meta = {
     },
     isSelected: {
       control: "boolean",
-    },
-    onClick: {
-      action: "clicked",
     },
   },
   args: {
@@ -138,35 +133,4 @@ export const AllStates: Story = {
       </div>
     </div>
   ),
-};
-
-const InteractiveHomeTab = (args: ComponentProps<typeof TabButton>) => {
-  const [isSelected, setIsSelected] = useState(false);
-
-  return (
-    <TabButton
-      {...args}
-      label="홈"
-      icon={
-        isSelected ? (
-          <HomeOnIcon width={24} height={24} />
-        ) : (
-          <HomeOffIcon width={24} height={24} />
-        )
-      }
-      hoverIcon={<HomeHoverIcon width={24} height={24} />}
-      isSelected={isSelected}
-      onClick={() => {
-        args.onClick?.();
-        setIsSelected((prevIsSelected) => !prevIsSelected);
-      }}
-    />
-  );
-};
-
-export const Interactive: Story = {
-  parameters: {
-    controls: { disable: true },
-  },
-  render: (args) => <InteractiveHomeTab {...args} />,
 };
