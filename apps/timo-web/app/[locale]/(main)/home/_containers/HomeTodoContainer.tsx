@@ -3,15 +3,15 @@
 import { AddTaskButton } from "@repo/timo-design-system/ui";
 import { useState } from "react";
 
-import type { Todo } from "@/app/(main)/home/_types/todo-type";
+import type { Todo } from "@/app/[locale]/(main)/home/_types/todo-type";
 
-import { HomeDateInformation } from "@/app/(main)/home/_components/HomeDateInformation";
-import { HomeTodoCard } from "@/app/(main)/home/_components/HomeTodoCard";
-import { todoMocks } from "@/app/(main)/home/_mocks/todo-mock";
+import { HomeDateInformation } from "@/app/[locale]/(main)/home/_components/HomeDateInformation";
+import { HomeTodoCard } from "@/app/[locale]/(main)/home/_components/HomeTodoCard";
+import { todoMocks } from "@/app/[locale]/(main)/home/_mocks/todo-mock";
 import {
   convertDateToDateText,
   convertDateToDayOfWeek,
-} from "@/app/(main)/home/_utils/date";
+} from "@/app/[locale]/(main)/home/_utils/date";
 
 export const HomeTodoContainer = () => {
   const [todos, setTodos] = useState<Todo[]>(todoMocks);

@@ -1,4 +1,4 @@
-import { Todo } from "@/app/(main)/home/_types/todo-type";
+import { Todo } from "@/app/[locale]/(main)/home/_types/todo-type";
 
 export const todoMocks: Todo[] = [
   {
