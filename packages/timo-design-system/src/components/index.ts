@@ -35,3 +35,5 @@ export { TodayButton } from "./button/today-button/TodayButton";
 export { WeeklyButton } from "./button/weekly-button/WeeklyButton";
 export { TimeSelector } from "./time/time-selector/TimeSelector";
 export { RepeatSelector } from "./repeat/repeat-selector/RepeatSelector";
+export { Calendar } from "./calendar/Calendar";
+export type { CalendarProps } from "./calendar/Calendar";
