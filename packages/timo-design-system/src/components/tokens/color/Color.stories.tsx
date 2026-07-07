@@ -1,7 +1,6 @@
 import { Color } from "./Color";
 import { COLOR_TOKENS } from "../../../tokens/color-token";
 
-
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {

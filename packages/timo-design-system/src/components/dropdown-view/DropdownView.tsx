@@ -4,7 +4,6 @@ import { ChevronDownIcon, ChevronUpIcon } from "../../icons";
 import { cn } from "../../lib";
 import { Dropdown } from "../layout/dropdown/Dropdown";
 
-
 export interface DropdownViewProps {
   items: string[];
   value: string;

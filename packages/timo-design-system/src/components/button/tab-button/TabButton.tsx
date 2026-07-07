@@ -14,7 +14,6 @@ export interface TabButtonProps {
   icon: ReactNode;
   hoverIcon?: ReactNode;
   isSelected?: boolean;
-  onClick?: () => void;
 }
 
 export const TabButton = ({
@@ -22,7 +21,6 @@ export const TabButton = ({
   icon,
   hoverIcon,
   isSelected = false,
-  onClick,
 }: TabButtonProps) => {
   const baseButtonClassName =
     "group flex w-45 items-center gap-2 rounded-[8px] px-3 py-1";
@@ -32,10 +30,7 @@ export const TabButton = ({
   const hasHoverIcon = hoverIcon && !isSelected;
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={isSelected}
+    <span
       className={cn(
         baseButtonClassName,
         TAB_BUTTON_VARIANT_CLASS_NAME[variant],
@@ -50,6 +45,6 @@ export const TabButton = ({
         icon
       )}
       <span>{label}</span>
-    </button>
+    </span>
   );
 };
