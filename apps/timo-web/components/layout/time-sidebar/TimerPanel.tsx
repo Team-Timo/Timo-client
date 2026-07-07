@@ -6,11 +6,14 @@ import { useState } from "react";
 import { Timer } from "@/components/timer/Timer";
 import { TimerControls } from "@/components/timer/TimerControls";
 
-export const TimerPanel = () => {
-  const [isRunning, setIsRunning] = useState(false);
+type TimerStatus = "RUNNING" | "PAUSED";
 
-  const handleTogglePlay = () => setIsRunning((prev) => !prev);
-  const handleEnd = () => setIsRunning(false);
+export const TimerPanel = () => {
+  const [status, setStatus] = useState<TimerStatus>("PAUSED");
+
+  const handleTogglePlay = () =>
+    setStatus((prev) => (prev === "RUNNING" ? "PAUSED" : "RUNNING"));
+  const handleEnd = () => setStatus("PAUSED");
   const handleAddTime = () => {};
 
   return (
@@ -18,13 +21,13 @@ export const TimerPanel = () => {
       <Timer
         icon={<TimerOnIcon />}
         time="10:30"
-        durationLabel="12M"
+        plannedLabel="12M"
         progress={70}
         size="sm"
       />
 
       <TimerControls
-        isRunning={isRunning}
+        isRunning={status === "RUNNING"}
         onTogglePlay={handleTogglePlay}
         onEnd={handleEnd}
         onAddTime={handleAddTime}

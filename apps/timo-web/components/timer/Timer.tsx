@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
 
 export type TimerSize = "sm" | "lg";
+export type IconType = ReactNode;
 
 export interface TimerProps {
-  icon: ReactNode;
+  icon: IconType;
   time: string;
-  durationLabel: string;
+  plannedLabel: string;
   progress: number;
   size: TimerSize;
   isOvertime?: boolean;
@@ -16,7 +17,7 @@ interface TimerSizeConfig {
   diameter: number;
   strokeWidth: number;
   timeClassName: string;
-  durationClassName: string;
+  plannedClassName: string;
 }
 
 const TIMER_SIZE_CONFIG: Record<TimerSize, TimerSizeConfig> = {
@@ -24,26 +25,26 @@ const TIMER_SIZE_CONFIG: Record<TimerSize, TimerSizeConfig> = {
     diameter: 242,
     strokeWidth: 23.12,
     timeClassName: "typo-headline-b-40",
-    durationClassName: "typo-headline-m-20",
+    plannedClassName: "typo-headline-m-20",
   },
   lg: {
     diameter: 360,
     strokeWidth: 34.39,
     timeClassName: "typo-headline-b-50",
-    durationClassName: "typo-headline-m-26",
+    plannedClassName: "typo-headline-m-26",
   },
 };
 
 export const Timer = ({
   icon,
   time,
-  durationLabel,
+  plannedLabel,
   progress,
   size,
   isOvertime = false,
   overtimeProgress = 0,
 }: TimerProps) => {
-  const { diameter, strokeWidth, timeClassName, durationClassName } =
+  const { diameter, strokeWidth, timeClassName, plannedClassName } =
     TIMER_SIZE_CONFIG[size];
   const radius = (diameter - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -98,9 +99,9 @@ export const Timer = ({
         </p>
 
         <p
-          className={`${durationClassName} text-center ${isOvertime ? "text-timo-blue-300" : "text-timo-gray-800"}`}
+          className={`${plannedClassName} text-center ${isOvertime ? "text-timo-blue-300" : "text-timo-gray-800"}`}
         >
-          {durationLabel}
+          {plannedLabel}
         </p>
       </div>
     </div>
