@@ -3,8 +3,8 @@ import { cn } from "../../../lib";
 export type TodayBadgeVariant = "default" | "weekly";
 
 const TODAY_BADGE_VARIANT: Record<TodayBadgeVariant, string> = {
-  default: "px-2 py-0.5 typo-headline-m-14",
-  weekly: "px-1.5 py-px typo-body-m-12",
+  default: "px-2 py-0.5 typo-headline-m-14 w-[54px]",
+  weekly: "px-1.5 py-px typo-body-m-12 w-11",
 };
 
 export interface TodayBadgeProps {
