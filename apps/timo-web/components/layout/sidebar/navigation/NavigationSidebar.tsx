@@ -19,9 +19,11 @@ import {
   TodayOnIcon,
 } from "@repo/timo-design-system/icons";
 import { TabButton } from "@repo/timo-design-system/ui";
+import { cn } from "@repo/timo-design-system/utils";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
+import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
 import { ROUTES } from "@/constants/routes";
 import { Link, usePathname } from "@/i18n/navigation";
 
@@ -70,13 +72,24 @@ const NAV_ITEMS = [
 
 export const NavigationSidebar = () => {
   const t = useTranslations("Navigation");
+
   const pathname = usePathname();
+
+  const { isOpen } = useNavigationSidebar();
+
   const isActivePath = (pathname: string, href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <aside className="bg-timo-gray-300 flex h-screen w-55 flex-col items-start p-5">
-      <div className="flex flex-col gap-7.5">
+    <aside
+      className={cn(
+        "bg-timo-gray-300 fixed top-0 left-0 z-10 flex h-screen w-55 flex-col items-start p-5 transition-[transform,opacity] duration-200 ease-in-out",
+        isOpen
+          ? "translate-x-0 opacity-100"
+          : "pointer-events-none -translate-x-full opacity-0",
+      )}
+    >
+      <div className="flex w-45 shrink-0 flex-col gap-7.5">
         <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
         <nav className="flex flex-col gap-2">
           {NAV_ITEMS.map(

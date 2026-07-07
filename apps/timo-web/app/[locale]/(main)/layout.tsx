@@ -1,4 +1,4 @@
-import { NavigationSidebar } from "@/components/layout/sidebar/NavigationSidebar";
+import { MainShellContainer } from "@/app/[locale]/(main)/_containers/MainShellContainer";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -6,9 +6,8 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: Readonly<MainLayoutProps>) {
   return (
-    <div className="flex min-h-screen">
-      <NavigationSidebar />
-      <main className="flex-1">{children}</main>
+    <div className="bg-timo-gray-300 h-screen overflow-hidden py-5">
+      <MainShellContainer>{children}</MainShellContainer>
     </div>
   );
 }
