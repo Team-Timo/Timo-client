@@ -4,19 +4,16 @@ import { TogglePanel } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 import { useId, useState } from "react";
 
+import {
+  TIME_SIDEBAR_COLLAPSED_WIDTH_CLASS_NAME,
+  TIME_SIDEBAR_WIDTH_CLASS_NAME,
+  type TimeSidebarSize,
+} from "@/components/layout/sidebar/time/time-sidebar-size";
 import { TimeboxPanel } from "@/components/layout/sidebar/time/TimeboxPanel";
 import { TimerPanel } from "@/components/layout/sidebar/time/TimerPanel";
 import { TimeSidebarHeader } from "@/components/layout/sidebar/time/TimeSidebarHeader";
 
 type TimeSidebarTab = "timebox" | "timer";
-type TimeSidebarSize = "sm" | "lg";
-
-const TIME_SIDEBAR_SIZE_WIDTH_CLASS_NAME: Record<TimeSidebarSize, string> = {
-  sm: "w-76",
-  lg: "w-110",
-};
-
-const TIME_SIDEBAR_COLLAPSED_WIDTH_CLASS_NAME = "w-18";
 
 export interface TimeSidebarProps {
   size?: TimeSidebarSize;
@@ -44,7 +41,7 @@ export const TimeSidebar = ({
       className={cn(
         "border-timo-gray-500 fixed top-5 right-0 bottom-5 z-10 flex flex-col overflow-hidden border-l bg-white transition-[width] duration-200 ease-in-out",
         isOpen
-          ? TIME_SIDEBAR_SIZE_WIDTH_CLASS_NAME[size]
+          ? TIME_SIDEBAR_WIDTH_CLASS_NAME[size]
           : TIME_SIDEBAR_COLLAPSED_WIDTH_CLASS_NAME,
       )}
     >
