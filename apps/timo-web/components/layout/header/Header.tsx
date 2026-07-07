@@ -41,7 +41,7 @@ const HeaderWeeklyNav = ({ onPrev, onNext, label }: HeaderWeeklyNavProps) => {
     <div className="flex items-center gap-2">
       <WeeklyButton variant="left" onClick={onPrev} />
       {label && (
-        <span className="typo-headline-m-14 text-timo-gray-900 flex h-8 items-center rounded-[4px] bg-white px-2">
+        <span className="typo-headline-m-14 text-timo-gray-900 flex h-8 w-17 shrink-0 items-center justify-center rounded-[4px] bg-white px-2 whitespace-nowrap">
           {label}
         </span>
       )}
