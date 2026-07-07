@@ -1,16 +1,16 @@
 import { SidebarButton } from "@repo/timo-design-system/ui";
 
-export interface SidebarHeaderProps {
+export interface TimeSidebarHeaderProps {
   date: Date;
   isOpen?: boolean;
   onToggleCollapse?: () => void;
 }
 
-export const SidebarHeader = ({
+export const TimeSidebarHeader = ({
   date,
   isOpen = true,
   onToggleCollapse,
-}: SidebarHeaderProps) => {
+}: TimeSidebarHeaderProps) => {
   const day = date.getDate();
   const weekday = new Intl.DateTimeFormat("ko-KR", { weekday: "long" }).format(
     date,

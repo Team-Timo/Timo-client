@@ -3,38 +3,38 @@
 import { TogglePanel } from "@repo/timo-design-system/ui";
 import { useId, useState } from "react";
 
-import { SidebarHeader } from "@/components/layout/sidebar/SidebarHeader";
-import { TimeboxPanel } from "@/components/layout/sidebar/TimeboxPanel";
-import { TimerPanel } from "@/components/layout/sidebar/TimerPanel";
+import { TimeboxPanel } from "@/components/layout/time-sidebar/TimeboxPanel";
+import { TimerPanel } from "@/components/layout/time-sidebar/TimerPanel";
+import { TimeSidebarHeader } from "@/components/layout/time-sidebar/TimeSidebarHeader";
 
-type SidebarTab = "timebox" | "timer";
-export type SidebarSize = "sm" | "lg";
+type TimeSidebarTab = "timebox" | "timer";
+type TimeSidebarSize = "sm" | "lg";
 
-const SIDEBAR_SIZE_WIDTH_CLASS_NAME: Record<SidebarSize, string> = {
+const TIME_SIDEBAR_SIZE_WIDTH_CLASS_NAME: Record<TimeSidebarSize, string> = {
   sm: "w-76",
   lg: "w-110",
 };
 
-export interface SidebarProps {
-  size?: SidebarSize;
+export interface TimeSidebarProps {
+  size?: TimeSidebarSize;
 }
 
-export const Sidebar = ({ size = "sm" }: SidebarProps) => {
+export const TimeSidebar = ({ size = "sm" }: TimeSidebarProps) => {
   const id = useId();
-  const [activeTab, setActiveTab] = useState<SidebarTab>("timebox");
+  const [activeTab, setActiveTab] = useState<TimeSidebarTab>("timebox");
 
   const timeboxPanelId = `${id}-timebox-panel`;
   const timerPanelId = `${id}-timer-panel`;
 
   const handleChangeTab = (value: string) => {
-    setActiveTab(value as SidebarTab);
+    setActiveTab(value as TimeSidebarTab);
   };
 
   return (
     <aside
-      className={`border-timo-gray-500 flex h-screen ${SIDEBAR_SIZE_WIDTH_CLASS_NAME[size]} flex-col border-l bg-white`}
+      className={`border-timo-gray-500 flex h-screen ${TIME_SIDEBAR_SIZE_WIDTH_CLASS_NAME[size]} flex-col border-l bg-white`}
     >
-      <SidebarHeader date={new Date()} />
+      <TimeSidebarHeader date={new Date()} />
 
       <div className="px-4.5">
         <TogglePanel
