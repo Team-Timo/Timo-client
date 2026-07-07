@@ -113,7 +113,7 @@ export const CreateTodoToolbar = ({
         {time && (
           <span
             className={cn(
-              "typo-caption-r-10 w-[36px] text-center",
+              "typo-caption-r-10 w-9 text-center",
               activeItem === "time"
                 ? "text-timo-blue-300"
                 : "text-timo-gray-900",
