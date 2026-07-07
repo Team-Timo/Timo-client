@@ -117,7 +117,9 @@ export const NavigationSidebar = () => {
       )}
     >
       <div className="flex h-full w-45 shrink-0 flex-col gap-7.5">
-        <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
+        <Link href={ROUTES.HOME}>
+          <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
+        </Link>
         <nav className="flex flex-1 flex-col justify-between">
           <div className="flex flex-col gap-2">
             {MAIN_NAV_ITEMS.map(renderNavItem)}
