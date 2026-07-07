@@ -1,7 +1,5 @@
 "use client";
 
-import { ModalButton } from "@components/button/modal-button/ModalButton";
-import { cn } from "@lib";
 import {
   createContext,
   useContext,
@@ -11,6 +9,10 @@ import {
   type ButtonHTMLAttributes,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
+
+import { cn } from "../../../lib";
+import { ModalButton } from "../../button/modal-button/ModalButton";
 
 interface ModalContextValue {
   isOpen: boolean;
@@ -45,13 +47,18 @@ const ModalRoot = ({ children, className }: ModalProps) => {
   useEffect(() => {
     if (!isOpen) return;
 
+    document.body.style.overflow = "hidden";
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsOpen(false);
     };
 
     document.addEventListener("keydown", handleEscape);
 
-    return () => document.removeEventListener("keydown", handleEscape);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, [isOpen]);
 
   const open = () => setIsOpen(true);
@@ -90,12 +97,13 @@ const ModalOverlay = ({ className }: ModalOverlayProps) => {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
-      className={cn("bg-timo-overlay fixed inset-0 z-40", className)}
+      className={cn("bg-timo-overlay z-modal-overlay fixed inset-0", className)}
       onClick={close}
       aria-hidden="true"
-    />
+    />,
+    document.body,
   );
 };
 
@@ -109,18 +117,19 @@ const ModalPanel = ({ children, className }: ModalPanelProps) => {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
       className={cn(
-        "fixed top-1/2 left-1/2 z-50 flex w-100 -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-5.5",
+        "z-modal-panel fixed top-1/2 left-1/2 flex w-100 -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-5.5",
         className,
       )}
     >
       {children}
-    </div>
+    </div>,
+    document.body,
   );
 };
 
@@ -195,13 +204,25 @@ const ModalBorderButton = ({
 
 export type ModalFillButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-const ModalFillButton = ({ className, ...rest }: ModalFillButtonProps) => (
-  <ModalButton
-    variant="fill"
-    {...rest}
-    className={cn("flex-1 px-0", className)}
-  />
-);
+const ModalFillButton = ({
+  onClick,
+  className,
+  ...rest
+}: ModalFillButtonProps) => {
+  const { close } = useModalContext();
+
+  return (
+    <ModalButton
+      variant="fill"
+      {...rest}
+      onClick={(e) => {
+        onClick?.(e);
+        close();
+      }}
+      className={cn("flex-1 px-0", className)}
+    />
+  );
+};
 
 export const Modal = Object.assign(ModalRoot, {
   Trigger: ModalTrigger,
