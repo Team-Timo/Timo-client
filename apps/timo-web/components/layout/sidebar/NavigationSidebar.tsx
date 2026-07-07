@@ -20,51 +20,56 @@ import {
 } from "@repo/timo-design-system/icons";
 import { TabButton } from "@repo/timo-design-system/ui";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { ROUTES } from "@/constants/routes";
+import { Link, usePathname } from "@/i18n/navigation";
 
 const NAV_ITEMS = [
   {
     href: ROUTES.HOME,
-    label: "홈",
+    labelKey: "home",
     OnIcon: HomeOnIcon,
     OffIcon: HomeOffIcon,
     HoverIcon: HomeHoverIcon,
+    className: undefined,
   },
   {
     href: ROUTES.TODAY,
-    label: "오늘",
+    labelKey: "today",
     OnIcon: TodayOnIcon,
     OffIcon: TodayOffIcon,
     HoverIcon: TodayHoverIcon,
+    className: undefined,
   },
   {
     href: ROUTES.FOCUS,
-    label: "집중 모드",
+    labelKey: "focus",
     OnIcon: TimerOnIcon,
     OffIcon: TimerOffIcon,
     HoverIcon: TimerHoverIcon,
+    className: undefined,
   },
   {
     href: ROUTES.STATISTICS,
-    label: "통계",
+    labelKey: "statistics",
     OnIcon: ChartOnIcon,
     OffIcon: ChartOffIcon,
     HoverIcon: ChartHoverIcon,
+    className: undefined,
   },
   {
     href: ROUTES.SETTINGS,
-    label: "설정",
+    labelKey: "settings",
     OnIcon: SettingOnIcon,
     OffIcon: SettingOffIcon,
     HoverIcon: SettingHoverIcon,
     className: "mt-auto",
   },
-];
+] as const;
 
 export const NavigationSidebar = () => {
+  const t = useTranslations("Navigation");
   const pathname = usePathname();
   const isActivePath = (pathname: string, href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
@@ -75,7 +80,7 @@ export const NavigationSidebar = () => {
         <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
         <nav className="flex flex-col gap-2">
           {NAV_ITEMS.map(
-            ({ href, label, OnIcon, OffIcon, HoverIcon, className }) => {
+            ({ href, labelKey, OnIcon, OffIcon, HoverIcon, className }) => {
               const isSelected = isActivePath(pathname, href);
 
               return (
@@ -86,7 +91,7 @@ export const NavigationSidebar = () => {
                   aria-current={isSelected ? "page" : undefined}
                 >
                   <TabButton
-                    label={label}
+                    label={t(labelKey)}
                     icon={
                       isSelected ? (
                         <OnIcon width={24} height={24} />

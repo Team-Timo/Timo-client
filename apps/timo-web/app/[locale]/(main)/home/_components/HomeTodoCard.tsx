@@ -18,9 +18,9 @@ import { cn } from "@repo/timo-design-system/utils";
 import type {
   TodoPriorityTypes,
   TodoTimerStatusTypes,
-} from "@/app/(main)/home/_types/todo-type";
+} from "@/app/[locale]/(main)/home/_types/todo-type";
 
-import { convertDurationToTimeText } from "@/app/(main)/home/_utils/todo-time";
+import { convertDurationToTimeText } from "@/app/[locale]/(main)/home/_utils/todo-time";
 
 const PRIORITY_MAP: Record<
   TodoPriorityTypes,
