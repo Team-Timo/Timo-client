@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-import { ChevronDownIcon, ChevronUpIcon } from "../../icons";
+import { ChevronDownIcon } from "../../icons";
 import { cn } from "../../lib";
 import { Dropdown } from "../layout/dropdown/Dropdown";
 
@@ -20,7 +20,7 @@ export const DropdownView = ({
   className,
 }: DropdownViewProps) => {
   return (
-    <Dropdown className={cn("w-[74px]", className)}>
+    <Dropdown className={cn("w-18.5", className)}>
       <Dropdown.Trigger
         aria-haspopup="listbox"
         className={cn(
@@ -32,8 +32,7 @@ export const DropdownView = ({
           {value || placeholder}
         </span>
         <div className="flex size-6 shrink-0 items-center justify-center">
-          <ChevronDownIcon className="group-aria-expanded:hidden" />
-          <ChevronUpIcon className="hidden group-aria-expanded:block" />
+          <ChevronDownIcon className="transition-transform duration-200 ease-in-out group-aria-expanded:rotate-180" />
         </div>
       </Dropdown.Trigger>
 
