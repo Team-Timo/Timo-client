@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 
-import { TogglePanel, TogglePanelValue } from "./TogglePanel";
+import { TogglePanel } from "./TogglePanel";
 
 import type { Meta, StoryObj } from "@storybook/react";
+
+const TIMEBOX_TIMER_OPTIONS = [
+  { value: "timebox", label: "Timebox" },
+  { value: "timer", label: "Timer" },
+] as const;
 
 const meta = {
   title: "Components/TogglePanel",
@@ -13,6 +18,7 @@ const meta = {
   args: {
     value: "timebox",
     onChange: () => {},
+    options: TIMEBOX_TIMER_OPTIONS,
   },
 } satisfies Meta<typeof TogglePanel>;
 
@@ -23,7 +29,7 @@ const PlaygroundTogglePanel = ({
   width,
   ...args
 }: React.ComponentProps<typeof TogglePanel> & { width: string }) => {
-  const [value, setValue] = useState<TogglePanelValue>(args.value);
+  const [value, setValue] = useState(args.value);
 
   useEffect(() => {
     setValue(args.value);
@@ -50,7 +56,7 @@ export const Big: Story = {
 const TogglePanelWithPanel = (
   args: React.ComponentProps<typeof TogglePanel>,
 ) => {
-  const [value, setValue] = useState<TogglePanelValue>(args.value);
+  const [value, setValue] = useState(args.value);
 
   useEffect(() => {
     setValue(args.value);
@@ -63,8 +69,16 @@ const TogglePanelWithPanel = (
         id="toggle-panel-demo"
         value={value}
         onChange={setValue}
-        timeboxControls="toggle-panel-demo-timebox-panel"
-        timerControls="toggle-panel-demo-timer-panel"
+        options={[
+          {
+            ...TIMEBOX_TIMER_OPTIONS[0],
+            controls: "toggle-panel-demo-timebox-panel",
+          },
+          {
+            ...TIMEBOX_TIMER_OPTIONS[1],
+            controls: "toggle-panel-demo-timer-panel",
+          },
+        ]}
       />
       <div
         id="toggle-panel-demo-timebox-panel"
@@ -98,13 +112,21 @@ export const AllSizes: Story = {
       <div className="flex flex-col items-start gap-2">
         <p className="text-xs">Default (268px)</p>
         <div className="w-67">
-          <TogglePanel value="timebox" onChange={() => {}} />
+          <TogglePanel
+            value="timebox"
+            onChange={() => {}}
+            options={TIMEBOX_TIMER_OPTIONS}
+          />
         </div>
       </div>
       <div className="flex flex-col items-start gap-2">
         <p className="text-xs">Big (404px)</p>
         <div className="w-101">
-          <TogglePanel value="timer" onChange={() => {}} />
+          <TogglePanel
+            value="timer"
+            onChange={() => {}}
+            options={TIMEBOX_TIMER_OPTIONS}
+          />
         </div>
       </div>
     </div>

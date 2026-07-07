@@ -28,4 +28,9 @@ export const COLOR_TOKENS: ColorToken[] = [
   { name: "timo-red", cssVar: "--color-timo-red", value: "#FF6650" },
   { name: "timo-orange", cssVar: "--color-timo-orange", value: "#FFB157" },
   { name: "timo-gray", cssVar: "--color-timo-gray", value: "#BEBEBE" },
+  {
+    name: "timo-overlay",
+    cssVar: "--color-timo-overlay",
+    value: "rgb(0 0 0 / 10%)",
+  },
 ];
