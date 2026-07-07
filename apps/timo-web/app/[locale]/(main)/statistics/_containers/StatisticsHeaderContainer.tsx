@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { Header } from "@/components/layout/header/Header";
+import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
 
 const MONTH_LABEL_FORMATTER = new Intl.DateTimeFormat("ko-KR", {
   year: "numeric",
@@ -14,6 +15,7 @@ const addMonths = (date: Date, amount: number) =>
 
 export const StatisticsHeaderContainer = () => {
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
+  const { isOpen, toggle } = useNavigationSidebar();
 
   const handlePrev = () => setCurrentMonth((prev) => addMonths(prev, -1));
   const handleNext = () => setCurrentMonth((prev) => addMonths(prev, 1));
@@ -21,11 +23,14 @@ export const StatisticsHeaderContainer = () => {
   return (
     <Header
       left={
-        <Header.WeeklyNav
-          onPrev={handlePrev}
-          onNext={handleNext}
-          label={MONTH_LABEL_FORMATTER.format(currentMonth)}
-        />
+        <>
+          <Header.SidebarButton isOpen={isOpen} onClick={toggle} />
+          <Header.WeeklyNav
+            onPrev={handlePrev}
+            onNext={handleNext}
+            label={MONTH_LABEL_FORMATTER.format(currentMonth)}
+          />
+        </>
       }
     />
   );
