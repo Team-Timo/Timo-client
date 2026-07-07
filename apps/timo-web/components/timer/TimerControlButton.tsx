@@ -1,3 +1,5 @@
+import { cn } from "@repo/timo-design-system/utils";
+
 import type { MouseEventHandler, ReactNode } from "react";
 
 export type TimerControlButtonVariant = "default" | "active";
@@ -27,13 +29,14 @@ export const TimerControlButton = ({
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className={`group flex size-14.5 items-center justify-center rounded-full ${
+      className={cn(
+        "group flex size-14.5 items-center justify-center rounded-full",
         isForcedActive
           ? "bg-timo-blue-50"
           : activeIcon
             ? "bg-timo-gray-300 active:bg-timo-blue-50"
-            : "bg-timo-gray-300"
-      }`}
+            : "bg-timo-gray-300",
+      )}
     >
       {isForcedActive || !activeIcon ? (
         icon
