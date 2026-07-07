@@ -1,39 +1,30 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Header } from "@/components/layout/header/Header";
-import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
-
-const VIEW_OPTIONS = ["기본", "7일"] as const;
-
-type ViewOption = (typeof VIEW_OPTIONS)[number];
-
-const isViewOption = (value: string): value is ViewOption =>
-  (VIEW_OPTIONS as readonly string[]).includes(value);
 
 export const HomeHeaderContainer = () => {
-  const [view, setView] = useState<ViewOption>(VIEW_OPTIONS[0]);
-  const { isOpen, toggle } = useNavigationSidebar();
+  const t = useTranslations("Home");
+  const basicLabel = t("viewBasic");
+  const weekLabel = t("viewWeek");
+  const viewOptions = [basicLabel, weekLabel];
+  const [isWeekView, setIsWeekView] = useState<boolean>(false);
 
   const handleChangeView = (value: string) => {
-    if (isViewOption(value)) {
-      setView(value);
+    if (value === basicLabel || value === weekLabel) {
+      setIsWeekView(value === weekLabel);
     }
   };
 
   return (
     <Header
-      left={
-        <>
-          <Header.SidebarButton isOpen={isOpen} onClick={toggle} />
-          <Header.TodayButton />
-        </>
-      }
+      left={<Header.TodayButton label={t("today")} />}
       right={
         <Header.ViewDropdown
-          items={[...VIEW_OPTIONS]}
-          value={view}
+          items={viewOptions}
+          value={isWeekView ? weekLabel : basicLabel}
           onChange={handleChangeView}
         />
       }

@@ -1,9 +1,15 @@
 export type TodoPriorityTypes = "URGENT" | "HIGH" | "MEDIUM" | "LOW";
 export type TodoTimerStatusTypes = "RUNNING" | "STOPPED";
+export type TodoTagName =
+  | "DAILY_LIFE"
+  | "WORK"
+  | "EXERCISE"
+  | "ASSIGNMENT"
+  | "ADDITIONAL";
 
 export interface TodoTag {
   tagId: number;
-  name: string;
+  name: TodoTagName;
 }
 
 export interface TodoSubtask {
