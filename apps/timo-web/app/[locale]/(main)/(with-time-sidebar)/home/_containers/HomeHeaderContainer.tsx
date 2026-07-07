@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Header } from "@/components/layout/header/Header";
+import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
 
 export const HomeHeaderContainer = () => {
   const t = useTranslations("Home");
@@ -11,6 +12,7 @@ export const HomeHeaderContainer = () => {
   const weekLabel = t("viewWeek");
   const viewOptions = [basicLabel, weekLabel];
   const [isWeekView, setIsWeekView] = useState<boolean>(false);
+  const { isOpen, toggle } = useNavigationSidebar();
 
   const handleChangeView = (value: string) => {
     if (value === basicLabel || value === weekLabel) {
@@ -20,7 +22,12 @@ export const HomeHeaderContainer = () => {
 
   return (
     <Header
-      left={<Header.TodayButton label={t("today")} />}
+      left={
+        <>
+          <Header.SidebarButton isOpen={isOpen} onClick={toggle} />
+          <Header.TodayButton label={t("today")} />
+        </>
+      }
       right={
         <Header.ViewDropdown
           items={viewOptions}
