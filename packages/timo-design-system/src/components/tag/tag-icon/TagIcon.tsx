@@ -10,7 +10,7 @@ export const TagIcon = ({ text, variant = "default" }: TagIconProps) => {
 
   return (
     <div
-      className={`flex h-4 items-center justify-center rounded-[4px] px-[6.5px] ${
+      className={`flex h-4 items-center justify-center rounded-[4px] px-[10px] ${
         isBlue ? "bg-timo-blue-300" : "bg-timo-gray-300"
       }`}
     >
