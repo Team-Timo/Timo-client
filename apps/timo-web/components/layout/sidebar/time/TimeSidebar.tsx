@@ -74,7 +74,7 @@ export const TimeSidebar = ({
             role="tabpanel"
             aria-labelledby={`${id}-timebox-tab`}
             hidden={activeTab !== "timebox"}
-            className="min-h-0 flex-1 overflow-y-auto px-4.5 pt-3"
+            className="min-h-0 flex-1 overflow-y-auto px-4.5 pt-[21px]"
           >
             <TimeboxPanel />
           </div>
