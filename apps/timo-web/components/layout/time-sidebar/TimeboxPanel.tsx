@@ -2,17 +2,12 @@
 
 import { useEffect, useState } from "react";
 
+import { getHourLabel } from "@/utils/get-hour-label";
+
 const HOURS_IN_DAY = 24;
 const HOUR_LINES = HOURS_IN_DAY + 1;
 const ROW_HEIGHT = 30;
 const CLOCK_TICK_INTERVAL_MS = 30_000;
-
-const getHourLabel = (hour: number) => {
-  const wrappedHour = hour % HOURS_IN_DAY;
-  const period = wrappedHour < 12 ? "AM" : "PM";
-  const displayHour = wrappedHour % 12 === 0 ? 12 : wrappedHour % 12;
-  return `${displayHour} ${period}`;
-};
 
 export interface TimeboxPanelProps {
   currentTime?: Date;
