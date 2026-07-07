@@ -6,7 +6,8 @@
     "./ui": "./src/components/index.ts",
     "./icons": "./src/icons/index.ts",
     "./utils": "./src/lib/index.ts",
-    "./styles": "./src/styles/components.css"
+    "./styles": "./src/styles/components.css",
+    "./assets/*": "./src/assets/*"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
