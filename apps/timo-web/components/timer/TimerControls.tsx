@@ -22,15 +22,12 @@ export const TimerControls = ({
   onEnd,
   onAddTime,
 }: TimerControlsProps) => {
-  const variant = isRunning ? "active" : "default";
-
   return (
     <div className="flex items-center gap-5">
       <TimerControlButton
-        icon={isRunning ? <EndBlueIcon /> : <EndBlackIcon />}
+        icon={<EndBlackIcon />}
         activeIcon={<EndBlueIcon />}
         label="종료"
-        variant={variant}
         onClick={onEnd}
       />
 
@@ -39,17 +36,14 @@ export const TimerControls = ({
           isRunning ? <StopIcon width={24} height={24} /> : <PlayTimerIcon />
         }
         label={isRunning ? "일시정지" : "재생"}
-        variant={variant}
+        variant={isRunning ? "active" : "default"}
         onClick={onTogglePlay}
       />
 
       <TimerControlButton
-        icon={
-          isRunning ? <PlusBlueIcon /> : <PlusIcon width={27} height={27} />
-        }
+        icon={<PlusIcon width={27} height={27} />}
         activeIcon={<PlusBlueIcon />}
         label="시간 추가"
-        variant={variant}
         onClick={onAddTime}
       />
     </div>
