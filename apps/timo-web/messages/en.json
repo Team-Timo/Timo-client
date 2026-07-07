@@ -1,5 +1,9 @@
 {
-  "HomePage": {
-    "title": "Hi Timo"
+  "Navigation": {
+    "home": "Home",
+    "today": "Today",
+    "focus": "Focus Mode",
+    "statistics": "Statistics",
+    "settings": "Settings"
   }
 }
