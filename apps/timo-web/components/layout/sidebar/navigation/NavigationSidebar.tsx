@@ -109,6 +109,8 @@ export const NavigationSidebar = () => {
 
   return (
     <aside
+      aria-hidden={!isOpen}
+      inert={!isOpen}
       className={cn(
         "bg-timo-gray-300 fixed top-0 left-0 z-10 flex h-screen w-55 flex-col items-start p-5 transition-[transform,opacity] duration-200 ease-in-out",
         isOpen

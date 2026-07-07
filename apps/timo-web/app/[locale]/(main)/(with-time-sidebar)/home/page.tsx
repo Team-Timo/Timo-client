@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <>
       <HomeHeaderContainer />
-      <section className="">
+      <section>
         <HomeTodoContainer />
       </section>
     </>

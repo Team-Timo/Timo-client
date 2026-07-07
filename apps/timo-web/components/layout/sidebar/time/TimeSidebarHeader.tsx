@@ -21,6 +21,7 @@ export const TimeSidebarHeader = ({
   return (
     <header className="relative flex items-center px-4.5 pt-3 pb-3">
       <p
+        aria-hidden={!isOpen}
         className={cn(
           "flex items-center gap-2 transition-opacity duration-200 ease-in-out",
           isOpen ? "opacity-100" : "pointer-events-none opacity-0",
