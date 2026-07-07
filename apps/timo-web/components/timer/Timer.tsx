@@ -1,3 +1,5 @@
+import { cn } from "@repo/timo-design-system/utils";
+
 import type { ReactNode } from "react";
 
 export type TimerSize = "sm" | "lg";
@@ -68,9 +70,9 @@ export const Timer = ({
           cy={diameter / 2}
           r={radius}
           fill="none"
-          className={
-            isOvertime ? "stroke-timo-blue-300" : "stroke-timo-blue-50"
-          }
+          className={cn(
+            isOvertime ? "stroke-timo-blue-300" : "stroke-timo-blue-50",
+          )}
           strokeWidth={strokeWidth}
         />
 
@@ -79,7 +81,10 @@ export const Timer = ({
           cy={diameter / 2}
           r={radius}
           fill="none"
-          className={`transition-[stroke-dashoffset] duration-1000 ease-linear ${isOvertime ? "stroke-timo-yellow-300" : "stroke-timo-blue-300"}`}
+          className={cn(
+            "transition-[stroke-dashoffset] duration-1000 ease-linear",
+            isOvertime ? "stroke-timo-yellow-300" : "stroke-timo-blue-300",
+          )}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={dashOffset}
@@ -93,13 +98,21 @@ export const Timer = ({
         </span>
 
         <p
-          className={`${timeClassName} text-center ${isOvertime ? "text-timo-blue-300" : "text-timo-black"}`}
+          className={cn(
+            timeClassName,
+            "text-center",
+            isOvertime ? "text-timo-blue-300" : "text-timo-black",
+          )}
         >
           {time}
         </p>
 
         <p
-          className={`${plannedClassName} text-center ${isOvertime ? "text-timo-blue-300" : "text-timo-gray-800"}`}
+          className={cn(
+            plannedClassName,
+            "text-center",
+            isOvertime ? "text-timo-blue-300" : "text-timo-gray-800",
+          )}
         >
           {plannedLabel}
         </p>

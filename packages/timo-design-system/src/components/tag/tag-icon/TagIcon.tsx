@@ -1,3 +1,5 @@
+import { cn } from "../../../lib";
+
 export type TagVariant = "default" | "blue";
 
 export interface TagIconProps {
@@ -10,14 +12,16 @@ export const TagIcon = ({ text, variant = "default" }: TagIconProps) => {
 
   return (
     <div
-      className={`flex h-4 items-center justify-center rounded-[4px] px-[6.5px] ${
-        isBlue ? "bg-timo-blue-300" : "bg-timo-gray-300"
-      }`}
+      className={cn(
+        "flex h-4 items-center justify-center rounded-[4px] px-[6.5px]",
+        isBlue ? "bg-timo-blue-300" : "bg-timo-gray-300",
+      )}
     >
       <span
-        className={`typo-caption-r-10 whitespace-nowrap ${
-          isBlue ? "text-white" : "text-timo-gray-800"
-        }`}
+        className={cn(
+          "typo-caption-r-10 whitespace-nowrap",
+          isBlue ? "text-white" : "text-timo-gray-800",
+        )}
       >
         {text}
       </span>
