@@ -121,7 +121,7 @@ const DropdownPanel = ({
     <div
       {...rest}
       className={cn(
-        "rounded-4 absolute top-full left-0 z-10 mt-1 flex flex-col items-start bg-white p-2",
+        "rounded-4 absolute top-full left-0 z-10 flex flex-col items-start bg-white p-2",
         className,
       )}
     >
@@ -130,9 +130,16 @@ const DropdownPanel = ({
   );
 };
 
-export type DropdownItemProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export interface DropdownItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  closeOnSelect?: boolean;
+}
 
-const DropdownItem = ({ className, onClick, ...rest }: DropdownItemProps) => {
+const DropdownItem = ({
+  className,
+  onClick,
+  closeOnSelect = true,
+  ...rest
+}: DropdownItemProps) => {
   const { close } = useDropdownContext();
 
   return (
@@ -141,7 +148,7 @@ const DropdownItem = ({ className, onClick, ...rest }: DropdownItemProps) => {
       {...rest}
       onClick={(e) => {
         onClick?.(e);
-        close();
+        if (closeOnSelect) close();
       }}
       className={cn(
         "rounded-4 flex w-full items-center transition-colors duration-200 ease-in-out",
