@@ -1,46 +1,53 @@
 "use client";
 
 import {
-  CalendarDisableIcon,
-  CalendarOnIcon,
-  ClockDisableIcon,
-  ClockOnIcon,
   HamburgerGrayIcon,
   HamburgerIcon,
-  MemoDisableIcon,
-  MemoOnIcon,
   PlayDisabledIcon,
   PlayIcon,
-  RepeatTodoDisableIcon,
-  RepeatTodoOnIcon,
-  TrashDisableIcon,
-  TrashOnIcon,
+  StopIcon,
 } from "@repo/timo-design-system/icons";
 import {
   Checkbox,
   PlayButton,
   PriorityIcon,
-  TagIcon,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { CreateTodoToolbar } from "../../../components/CreateTodoToolbar";
 
 import type { ComponentProps, ReactNode } from "react";
 
 type Priority = ComponentProps<typeof PriorityIcon>["priority"];
+
+function truncateTitle(text: string): string {
+  let korean = 0;
+  let other = 0;
+
+  for (let i = 0; i < text.length; i++) {
+    if (/[가-힣]/.test(text.charAt(i))) {
+      korean++;
+    } else {
+      other++;
+    }
+    if (korean / 20 + other / 30 >= 1) {
+      return text.slice(0, i) + "…";
+    }
+  }
+  return text;
+}
 
 const CARD_STYLE = {
   active: {
     card: "bg-white",
     title: "text-timo-gray-900",
     subText: "text-timo-gray-700",
-    meta: "text-timo-gray-900",
   },
   done: {
     card: "bg-timo-gray-200",
     title: "text-timo-gray-700",
     subText: "text-timo-gray-700",
-    meta: "text-timo-gray-700",
   },
 } as const;
 
@@ -87,7 +94,12 @@ export const TodayTodoCard = ({
   onSubTodoCheck,
 }: TodayTodoCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const isDimmed = isDone && !isHovered;
+
+  useEffect(() => {
+    if (isDone) setIsPlaying(false);
+  }, [isDone]);
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
 
   return (
@@ -119,20 +131,23 @@ export const TodayTodoCard = ({
               {icon}
             </button>
           )}
-          <span
-            className={cn("typo-headline-b-14 min-w-0 truncate", style.title)}
-          >
-            {title}
+          <span className={cn("typo-headline-b-14 min-w-0", style.title)}>
+            {truncateTitle(title)}
           </span>
         </div>
         <PlayButton
-          variant="play"
+          variant={isPlaying ? "stop" : "play"}
           size="lg"
-          disabled={isDimmed}
-          onClick={onPlay}
+          disabled={isDone}
+          onClick={() => {
+            setIsPlaying((prev) => !prev);
+            onPlay?.();
+          }}
         >
-          {isDimmed ? (
+          {isDone ? (
             <PlayDisabledIcon width={24} height={24} />
+          ) : isPlaying ? (
+            <StopIcon width={24} height={24} />
           ) : (
             <PlayIcon width={24} height={24} />
           )}
@@ -157,47 +172,17 @@ export const TodayTodoCard = ({
       )}
 
       {/* Toolbar */}
-      <div className="flex items-center justify-end gap-2">
-        {toolbar?.date && (
-          <button
-            type="button"
-            className="flex items-center gap-0.5"
-            aria-label="날짜"
-          >
-            {isDimmed ? <CalendarDisableIcon /> : <CalendarOnIcon />}
-            <span className={cn("typo-caption-r-10", style.meta)}>
-              {toolbar.date}
-            </span>
-          </button>
-        )}
-        {toolbar?.time && (
-          <button
-            type="button"
-            className="flex items-center gap-0.5"
-            aria-label="시간"
-          >
-            {isDimmed ? <ClockDisableIcon /> : <ClockOnIcon />}
-            <span className={cn("typo-caption-r-10", style.meta)}>
-              {toolbar.time}
-            </span>
-          </button>
-        )}
-        {toolbar?.priority && (
-          <PriorityIcon priority={isDimmed ? "Disable" : toolbar.priority} />
-        )}
-        {toolbar?.tag && <TagIcon text={toolbar.tag} />}
-        {toolbar?.memo && (isDimmed ? <MemoDisableIcon /> : <MemoOnIcon />)}
-        {toolbar?.repeat &&
-          (isDimmed ? <RepeatTodoDisableIcon /> : <RepeatTodoOnIcon />)}
-        <button
-          type="button"
-          onClick={onDelete}
-          disabled={isDimmed}
-          aria-label="삭제"
-          className={cn(isDimmed && "cursor-not-allowed")}
-        >
-          {isDimmed ? <TrashDisableIcon /> : <TrashOnIcon />}
-        </button>
+      <div className="flex justify-end">
+        <CreateTodoToolbar
+          date={isDimmed ? undefined : toolbar?.date}
+          time={isDimmed ? undefined : toolbar?.time}
+          priority={isDimmed ? undefined : toolbar?.priority}
+          tag={isDimmed ? undefined : toolbar?.tag}
+          memo={!isDimmed && toolbar?.memo}
+          repeat={!isDimmed && toolbar?.repeat}
+          delete={!isDimmed}
+          onDeleteClick={onDelete}
+        />
       </div>
     </div>
   );
