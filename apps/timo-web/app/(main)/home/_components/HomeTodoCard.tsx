@@ -18,9 +18,9 @@ import { cn } from "@repo/timo-design-system/utils";
 import type {
   TodoPriorityTypes,
   TodoTimerStatusTypes,
-} from "@/app/home/_types/todo-type";
+} from "@/app/(main)/home/_types/todo-type";
 
-import { convertDurationToTimeText } from "@/app/home/_utils/todo-time";
+import { convertDurationToTimeText } from "@/app/(main)/home/_utils/todo-time";
 
 const PRIORITY_MAP: Record<
   TodoPriorityTypes,
@@ -32,7 +32,7 @@ const PRIORITY_MAP: Record<
   LOW: "low",
 };
 
-export interface HomeDayTodoCardProps {
+export interface HomeTodoCardProps {
   title: string;
   isCompleted: boolean;
   durationSeconds: number;
@@ -48,7 +48,7 @@ export interface HomeDayTodoCardProps {
   onToggleSubtaskCompleted?: (completed: boolean) => void;
 }
 
-export const HomeDayTodoCard = ({
+export const HomeTodoCard = ({
   title,
   isCompleted,
   durationSeconds,
@@ -62,7 +62,7 @@ export const HomeDayTodoCard = ({
   onToggleCompleted,
   onTogglePlay,
   onToggleSubtaskCompleted,
-}: HomeDayTodoCardProps) => {
+}: HomeTodoCardProps) => {
   const isRunning = timerStatus === "RUNNING";
 
   const titleRow = (

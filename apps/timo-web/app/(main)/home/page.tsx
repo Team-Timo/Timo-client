@@ -1,9 +1,9 @@
-import { HomeDayTodoContainer } from "@/app/home/_containers/HomeDayTodoContainer";
+import { HomeTodoContainer } from "@/app/(main)/home/_containers/HomeTodoContainer";
 
 export default function HomePage() {
   return (
     <>
-      <HomeDayTodoContainer />
+      <HomeTodoContainer />
     </>
   );
 }
