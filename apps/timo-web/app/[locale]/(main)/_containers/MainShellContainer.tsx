@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@repo/timo-design-system/utils";
+
 import { NavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebar";
 import {
   NavigationSidebarProvider,
@@ -20,9 +22,10 @@ const MainContent = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <main
-      className={`rounded-8 h-full overflow-y-auto bg-white transition-[margin-left] duration-200 ease-in-out ${
-        isOpen ? MAIN_MARGIN_CLASS_NAME.open : MAIN_MARGIN_CLASS_NAME.collapsed
-      }`}
+      className={cn(
+        "rounded-8 h-full overflow-y-auto bg-white transition-[margin-left] duration-200 ease-in-out",
+        isOpen ? MAIN_MARGIN_CLASS_NAME.open : MAIN_MARGIN_CLASS_NAME.collapsed,
+      )}
     >
       {children}
     </main>
