@@ -1,12 +1,15 @@
 /* global process */
 import { withSentryConfig } from "@sentry/nextjs";
+import createNextIntlPlugin from "next-intl/plugin";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["@repo/timo-design-system"],
 };
 
-export default withSentryConfig(nextConfig, {
+const withNextIntl = createNextIntlPlugin();
+
+export default withSentryConfig(withNextIntl(nextConfig), {
   org: "timo-client",
   project: "timo-web",
   authToken: process.env["SENTRY_AUTH_TOKEN"],
