@@ -104,7 +104,6 @@ export const TodayTodoCard = ({
       setIsPlaying(false);
       onPlay?.();
     }
-    // isDone 변경 시점의 isPlaying/onPlay를 참조하는 것이 의도된 동작
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [internalIsDone]);
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
