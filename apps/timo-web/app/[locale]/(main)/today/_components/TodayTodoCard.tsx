@@ -19,7 +19,6 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { CreateTodoToolbar } from "@/components/CreateTodoToolbar";
 
-
 type Priority = ComponentProps<typeof PriorityIcon>["priority"];
 
 function truncateTitle(text: string): string {
@@ -96,16 +95,18 @@ export const TodayTodoCard = ({
 }: TodayTodoCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const isDimmed = isDone && !isHovered;
+  const [internalIsDone, setInternalIsDone] = useState(isDone);
+  const [internalSubTodos, setInternalSubTodos] = useState(subTodos ?? []);
+  const isDimmed = internalIsDone && !isHovered;
 
   useEffect(() => {
-    if (isDone && isPlaying) {
+    if (internalIsDone && isPlaying) {
       setIsPlaying(false);
       onPlay?.();
     }
     // isDone 변경 시점의 isPlaying/onPlay를 참조하는 것이 의도된 동작
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDone]);
+  }, [internalIsDone]);
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
 
   return (
@@ -120,7 +121,13 @@ export const TodayTodoCard = ({
       {/* Title row */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <Checkbox checked={isDone} onChange={() => onCheck?.()} />
+          <Checkbox
+            checked={internalIsDone}
+            onChange={() => {
+              setInternalIsDone((prev) => !prev);
+              onCheck?.();
+            }}
+          />
           {isDraggable &&
             (isDimmed ? (
               <HamburgerGrayIcon className="shrink-0" />
@@ -144,13 +151,13 @@ export const TodayTodoCard = ({
         <PlayButton
           variant={isPlaying ? "stop" : "play"}
           size="lg"
-          disabled={isDone}
+          disabled={internalIsDone}
           onClick={() => {
             setIsPlaying((prev) => !prev);
             onPlay?.();
           }}
         >
-          {isDone ? (
+          {internalIsDone ? (
             <PlayDisabledIcon width={24} height={24} />
           ) : isPlaying ? (
             <StopIcon width={24} height={24} />
@@ -161,13 +168,20 @@ export const TodayTodoCard = ({
       </div>
 
       {/* Sub-todos */}
-      {subTodos && subTodos.length > 0 && (
+      {internalSubTodos.length > 0 && (
         <div className="flex flex-col gap-1 pl-8">
-          {subTodos.map((sub) => (
+          {internalSubTodos.map((sub) => (
             <div key={sub.id} className="flex items-center gap-2">
               <Checkbox
                 checked={sub.isDone ?? false}
-                onChange={() => onSubTodoCheck?.(sub.id)}
+                onChange={() => {
+                  setInternalSubTodos((prev) =>
+                    prev.map((s) =>
+                      s.id === sub.id ? { ...s, isDone: !s.isDone } : s,
+                    ),
+                  );
+                  onSubTodoCheck?.(sub.id);
+                }}
               />
               <span className={cn("typo-body-r-12", style.subText)}>
                 {sub.text}
