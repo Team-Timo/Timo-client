@@ -15,9 +15,10 @@ import {
 import { cn } from "@repo/timo-design-system/utils";
 import { useEffect, useState } from "react";
 
-import { CreateTodoToolbar } from "../../../../../components/CreateTodoToolbar";
-
 import type { ComponentProps, ReactNode } from "react";
+
+import { CreateTodoToolbar } from "@/components/CreateTodoToolbar";
+
 
 type Priority = ComponentProps<typeof PriorityIcon>["priority"];
 
@@ -31,7 +32,7 @@ function truncateTitle(text: string): string {
     } else {
       other++;
     }
-    if (korean / 20 + other / 30 >= 1) {
+    if (korean / 20 + other / 30 > 1) {
       return text.slice(0, i) + "…";
     }
   }
@@ -98,7 +99,12 @@ export const TodayTodoCard = ({
   const isDimmed = isDone && !isHovered;
 
   useEffect(() => {
-    if (isDone) setIsPlaying(false);
+    if (isDone && isPlaying) {
+      setIsPlaying(false);
+      onPlay?.();
+    }
+    // isDone 변경 시점의 isPlaying/onPlay를 참조하는 것이 의도된 동작
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDone]);
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
 

@@ -128,7 +128,7 @@ export const CreateTodoToolbar = ({
         type="button"
         onClick={onPriorityClick}
         aria-label="우선순위"
-        className="flex size-[22px] items-center justify-center"
+        className="flex size-5.5 items-center justify-center"
       >
         <PriorityIcon
           priority={
@@ -137,12 +137,14 @@ export const CreateTodoToolbar = ({
         />
       </button>
 
-      <button type="button" onClick={onTagClick} aria-label="태그">
-        <TagIcon
-          text={tag ?? ""}
-          variant={activeItem === "tag" ? "blue" : "default"}
-        />
-      </button>
+      {(tag ?? activeItem === "tag") && (
+        <button type="button" onClick={onTagClick} aria-label="태그">
+          <TagIcon
+            text={tag ?? ""}
+            variant={activeItem === "tag" ? "blue" : "default"}
+          />
+        </button>
+      )}
 
       <button type="button" onClick={onMemoClick} aria-label="메모">
         {activeItem === "memo" ? (
