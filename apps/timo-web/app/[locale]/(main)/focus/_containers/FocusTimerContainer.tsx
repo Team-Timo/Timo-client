@@ -17,7 +17,7 @@ export const FocusTimerContainer = () => {
   const handleAddTime = () => {};
 
   return (
-    <div className="flex w-[546px] flex-col items-center gap-11.25">
+    <div className="flex w-136.5 flex-col items-center gap-11.25">
       <Timer
         icon={<TimerOnIcon />}
         time="10:30"
