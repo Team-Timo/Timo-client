@@ -4,9 +4,9 @@ import { cn } from "../../../lib";
 export type AddTaskButtonVariant = "default" | "weekly" | "big";
 
 const ADD_TASK_BUTTON_VARIANT: Record<AddTaskButtonVariant, string> = {
-  default: "w-57.5 px-2 typo-body-m-12",
-  weekly: "w-29 px-2 typo-body-m-12",
-  big: "h-14.5 w-155 px-5 typo-headline-m-14",
+  default: "min-w-57.5 px-2 typo-body-m-12",
+  weekly: "min-w-29 px-2 typo-body-m-12",
+  big: "h-14.5 min-w-155 px-5 typo-headline-m-14",
 };
 
 export interface AddTaskButtonProps {
