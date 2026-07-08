@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { cn } from "../../lib";
-import { WeeklyButton } from "../button/chevron-button/ChevronButton";
+import { ChevronButton } from "../button/chevron-button/ChevronButton";
 
 const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
 
@@ -90,7 +90,7 @@ export const Calendar = ({
       className={cn("h-66 w-67 rounded-[4px] bg-white px-6 py-4", className)}
     >
       <div className="relative mb-4 h-8">
-        <WeeklyButton
+        <ChevronButton
           variant="left"
           onClick={() => handleMoveMonth(-1)}
           className="absolute top-0 left-0"
@@ -105,7 +105,7 @@ export const Calendar = ({
           </span>
         </div>
 
-        <WeeklyButton
+        <ChevronButton
           variant="right"
           onClick={() => handleMoveMonth(1)}
           className="absolute top-0 right-0"
