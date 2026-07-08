@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { cn } from "../../lib";
-import { WeeklyButton } from "../button/weekly-button/WeeklyButton";
+import { WeeklyButton } from "../button/chevron-button/ChevronButton";
 
 const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
 
