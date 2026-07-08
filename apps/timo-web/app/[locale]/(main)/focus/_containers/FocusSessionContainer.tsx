@@ -65,8 +65,8 @@ export const FocusSessionContainer = () => {
   };
 
   return (
-    <div className="flex h-full">
-      <div className="flex min-w-0 flex-1 flex-col gap-18">
+    <div className="flex h-full overflow-x-auto">
+      <div className="flex flex-1 flex-col gap-18">
         <FocusHeaderContainer />
         <FocusTaskCard
           dayNumber={convertDateToDayNumberText(today)}
