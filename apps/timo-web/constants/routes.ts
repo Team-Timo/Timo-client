@@ -4,4 +4,6 @@ export const ROUTES = {
   FOCUS: "/focus",
   STATISTICS: "/statistics",
   SETTINGS: "/settings",
+  SETTINGS_POLICY: "/settings/policy",
+  SETTINGS_WITHDRAWAL: "/settings/withdrawal",
 } as const;
