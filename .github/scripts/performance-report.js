@@ -30,53 +30,49 @@ const INTERNAL_ROUTES = new Set(['/_not-found', '/_global-error']);
 const BUNDLE_WARN_KB = 200;
 const BUNDLE_ERROR_KB = 350;
 
-const sumDirGzipSize = (dir) => {
-  if (!fs.existsSync(dir)) return 0;
-  return fs.readdirSync(dir).reduce((sum, file) => {
-    const full = path.join(dir, file);
-    return sum + (fs.statSync(full).isFile() ? gzipSize(full) : 0);
-  }, 0);
+const PROJECT_MODULE_PREFIX = '[project]/apps/timo-web/app';
+
+const extractClientReferenceManifest = (jsFilePath) => {
+  if (!jsFilePath || !fs.existsSync(jsFilePath)) return null;
+  try {
+    const content = fs.readFileSync(jsFilePath, 'utf8');
+    const match = content.match(/"\]\s*=\s*(\{[\s\S]*\});\s*$/);
+    return match ? JSON.parse(match[1]) : null;
+  } catch {
+    return null;
+  }
 };
 
+const stripRouteGroups = (routePath) =>
+  routePath
+    .split('/')
+    .filter((segment) => !(segment.startsWith('(') && segment.endsWith(')')))
+    .join('/') || '/';
+
+// Turbopack (Next.js 16's default bundler) does not emit `app-build-manifest.json`
+// or `static/chunks/app/<route>/`, so per-route sizes come from each route's
+// `page_client-reference-manifest.js` (entryJSFiles already accumulates the page's
+// own chunk plus every parent layout chunk, deduped against the shared root chunks).
 const analyzeBundle = () => {
   const buildManifest = readJson(path.join(BUILD_DIR, 'build-manifest.json'));
-  if (!buildManifest) return null;
+  const appPathsManifest = readJson(path.join(BUILD_DIR, 'server', 'app-paths-manifest.json'));
+  if (!buildManifest || !appPathsManifest) return null;
 
-  const routesManifest = readJson(path.join(BUILD_DIR, 'routes-manifest.json'));
-  const appBuildManifest = readJson(path.join(BUILD_DIR, 'app-build-manifest.json'));
+  const sharedFiles = new Set(buildManifest.rootMainFiles ?? []);
+  const sharedBytes = [...sharedFiles].reduce((sum, chunk) => sum + gzipSize(path.join(BUILD_DIR, chunk)), 0);
 
-  const sharedBytes = (buildManifest.rootMainFiles ?? []).reduce(
-    (sum, chunk) => sum + gzipSize(path.join(BUILD_DIR, chunk)),
-    0
-  );
-
-  let routes;
-  if (appBuildManifest) {
-    routes = Object.entries(appBuildManifest.pages ?? {})
-      .filter(([route]) => !INTERNAL_ROUTES.has(route))
-      .map(([route, chunks]) => {
-        const pageBytes = chunks.reduce((sum, c) => sum + gzipSize(path.join(BUILD_DIR, c)), 0);
-        const firstLoad = pageBytes + sharedBytes;
-        return { path: route, size: formatBytes(pageBytes), firstLoad: formatBytes(firstLoad), firstLoadKb: firstLoad / 1024 };
-      });
-  } else {
-    const allRoutes = [
-      ...(routesManifest?.staticRoutes ?? []),
-      ...(routesManifest?.dynamicRoutes ?? []),
-    ];
-    const chunksDir = path.join(BUILD_DIR, 'static', 'chunks', 'app');
-    routes = allRoutes
-      .filter(({ page }) => !INTERNAL_ROUTES.has(page))
-      .map(({ page }) => {
-        const pageBytes = sumDirGzipSize(path.join(chunksDir, page === '/' ? '' : page));
-        const firstLoad = pageBytes + sharedBytes;
-        return { path: page, size: formatBytes(pageBytes), firstLoad: formatBytes(firstLoad), firstLoadKb: firstLoad / 1024 };
-      });
-
-    if (routes.length === 0 && sharedBytes > 0) {
-      routes = [{ path: '/', size: '0 B', firstLoad: formatBytes(sharedBytes), firstLoadKb: sharedBytes / 1024 }];
-    }
-  }
+  const routes = Object.entries(appPathsManifest)
+    .filter(([entryKey]) => !INTERNAL_ROUTES.has(entryKey.replace(/\/page$/, '')))
+    .map(([entryKey, relPath]) => {
+      const routePath = stripRouteGroups(entryKey.replace(/\/page$/, ''));
+      const manifestPath = path.join(BUILD_DIR, 'server', relPath.replace(/\.js$/, '_client-reference-manifest.js'));
+      const manifest = extractClientReferenceManifest(manifestPath);
+      const pageFiles = (manifest?.entryJSFiles?.[`${PROJECT_MODULE_PREFIX}${entryKey}`] ?? [])
+        .filter((file) => !sharedFiles.has(file));
+      const pageBytes = pageFiles.reduce((sum, file) => sum + gzipSize(path.join(BUILD_DIR, file)), 0);
+      const firstLoad = pageBytes + sharedBytes;
+      return { path: routePath, size: formatBytes(pageBytes), firstLoad: formatBytes(firstLoad), firstLoadKb: firstLoad / 1024 };
+    });
 
   return { routes, sharedSize: formatBytes(sharedBytes) };
 };
