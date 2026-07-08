@@ -5,5 +5,10 @@
     "focus": "집중 모드",
     "statistics": "통계",
     "settings": "설정"
+  },
+  "Toast": {
+    "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
+    "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",
+    "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 완료해주세요."
   }
 }
