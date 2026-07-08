@@ -21,9 +21,9 @@ export default function OnboardingPage() {
         <h2 className="typo-headline-b-16">OnboardingGoogleButton</h2>
         <div className="flex flex-col gap-3">
           <OnboardingGoogleButton variant="login" />
-          <OnboardingGoogleButton variant="login" selected />
+          <OnboardingGoogleButton variant="login" isSelected />
           <OnboardingGoogleButton variant="connectCalendar" />
-          <OnboardingGoogleButton variant="connectCalendar" selected />
+          <OnboardingGoogleButton variant="connectCalendar" isSelected />
         </div>
       </section>
 

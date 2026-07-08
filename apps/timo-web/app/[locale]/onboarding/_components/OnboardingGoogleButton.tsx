@@ -9,13 +9,13 @@ export type OnboardingGoogleButtonVariant = "login" | "connectCalendar";
 
 export interface OnboardingGoogleButtonProps {
   variant: OnboardingGoogleButtonVariant;
-  selected?: boolean;
+  isSelected?: boolean;
   onClick?: () => void;
 }
 
 export const OnboardingGoogleButton = ({
   variant,
-  selected = false,
+  isSelected = false,
   onClick,
 }: OnboardingGoogleButtonProps) => {
   const t = useTranslations("Onboarding");
@@ -26,7 +26,7 @@ export const OnboardingGoogleButton = ({
       onClick={onClick}
       className={cn(
         "flex w-[305px] items-center justify-center rounded-[4px] border py-2.5",
-        selected
+        isSelected
           ? "border-timo-blue-300 bg-timo-blue-50"
           : "border-timo-gray-500 bg-white",
       )}
