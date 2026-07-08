@@ -2,46 +2,30 @@ import { useId, useRef } from "react";
 
 import { cn } from "../../lib";
 
-import type { KeyboardEvent, RefObject } from "react";
+import type { KeyboardEvent } from "react";
 
-export type TogglePanelValue = "timebox" | "timer";
+export interface TogglePanelOption {
+  value: string;
+  label: string;
+  controls?: string;
+}
 
 export interface TogglePanelProps {
   id?: string;
-  value: TogglePanelValue;
-  onChange: (value: TogglePanelValue) => void;
-  timeboxControls?: string;
-  timerControls?: string;
-}
-
-interface TogglePanelOption {
-  value: TogglePanelValue;
-  label: string;
-  ref: RefObject<HTMLButtonElement | null>;
-  controls?: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: readonly [TogglePanelOption, TogglePanelOption];
 }
 
 export const TogglePanel = ({
   id: idProp,
   value,
   onChange,
-  timeboxControls,
-  timerControls,
+  options,
 }: TogglePanelProps) => {
   const generatedId = useId();
   const id = idProp ?? generatedId;
-  const timeboxRef = useRef<HTMLButtonElement>(null);
-  const timerRef = useRef<HTMLButtonElement>(null);
-
-  const options: TogglePanelOption[] = [
-    {
-      value: "timebox",
-      label: "Timebox",
-      ref: timeboxRef,
-      controls: timeboxControls,
-    },
-    { value: "timer", label: "Timer", ref: timerRef, controls: timerControls },
-  ];
+  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
@@ -50,7 +34,7 @@ export const TogglePanel = ({
     const next = options.find((option) => option.value !== value);
     if (!next) return;
     onChange(next.value);
-    next.ref.current?.focus();
+    buttonRefs.current[next.value]?.focus();
   };
 
   return (
@@ -63,7 +47,9 @@ export const TogglePanel = ({
       {options.map((option) => (
         <button
           key={option.value}
-          ref={option.ref}
+          ref={(element) => {
+            buttonRefs.current[option.value] = element;
+          }}
           type="button"
           id={`${id}-${option.value}-tab`}
           role="tab"

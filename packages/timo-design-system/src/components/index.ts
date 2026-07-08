@@ -12,6 +12,7 @@ export { DeleteButton } from "./button/delete-button/DeleteButton";
 export { AddTaskButton } from "./button/add-task-button/AddTaskButton";
 export { TodayBadge } from "./badge/today-badge/TodayBadge";
 export { TogglePanel } from "./toggle-panel/TogglePanel";
+export type { TogglePanelOption } from "./toggle-panel/TogglePanel";
 export { PlayButton } from "./button/play-button/PlayButton";
 export { TabButton } from "./button/tab-button/TabButton";
 export { Toast } from "./toast/Toast";
