@@ -3,7 +3,7 @@ import { WeeklyButton } from "./ChevronButton";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: "Components/Button/WeeklyButton",
+  title: "Components/Button/ChevronButton",
   component: WeeklyButton,
   parameters: {
     layout: "centered",
