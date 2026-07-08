@@ -13,30 +13,12 @@ import {
   PriorityIcon,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-import { useEffect, useState } from "react";
 
 import type { ComponentProps, ReactNode } from "react";
 
 import { CreateTodoToolbar } from "@/components/CreateTodoToolbar";
 
 type Priority = ComponentProps<typeof PriorityIcon>["priority"];
-
-function truncateTitle(text: string): string {
-  let korean = 0;
-  let other = 0;
-
-  for (let i = 0; i < text.length; i++) {
-    if (/[가-힣]/.test(text.charAt(i))) {
-      korean++;
-    } else {
-      other++;
-    }
-    if (korean / 20 + other / 30 > 1) {
-      return text.slice(0, i) + "…";
-    }
-  }
-  return text;
-}
 
 const CARD_STYLE = {
   active: {
@@ -58,31 +40,37 @@ export interface SubTodo {
 }
 
 export interface TodayTodoCardToolbar {
-  date?: string;
-  time?: string;
-  priority?: Priority;
+  date: string;
+  time: string;
+  priority: Priority;
   tag?: string;
-  memo?: boolean;
-  repeat?: boolean;
+  memo: boolean;
+  repeat: boolean;
 }
 
 export interface TodayTodoCardProps {
   title: string;
-  isDone?: boolean;
+  isDone: boolean;
+  isDimmed: boolean;
+  isPlaying: boolean;
   isDraggable?: boolean;
   icon?: ReactNode;
   onIconClick?: () => void;
-  subTodos?: SubTodo[];
-  toolbar?: TodayTodoCardToolbar;
-  onCheck?: () => void;
-  onPlay?: () => void;
-  onDelete?: () => void;
-  onSubTodoCheck?: (id: string) => void;
+  subTodos: SubTodo[];
+  toolbar: TodayTodoCardToolbar;
+  onCheck: () => void;
+  onPlay: () => void;
+  onDelete: () => void;
+  onSubTodoCheck: (id: string) => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
 }
 
 export const TodayTodoCard = ({
   title,
-  isDone = false,
+  isDone,
+  isDimmed,
+  isPlaying,
   isDraggable = false,
   icon,
   onIconClick,
@@ -92,41 +80,23 @@ export const TodayTodoCard = ({
   onPlay,
   onDelete,
   onSubTodoCheck,
+  onMouseEnter,
+  onMouseLeave,
 }: TodayTodoCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [internalIsDone, setInternalIsDone] = useState(isDone);
-  const [internalSubTodos, setInternalSubTodos] = useState(subTodos ?? []);
-  const isDimmed = internalIsDone && !isHovered;
-
-  useEffect(() => {
-    if (internalIsDone && isPlaying) {
-      setIsPlaying(false);
-      onPlay?.();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [internalIsDone]);
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
 
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={cn(
         "border-timo-gray-500 flex w-full flex-col gap-1 rounded-[4px] border px-5 py-4",
         style.card,
       )}
     >
-      {/* Title row */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <Checkbox
-            checked={internalIsDone}
-            onChange={() => {
-              setInternalIsDone((prev) => !prev);
-              onCheck?.();
-            }}
-          />
+          <Checkbox checked={isDone} onChange={() => onCheck()} />
           {isDraggable &&
             (isDimmed ? (
               <HamburgerGrayIcon className="shrink-0" />
@@ -144,19 +114,16 @@ export const TodayTodoCard = ({
             </button>
           )}
           <span className={cn("typo-headline-b-14 min-w-0", style.title)}>
-            {truncateTitle(title)}
+            {title}
           </span>
         </div>
         <PlayButton
           variant={isPlaying ? "stop" : "play"}
           size="lg"
-          disabled={internalIsDone}
-          onClick={() => {
-            setIsPlaying((prev) => !prev);
-            onPlay?.();
-          }}
+          disabled={isDone}
+          onClick={onPlay}
         >
-          {internalIsDone ? (
+          {isDone ? (
             <PlayDisabledIcon width={24} height={24} />
           ) : isPlaying ? (
             <StopIcon width={24} height={24} />
@@ -166,39 +133,30 @@ export const TodayTodoCard = ({
         </PlayButton>
       </div>
 
-      {/* Sub-todos */}
-      {internalSubTodos.length > 0 && (
-        <div className="flex flex-col gap-1 pl-8">
-          {internalSubTodos.map((sub) => (
-            <div key={sub.id} className="flex items-center gap-2">
+      {subTodos.length > 0 && (
+        <ul className="flex flex-col gap-1 pl-8">
+          {subTodos.map((sub) => (
+            <li key={sub.id} className="flex items-center gap-2">
               <Checkbox
                 checked={sub.isDone ?? false}
-                onChange={() => {
-                  setInternalSubTodos((prev) =>
-                    prev.map((s) =>
-                      s.id === sub.id ? { ...s, isDone: !s.isDone } : s,
-                    ),
-                  );
-                  onSubTodoCheck?.(sub.id);
-                }}
+                onChange={() => onSubTodoCheck(sub.id)}
               />
               <span className={cn("typo-body-r-12", style.subText)}>
                 {sub.text}
               </span>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
-      {/* Toolbar */}
       <div className="flex justify-end">
         <CreateTodoToolbar
-          date={isDimmed ? undefined : toolbar?.date}
-          time={isDimmed ? undefined : toolbar?.time}
-          priority={isDimmed ? undefined : toolbar?.priority}
-          tag={isDimmed ? undefined : toolbar?.tag}
-          memo={!isDimmed && toolbar?.memo}
-          repeat={!isDimmed && toolbar?.repeat}
+          date={isDimmed ? undefined : toolbar.date}
+          time={isDimmed ? undefined : toolbar.time}
+          priority={isDimmed ? undefined : toolbar.priority}
+          tag={isDimmed ? undefined : toolbar.tag}
+          memo={!isDimmed && toolbar.memo}
+          repeat={!isDimmed && toolbar.repeat}
           delete={!isDimmed}
           onDeleteClick={onDelete}
         />
