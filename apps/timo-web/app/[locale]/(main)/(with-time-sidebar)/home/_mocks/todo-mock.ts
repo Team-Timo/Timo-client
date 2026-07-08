@@ -1,14 +1,17 @@
-import { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-export const todoMocks: Todo[] = [
+import { formatDateKey } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
+
+type TodoTemplate = Omit<Todo, "todoId">;
+
+const TODO_TEMPLATES: TodoTemplate[] = [
   {
-    todoId: 145,
     icon: "ICON_3",
     title: "티모 하이와프 작업하기",
     completed: false,
     durationSeconds: 7200,
     priority: "HIGH",
-    tag: { tagId: 3, name: "WORK" },
+    tag: { tagId: 3, name: "업무" },
     hasMemo: false,
     isRepeated: true,
     timerStatus: "RUNNING",
@@ -16,13 +19,12 @@ export const todoMocks: Todo[] = [
     subtasks: [],
   },
   {
-    todoId: 146,
     icon: "ICON_1",
     title: "앱잼 1차 과제 제출",
     completed: false,
     durationSeconds: 5400,
     priority: "URGENT",
-    tag: { tagId: 1, name: "ASSIGNMENT" },
+    tag: { tagId: 1, name: "과제" },
     hasMemo: true,
     isRepeated: false,
     timerStatus: "STOPPED",
@@ -36,13 +38,12 @@ export const todoMocks: Todo[] = [
     ],
   },
   {
-    todoId: 147,
     icon: "ICON_2",
     title: "운동하기",
     completed: true,
     durationSeconds: 1800,
     priority: "LOW",
-    tag: { tagId: 4, name: "EXERCISE" },
+    tag: { tagId: 4, name: "운동" },
     hasMemo: false,
     isRepeated: true,
     timerStatus: "STOPPED",
@@ -50,13 +51,12 @@ export const todoMocks: Todo[] = [
     subtasks: [],
   },
   {
-    todoId: 148,
     icon: "ICON_4",
     title: "독서 30분",
     completed: false,
     durationSeconds: 1800,
     priority: "MEDIUM",
-    tag: { tagId: 5, name: "ADDITIONAL" },
+    tag: { tagId: 5, name: "기타" },
     hasMemo: true,
     isRepeated: false,
     timerStatus: "STOPPED",
@@ -64,13 +64,12 @@ export const todoMocks: Todo[] = [
     subtasks: [],
   },
   {
-    todoId: 149,
     icon: "ICON_5",
     title: "저녁 약속 준비",
     completed: false,
     durationSeconds: 3600,
     priority: "MEDIUM",
-    tag: { tagId: 2, name: "DAILY_LIFE" },
+    tag: { tagId: 2, name: "일상" },
     hasMemo: false,
     isRepeated: false,
     timerStatus: "STOPPED",
@@ -78,3 +77,13 @@ export const todoMocks: Todo[] = [
     subtasks: [],
   },
 ];
+
+export const getTodoMocksByDate = (date: Date): Todo[] => {
+  const dateKeyDigits = formatDateKey(date).replaceAll("-", "");
+  const templateCount = (date.getDate() % TODO_TEMPLATES.length) + 1;
+
+  return TODO_TEMPLATES.slice(0, templateCount).map((template, index) => ({
+    ...template,
+    todoId: Number(`${dateKeyDigits}${index}`),
+  }));
+};
