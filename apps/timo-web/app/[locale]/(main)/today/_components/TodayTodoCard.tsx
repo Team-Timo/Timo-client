@@ -113,7 +113,9 @@ export const TodayTodoCard = ({
               {icon}
             </button>
           )}
-          <span className={cn("typo-headline-b-14 min-w-0", style.title)}>
+          <span
+            className={cn("typo-headline-b-14 min-w-0 truncate", style.title)}
+          >
             {title}
           </span>
         </div>
