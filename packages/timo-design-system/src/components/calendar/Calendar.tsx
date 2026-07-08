@@ -31,9 +31,14 @@ const getCalendarDates = (month: Date): CalendarDate[] => {
   const monthIndex = month.getMonth();
   const firstDate = new Date(year, monthIndex, 1);
   const firstDay = firstDate.getDay();
+  const lastDate = new Date(year, monthIndex + 1, 0);
+  const lastDay = lastDate.getDate();
+
+  const calendarCellCount = firstDay + lastDay > 35 ? 42 : 35;
+
   const startDate = new Date(year, monthIndex, 1 - firstDay);
 
-  return Array.from({ length: 35 }, (_, index) => {
+  return Array.from({ length: calendarCellCount }, (_, index) => {
     const date = new Date(
       startDate.getFullYear(),
       startDate.getMonth(),
