@@ -56,6 +56,17 @@
       "removeTag": "{tag} 태그 삭제",
       "logout": "로그아웃",
       "save": "변경사항 저장"
+    },
+    "withdrawal": {
+      "title": "탈퇴",
+      "guideTitle": "더이상 Timo를 이용하지 않으시나요?",
+      "guideDescription": "탈퇴 후에는 계정 정보와 저장된 모든 데이터가 삭제되며 복구할 수 없어요.",
+      "warningTitle": "탈퇴 전 꼭 확인해주세요.",
+      "warningSchedule": "저장된 일정 및 할 일이 삭제됩니다.",
+      "warningCalendar": "연동된 캘린더 연결이 해제됩니다.",
+      "warningIrreversible": "삭제된 계정은 복구할 수 없습니다.",
+      "withdraw": "탈퇴하기",
+      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요."
     }
   },
   "Toast": {
