@@ -16,14 +16,14 @@ import { todoMocks } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { getDayOfWeekKey } from "@/utils/get-day-of-week-key";
 
-type TagLabelKey =
+type TagLabelKeyTypes =
   | "dailyLife"
   | "work"
   | "exercise"
   | "assignment"
   | "additional";
 
-const TAG_LABEL_KEY: Record<TodoTagName, TagLabelKey> = {
+const TAG_LABEL_KEY: Record<TodoTagName, TagLabelKeyTypes> = {
   DAILY_LIFE: "dailyLife",
   WORK: "work",
   EXERCISE: "exercise",
@@ -31,9 +31,9 @@ const TAG_LABEL_KEY: Record<TodoTagName, TagLabelKey> = {
   ADDITIONAL: "additional",
 };
 
-type PriorityLabelKey = "veryImportant" | "important" | "average" | "low";
+type PriorityLabelKeyTypes = "veryImportant" | "important" | "average" | "low";
 
-const PRIORITY_LABEL_KEY: Record<TodoPriorityTypes, PriorityLabelKey> = {
+const PRIORITY_LABEL_KEY: Record<TodoPriorityTypes, PriorityLabelKeyTypes> = {
   URGENT: "veryImportant",
   HIGH: "important",
   MEDIUM: "average",
