@@ -1,5 +1,9 @@
-import { DeleteIcon, PlusGrayIcon } from "@repo/timo-design-system/icons";
-import { CreateButton, TogglePanel } from "@repo/timo-design-system/ui";
+import { PlusIcon } from "@repo/timo-design-system/icons";
+import {
+  CreateButton,
+  TagButton,
+  TogglePanel,
+} from "@repo/timo-design-system/ui";
 import Image from "next/image";
 
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/profile-type";
@@ -12,6 +16,7 @@ export interface SettingsProfileFormProps {
   isCalendarConnected: boolean;
   language: SettingsLanguage;
   tags: string[];
+  isSaveDisabled: boolean;
   onConnectCalendar: () => void;
   onChangeLanguage: (language: SettingsLanguage) => void;
   onAddTag: () => void;
@@ -26,6 +31,7 @@ export const SettingsProfileForm = ({
   isCalendarConnected,
   language,
   tags,
+  isSaveDisabled,
   onConnectCalendar,
   onChangeLanguage,
   onAddTag,
@@ -79,13 +85,9 @@ export const SettingsProfileForm = ({
               </span>
             </div>
 
-            <button
-              type="button"
-              onClick={onConnectCalendar}
-              className="bg-timo-blue-300 typo-body-r-12 shrink-0 rounded-[4px] px-2 py-0.5 whitespace-nowrap text-white"
-            >
+            <TagButton variant="blue" onClick={onConnectCalendar}>
               {isCalendarConnected ? "연동 해제" : "연동하기"}
-            </button>
+            </TagButton>
           </div>
         </section>
 
@@ -113,51 +115,37 @@ export const SettingsProfileForm = ({
               const isDefaultTag = DEFAULT_SETTINGS_TAGS.includes(tag);
 
               return (
-                <div
+                <TagButton
                   key={tag}
-                  className="bg-timo-gray-300 flex h-7.5 items-center gap-1.5 rounded-[4px] px-3"
+                  onRemove={isDefaultTag ? undefined : () => onRemoveTag(tag)}
+                  removeLabel={`${tag} 태그 삭제`}
                 >
-                  <span className="typo-body-m-12 text-timo-gray-900 whitespace-nowrap">
-                    {tag}
-                  </span>
-                  {!isDefaultTag && (
-                    <button
-                      type="button"
-                      onClick={() => onRemoveTag(tag)}
-                      aria-label={`${tag} 태그 삭제`}
-                    >
-                      <DeleteIcon width={18} height={18} />
-                    </button>
-                  )}
-                </div>
+                  {tag}
+                </TagButton>
               );
             })}
 
-            <button
-              type="button"
+            <TagButton
+              icon={<PlusIcon width={20} height={20} />}
               onClick={onAddTag}
-              className="bg-timo-gray-300 flex h-7.5 items-center gap-1.5 rounded-[4px] px-2"
             >
-              <span className="typo-body-m-12 text-timo-gray-900 whitespace-nowrap">
-                태그 추가
-              </span>
-              <PlusGrayIcon width={18} height={18} />
-            </button>
+              태그 추가
+            </TagButton>
           </div>
         </section>
 
         <hr className="border-timo-gray-500" />
 
-        <button
-          type="button"
-          onClick={onLogout}
-          className="bg-timo-gray-300 typo-body-m-12 text-timo-gray-900 flex h-7.5 w-fit items-center rounded-[4px] px-3.5"
-        >
+        <TagButton onClick={onLogout} className="w-fit">
           로그아웃
-        </button>
+        </TagButton>
       </div>
 
-      <CreateButton label="변경사항 저장" onClick={onSave} />
+      <CreateButton
+        label="변경사항 저장"
+        disabled={isSaveDisabled}
+        onClick={onSave}
+      />
     </div>
   );
 };
