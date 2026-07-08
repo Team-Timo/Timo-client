@@ -137,14 +137,12 @@ export const CreateTodoToolbar = ({
         />
       </button>
 
-      {(tag ?? activeItem === "tag") && (
-        <button type="button" onClick={onTagClick} aria-label="태그">
-          <TagIcon
-            text={tag ?? ""}
-            variant={activeItem === "tag" ? "blue" : "default"}
-          />
-        </button>
-      )}
+      <button type="button" onClick={onTagClick} aria-label="태그">
+        <TagIcon
+          text={tag ?? "태그"}
+          variant={activeItem === "tag" ? "blue" : tag ? "default" : "disable"}
+        />
+      </button>
 
       <button type="button" onClick={onMemoClick} aria-label="메모">
         {activeItem === "memo" ? (
