@@ -92,7 +92,7 @@ export const Calendar = ({
       <div className="relative mb-4 h-8">
         <WeeklyButton
           variant="left"
-          onClick={() => moveMonth(-1)}
+          onClick={() => handleMoveMonth(-1)}
           className="absolute top-0 left-0"
         />
 
@@ -107,7 +107,7 @@ export const Calendar = ({
 
         <WeeklyButton
           variant="right"
-          onClick={() => moveMonth(1)}
+          onClick={() => handleMoveMonth(1)}
           className="absolute top-0 right-0"
         />
       </div>
