@@ -7,9 +7,11 @@ import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types
 
 import { patchTodoOrderMock } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks/todo-order-mock";
 import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
+import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
+  const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
 
   useEffect(() => {
     setTodosByDate(
@@ -41,10 +43,18 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
 
   const handleTogglePlay = (dateKey: string, todoId: number) => {
     // TODO: API
+    const willRun =
+      todosByDate[dateKey]?.find((todo) => todo.todoId === todoId)
+        ?.timerStatus !== "RUNNING";
+
     updateTodo(dateKey, todoId, (todo) => ({
       ...todo,
       timerStatus: todo.timerStatus === "RUNNING" ? "STOPPED" : "RUNNING",
     }));
+
+    if (willRun) {
+      openTimerPanel();
+    }
   };
 
   const handleToggleSubtaskCompleted = (
