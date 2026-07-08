@@ -39,7 +39,7 @@ export const FocusTaskCard = ({
   onToggleSubtaskCompleted,
 }: FocusTaskCardProps) => {
   return (
-    <div className="flex w-full min-w-80 flex-col items-start gap-5 px-[34.5px] py-8">
+    <div className="flex w-full min-w-80 flex-col items-start gap-5 px-[34.5px] pb-8">
       <div className="text-timo-gray-900 flex flex-col items-start">
         <p className="typo-headline-b-30">{dayNumber}</p>
         <p className="typo-headline-m-14">{dayOfWeek}</p>
