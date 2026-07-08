@@ -18,7 +18,7 @@ export const OnboardingSelectCard = ({
   const radioIcon = (
     <div
       className={cn(
-        "size-[18px] shrink-0 rounded-full bg-white",
+        "size-4.5 shrink-0 rounded-full bg-white",
         selected
           ? "border-timo-blue-300 border-[5px]"
           : "border-timo-gray-500 border-2",
@@ -35,9 +35,7 @@ export const OnboardingSelectCard = ({
         selected
           ? "border-timo-blue-300 bg-timo-blue-50"
           : "border-timo-gray-500 bg-white",
-        size === "sm"
-          ? "w-[150px]"
-          : "w-[304px] flex-row items-center justify-between",
+        size === "sm" ? "w-37.5" : "w-76 flex-row items-center justify-between",
       )}
     >
       {size === "sm" ? (
