@@ -9,7 +9,7 @@ import { cn } from "@repo/timo-design-system/utils";
 
 import type { FocusTaskSubtask } from "@/app/[locale]/(main)/focus/_types/task-type";
 
-export interface FocusTaskCardProps {
+export interface FocusTaskItemProps {
   dayNumber: string;
   dayOfWeek: string;
   title: string;
@@ -24,7 +24,7 @@ export interface FocusTaskCardProps {
   onToggleSubtaskCompleted: (subtaskId: number, completed: boolean) => void;
 }
 
-export const FocusTaskCard = ({
+export const FocusTaskItem = ({
   dayNumber,
   dayOfWeek,
   title,
@@ -37,9 +37,9 @@ export const FocusTaskCard = ({
   onToggleCompleted,
   onTogglePlay,
   onToggleSubtaskCompleted,
-}: FocusTaskCardProps) => {
+}: FocusTaskItemProps) => {
   return (
-    <div className="flex w-full min-w-80 flex-col items-start gap-5 px-[34.5px] pb-8">
+    <section className="flex w-full min-w-80 flex-col items-start gap-5 px-[34.5px] pb-8">
       <div className="text-timo-gray-900 flex flex-col items-start">
         <p className="typo-headline-b-30">{dayNumber}</p>
         <p className="typo-headline-m-14">{dayOfWeek}</p>
@@ -108,6 +108,6 @@ export const FocusTaskCard = ({
           </p>
         )}
       </div>
-    </div>
+    </section>
   );
 };

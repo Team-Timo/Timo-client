@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import type { FocusTask } from "@/app/[locale]/(main)/focus/_types/task-type";
 
-import { FocusTaskCard } from "@/app/[locale]/(main)/focus/_components/FocusTaskCard";
+import { FocusTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusTaskItem";
 import { FocusHeaderContainer } from "@/app/[locale]/(main)/focus/_containers/FocusHeaderContainer";
 import { focusTaskMock } from "@/app/[locale]/(main)/focus/_mocks/task-mock";
 import {
@@ -68,7 +68,7 @@ export const FocusSessionContainer = () => {
     <div className="flex h-full overflow-x-auto">
       <div className="flex flex-1 flex-col gap-18">
         <FocusHeaderContainer />
-        <FocusTaskCard
+        <FocusTaskItem
           dayNumber={convertDateToDayNumberText(today)}
           dayOfWeek={convertDateToDayOfWeekText(today)}
           title={task.title}
