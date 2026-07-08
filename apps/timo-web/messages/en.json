@@ -5,5 +5,16 @@
     "focus": "Focus Mode",
     "statistics": "Statistics",
     "settings": "Settings"
+  },
+  "Onboarding": {
+    "button": {
+      "next": "Next",
+      "prev": "Previous",
+      "start": "Get Started"
+    },
+    "onboardingGoogleButton": {
+      "login": "Continue with your Google account",
+      "connectCalendar": "Connect Google Calendar"
+    }
   }
 }

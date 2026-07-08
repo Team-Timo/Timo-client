@@ -1,35 +1,44 @@
+"use client";
+
 import {
   ChevronSmallLeftIcon,
   ChevronSmallRightIcon,
   ChevronSmallRightWhiteIcon,
 } from "@repo/timo-design-system/icons";
 import { cn } from "@repo/timo-design-system/utils";
+import { useTranslations } from "next-intl";
 
 export type OnboardingButtonVariant =
-  | "다음"
-  | "다음_활성화"
-  | "이전"
-  | "시작하기"
-  | "시작하기_비활성";
+  | "next"
+  | "next_active"
+  | "prev"
+  | "start"
+  | "start_inactive";
 
 export interface OnboardingButtonProps {
   variant: OnboardingButtonVariant;
   onClick?: () => void;
 }
 
-const LABEL: Record<OnboardingButtonVariant, string> = {
-  다음: "다음",
-  다음_활성화: "다음",
-  이전: "이전",
-  시작하기: "시작하기",
-  시작하기_비활성: "시작하기",
+type ButtonTranslationKey = "button.next" | "button.prev" | "button.start";
+
+const BUTTON_TRANSLATION_KEY: Record<
+  OnboardingButtonVariant,
+  ButtonTranslationKey
+> = {
+  next: "button.next",
+  next_active: "button.next",
+  prev: "button.prev",
+  start: "button.start",
+  start_inactive: "button.start",
 };
 
 export const OnboardingButton = ({
   variant,
   onClick,
 }: OnboardingButtonProps) => {
-  const active = variant === "다음_활성화" || variant === "시작하기";
+  const t = useTranslations("Onboarding");
+  const active = variant === "next_active" || variant === "start";
 
   return (
     <button
@@ -40,17 +49,17 @@ export const OnboardingButton = ({
         active ? "bg-timo-blue-300" : "bg-timo-gray-200",
       )}
     >
-      {variant === "이전" && <ChevronSmallLeftIcon />}
+      {variant === "prev" && <ChevronSmallLeftIcon />}
       <span
         className={cn(
           "typo-headline-m-16",
           active ? "text-white" : "text-timo-gray-700",
         )}
       >
-        {LABEL[variant]}
+        {t(BUTTON_TRANSLATION_KEY[variant])}
       </span>
-      {variant === "다음" && <ChevronSmallRightIcon />}
-      {variant === "다음_활성화" && <ChevronSmallRightWhiteIcon />}
+      {variant === "next" && <ChevronSmallRightIcon />}
+      {variant === "next_active" && <ChevronSmallRightWhiteIcon />}
     </button>
   );
 };
