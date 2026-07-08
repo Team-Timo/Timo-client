@@ -4,17 +4,15 @@
 module.exports = {
   ci: {
     collect: {
-      // "/en" (root [locale] page) renders an empty fragment with no redirect,
-      // so Lighthouse always times out with NO_FCP there — omit it.
+      // "/en", "/en/onboarding", and the "/en/settings*" routes are still
+      // placeholder pages (`return <></>`) with no content to paint, so
+      // Lighthouse always times out with NO_FCP there — omit them until
+      // they're implemented.
       url: [
         "http://localhost:3000/en/home",
         "http://localhost:3000/en/today",
         "http://localhost:3000/en/focus",
         "http://localhost:3000/en/statistics",
-        "http://localhost:3000/en/onboarding",
-        "http://localhost:3000/en/settings",
-        "http://localhost:3000/en/settings/account",
-        "http://localhost:3000/en/settings/policy",
       ],
       numberOfRuns: 3,
       settings: {
