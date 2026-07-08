@@ -1,11 +1,14 @@
 import { Suspense, type ReactNode } from "react";
 
-import { ErrorBoundary } from "@/components/boundary/ErrorBoundary";
+import {
+  ErrorBoundary,
+  type ErrorFallbackTypes,
+} from "@/components/boundary/ErrorBoundary";
 
 interface AsyncBoundaryProps {
   children: ReactNode;
   pendingFallback?: ReactNode;
-  errorFallback?: ReactNode | ((error: Error, reset: () => void) => ReactNode);
+  errorFallback?: ErrorFallbackTypes;
 }
 
 export const AsyncBoundary = ({

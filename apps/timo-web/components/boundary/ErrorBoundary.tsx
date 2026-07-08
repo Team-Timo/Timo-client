@@ -1,21 +1,25 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { Component } from "react";
 
-import type { ReactNode } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 
-type ErrorFallback =
+export type ErrorFallbackTypes =
   | ReactNode
   | ((error: Error, reset: () => void) => ReactNode);
 
 interface ErrorBoundaryProps {
   children: ReactNode;
-  fallback: ErrorFallback;
+  fallback: ErrorFallbackTypes;
 }
 
 interface ErrorBoundaryState {
   error: Error | null;
 }
+
+const toError = (value: unknown): Error =>
+  value instanceof Error ? value : new Error(String(value));
 
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
@@ -23,8 +27,14 @@ export class ErrorBoundary extends Component<
 > {
   state: ErrorBoundaryState = { error: null };
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { error };
+  static getDerivedStateFromError(error: unknown): ErrorBoundaryState {
+    return { error: toError(error) };
+  }
+
+  componentDidCatch(error: unknown, errorInfo: ErrorInfo): void {
+    Sentry.captureException(toError(error), {
+      contexts: { react: { componentStack: errorInfo.componentStack } },
+    });
   }
 
   reset = (): void => {
