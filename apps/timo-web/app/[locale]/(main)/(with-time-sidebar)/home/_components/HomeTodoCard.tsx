@@ -1,3 +1,5 @@
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   MemoDisableIcon,
   MemoOnIcon,
@@ -34,6 +36,7 @@ const PRIORITY_MAP: Record<
 };
 
 export interface HomeTodoCardProps {
+  todoId: number;
   title: string;
   isCompleted: boolean;
   durationSeconds: number;
@@ -50,6 +53,7 @@ export interface HomeTodoCardProps {
 }
 
 export const HomeTodoCard = ({
+  todoId,
   title,
   isCompleted,
   durationSeconds,
@@ -65,6 +69,15 @@ export const HomeTodoCard = ({
   onToggleSubtaskCompleted,
 }: HomeTodoCardProps) => {
   const tCommon = useTranslations("Common");
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: todoId, disabled: isCompleted });
+
+  const sortableStyle = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    touchAction: "none",
+  };
 
   const isRunning = timerStatus === "RUNNING";
 
@@ -106,6 +119,10 @@ export const HomeTodoCard = ({
 
   return (
     <article
+      ref={setNodeRef}
+      style={sortableStyle}
+      {...attributes}
+      {...listeners}
       className={cn(
         "border-timo-gray-500 flex size-full flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
         isCompleted ? "bg-timo-gray-200" : "bg-white",

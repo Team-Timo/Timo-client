@@ -1,8 +1,15 @@
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { formatDateKey } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
+import {
+  formatDateKey,
+  getToday,
+  isSameDate,
+} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 
 type TodoTemplate = Omit<Todo, "todoId">;
+
+/** 오늘 날짜 컬럼의 세로 스크롤 동작을 시각적으로 확인하기 위한 투두 개수 */
+const SCROLL_TEST_TODO_COUNT = 10;
 
 const TODO_TEMPLATES: TodoTemplate[] = [
   {
@@ -11,7 +18,7 @@ const TODO_TEMPLATES: TodoTemplate[] = [
     completed: false,
     durationSeconds: 7200,
     priority: "HIGH",
-    tag: { tagId: 3, name: "업무" },
+    tag: { tagId: 3, name: "work" },
     hasMemo: false,
     isRepeated: true,
     timerStatus: "RUNNING",
@@ -24,7 +31,7 @@ const TODO_TEMPLATES: TodoTemplate[] = [
     completed: false,
     durationSeconds: 5400,
     priority: "URGENT",
-    tag: { tagId: 1, name: "과제" },
+    tag: { tagId: 1, name: "assignment" },
     hasMemo: true,
     isRepeated: false,
     timerStatus: "STOPPED",
@@ -43,7 +50,7 @@ const TODO_TEMPLATES: TodoTemplate[] = [
     completed: true,
     durationSeconds: 1800,
     priority: "LOW",
-    tag: { tagId: 4, name: "운동" },
+    tag: { tagId: 4, name: "exercise" },
     hasMemo: false,
     isRepeated: true,
     timerStatus: "STOPPED",
@@ -56,7 +63,7 @@ const TODO_TEMPLATES: TodoTemplate[] = [
     completed: false,
     durationSeconds: 1800,
     priority: "MEDIUM",
-    tag: { tagId: 5, name: "기타" },
+    tag: { tagId: 5, name: "additional" },
     hasMemo: true,
     isRepeated: false,
     timerStatus: "STOPPED",
@@ -69,7 +76,7 @@ const TODO_TEMPLATES: TodoTemplate[] = [
     completed: false,
     durationSeconds: 3600,
     priority: "MEDIUM",
-    tag: { tagId: 2, name: "일상" },
+    tag: { tagId: 2, name: "dailyLife" },
     hasMemo: false,
     isRepeated: false,
     timerStatus: "STOPPED",
@@ -80,10 +87,22 @@ const TODO_TEMPLATES: TodoTemplate[] = [
 
 export const getTodoMocksByDate = (date: Date): Todo[] => {
   const dateKeyDigits = formatDateKey(date).replaceAll("-", "");
-  const templateCount = (date.getDate() % TODO_TEMPLATES.length) + 1;
+  const templateCount = isSameDate(date, getToday())
+    ? SCROLL_TEST_TODO_COUNT
+    : (date.getDate() % TODO_TEMPLATES.length) + 1;
 
-  return TODO_TEMPLATES.slice(0, templateCount).map((template, index) => ({
-    ...template,
-    todoId: Number(`${dateKeyDigits}${index}`),
-  }));
+  return Array.from({ length: templateCount }, (_, index) => {
+    // index % TODO_TEMPLATES.length는 항상 유효한 범위 내 인덱스이다
+    const template = TODO_TEMPLATES[index % TODO_TEMPLATES.length]!;
+
+    return {
+      ...template,
+      title:
+        templateCount > TODO_TEMPLATES.length
+          ? `${template.title} ${index + 1}`
+          : template.title,
+      sortOrder: index,
+      todoId: Number(`${dateKeyDigits}${index}`),
+    };
+  });
 };
