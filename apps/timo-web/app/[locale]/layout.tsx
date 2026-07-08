@@ -6,7 +6,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import type { Metadata } from "next";
 
 import { routing } from "@/i18n/routing";
-import { QueryProvider } from "@/providers/QueryProvider";
+import { QueryProvider } from "@/providers/query/QueryProvider";
 
 const pretendard = localFont({
   src: "../../fonts/PretendardVariable.woff2",
