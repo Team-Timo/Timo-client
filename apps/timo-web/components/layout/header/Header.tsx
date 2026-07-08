@@ -4,7 +4,7 @@ import {
   DropdownView,
   SidebarButton,
   TodayButton,
-  WeeklyButton,
+  ChevronButton,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 
@@ -39,13 +39,13 @@ export interface HeaderWeeklyNavProps {
 const HeaderWeeklyNav = ({ onPrev, onNext, label }: HeaderWeeklyNavProps) => {
   return (
     <div className="flex items-center gap-2">
-      <WeeklyButton variant="left" onClick={onPrev} />
+      <ChevronButton variant="left" onClick={onPrev} />
       {label && (
         <span className="typo-headline-m-14 text-timo-gray-900 flex h-8 items-center rounded-[4px] bg-white px-2">
           {label}
         </span>
       )}
-      <WeeklyButton variant="right" onClick={onNext} />
+      <ChevronButton variant="right" onClick={onNext} />
     </div>
   );
 };
