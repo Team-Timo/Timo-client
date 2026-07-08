@@ -124,7 +124,7 @@ export const HomeTodoCard = ({
       {...attributes}
       {...listeners}
       className={cn(
-        "border-timo-gray-500 flex size-full flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
+        "border-timo-gray-500 flex w-full shrink-0 flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
         isCompleted ? "bg-timo-gray-200" : "bg-white",
       )}
     >
