@@ -10,9 +10,9 @@ export default function SettingsLayout({
     <div className="flex h-full flex-col">
       <SettingsHeaderContainer />
 
-      <div className="flex flex-1 overflow-y-auto">
+      <div className="flex flex-1 overflow-hidden">
         <SettingsNavContainer />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>
   );
