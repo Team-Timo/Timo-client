@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { ReactNode } from "react";
 
@@ -43,6 +43,10 @@ export const TodayTodoCardContainer = ({
   const [isPlaying, setIsPlaying] = useState(timerStatus === "RUNNING");
   const [isDone, setIsDone] = useState(initialIsDone);
   const [subTodos, setSubTodos] = useState(initialSubTodos);
+
+  useEffect(() => {
+    setIsPlaying(timerStatus === "RUNNING");
+  }, [timerStatus]);
 
   const isDimmed = isDone && !isHovered;
 
