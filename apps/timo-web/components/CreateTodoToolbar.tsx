@@ -41,6 +41,7 @@ export interface CreateTodoToolbarProps {
   memo?: boolean;
   repeat?: boolean;
   delete?: boolean;
+  isDimmed?: boolean;
   activeItem?: ActiveItem;
   onDateClick?: () => void;
   onTimeClick?: () => void;
@@ -59,6 +60,7 @@ export const CreateTodoToolbar = ({
   memo,
   repeat,
   delete: isDeleteSet,
+  isDimmed,
   activeItem,
   onDateClick,
   onTimeClick,
@@ -78,7 +80,7 @@ export const CreateTodoToolbar = ({
       >
         {activeItem === "date" ? (
           <CalendarBlueIcon />
-        ) : date ? (
+        ) : date && !isDimmed ? (
           <CalendarOnIcon />
         ) : (
           <CalendarDisableIcon />
@@ -89,7 +91,9 @@ export const CreateTodoToolbar = ({
               "typo-caption-r-10",
               activeItem === "date"
                 ? "text-timo-blue-300"
-                : "text-timo-gray-900",
+                : isDimmed
+                  ? "text-timo-gray-700"
+                  : "text-timo-gray-900",
             )}
           >
             {date}
@@ -105,7 +109,7 @@ export const CreateTodoToolbar = ({
       >
         {activeItem === "time" ? (
           <ClockBlueIcon />
-        ) : time ? (
+        ) : time && !isDimmed ? (
           <ClockOnIcon />
         ) : (
           <ClockDisableIcon />
@@ -116,7 +120,9 @@ export const CreateTodoToolbar = ({
               "typo-caption-r-10 w-9 text-center",
               activeItem === "time"
                 ? "text-timo-blue-300"
-                : "text-timo-gray-900",
+                : isDimmed
+                  ? "text-timo-gray-700"
+                  : "text-timo-gray-900",
             )}
           >
             {time}
@@ -132,7 +138,11 @@ export const CreateTodoToolbar = ({
       >
         <PriorityIcon
           priority={
-            activeItem === "priority" ? "blue" : (priority ?? "Disable")
+            activeItem === "priority"
+              ? "blue"
+              : isDimmed
+                ? "Disable"
+                : (priority ?? "Disable")
           }
         />
       </button>
@@ -140,14 +150,22 @@ export const CreateTodoToolbar = ({
       <button type="button" onClick={onTagClick} aria-label="태그">
         <TagIcon
           text={tag ?? "태그"}
-          variant={activeItem === "tag" ? "blue" : tag ? "default" : "disable"}
+          variant={
+            activeItem === "tag"
+              ? "blue"
+              : isDimmed
+                ? "disable"
+                : tag
+                  ? "default"
+                  : "disable"
+          }
         />
       </button>
 
       <button type="button" onClick={onMemoClick} aria-label="메모">
         {activeItem === "memo" ? (
           <MemoBlueIcon />
-        ) : memo ? (
+        ) : memo && !isDimmed ? (
           <MemoOnIcon />
         ) : (
           <MemoDisableIcon />
@@ -157,7 +175,7 @@ export const CreateTodoToolbar = ({
       <button type="button" onClick={onRepeatClick} aria-label="반복">
         {activeItem === "repeat" ? (
           <RepeatBlueIcon />
-        ) : repeat ? (
+        ) : repeat && !isDimmed ? (
           <RepeatTodoOnIcon />
         ) : (
           <RepeatTodoDisableIcon />
@@ -167,7 +185,7 @@ export const CreateTodoToolbar = ({
       <button type="button" onClick={onDeleteClick} aria-label="삭제">
         {activeItem === "delete" ? (
           <TrashBlueIcon />
-        ) : isDeleteSet ? (
+        ) : isDeleteSet && !isDimmed ? (
           <TrashOnIcon />
         ) : (
           <TrashDisableIcon />

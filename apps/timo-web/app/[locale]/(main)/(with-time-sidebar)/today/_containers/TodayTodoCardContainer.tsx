@@ -16,7 +16,6 @@ export interface TodayTodoCardContainerProps {
   subTodos: SubTodo[];
   toolbar: TodayTodoCardToolbar;
   timerStatus: "RUNNING" | "PAUSED" | "STOPPED";
-  isDraggable?: boolean;
   icon?: ReactNode;
   onIconClick?: () => void;
   onCheck?: () => void;
@@ -28,7 +27,6 @@ export interface TodayTodoCardContainerProps {
 export const TodayTodoCardContainer = ({
   title,
   isDone: initialIsDone,
-  isDraggable = false,
   icon,
   onIconClick,
   subTodos: initialSubTodos,
@@ -53,9 +51,12 @@ export const TodayTodoCardContainer = ({
   const handleCheck = () => {
     const next = !isDone;
     setIsDone(next);
-    if (next && isPlaying) {
-      setIsPlaying(false);
-      onPlay?.();
+    if (next) {
+      setSubTodos((prev) => prev.map((s) => ({ ...s, isDone: true })));
+      if (isPlaying) {
+        setIsPlaying(false);
+        onPlay?.();
+      }
     }
     onCheck?.();
   };
@@ -80,7 +81,6 @@ export const TodayTodoCardContainer = ({
       isDone={isDone}
       isDimmed={isDimmed}
       isPlaying={isPlaying}
-      isDraggable={isDraggable}
       icon={icon}
       onIconClick={onIconClick}
       subTodos={subTodos}

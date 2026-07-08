@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  HamburgerGrayIcon,
-  HamburgerIcon,
   PlayDisabledIcon,
   PlayIcon,
   StopIcon,
@@ -53,7 +51,6 @@ export interface TodayTodoCardProps {
   isDone: boolean;
   isDimmed: boolean;
   isPlaying: boolean;
-  isDraggable?: boolean;
   icon?: ReactNode;
   onIconClick?: () => void;
   subTodos: SubTodo[];
@@ -71,7 +68,6 @@ export const TodayTodoCard = ({
   isDone,
   isDimmed,
   isPlaying,
-  isDraggable = false,
   icon,
   onIconClick,
   subTodos,
@@ -97,12 +93,6 @@ export const TodayTodoCard = ({
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <Checkbox checked={isDone} onChange={() => onCheck()} />
-          {isDraggable &&
-            (isDimmed ? (
-              <HamburgerGrayIcon className="shrink-0" />
-            ) : (
-              <HamburgerIcon className="shrink-0" />
-            ))}
           {icon && (
             <button
               type="button"
@@ -153,13 +143,14 @@ export const TodayTodoCard = ({
 
       <div className="flex justify-end">
         <CreateTodoToolbar
-          date={isDimmed ? undefined : toolbar.date}
-          time={isDimmed ? undefined : toolbar.time}
-          priority={isDimmed ? undefined : toolbar.priority}
-          tag={isDimmed ? undefined : toolbar.tag}
-          memo={!isDimmed && toolbar.memo}
-          repeat={!isDimmed && toolbar.repeat}
-          delete={!isDimmed}
+          date={toolbar.date}
+          time={toolbar.time}
+          priority={toolbar.priority}
+          tag={toolbar.tag}
+          memo={toolbar.memo}
+          repeat={toolbar.repeat}
+          delete
+          isDimmed={isDimmed}
           onDeleteClick={onDelete}
         />
       </div>
