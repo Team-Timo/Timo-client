@@ -127,7 +127,19 @@ export const Calendar = ({
             <button
               key={calendarDate.date.toISOString()}
               type="button"
-              onClick={() => onChange?.(calendarDate.date)}
+              onClick={() => {
+                if (!calendarDate.isCurrentMonth) {
+                  setVisibleMonth(
+                    new Date(
+                      calendarDate.date.getFullYear(),
+                      calendarDate.date.getMonth(),
+                      1,
+                    ),
+                  );
+                }
+
+                onChange?.(calendarDate.date);
+              }}
               className={cn(
                 "flex h-6.5 w-7 items-center justify-center",
                 isToday ? "typo-headline-b-14" : "typo-headline-r-14",

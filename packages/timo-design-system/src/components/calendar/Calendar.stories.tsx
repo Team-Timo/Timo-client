@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 
 const CalendarDemo = (args: CalendarProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(2026, 5, 24),
+    new Date(2026, 6, 1),
   );
 
   return (
