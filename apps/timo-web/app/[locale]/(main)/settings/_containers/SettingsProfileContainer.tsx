@@ -31,6 +31,7 @@ export const SettingsProfileContainer = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
+  const [draftLanguage, setDraftLanguage] = useState<SettingsLanguage>(locale);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -78,7 +79,8 @@ export const SettingsProfileContainer = () => {
   };
 
   const handleChangeLanguage = (language: SettingsLanguage) => {
-    router.replace(pathname, { locale: language });
+    setDraftLanguage(language);
+    setIsDirty(true);
   };
 
   const handleAddTag = () => {
@@ -99,8 +101,10 @@ export const SettingsProfileContainer = () => {
   };
 
   const handleLogout = () => {
-    // TODO: API
+    // TODO: API - 로그아웃 처리 및 브라우저 저장 데이터 파기
     console.log("로그아웃 API 호출");
+    // TODO: 로그인 페이지 라우트 추가 후 이동 연결 (뒤로가기로 재접근 차단 포함)
+    console.log("[Login] 페이지로 이동합니다.");
   };
 
   const handleSave = async () => {
@@ -112,6 +116,10 @@ export const SettingsProfileContainer = () => {
       // TODO: API 연동
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsDirty(false);
+
+      if (draftLanguage !== locale) {
+        router.replace(pathname, { locale: draftLanguage });
+      }
     } catch {
       // TODO: 실제 토스트 컴포넌트로 교체
       window.alert("저장에 실패했습니다. 잠시 후 다시 시도해 주세요.");
@@ -126,7 +134,7 @@ export const SettingsProfileContainer = () => {
         name={profile.name}
         googleEmail={profile.googleEmail}
         isCalendarConnected={profile.isCalendarConnected}
-        language={locale}
+        language={draftLanguage}
         tags={tagItems}
         isSaveDisabled={!isDirty || isSaving}
         labels={labels}
