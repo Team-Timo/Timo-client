@@ -1,73 +1,77 @@
-import type { TodayTodoCardContainerProps } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
+interface TodoTag {
+  tagId: number;
+  name: string;
+}
 
-export const todayTodoMock: TodayTodoCardContainerProps = {
-  title: "티모 하이와프 작업하기",
-  isDone: false,
-  isDraggable: true,
-  timerStatus: "RUNNING",
-  toolbar: {
-    date: "7/22",
-    time: "2:00:00",
-    priority: "urgent",
-    tag: "업무",
-    memo: false,
-    repeat: true,
+interface TodoSubtask {
+  subtaskId: number;
+  content: string;
+  completed: boolean;
+}
+
+export interface TodoMock {
+  todoId: number;
+  icon: string;
+  title: string;
+  completed: boolean;
+  date: string;
+  durationSeconds: number;
+  priority: "URGENT" | "HIGH" | "MEDIUM" | "LOW";
+  tag: TodoTag | null;
+  hasMemo: boolean;
+  isRepeated: boolean;
+  timerStatus: "RUNNING" | "PAUSED" | "STOPPED";
+  sortOrder: number;
+  subtasks: TodoSubtask[];
+}
+
+export const todayTodoMocks: TodoMock[] = [
+  {
+    todoId: 1,
+    icon: "ICON_1",
+    title: "디자인 시스템 컴포넌트 정리하기",
+    completed: false,
+    date: "2026-07-09",
+    durationSeconds: 36000,
+    priority: "URGENT",
+    tag: { tagId: 1, name: "작업" },
+    hasMemo: true,
+    isRepeated: false,
+    timerStatus: "STOPPED",
+    sortOrder: 0,
+    subtasks: [
+      { subtaskId: 1, content: "색상 토큰 정리", completed: true },
+      { subtaskId: 2, content: "타이포그래피 스펙 문서화", completed: false },
+    ],
   },
-  subTodos: [
-    { id: "1", text: "티모 타이머 명시 제작하기", isDone: true },
-    { id: "2", text: "티모 타이머 명시 제작하기", isDone: false },
-  ],
-};
-
-export const todayTodoMocks: (TodayTodoCardContainerProps & { id: string })[] =
-  [
-    {
-      id: "1",
-      title: "디자인 시스템 컴포넌트 정리하기",
-      isDone: false,
-      isDraggable: true,
-      timerStatus: "STOPPED",
-      toolbar: {
-        date: "7/8",
-        time: "10:00",
-        priority: "urgent",
-        tag: "작업",
-        memo: true,
-        repeat: false,
-      },
-      subTodos: [
-        { id: "1-1", text: "색상 토큰 정리", isDone: true },
-        { id: "1-2", text: "타이포그래피 스펙 문서화", isDone: false },
-      ],
-    },
-    {
-      id: "2",
-      title: "완료된 할 일 예시",
-      isDone: true,
-      isDraggable: true,
-      timerStatus: "STOPPED",
-      toolbar: {
-        date: "7/8",
-        time: "1:00:00",
-        priority: "medium",
-        tag: "완료",
-        memo: false,
-        repeat: false,
-      },
-      subTodos: [],
-    },
-    {
-      id: "3",
-      title: "서브투두 없는 단순 카드",
-      isDone: false,
-      timerStatus: "STOPPED",
-      toolbar: {
-        date: "7/8",
-        time: "0:30:00",
-        priority: "high",
-        memo: true,
-        repeat: false,
-      },
-      subTodos: [],
-    },
-  ];
+  {
+    todoId: 2,
+    icon: "ICON_2",
+    title: "완료된 할 일 예시",
+    completed: true,
+    date: "2026-07-09",
+    durationSeconds: 3600,
+    priority: "MEDIUM",
+    tag: { tagId: 2, name: "완료" },
+    hasMemo: false,
+    isRepeated: false,
+    timerStatus: "STOPPED",
+    sortOrder: 1,
+    subtasks: [],
+  },
+  {
+    todoId: 3,
+    icon: "ICON_3",
+    title: "서브투두 없는 단순 카드",
+    completed: false,
+    date: "2026-07-09",
+    durationSeconds: 1800,
+    priority: "HIGH",
+    tag: null,
+    hasMemo: true,
+    isRepeated: true,
+    timerStatus: "STOPPED",
+    sortOrder: 2,
+    subtasks: [],
+  },
+];
