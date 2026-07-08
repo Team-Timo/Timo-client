@@ -1,19 +1,64 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import type {
+  SettingsDefaultTagKey,
   SettingsLanguage,
   SettingsProfile,
+  SettingsProfileLabels,
 } from "@/app/[locale]/(main)/settings/_types/profile-type";
 
 import { SettingsProfileForm } from "@/app/[locale]/(main)/settings/_components/SettingsProfileForm";
 import { settingsProfileMock } from "@/app/[locale]/(main)/settings/_mocks/profile-mock";
+import { usePathname, useRouter } from "@/i18n/navigation";
+
+const DEFAULT_TAG_KEYS: SettingsDefaultTagKey[] = [
+  "assignment",
+  "work",
+  "exercise",
+  "dailyLife",
+];
+
+const isDefaultTagKey = (tag: string): tag is SettingsDefaultTagKey =>
+  DEFAULT_TAG_KEYS.includes(tag as SettingsDefaultTagKey);
 
 export const SettingsProfileContainer = () => {
+  const tCommon = useTranslations("Common");
+  const tSettings = useTranslations("Settings");
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
   const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  const tagItems = profile.tags.map((tag) => {
+    const isDefault = isDefaultTagKey(tag);
+
+    return {
+      id: tag,
+      label: isDefault ? tCommon(`tag.${tag}`) : tag,
+      isDefault,
+    };
+  });
+
+  const labels: SettingsProfileLabels = {
+    title: tSettings("profile.title"),
+    profileSection: tSettings("profile.profileSection"),
+    calendarSection: tSettings("profile.calendarSection"),
+    connect: tSettings("profile.connect"),
+    disconnect: tSettings("profile.disconnect"),
+    languageSection: tSettings("profile.languageSection"),
+    languageKorean: tSettings("profile.languageKorean"),
+    languageEnglish: tSettings("profile.languageEnglish"),
+    tagsSection: tSettings("profile.tagsSection"),
+    addTag: tSettings("profile.addTag"),
+    logout: tSettings("profile.logout"),
+    save: tSettings("profile.save"),
+    removeTag: (tag: string) => tSettings("profile.removeTag", { tag }),
+  };
 
   const handleConnectCalendar = () => {
     if (profile.isCalendarConnected) {
@@ -33,9 +78,7 @@ export const SettingsProfileContainer = () => {
   };
 
   const handleChangeLanguage = (language: SettingsLanguage) => {
-    // TODO: next-intl 로케일 전환 연동
-    setProfile((prev) => ({ ...prev, language }));
-    setIsDirty(true);
+    router.replace(pathname, { locale: language });
   };
 
   const handleAddTag = () => {
@@ -83,9 +126,10 @@ export const SettingsProfileContainer = () => {
         name={profile.name}
         googleEmail={profile.googleEmail}
         isCalendarConnected={profile.isCalendarConnected}
-        language={profile.language}
-        tags={profile.tags}
+        language={locale}
+        tags={tagItems}
         isSaveDisabled={!isDirty || isSaving}
+        labels={labels}
         onConnectCalendar={handleConnectCalendar}
         onChangeLanguage={handleChangeLanguage}
         onAddTag={handleAddTag}

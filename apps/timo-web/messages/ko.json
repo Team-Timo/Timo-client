@@ -36,6 +36,28 @@
     "viewWeek": "7일",
     "addTask": "할 일을 추가하세요"
   },
+  "Settings": {
+    "nav": {
+      "account": "개인 정보",
+      "policy": "약관",
+      "withdrawal": "회원 탈퇴"
+    },
+    "profile": {
+      "title": "개인 정보",
+      "profileSection": "프로필",
+      "calendarSection": "구글 캘린더 연동",
+      "connect": "연동하기",
+      "disconnect": "연동 해제",
+      "languageSection": "언어",
+      "languageKorean": "한국어",
+      "languageEnglish": "English",
+      "tagsSection": "태그",
+      "addTag": "태그 추가",
+      "removeTag": "{tag} 태그 삭제",
+      "logout": "로그아웃",
+      "save": "변경사항 저장"
+    }
+  },
   "Toast": {
     "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
     "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",

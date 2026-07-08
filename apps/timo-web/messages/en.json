@@ -36,6 +36,28 @@
     "viewWeek": "7 days",
     "addTask": "Add a task"
   },
+  "Settings": {
+    "nav": {
+      "account": "Account",
+      "policy": "Terms & Policies",
+      "withdrawal": "Delete account"
+    },
+    "profile": {
+      "title": "Personal information",
+      "profileSection": "Profile",
+      "calendarSection": "Google Calendar integration",
+      "connect": "Integrate",
+      "disconnect": "Disconnect",
+      "languageSection": "Language",
+      "languageKorean": "Korean",
+      "languageEnglish": "English",
+      "tagsSection": "Tags",
+      "addTag": "Add tag",
+      "removeTag": "Delete {tag} tag",
+      "logout": "Log out",
+      "save": "Save changes"
+    }
+  },
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
