@@ -5,8 +5,7 @@ import { useState } from "react";
 import { Header } from "@/components/layout/header/Header";
 import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
 
-const MONTH_LABEL_FORMATTER = new Intl.DateTimeFormat("ko-KR", {
-  year: "numeric",
+const MONTH_LABEL_FORMATTER = new Intl.DateTimeFormat("en-US", {
   month: "long",
 });
 

@@ -20,11 +20,11 @@ export const DropdownView = ({
   className,
 }: DropdownViewProps) => {
   return (
-    <Dropdown className={cn("w-18.5", className)}>
+    <Dropdown className={className}>
       <Dropdown.Trigger
         aria-haspopup="listbox"
         className={cn(
-          "group border-timo-gray-500 flex h-8 w-full items-center justify-between rounded-[4px] border bg-white px-2",
+          "group border-timo-gray-500 flex h-8 w-full items-center justify-between gap-2.5 rounded-[4px] border bg-white px-2",
           "aria-expanded:shadow-timo aria-expanded:rounded-b-none",
         )}
       >

@@ -1,5 +1,10 @@
+"use client";
+
 import { SidebarButton } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
+import { useTranslations } from "next-intl";
+
+import { getDayOfWeekKey } from "@/utils/get-day-of-week-key";
 
 export interface TimeSidebarHeaderProps {
   date: Date;
@@ -12,11 +17,10 @@ export const TimeSidebarHeader = ({
   isOpen = true,
   onToggleCollapse,
 }: TimeSidebarHeaderProps) => {
+  const t = useTranslations("Common");
   const day = date.getDate();
 
-  const weekday = new Intl.DateTimeFormat("ko-KR", { weekday: "long" }).format(
-    date,
-  );
+  const weekday = t(`weekday.${getDayOfWeekKey(date)}`);
 
   return (
     <header className="relative flex items-center px-4.5 pt-3 pb-3">
