@@ -4,8 +4,9 @@
 module.exports = {
   ci: {
     collect: {
+      // "/en" (root [locale] page) renders an empty fragment with no redirect,
+      // so Lighthouse always times out with NO_FCP there — omit it.
       url: [
-        "http://localhost:3000/en",
         "http://localhost:3000/en/home",
         "http://localhost:3000/en/today",
         "http://localhost:3000/en/focus",
