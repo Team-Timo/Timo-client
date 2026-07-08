@@ -1,4 +1,4 @@
-import { PlusIcon } from "../../../icons";
+import { PlusGrayIcon } from "../../../icons";
 import { cn } from "../../../lib";
 
 export type AddTaskButtonVariant = "default" | "weekly" | "big";
@@ -32,7 +32,7 @@ export const AddTaskButton = ({
       )}
     >
       <span className="flex size-5.5 shrink-0 items-center justify-center">
-        <PlusIcon />
+        <PlusGrayIcon />
       </span>
 
       <span

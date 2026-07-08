@@ -37,6 +37,7 @@ export interface HomeTodoCardProps {
   isCompleted: boolean;
   durationSeconds: number;
   priority: TodoPriorityTypes;
+  priorityLabel?: string;
   tagName?: string;
   hasMemo: boolean;
   isRepeated: boolean;
@@ -53,6 +54,7 @@ export const HomeTodoCard = ({
   isCompleted,
   durationSeconds,
   priority,
+  priorityLabel,
   tagName,
   hasMemo,
   isRepeated,
@@ -125,6 +127,7 @@ export const HomeTodoCard = ({
         <div className="flex min-w-0 items-center gap-1">
           <PriorityIcon
             priority={isCompleted ? "Disable" : PRIORITY_MAP[priority]}
+            label={priorityLabel}
           />
           {tagName && <TagIcon text={tagName} />}
           {hasMemo &&

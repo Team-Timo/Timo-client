@@ -6,6 +6,36 @@
     "statistics": "통계",
     "settings": "설정"
   },
+  "Common": {
+    "weekday": {
+      "sunday": "일요일",
+      "monday": "월요일",
+      "tuesday": "화요일",
+      "wednesday": "수요일",
+      "thursday": "목요일",
+      "friday": "금요일",
+      "saturday": "토요일"
+    },
+    "tag": {
+      "dailyLife": "일상",
+      "work": "업무",
+      "exercise": "운동",
+      "assignment": "과제",
+      "additional": "기타"
+    },
+    "priority": {
+      "veryImportant": "매우중요",
+      "important": "중요",
+      "average": "보통",
+      "low": "낮음"
+    }
+  },
+  "Home": {
+    "today": "오늘",
+    "viewBasic": "기본",
+    "viewWeek": "7일",
+    "addTask": "할 일을 추가하세요"
+  },
   "Toast": {
     "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
     "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",
