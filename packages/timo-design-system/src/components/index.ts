@@ -15,6 +15,7 @@ export { TogglePanel } from "./toggle-panel/TogglePanel";
 export type { TogglePanelOption } from "./toggle-panel/TogglePanel";
 export { PlayButton } from "./button/play-button/PlayButton";
 export { TabButton } from "./button/tab-button/TabButton";
+export { Toast } from "./toast/Toast";
 export { ModalButton } from "./button/modal-button/ModalButton";
 export type { ModalButtonVariantTypes } from "./button/modal-button/ModalButton";
 export { Modal } from "./layout/modal/Modal";

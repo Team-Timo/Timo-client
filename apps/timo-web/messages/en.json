@@ -35,5 +35,10 @@
     "viewBasic": "Basic",
     "viewWeek": "7 days",
     "addTask": "Add a task"
+  },
+  "Toast": {
+    "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
+    "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
+    "todoLimitLine2": "To add a new to-do, please complete an existing one."
   }
 }
