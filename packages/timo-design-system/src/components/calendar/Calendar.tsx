@@ -73,7 +73,8 @@ export const Calendar = ({
       a.getDate() === b.getDate()
     );
   };
-  const moveMonth = (amount: number) => {
+
+  const handleMoveMonth = (amount: number) => {
     setVisibleMonth(
       (prev) => new Date(prev.getFullYear(), prev.getMonth() + amount, 1),
     );
