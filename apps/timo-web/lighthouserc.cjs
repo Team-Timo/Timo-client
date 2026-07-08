@@ -5,15 +5,15 @@ module.exports = {
   ci: {
     collect: {
       url: [
-        "http://localhost:3000",
-        "http://localhost:3000/home",
-        "http://localhost:3000/today",
-        "http://localhost:3000/focus",
-        "http://localhost:3000/statistics",
-        "http://localhost:3000/onboarding",
-        "http://localhost:3000/settings",
-        "http://localhost:3000/settings/account",
-        "http://localhost:3000/settings/term",
+        "http://localhost:3000/en",
+        "http://localhost:3000/en/home",
+        "http://localhost:3000/en/today",
+        "http://localhost:3000/en/focus",
+        "http://localhost:3000/en/statistics",
+        "http://localhost:3000/en/onboarding",
+        "http://localhost:3000/en/settings",
+        "http://localhost:3000/en/settings/account",
+        "http://localhost:3000/en/settings/policy",
       ],
       numberOfRuns: 3,
       settings: {
