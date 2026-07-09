@@ -37,7 +37,7 @@ export interface CreateTodoToolbarProps {
   date: string;
   time: string;
   priority: Priority;
-  tag: string;
+  tag?: string;
   hasMemo: boolean;
   hasRepeat?: boolean;
   hasDelete?: boolean;
