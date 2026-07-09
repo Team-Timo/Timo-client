@@ -7,8 +7,6 @@ import {
 import { Dropdown } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 
-import styles from "./OnboardingTimeDropdown.module.css";
-
 const TIME_OPTIONS = Array.from(
   { length: 25 },
   (_, i) => `${String(i).padStart(2, "0")}:00`,
@@ -50,12 +48,7 @@ export const OnboardingTimeDropdown = ({
       </Dropdown.Trigger>
 
       <Dropdown.Panel className="border-timo-gray-500 mt-1 h-[220px] w-full rounded-[4px] border py-3 pr-2.5 pl-4">
-        <div
-          className={cn(
-            styles.scrollbar,
-            "flex h-full w-full flex-col gap-2.5 overflow-y-auto p-1 pr-3.5",
-          )}
-        >
+        <div className="flex h-full w-full flex-col gap-2.5 overflow-y-auto p-1 pr-3.5">
           {TIME_OPTIONS.map((time) => (
             <Dropdown.Item
               key={time}
