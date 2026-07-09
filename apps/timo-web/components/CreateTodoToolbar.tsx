@@ -43,11 +43,11 @@ export interface CreateTodoToolbarProps {
   hasDelete?: boolean;
   isDimmed?: boolean;
   activeItem?: ActiveItem;
-  onDateClick: () => void;
-  onTimeClick: () => void;
-  onPriorityClick: () => void;
-  onTagClick: () => void;
-  onMemoClick: () => void;
+  onDateClick?: () => void;
+  onTimeClick?: () => void;
+  onPriorityClick?: () => void;
+  onTagClick?: () => void;
+  onMemoClick?: () => void;
   onRepeatClick?: () => void;
   onDeleteClick?: () => void;
 }
