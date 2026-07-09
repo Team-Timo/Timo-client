@@ -16,7 +16,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { CreateTodoToolbar } from "@/components/CreateTodoToolbar";
 
-type Priority = ComponentProps<typeof PriorityIcon>["priority"];
+type PriorityTypes = ComponentProps<typeof PriorityIcon>["priority"];
 
 const CARD_STYLE = {
   active: {
@@ -40,7 +40,7 @@ export interface SubTodo {
 export interface TodayTodoCardToolbar {
   date: string;
   time: string;
-  priority: Priority;
+  priority: PriorityTypes;
   tag?: string;
   memo: boolean;
   repeat: boolean;
