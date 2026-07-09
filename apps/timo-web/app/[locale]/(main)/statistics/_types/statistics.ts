@@ -22,6 +22,17 @@ export const statisticsDayDetailSchema = z.object({
   todos: z.array(statisticsTodoRecordSchema),
 });
 
+export const statisticsCalendarResponseSchema = z.object({
+  yearMonth: z.string(),
+  today: z.string(),
+  days: z.array(
+    z.object({
+      date: z.string(),
+      completionRate: z.number().nullable(),
+    }),
+  ),
+});
+
 export type StatisticsMonthSummary = z.infer<
   typeof statisticsMonthSummarySchema
 >;
@@ -29,3 +40,7 @@ export type StatisticsMonthSummary = z.infer<
 export type StatisticsDayDetail = z.infer<typeof statisticsDayDetailSchema>;
 
 export type StatisticsTodoRecord = z.infer<typeof statisticsTodoRecordSchema>;
+
+export type StatisticsCalendarResponse = z.infer<
+  typeof statisticsCalendarResponseSchema
+>;
