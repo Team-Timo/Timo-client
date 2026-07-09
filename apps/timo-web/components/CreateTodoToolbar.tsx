@@ -34,20 +34,20 @@ type ActiveItem =
   | "delete";
 
 export interface CreateTodoToolbarProps {
-  date?: string;
-  time?: string;
-  priority?: Priority;
-  tag?: string;
-  memo?: boolean;
+  date: string;
+  time: string;
+  priority: Priority;
+  tag: string;
+  memo: boolean;
   repeat?: boolean;
   delete?: boolean;
   isDimmed?: boolean;
   activeItem?: ActiveItem;
-  onDateClick?: () => void;
-  onTimeClick?: () => void;
-  onPriorityClick?: () => void;
-  onTagClick?: () => void;
-  onMemoClick?: () => void;
+  onDateClick: () => void;
+  onTimeClick: () => void;
+  onPriorityClick: () => void;
+  onTagClick: () => void;
+  onMemoClick: () => void;
   onRepeatClick?: () => void;
   onDeleteClick?: () => void;
 }
