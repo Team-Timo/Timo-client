@@ -4,8 +4,8 @@
 }
 
 *::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 *::-webkit-scrollbar-track {
@@ -19,4 +19,9 @@
 
 *::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-timo-gray-700);
+}
+
+.scrollbar-sm::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
