@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { OnboardingTimeDropdown } from "./OnboardingTimeDropdown";
+import { OnboardingTimeDropdown } from "../_components/OnboardingTimeDropdown";
 
 export const OnboardingTimeField = () => {
   const [time, setTime] = useState("");
