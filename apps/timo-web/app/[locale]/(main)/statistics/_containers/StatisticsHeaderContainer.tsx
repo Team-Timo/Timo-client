@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import { Header } from "@/components/layout/header/Header";
 import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
+
+
+interface StatisticsHeaderContainerProps {
+  currentMonth: Date;
+  onChangeMonth: Dispatch<SetStateAction<Date>>;
+}
 
 const MONTH_LABEL_FORMATTER = new Intl.DateTimeFormat("en-US", {
   month: "long",
@@ -12,12 +18,14 @@ const MONTH_LABEL_FORMATTER = new Intl.DateTimeFormat("en-US", {
 const addMonths = (date: Date, amount: number) =>
   new Date(date.getFullYear(), date.getMonth() + amount, 1);
 
-export const StatisticsHeaderContainer = () => {
-  const [currentMonth, setCurrentMonth] = useState(() => new Date());
+export const StatisticsHeaderContainer = ({
+  currentMonth,
+  onChangeMonth,
+}: StatisticsHeaderContainerProps) => {
   const { isOpen, toggle } = useNavigationSidebar();
 
-  const handlePrev = () => setCurrentMonth((prev) => addMonths(prev, -1));
-  const handleNext = () => setCurrentMonth((prev) => addMonths(prev, 1));
+  const handlePrev = () => onChangeMonth((prev) => addMonths(prev, -1));
+  const handleNext = () => onChangeMonth((prev) => addMonths(prev, 1));
 
   return (
     <Header
