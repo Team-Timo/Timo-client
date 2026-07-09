@@ -17,11 +17,5 @@ export interface StatisticsTodoRecord {
   title: string;
   actualTimeMinutes: number;
   estimatedTimeMinutes: number;
-  tag: StatisticsTodoTag | null;
-}
-
-export interface StatisticsTodoTag {
-  tagId: number;
-  name: string;
-  color: string;
+  tagName: string | null;
 }
