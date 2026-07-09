@@ -8,9 +8,9 @@ const STEPS = [1, 2, 3, 4] as const;
 
 export const OnboardingStepButton = ({ step }: OnboardingStepButtonProps) => {
   return (
-    <div className="flex items-center gap-2">
+    <ol className="flex items-center gap-2">
       {STEPS.map((s) => (
-        <div
+        <li
           key={s}
           className={cn(
             "flex size-[19px] items-center justify-center rounded-full",
@@ -25,8 +25,8 @@ export const OnboardingStepButton = ({ step }: OnboardingStepButtonProps) => {
           >
             {s}
           </span>
-        </div>
+        </li>
       ))}
-    </div>
+    </ol>
   );
 };
