@@ -25,7 +25,7 @@ export const OnboardingGoogleButton = ({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex w-[305px] items-center justify-center rounded-[4px] border py-2.5",
+        "flex w-full items-center justify-center rounded-[4px] border py-2.5",
         isSelected
           ? "border-timo-blue-300 bg-timo-blue-50"
           : "border-timo-gray-500 bg-white",
