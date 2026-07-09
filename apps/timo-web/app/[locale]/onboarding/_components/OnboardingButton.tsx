@@ -38,24 +38,24 @@ export const OnboardingButton = ({
   onClick,
 }: OnboardingButtonProps) => {
   const t = useTranslations("Onboarding");
-  const active = variant === "next_active" || variant === "start";
-  const disabled = variant === "next" || variant === "start_inactive";
+  const isActive = variant === "next_active" || variant === "start";
+  const isDisabled = variant === "next" || variant === "start_inactive";
 
   return (
     <button
       type="button"
       onClick={onClick}
-      disabled={disabled}
+      disabled={isDisabled}
       className={cn(
         "flex items-center justify-center gap-2 rounded-[4px] px-4 py-2",
-        active ? "bg-timo-blue-300" : "bg-timo-gray-200",
+        isActive ? "bg-timo-blue-300" : "bg-timo-gray-200",
       )}
     >
       {variant === "prev" && <ChevronSmallLeftIcon />}
       <span
         className={cn(
           "typo-headline-m-16",
-          active ? "text-white" : "text-timo-gray-700",
+          isActive ? "text-white" : "text-timo-gray-700",
         )}
       >
         {t(BUTTON_TRANSLATION_KEY[variant])}
