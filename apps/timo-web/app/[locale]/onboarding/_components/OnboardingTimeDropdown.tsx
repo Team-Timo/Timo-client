@@ -1,25 +1,28 @@
 "use client";
 
 import {
-  ChevronSmallDownIcon,
-  ChevronSmallUpIcon,
+  ChevronDownGrayIcon,
+  ChevronUpGrayIcon,
 } from "@repo/timo-design-system/icons";
 import { Dropdown } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-import { useState } from "react";
 
-const PANEL_SCROLLBAR =
-  "[scrollbar-width:thin] [scrollbar-color:var(--color-timo-gray-600)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-timo-gray-600 [&::-webkit-scrollbar-thumb:hover]:bg-timo-gray-700";
+import styles from "./OnboardingTimeDropdown.module.css";
 
 const TIME_OPTIONS = Array.from(
   { length: 25 },
   (_, i) => `${String(i).padStart(2, "0")}:00`,
 );
 
+const getAmPm = (time: string): "AM" | "PM" => {
+  const hour = parseInt(time.split(":")[0] ?? "0", 10);
+  return hour >= 12 && hour < 24 ? "PM" : "AM";
+};
+
 export interface OnboardingTimeDropdownProps {
-  value?: string;
+  value: string;
   placeholder?: string;
-  onChange?: (time: string) => void;
+  onChange: (time: string) => void;
 }
 
 export const OnboardingTimeDropdown = ({
@@ -27,52 +30,46 @@ export const OnboardingTimeDropdown = ({
   placeholder,
   onChange,
 }: OnboardingTimeDropdownProps) => {
-  const [internalValue, setInternalValue] = useState<string | undefined>();
-
-  const isControlled = value !== undefined;
-  const currentValue = isControlled ? value : internalValue;
-  const hasValue = currentValue !== undefined;
-
-  const handleChange = (time: string) => {
-    if (!isControlled) setInternalValue(time);
-    onChange?.(time);
-  };
-
   return (
     <Dropdown className="w-[150px]">
       <Dropdown.Trigger className="group border-timo-gray-500 flex w-full items-center justify-between rounded-[4px] border bg-white px-4 py-3 text-left">
-        <span
-          className={cn(
-            "typo-headline-b-16",
-            hasValue ? "text-timo-black" : "text-timo-gray-700",
-          )}
-        >
-          {currentValue ?? placeholder}
-        </span>
-        <ChevronSmallDownIcon className="group-aria-expanded:hidden" />
-        <ChevronSmallUpIcon className="hidden group-aria-expanded:block" />
+        {value ? (
+          <div className="flex items-center gap-1">
+            <span className="typo-headline-b-16 text-timo-black">{value}</span>
+            <span className="typo-headline-b-16 text-timo-black">
+              {getAmPm(value)}
+            </span>
+          </div>
+        ) : (
+          <span className="typo-headline-b-16 text-timo-gray-700">
+            {placeholder}
+          </span>
+        )}
+        <ChevronDownGrayIcon className="group-aria-expanded:hidden" />
+        <ChevronUpGrayIcon className="hidden group-aria-expanded:block" />
       </Dropdown.Trigger>
 
-      <Dropdown.Panel
-        className={cn(
-          "border-timo-gray-500 mt-1 h-[220px] w-full gap-2.5 overflow-y-auto rounded-[4px] border py-3 pr-2 pl-4",
-          PANEL_SCROLLBAR,
-        )}
-      >
-        {TIME_OPTIONS.map((time) => (
-          <Dropdown.Item
-            key={time}
-            onClick={() => handleChange(time)}
-            className={cn(
-              "typo-headline-b-16 w-full rounded-none text-left",
-              currentValue === time
-                ? "text-timo-blue-300"
-                : "text-timo-gray-700",
-            )}
-          >
-            {time}
-          </Dropdown.Item>
-        ))}
+      <Dropdown.Panel className="border-timo-gray-500 mt-1 h-[220px] w-full rounded-[4px] border py-3 pr-2.5 pl-4">
+        <div
+          className={cn(
+            styles.scrollbar,
+            "flex h-full w-full flex-col gap-2.5 overflow-y-auto p-1 pr-3.5",
+          )}
+        >
+          {TIME_OPTIONS.map((time) => (
+            <Dropdown.Item
+              key={time}
+              onClick={() => onChange(time)}
+              className={cn(
+                "typo-headline-b-16 flex w-full justify-between rounded-none",
+                value === time ? "text-timo-blue-300" : "text-timo-gray-700",
+              )}
+            >
+              <span>{time}</span>
+              <span>{getAmPm(time)}</span>
+            </Dropdown.Item>
+          ))}
+        </div>
       </Dropdown.Panel>
     </Dropdown>
   );
