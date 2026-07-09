@@ -6,6 +6,7 @@ import {
 } from "@repo/timo-design-system/icons";
 import { Dropdown } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
+import { useState } from "react";
 
 const PANEL_SCROLLBAR =
   "[scrollbar-width:thin] [scrollbar-color:var(--color-timo-gray-600)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-timo-gray-600 [&::-webkit-scrollbar-thumb:hover]:bg-timo-gray-700";
@@ -23,10 +24,19 @@ export interface OnboardingTimeDropdownProps {
 
 export const OnboardingTimeDropdown = ({
   value,
-  placeholder = "01:00",
+  placeholder,
   onChange,
 }: OnboardingTimeDropdownProps) => {
-  const hasValue = value !== undefined;
+  const [internalValue, setInternalValue] = useState<string | undefined>();
+
+  const isControlled = value !== undefined;
+  const currentValue = isControlled ? value : internalValue;
+  const hasValue = currentValue !== undefined;
+
+  const handleChange = (time: string) => {
+    if (!isControlled) setInternalValue(time);
+    onChange?.(time);
+  };
 
   return (
     <Dropdown className="w-[150px]">
@@ -37,7 +47,7 @@ export const OnboardingTimeDropdown = ({
             hasValue ? "text-timo-black" : "text-timo-gray-700",
           )}
         >
-          {value ?? placeholder}
+          {currentValue ?? placeholder}
         </span>
         <ChevronSmallDownIcon className="group-aria-expanded:hidden" />
         <ChevronSmallUpIcon className="hidden group-aria-expanded:block" />
@@ -52,10 +62,12 @@ export const OnboardingTimeDropdown = ({
         {TIME_OPTIONS.map((time) => (
           <Dropdown.Item
             key={time}
-            onClick={() => onChange?.(time)}
+            onClick={() => handleChange(time)}
             className={cn(
               "typo-headline-b-16 w-full rounded-none text-left",
-              value === time ? "text-timo-blue-300" : "text-timo-gray-700",
+              currentValue === time
+                ? "text-timo-blue-300"
+                : "text-timo-gray-700",
             )}
           >
             {time}
