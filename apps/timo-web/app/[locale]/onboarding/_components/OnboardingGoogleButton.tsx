@@ -1,25 +1,21 @@
-"use client";
-
 import googleLogo from "@repo/timo-design-system/assets/images/google-logo.svg";
 import { cn } from "@repo/timo-design-system/utils";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 
-export type OnboardingGoogleButtonVariant = "login" | "connectCalendar";
+type OnboardingGoogleButtonVariant = "login" | "connectCalendar";
 
 export interface OnboardingGoogleButtonProps {
   variant: OnboardingGoogleButtonVariant;
+  label: string;
   isSelected?: boolean;
   onClick?: () => void;
 }
 
 export const OnboardingGoogleButton = ({
-  variant,
+  label,
   isSelected = false,
   onClick,
 }: OnboardingGoogleButtonProps) => {
-  const t = useTranslations("Onboarding");
-
   return (
     <button
       type="button"
@@ -35,9 +31,7 @@ export const OnboardingGoogleButton = ({
         <div className="flex size-[22px] items-center justify-center">
           <Image src={googleLogo} alt="Google" width={18} height={18} />
         </div>
-        <span className="typo-headline-m-16 text-timo-blue-300">
-          {t(`onboardingGoogleButton.${variant}`)}
-        </span>
+        <span className="typo-headline-m-16 text-timo-blue-300">{label}</span>
       </div>
     </button>
   );

@@ -1,6 +1,6 @@
 import { cn } from "@repo/timo-design-system/utils";
 
-export interface OnboardingStepButtonProps {
+interface OnboardingStepButtonProps {
   step: 1 | 2 | 3 | 4;
 }
 

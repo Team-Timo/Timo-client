@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-import { OnboardingTimeDropdown } from "../_components/OnboardingTimeDropdown";
+import { OnboardingTimeDropdown } from "@/app/[locale]/onboarding/_components/OnboardingTimeDropdown";
 
-export const OnboardingTimeField = () => {
+export const OnboardingTimeContainer = () => {
   const [time, setTime] = useState("");
 
   return (

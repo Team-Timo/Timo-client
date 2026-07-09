@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ChevronDownGrayIcon,
   ChevronUpGrayIcon,
@@ -7,17 +5,14 @@ import {
 import { Dropdown } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 
+import { getAmPm } from "@/utils/get-am-pm";
+
 const TIME_OPTIONS = Array.from(
   { length: 25 },
   (_, i) => `${String(i).padStart(2, "0")}:00`,
 );
 
-const getAmPm = (time: string): "AM" | "PM" => {
-  const hour = parseInt(time.split(":")[0] ?? "0", 10);
-  return hour >= 12 && hour < 24 ? "PM" : "AM";
-};
-
-export interface OnboardingTimeDropdownProps {
+interface OnboardingTimeDropdownProps {
   value: string;
   placeholder?: string;
   onChange: (time: string) => void;
