@@ -38,9 +38,9 @@ export interface CreateTodoToolbarProps {
   time: string;
   priority: Priority;
   tag: string;
-  memo: boolean;
-  repeat?: boolean;
-  delete?: boolean;
+  hasMemo: boolean;
+  hasRepeat?: boolean;
+  hasDelete?: boolean;
   isDimmed?: boolean;
   activeItem?: ActiveItem;
   onDateClick: () => void;
@@ -57,9 +57,9 @@ export const CreateTodoToolbar = ({
   time,
   priority,
   tag,
-  memo,
-  repeat,
-  delete: isDeleteSet,
+  hasMemo,
+  hasRepeat,
+  hasDelete,
   isDimmed,
   activeItem,
   onDateClick,
@@ -165,7 +165,7 @@ export const CreateTodoToolbar = ({
       <button type="button" onClick={onMemoClick} aria-label="메모">
         {activeItem === "memo" ? (
           <MemoBlueIcon />
-        ) : memo && !isDimmed ? (
+        ) : hasMemo && !isDimmed ? (
           <MemoOnIcon />
         ) : (
           <MemoDisableIcon />
@@ -175,7 +175,7 @@ export const CreateTodoToolbar = ({
       <button type="button" onClick={onRepeatClick} aria-label="반복">
         {activeItem === "repeat" ? (
           <RepeatBlueIcon />
-        ) : repeat && !isDimmed ? (
+        ) : hasRepeat && !isDimmed ? (
           <RepeatTodoOnIcon />
         ) : (
           <RepeatTodoDisableIcon />
@@ -185,7 +185,7 @@ export const CreateTodoToolbar = ({
       <button type="button" onClick={onDeleteClick} aria-label="삭제">
         {activeItem === "delete" ? (
           <TrashBlueIcon />
-        ) : isDeleteSet && !isDimmed ? (
+        ) : hasDelete && !isDimmed ? (
           <TrashOnIcon />
         ) : (
           <TrashDisableIcon />

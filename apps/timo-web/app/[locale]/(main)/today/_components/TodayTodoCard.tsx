@@ -42,8 +42,8 @@ export interface TodayTodoCardToolbar {
   time: string;
   priority: PriorityTypes;
   tag?: string;
-  memo: boolean;
-  repeat: boolean;
+  hasMemo: boolean;
+  hasRepeat: boolean;
 }
 
 export interface TodayTodoCardProps {
@@ -147,9 +147,9 @@ export const TodayTodoCard = ({
           time={toolbar.time}
           priority={toolbar.priority}
           tag={toolbar.tag}
-          memo={toolbar.memo}
-          repeat={toolbar.repeat}
-          delete
+          hasMemo={toolbar.hasMemo}
+          hasRepeat={toolbar.hasRepeat}
+          hasDelete
           isDimmed={isDimmed}
           onDeleteClick={onDelete}
         />

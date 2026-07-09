@@ -83,8 +83,8 @@ export const TodayTodoListContainer = () => {
             time: formatDuration(todo.durationSeconds),
             priority: PRIORITY_MAP[todo.priority],
             tag: todo.tag?.name,
-            memo: todo.hasMemo,
-            repeat: todo.isRepeated,
+            hasMemo: todo.hasMemo,
+            hasRepeat: todo.isRepeated,
           }}
           subTodos={todo.subtasks.map((s) => ({
             id: String(s.subtaskId),
