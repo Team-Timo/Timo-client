@@ -32,6 +32,7 @@ export const SettingsProfileContainer = () => {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+
   const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
 
   const { watch, setValue, handleSubmit, reset, formState } =
