@@ -41,6 +41,12 @@
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
     "todoLimitLine2": "To add a new to-do, please complete an existing one."
   },
+  "Login": {
+    "headline": "Manage your day with clear timeboxes.",
+    "description": "Please log in to your timo account.",
+    "connectLabel": "Log in with Google",
+    "termsNotice": "By continuing, you agree to the timo <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+  },
   "Onboarding": {
     "button": {
       "next": "Next",
@@ -50,6 +56,46 @@
     "onboardingGoogleButton": {
       "login": "Continue with your Google account",
       "connectCalendar": "Connect Google Calendar"
+    },
+    "language": {
+      "title": "Please select a language to use.",
+      "description": "timo will be displayed in your selected language.\nYou can change it later in settings."
+    },
+    "timePrediction": {
+      "title": "Do you estimate your time well?",
+      "description": "timo provides personalized recommendations.",
+      "options": {
+        "4": {
+          "label": "Very accurate.",
+          "sublabel": "The estimated time matches the actual time."
+        },
+        "3": {
+          "label": "Generally accurate.",
+          "sublabel": "Sometimes incorrect but generally accurate."
+        },
+        "2": {
+          "label": "Often incorrect.",
+          "sublabel": "Always goes differently than expected."
+        },
+        "1": {
+          "label": "I'm not sure.",
+          "sublabel": "I've never thought about it."
+        }
+      }
+    },
+    "lifePattern": {
+      "title": "Set your wake-up and bedtime.",
+      "description": "The information you provide will only be used for time pattern analysis.",
+      "wakeUpTime": "Wake-up time",
+      "bedTime": "Bedtime",
+      "bedTimeError": "Please set your bedtime later than your wake-up time."
+    },
+    "calendarConnect": {
+      "title": "Connect your Google Calendar.",
+      "description": "You can import your existing schedules into timo and manage them in one place.",
+      "connectLabel": "Google Calendar integration",
+      "consentNotice": "Clicking will display the Google authentication and calendar access permission screen.",
+      "permissionNotice": "timo only requests permission to view your schedules."
     }
   }
 }

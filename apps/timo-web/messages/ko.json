@@ -41,6 +41,12 @@
     "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",
     "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 완료해주세요."
   },
+  "Login": {
+    "headline": "흩어진 시간을, 실행 가능한 흐름으로.",
+    "description": "timo 계정에 로그인하세요.",
+    "connectLabel": "Google 로그인",
+    "termsNotice": "계속하면 timo <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하게 됩니다."
+  },
   "Onboarding": {
     "button": {
       "next": "다음",
@@ -50,6 +56,43 @@
     "onboardingGoogleButton": {
       "login": "Google 계정으로 계속하기",
       "connectCalendar": "Google 캘린더 연결하기"
+    },
+    "language": {
+      "title": "사용할 언어를 선택해 주세요.",
+      "description": "선택한 언어로 timo의 모든 텍스트가 표시돼요.\n나중에 설정에서 변경할 수 있어요."
+    },
+    "timePrediction": {
+      "title": "평소 작업 시간을\n잘 예측하는 편인가요?",
+      "description": "timo가 맞춤 추천을 해드려요.",
+      "options": {
+        "4": {
+          "label": "매우 정확해요.",
+          "sublabel": "예상 시간과 실제 시간이 일치해요."
+        },
+        "3": {
+          "label": "대체로 맞는 편이에요.",
+          "sublabel": "가끔 틀리지만 대체로 맞는 편이에요."
+        },
+        "2": {
+          "label": "자주 틀리는 편이에요.",
+          "sublabel": "예상과 항상 다르게 흘러가요."
+        },
+        "1": { "label": "잘 모르겠어요.", "sublabel": "생각해본 적이 없어요." }
+      }
+    },
+    "lifePattern": {
+      "title": "평소 생활 패턴을 알려주세요.",
+      "description": "입력한 정보는 시간 패턴 분석에만 사용돼요.",
+      "wakeUpTime": "기상 시간",
+      "bedTime": "취침 시간",
+      "bedTimeError": "취침 시간은 기상 시간보다 늦게 설정해 주세요."
+    },
+    "calendarConnect": {
+      "title": "Google 캘린더를 연결하면\n일정을 함께 관리할 수 있어요.",
+      "description": "기존 일정을 timo에 불러와 한 곳에서 관리할 수 있어요.",
+      "connectLabel": "Google 캘린더 연동",
+      "consentNotice": "클릭 시 Google 인증 및 캘린더 접근 권한 동의 화면이 표시됩니다.",
+      "permissionNotice": "timo는 일정 조회 권한만 요청합니다."
     }
   }
 }
