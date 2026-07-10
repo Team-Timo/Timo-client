@@ -36,4 +36,5 @@ export { TodayButton } from "./button/today-button/TodayButton";
 export { WeeklyButton } from "./button/weekly-button/WeeklyButton";
 export { TimeSelector } from "./time/time-selector/TimeSelector";
 export { RepeatSelector } from "./repeat/repeat-selector/RepeatSelector";
-export { TagButton } from "./button/tag-button/TagButton";
+export { PillButton } from "./button/pill-button/PillButton";
+export { TagChip } from "./tag/tag-chip/TagChip";
