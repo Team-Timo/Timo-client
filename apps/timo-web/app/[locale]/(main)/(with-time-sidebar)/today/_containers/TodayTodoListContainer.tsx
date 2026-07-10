@@ -18,32 +18,39 @@ const PRIORITY_MAP = {
 
 export const TodayTodoListContainer = () => {
   const [todos, setTodos] = useState<TodoMock[]>(todayTodoMocks);
-  const [runningTodoId, setRunningTodoId] = useState<number | null>(
-    todayTodoMocks.find((t) => t.timerStatus === "RUNNING")?.todoId ?? null,
-  );
+  const runningTodoId =
+    todos.find((t) => t.timerStatus === "RUNNING")?.todoId ?? null;
 
   const handlePlay = (todoId: number) => {
     // TODO: API
-    setRunningTodoId((prev) => (prev === todoId ? null : todoId));
+    setTodos((prev) =>
+      prev.map((t) => ({
+        ...t,
+        timerStatus:
+          t.todoId === todoId && t.timerStatus !== "RUNNING"
+            ? "RUNNING"
+            : "STOPPED",
+      })),
+    );
   };
 
   const handleCheck = (todoId: number) => {
     // TODO: API
     setTodos((prev) =>
       prev.map((t) =>
-        t.todoId === todoId ? { ...t, completed: !t.completed } : t,
+        t.todoId === todoId
+          ? { ...t, completed: !t.completed, timerStatus: "STOPPED" }
+          : t,
       ),
     );
-    if (runningTodoId === todoId) setRunningTodoId(null);
   };
 
   const handleDelete = (todoId: number) => {
     // TODO: API
     setTodos((prev) => prev.filter((t) => t.todoId !== todoId));
-    if (runningTodoId === todoId) setRunningTodoId(null);
   };
 
-  const handleSubTodoCheck = (todoId: number, subtaskId: string) => {
+  const handleSubTodoCheck = (todoId: number, subtaskId: number) => {
     // TODO: API
     setTodos((prev) =>
       prev.map((t) =>
@@ -51,7 +58,7 @@ export const TodayTodoListContainer = () => {
           ? {
               ...t,
               subtasks: t.subtasks.map((s) =>
-                s.subtaskId === Number(subtaskId)
+                s.subtaskId === subtaskId
                   ? { ...s, completed: !s.completed }
                   : s,
               ),
@@ -78,7 +85,7 @@ export const TodayTodoListContainer = () => {
             hasRepeat: todo.isRepeated,
           }}
           subTodos={todo.subtasks.map((s) => ({
-            id: String(s.subtaskId),
+            id: s.subtaskId,
             text: s.content,
             isDone: s.completed,
           }))}
