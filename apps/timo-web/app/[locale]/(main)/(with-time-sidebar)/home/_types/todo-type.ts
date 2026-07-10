@@ -1,34 +1,36 @@
-export type TodoPriorityTypes = "URGENT" | "HIGH" | "MEDIUM" | "LOW";
-export type TodoTimerStatusTypes = "RUNNING" | "STOPPED";
-export type TodoTagName =
-  | "DAILY_LIFE"
-  | "WORK"
-  | "EXERCISE"
-  | "ASSIGNMENT"
-  | "ADDITIONAL";
+import { z } from "zod";
 
-export interface TodoTag {
-  tagId: number;
-  name: TodoTagName;
-}
+export const todoPrioritySchema = z.enum(["URGENT", "HIGH", "MEDIUM", "LOW"]);
+export const todoTimerStatusSchema = z.enum(["RUNNING", "STOPPED"]);
 
-export interface TodoSubtask {
-  subtaskId: number;
-  content: string;
-  completed: boolean;
-}
+export const todoTagSchema = z.object({
+  tagId: z.number(),
+  name: z.string(),
+});
 
-export interface Todo {
-  todoId: number;
-  icon: string;
-  title: string;
-  completed: boolean;
-  durationSeconds: number;
-  priority: TodoPriorityTypes;
-  tag: TodoTag;
-  hasMemo: boolean;
-  isRepeated: boolean;
-  timerStatus: TodoTimerStatusTypes;
-  sortOrder: number;
-  subtasks: TodoSubtask[];
-}
+export const todoSubtaskSchema = z.object({
+  subtaskId: z.number(),
+  content: z.string(),
+  completed: z.boolean(),
+});
+
+export const todoSchema = z.object({
+  todoId: z.number(),
+  icon: z.string(),
+  title: z.string(),
+  completed: z.boolean(),
+  durationSeconds: z.number(),
+  priority: todoPrioritySchema,
+  tag: todoTagSchema,
+  hasMemo: z.boolean(),
+  isRepeated: z.boolean(),
+  timerStatus: todoTimerStatusSchema,
+  sortOrder: z.number(),
+  subtasks: z.array(todoSubtaskSchema),
+});
+
+export type TodoPriorityTypes = z.infer<typeof todoPrioritySchema>;
+export type TodoTimerStatusTypes = z.infer<typeof todoTimerStatusSchema>;
+export type TodoTag = z.infer<typeof todoTagSchema>;
+export type TodoSubtask = z.infer<typeof todoSubtaskSchema>;
+export type Todo = z.infer<typeof todoSchema>;

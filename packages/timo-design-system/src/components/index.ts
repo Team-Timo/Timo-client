@@ -33,8 +33,9 @@ export type {
 } from "./layout/modal/Modal";
 export { SidebarButton } from "./button/sidebar-button/SidebarButton";
 export { TodayButton } from "./button/today-button/TodayButton";
-export { WeeklyButton } from "./button/weekly-button/WeeklyButton";
+export { ChevronButton } from "./button/chevron-button/ChevronButton";
 export { TimeSelector } from "./time/time-selector/TimeSelector";
 export { RepeatSelector } from "./repeat/repeat-selector/RepeatSelector";
 export { PillButton } from "./button/pill-button/PillButton";
 export { TagChip } from "./tag/tag-chip/TagChip";
+export { Calendar } from "./calendar/Calendar";

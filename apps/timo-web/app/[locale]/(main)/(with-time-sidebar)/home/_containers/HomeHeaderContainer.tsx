@@ -1,8 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
+import { triggerScrollToToday } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeTodayScroll";
+import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeViewMode";
 import { Header } from "@/components/layout/header/Header";
 import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
 
@@ -10,14 +11,24 @@ export const HomeHeaderContainer = () => {
   const t = useTranslations("Home");
   const basicLabel = t("viewBasic");
   const weekLabel = t("viewWeek");
+
   const viewOptions = [basicLabel, weekLabel];
-  const [isWeekView, setIsWeekView] = useState<boolean>(false);
+
   const { isOpen, toggle } = useNavigationSidebar();
+  const { isWeekView, setViewMode, goToNextWeek, goToPrevWeek, goToToday } =
+    useHomeViewMode();
 
   const handleChangeView = (value: string) => {
-    if (value === basicLabel || value === weekLabel) {
-      setIsWeekView(value === weekLabel);
+    if (value === basicLabel) {
+      setViewMode("basic");
+    } else if (value === weekLabel) {
+      setViewMode("week");
     }
+  };
+
+  const handleGoToToday = () => {
+    goToToday();
+    triggerScrollToToday();
   };
 
   return (
@@ -25,7 +36,11 @@ export const HomeHeaderContainer = () => {
       left={
         <>
           <Header.SidebarButton isOpen={isOpen} onClick={toggle} />
-          <Header.TodayButton label={t("today")} />
+          {isWeekView ? (
+            <Header.WeeklyNav onPrev={goToPrevWeek} onNext={goToNextWeek} />
+          ) : (
+            <Header.TodayButton label={t("today")} onClick={handleGoToToday} />
+          )}
         </>
       }
       right={

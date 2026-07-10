@@ -2,7 +2,7 @@
 
 import { TogglePanel } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-import { useId, useState } from "react";
+import { useId } from "react";
 
 import {
   TIME_SIDEBAR_COLLAPSED_WIDTH_CLASS_NAME,
@@ -12,8 +12,10 @@ import {
 import { TimeboxPanel } from "@/components/layout/sidebar/time/TimeboxPanel";
 import { TimerPanel } from "@/components/layout/sidebar/time/TimerPanel";
 import { TimeSidebarHeader } from "@/components/layout/sidebar/time/TimeSidebarHeader";
-
-type TimeSidebarTab = "timebox" | "timer";
+import {
+  type TimeSidebarTab,
+  useTimeSidebarStore,
+} from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export interface TimeSidebarProps {
   size?: TimeSidebarSize;
@@ -27,7 +29,8 @@ export const TimeSidebar = ({
   onToggleCollapse,
 }: TimeSidebarProps) => {
   const id = useId();
-  const [activeTab, setActiveTab] = useState<TimeSidebarTab>("timebox");
+  const activeTab = useTimeSidebarStore((state) => state.activeTab);
+  const setActiveTab = useTimeSidebarStore((state) => state.setActiveTab);
 
   const timeboxPanelId = `${id}-timebox-panel`;
   const timerPanelId = `${id}-timer-panel`;
