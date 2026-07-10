@@ -23,7 +23,12 @@ export const LottiePlayer = ({
     const controller = new AbortController();
 
     fetch(src, { signal: controller.signal })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Lottie 애니메이션 로드 실패: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(setAnimationData)
       .catch(() => {
         // 애니메이션 로드 실패 시 컨테이너만 비운 상태로 유지 (레이아웃 시프트 방지)
