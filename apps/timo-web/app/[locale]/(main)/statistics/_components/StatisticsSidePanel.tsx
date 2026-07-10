@@ -6,11 +6,11 @@ import type {
   StatisticsMonthSummary,
 } from "@/app/[locale]/(main)/statistics/_types/statistics";
 
+import { SummaryTimeBlock } from "@/app/[locale]/(main)/statistics/_components/SummaryTimeBlock";
 import {
   formatStatisticsClockText,
   formatStatisticsHourText,
 } from "@/app/[locale]/(main)/statistics/_utils/formatStatisticsTime";
-
 
 interface StatisticsMonthSidePanelProps {
   variant: "month";
@@ -40,20 +40,6 @@ const getDiffClassName = (diffMinutes: number) => {
   if (diffMinutes < 0) return "text-timo-blue-300";
   return "invisible";
 };
-
-interface SummaryTimeBlockProps {
-  label: string;
-  minutes: number;
-}
-
-const SummaryTimeBlock = ({ label, minutes }: SummaryTimeBlockProps) => (
-  <div className="flex flex-col">
-    <p className="typo-headline-r-14 text-timo-gray-700">{label}</p>
-    <strong className="typo-headline-b-30">
-      {formatStatisticsHourText(minutes)}
-    </strong>
-  </div>
-);
 
 export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
   if (props.variant === "month") {
