@@ -1,7 +1,8 @@
 import { PlusIcon } from "@repo/timo-design-system/icons";
 import {
   CreateButton,
-  TagButton,
+  PillButton,
+  TagChip,
   TogglePanel,
 } from "@repo/timo-design-system/ui";
 import Image from "next/image";
@@ -93,9 +94,9 @@ export const SettingsProfileForm = ({
               </span>
             </div>
 
-            <TagButton variant="blue" onClick={onConnectCalendar}>
+            <PillButton variant="blue" onClick={onConnectCalendar}>
               {isCalendarConnected ? labels.disconnect : labels.connect}
-            </TagButton>
+            </PillButton>
           </div>
         </section>
 
@@ -124,29 +125,29 @@ export const SettingsProfileForm = ({
           </h2>
           <div className="flex flex-wrap items-center gap-3">
             {tags.map((tag) => (
-              <TagButton
+              <TagChip
                 key={tag.id}
                 onRemove={tag.isDefault ? undefined : () => onRemoveTag(tag.id)}
                 removeLabel={labels.removeTag(tag.label)}
               >
                 {tag.label}
-              </TagButton>
+              </TagChip>
             ))}
 
-            <TagButton
+            <PillButton
               icon={<PlusIcon width={20} height={20} />}
               onClick={onAddTag}
             >
               {labels.addTag}
-            </TagButton>
+            </PillButton>
           </div>
         </section>
 
         <hr className="border-timo-gray-500" />
 
-        <TagButton onClick={onLogout} className="w-fit">
+        <PillButton onClick={onLogout} className="w-fit">
           {labels.logout}
-        </TagButton>
+        </PillButton>
       </div>
 
       <CreateButton
