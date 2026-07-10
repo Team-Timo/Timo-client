@@ -11,12 +11,12 @@ import type { StatisticsCalendarResponse } from "@/app/[locale]/(main)/statistic
 import {
   formatStatisticsCalendarDate,
   formatStatisticsMonth,
-} from "@/app/[locale]/(main)/statistics/_utils/formatStatisticsDate";
+} from "@/app/[locale]/(main)/statistics/_utils/format-statistics-date";
 import {
   formatDateKey,
   getCalendarDates,
   getFirstDayOffset,
-} from "@/app/[locale]/(main)/statistics/_utils/statisticsCalendar";
+} from "@/app/[locale]/(main)/statistics/_utils/statistics-calendar";
 
 type CalendarIconStatus = "disabled" | "empty" | "outline" | "light" | "filled";
 
