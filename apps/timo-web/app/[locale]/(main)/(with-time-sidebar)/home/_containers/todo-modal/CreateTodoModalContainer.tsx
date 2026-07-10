@@ -7,6 +7,7 @@ import { overlay } from "overlay-kit";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
 import { CreateTodoModalContent } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContent";
+import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-create-todo-submit";
 
 export interface CreateTodoModalContainerProps {
   defaultDate?: Date;
@@ -18,6 +19,7 @@ export const CreateTodoModalContainer = ({
   onCreate,
 }: CreateTodoModalContainerProps) => {
   const t = useTranslations("Home");
+  const { handleSubmit } = useCreateTodoSubmit({ onCreate });
 
   const handleAddClick = () => {
     overlay.open(({ isOpen, close, unmount }) => (
@@ -26,7 +28,7 @@ export const CreateTodoModalContainer = ({
         onClose={close}
         onExited={unmount}
         defaultDate={defaultDate}
-        onCreate={onCreate}
+        onSubmit={handleSubmit}
       />
     ));
   };

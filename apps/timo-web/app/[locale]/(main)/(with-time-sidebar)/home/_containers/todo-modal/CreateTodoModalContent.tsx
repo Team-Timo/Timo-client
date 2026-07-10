@@ -8,7 +8,6 @@ import { useState } from "react";
 import { useController, useForm, useWatch } from "react-hook-form";
 
 import type { CreateTodoRequest } from "@/api/todo/todo-schema";
-import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
 import { createTodoRequestSchema } from "@/api/todo/todo-schema";
@@ -23,9 +22,13 @@ import {
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-tag-field";
 import { useTimeField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-time-field";
 import { formatDateToIsoDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
-import { convertApiDurationToSeconds } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
 import { Modal } from "@/components/modal/Modal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
+
+export interface CreateTodoTag {
+  id: number;
+  name: string;
+}
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   icon: null,
@@ -46,7 +49,7 @@ export interface CreateTodoModalContentProps {
   onClose: () => void;
   onExited: () => void;
   defaultDate?: Date;
-  onCreate: (todo: Todo) => void;
+  onSubmit: (data: CreateTodoRequest, tag: CreateTodoTag) => void;
 }
 
 export const CreateTodoModalContent = ({
@@ -54,7 +57,7 @@ export const CreateTodoModalContent = ({
   onClose,
   onExited,
   defaultDate,
-  onCreate,
+  onSubmit,
 }: CreateTodoModalContentProps) => {
   const t = useTranslations("Home");
   const tToast = useTranslations("Toast");
@@ -91,33 +94,10 @@ export const CreateTodoModalContent = ({
     });
   };
 
-  const onSubmit = (data: CreateTodoRequest) => {
-    const subtasks = data.subtasks ?? [];
-    const memoText = data.memo?.trim() ? data.memo.trim() : null;
+  const handleFormSubmit = (data: CreateTodoRequest) => {
     const tag = tagField.selectedTagOption ?? DEFAULT_TAG;
 
-    // 목데이터: 실제 API 호출 없이 로컬 상태에만 즉시 반영한다.
-    onCreate({
-      todoId: Date.now(),
-      icon: data.icon,
-      title: data.title,
-      completed: false,
-      durationSeconds: convertApiDurationToSeconds(data.duration),
-      priority: data.priority ?? "MEDIUM",
-      tag: {
-        tagId: data.tagId ?? tag.id,
-        name: tag.name,
-      },
-      hasMemo: Boolean(memoText),
-      isRepeated: data.repeatType !== "NONE",
-      timerStatus: "STOPPED",
-      sortOrder: 0,
-      subtasks: subtasks.map((content) => ({
-        subtaskId: Date.now(),
-        content,
-        completed: false,
-      })),
-    });
+    onSubmit(data, { id: data.tagId ?? tag.id, name: tag.name });
 
     reset(createDefaultValues());
     setSubtaskInput("");
@@ -233,7 +213,7 @@ export const CreateTodoModalContent = ({
           <CreateButton
             label={t("createModal.create")}
             disabled={!title.trim()}
-            onClick={handleSubmit(onSubmit)}
+            onClick={handleSubmit(handleFormSubmit)}
           />
         </div>
       </Modal>
