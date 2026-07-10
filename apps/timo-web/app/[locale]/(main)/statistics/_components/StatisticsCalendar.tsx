@@ -7,7 +7,8 @@ import {
 } from "@repo/timo-design-system/icons";
 import { cn } from "@repo/timo-design-system/utils";
 
-import { MOCK_STATISTICS_CALENDAR } from "@/app/[locale]/(main)/statistics/_mocks/statisticsCalendar";
+import type { StatisticsCalendarResponse } from "@/app/[locale]/(main)/statistics/_types/statistics";
+
 import {
   formatStatisticsCalendarDate,
   formatStatisticsMonth,
@@ -44,19 +45,18 @@ const WEEKDAYS = ["M", "T", "W", "T", "F", "S", "S"];
 
 interface StatisticsCalendarProps {
   currentMonth: Date;
+  calendarData: StatisticsCalendarResponse;
 }
 
 export const StatisticsCalendar = ({
   currentMonth,
+  calendarData,
 }: StatisticsCalendarProps) => {
-  const today = new Date(MOCK_STATISTICS_CALENDAR.today);
+  const today = new Date(calendarData.today);
   const calendarDates = getCalendarDates(currentMonth);
   const firstDayOffset = getFirstDayOffset(currentMonth);
   const completionRateByDate = new Map(
-    MOCK_STATISTICS_CALENDAR.days.map(({ date, completionRate }) => [
-      date,
-      completionRate,
-    ]),
+    calendarData.days.map(({ date, completionRate }) => [date, completionRate]),
   );
   const todayLabel = formatStatisticsCalendarDate(today);
 
