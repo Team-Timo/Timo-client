@@ -1,7 +1,7 @@
 import { Modal, ModalButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 
-const TimerEndIcon = () => (
+const TimerStopIcon = () => (
   //TODO: SVG를 컴포넌트 머지 시 변경 예정
   <svg
     width="40"
@@ -58,38 +58,30 @@ const TimerEndIcon = () => (
   </svg>
 );
 
-export interface TimerEndModalPanelProps {
-  onContinue: () => void;
-  onComplete: () => void;
+export interface TimerStopModalPanelProps {
+  minutes: number;
+  onSwitch: () => void;
 }
 
-export const TimerEndModalPanel = ({
-  onContinue,
-  onComplete,
-}: TimerEndModalPanelProps) => {
-  const t = useTranslations("Focus.endModal");
+export const TimerStopModalPanel = ({
+  minutes,
+  onSwitch,
+}: TimerStopModalPanelProps) => {
+  const t = useTranslations("Focus.stopModal");
 
   return (
     <>
       <Modal.Icon>
-        <TimerEndIcon />
+        <TimerStopIcon />
       </Modal.Icon>
       <Modal.Title>{t("title")}</Modal.Title>
-      <Modal.Description>{t("description")}</Modal.Description>
+      <Modal.Description>{t("description", { minutes })}</Modal.Description>
       <Modal.Footer>
-        <ModalButton
-          variant="border"
-          className="flex-1 px-0"
-          onClick={onContinue}
-        >
+        <Modal.BorderButton className="flex-1 px-0">
           {t("continueButton")}
-        </ModalButton>
-        <ModalButton
-          variant="fill"
-          className="flex-1 px-0"
-          onClick={onComplete}
-        >
-          {t("completeButton")}
+        </Modal.BorderButton>
+        <ModalButton variant="fill" className="flex-1 px-0" onClick={onSwitch}>
+          {t("switchButton")}
         </ModalButton>
       </Modal.Footer>
     </>

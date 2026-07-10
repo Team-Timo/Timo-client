@@ -10,10 +10,9 @@ import {
   TimerExtendModalPanel,
   type ExtendTimePreset,
 } from "@/components/timer/TimerExtendModalPanel";
+import { TimerStopModalPanel } from "@/components/timer/TimerStopModalPanel";
 
-type TimerModalStep = "end" | "extend" | "complete";
-
-const DEFAULT_COMPLETE_FEEDBACK_TEXT = "이번 작업을 완료했어요. 수고하셨어요!";
+type TimerModalStep = "end" | "stop" | "extend" | "complete";
 
 export interface TimerSessionControlsProps {
   isRunning: boolean;
@@ -30,7 +29,7 @@ export const TimerSessionControls = ({
   onTogglePlay,
   plannedMinutes,
   actualMinutes,
-  feedbackText = DEFAULT_COMPLETE_FEEDBACK_TEXT,
+  feedbackText,
   onExtend,
   onComplete,
 }: TimerSessionControlsProps) => {
@@ -65,7 +64,7 @@ export const TimerSessionControls = ({
       <TimerControls
         isRunning={isRunning}
         onTogglePlay={onTogglePlay}
-        onOpenEndModal={() => setStep("end")}
+        onOpenEndModal={() => setStep(isRunning ? "stop" : "end")}
         onOpenExtendModal={() => {
           resetExtendSelection();
           setStep("extend");
@@ -80,6 +79,12 @@ export const TimerSessionControls = ({
               setStep("extend");
             }}
             onComplete={() => setStep("complete")}
+          />
+        )}
+        {step === "stop" && (
+          <TimerStopModalPanel
+            minutes={actualMinutes}
+            onSwitch={() => setStep("complete")}
           />
         )}
         {step === "extend" && (

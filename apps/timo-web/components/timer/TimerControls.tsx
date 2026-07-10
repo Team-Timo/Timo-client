@@ -7,11 +7,12 @@ import {
   StopIcon,
 } from "@repo/timo-design-system/icons";
 import { Modal } from "@repo/timo-design-system/ui";
+import { useTranslations } from "next-intl";
 
 import { TimerControlButton } from "@/components/timer/TimerControlButton";
 
 const MODAL_TRIGGER_CLASS =
-  "group bg-timo-gray-300 active:bg-timo-blue-50 flex size-14.5 items-center justify-center rounded-full";
+  "group bg-timo-gray-300 active:bg-timo-blue-50 focus-visible:border-timo-blue-300 flex size-14.5 items-center justify-center rounded-full border-2 border-transparent outline-none";
 
 export interface TimerControlsProps {
   isRunning: boolean;
@@ -26,10 +27,12 @@ export const TimerControls = ({
   onOpenEndModal,
   onOpenExtendModal,
 }: TimerControlsProps) => {
+  const t = useTranslations("Focus.controls");
+
   return (
     <div className="flex items-center gap-5">
       <Modal.Trigger
-        aria-label="종료"
+        aria-label={t("end")}
         onClick={onOpenEndModal}
         className={MODAL_TRIGGER_CLASS}
       >
@@ -45,13 +48,13 @@ export const TimerControls = ({
         icon={
           isRunning ? <StopIcon width={24} height={24} /> : <PlayTimerIcon />
         }
-        label={isRunning ? "일시정지" : "재생"}
+        label={isRunning ? t("pause") : t("play")}
         variant={isRunning ? "active" : "default"}
         onClick={onTogglePlay}
       />
 
       <Modal.Trigger
-        aria-label="시간 추가"
+        aria-label={t("extend")}
         onClick={onOpenExtendModal}
         className={MODAL_TRIGGER_CLASS}
       >

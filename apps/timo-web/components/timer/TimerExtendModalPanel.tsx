@@ -1,15 +1,27 @@
 import { Modal } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
+import { useTranslations } from "next-intl";
 
 export type ExtendTimePreset = 10 | 30 | 60 | "custom";
 
-const PRESET_OPTIONS: { preset: ExtendTimePreset; label: string }[] = [
-  { preset: 10, label: "+10M" },
-  { preset: 30, label: "+30M" },
-  { preset: 60, label: "+1H" },
+type ExtendPresetLabelKey =
+  | "presetTenMin"
+  | "presetThirtyMin"
+  | "presetOneHour";
+
+const PRESET_OPTIONS: {
+  preset: ExtendTimePreset;
+  labelKey: ExtendPresetLabelKey;
+}[] = [
+  { preset: 10, labelKey: "presetTenMin" },
+  { preset: 30, labelKey: "presetThirtyMin" },
+  { preset: 60, labelKey: "presetOneHour" },
 ];
 
 const MAX_CUSTOM_MINUTES = 720;
+
+const CHIP_FOCUS_BORDER_CLASS =
+  "border-2 border-transparent focus-visible:border-timo-blue-300 outline-none";
 
 export interface TimerExtendModalPanelProps {
   selectedPreset: ExtendTimePreset | null;
@@ -30,14 +42,15 @@ export const TimerExtendModalPanel = ({
   onSubmit,
   canSubmit,
 }: TimerExtendModalPanelProps) => {
+  const t = useTranslations("Focus.extendModal");
   const isCustomSelected = selectedPreset === "custom";
 
   return (
     <>
-      <Modal.Title>시간을 얼마나 추가할까요?</Modal.Title>
+      <Modal.Title>{t("title")}</Modal.Title>
 
       <div className="mt-5.75 grid w-full grid-cols-4 gap-1.25">
-        {PRESET_OPTIONS.map(({ preset, label }) => (
+        {PRESET_OPTIONS.map(({ preset, labelKey }) => (
           <button
             key={preset}
             type="button"
@@ -45,17 +58,18 @@ export const TimerExtendModalPanel = ({
             onClick={() => onSelectPreset(preset)}
             className={cn(
               "typo-headline-r-14 flex h-[37px] items-center justify-center rounded-[4px]",
+              CHIP_FOCUS_BORDER_CLASS,
               selectedPreset === preset
                 ? "bg-timo-blue-300 text-white"
                 : "bg-timo-gray-300 text-timo-black",
             )}
           >
-            {label}
+            {t(labelKey)}
           </button>
         ))}
 
         {isCustomSelected ? (
-          <div className="border-timo-gray-500 flex h-[37px] items-center justify-center gap-0.5 rounded-[4px] border px-2">
+          <div className="border-timo-gray-500 focus-within:border-timo-blue-300 flex h-[37px] items-center justify-center rounded-[4px] border px-2">
             <input
               type="text"
               inputMode="numeric"
@@ -69,27 +83,31 @@ export const TimerExtendModalPanel = ({
 
                 onCustomMinutesChange(clamped);
               }}
-              aria-label="직접 입력 시간(분)"
-              className="typo-headline-r-14 text-timo-black min-w-0 flex-1 text-right outline-none"
+              aria-label={t("customInputLabel")}
+              style={{ width: `${Math.max(customMinutes.length, 1)}ch` }}
+              className="typo-headline-r-14 text-timo-black shrink-0 text-center outline-none"
             />
             <span className="typo-headline-r-14 text-timo-black shrink-0">
-              분
+              {t("customUnitSuffix")}
             </span>
           </div>
         ) : (
           <button
             type="button"
             onClick={() => onSelectPreset("custom")}
-            className="typo-headline-r-14 text-timo-gray-700 bg-timo-gray-300 flex h-[37px] items-center justify-center rounded-[4px]"
+            className={cn(
+              "typo-headline-r-14 text-timo-gray-700 bg-timo-gray-300 flex h-[37px] items-center justify-center rounded-[4px]",
+              CHIP_FOCUS_BORDER_CLASS,
+            )}
           >
-            직접 입력
+            {t("customPreset")}
           </button>
         )}
       </div>
 
       <div className="mt-2.5 flex w-full gap-1.5">
         <Modal.BorderButton className="flex-1 px-0" onClick={onClose}>
-          닫기
+          {t("closeButton")}
         </Modal.BorderButton>
         <Modal.FillButton
           className={cn(
@@ -100,7 +118,7 @@ export const TimerExtendModalPanel = ({
           disabled={!canSubmit}
           onClick={onSubmit}
         >
-          시간 추가하기
+          {t("submitButton")}
         </Modal.FillButton>
       </div>
     </>
