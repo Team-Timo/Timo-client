@@ -6,6 +6,8 @@ import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_
 
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { todayTodoMocks } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
+import { formatDate } from "@/utils/format-date";
 
 const PRIORITY_MAP = {
   URGENT: "urgent",
@@ -13,17 +15,6 @@ const PRIORITY_MAP = {
   MEDIUM: "medium",
   LOW: "low",
 } as const;
-
-const formatDuration = (seconds: number): string => {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-};
-
-const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  return `${date.getMonth() + 1}/${date.getDate()}`;
-};
 
 export const TodayTodoListContainer = () => {
   const [todos, setTodos] = useState<TodoMock[]>(todayTodoMocks);
@@ -80,7 +71,7 @@ export const TodayTodoListContainer = () => {
           timerStatus={runningTodoId === todo.todoId ? "RUNNING" : "STOPPED"}
           toolbar={{
             date: formatDate(todo.date),
-            time: formatDuration(todo.durationSeconds),
+            time: convertDurationToTimeText(todo.durationSeconds),
             priority: PRIORITY_MAP[todo.priority],
             tag: todo.tag?.name,
             hasMemo: todo.hasMemo,
