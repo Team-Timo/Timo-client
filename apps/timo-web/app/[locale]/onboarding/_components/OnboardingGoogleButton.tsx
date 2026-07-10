@@ -4,7 +4,7 @@ import Image from "next/image";
 
 type OnboardingGoogleButtonVariant = "login" | "connectCalendar";
 
-export interface OnboardingGoogleButtonProps {
+interface OnboardingGoogleButtonProps {
   variant: OnboardingGoogleButtonVariant;
   label: string;
   isSelected?: boolean;
