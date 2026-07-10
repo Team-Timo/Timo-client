@@ -12,7 +12,7 @@ export default function SettingsLayout({
 
       <div className="flex flex-1 overflow-hidden">
         <SettingsNavContainer />
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <section className="flex-1 overflow-y-auto">{children}</section>
       </div>
     </div>
   );
