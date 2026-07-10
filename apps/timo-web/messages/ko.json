@@ -8,13 +8,13 @@
   },
   "Common": {
     "weekday": {
-      "sunday": "일요일",
-      "monday": "월요일",
-      "tuesday": "화요일",
-      "wednesday": "수요일",
-      "thursday": "목요일",
-      "friday": "금요일",
-      "saturday": "토요일"
+      "SUN": "일요일",
+      "MON": "월요일",
+      "TUE": "화요일",
+      "WED": "수요일",
+      "THU": "목요일",
+      "FRI": "금요일",
+      "SAT": "토요일"
     },
     "tag": {
       "dailyLife": "일상",
@@ -24,9 +24,9 @@
       "additional": "기타"
     },
     "priority": {
-      "veryImportant": "매우중요",
-      "important": "중요",
-      "average": "보통",
+      "urgent": "매우중요",
+      "high": "중요",
+      "medium": "보통",
       "low": "낮음"
     }
   },
@@ -55,5 +55,16 @@
     "title": "문제가 발생했어요.",
     "description": "잠시 후 다시 시도하거나 홈으로 이동해주세요.",
     "homeButton": "홈으로 돌아가기"
+  },
+  "Onboarding": {
+    "button": {
+      "next": "다음",
+      "prev": "이전",
+      "start": "시작하기"
+    },
+    "onboardingGoogleButton": {
+      "login": "Google 계정으로 계속하기",
+      "connectCalendar": "Google 캘린더 연결하기"
+    }
   }
 }

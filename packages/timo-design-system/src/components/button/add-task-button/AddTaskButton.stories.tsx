@@ -14,7 +14,7 @@ const meta = {
     },
     variant: {
       control: "select",
-      options: ["default", "weekly", "big"],
+      options: ["default", "big"],
     },
   },
 } satisfies Meta<typeof AddTaskButton>;
@@ -26,13 +26,6 @@ export const Default: Story = {
   args: {
     text: "Add task",
     variant: "default",
-  },
-};
-
-export const Weekly: Story = {
-  args: {
-    text: "Add task",
-    variant: "weekly",
   },
 };
 

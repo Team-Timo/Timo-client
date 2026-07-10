@@ -1,3 +1,5 @@
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   MemoDisableIcon,
   MemoOnIcon,
@@ -14,6 +16,7 @@ import {
   TagIcon,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
+import { useTranslations } from "next-intl";
 
 import type {
   TodoPriorityTypes,
@@ -33,11 +36,11 @@ const PRIORITY_MAP: Record<
 };
 
 export interface HomeTodoCardProps {
+  todoId: number;
   title: string;
   isCompleted: boolean;
   durationSeconds: number;
   priority: TodoPriorityTypes;
-  priorityLabel?: string;
   tagName?: string;
   hasMemo: boolean;
   isRepeated: boolean;
@@ -50,11 +53,11 @@ export interface HomeTodoCardProps {
 }
 
 export const HomeTodoCard = ({
+  todoId,
   title,
   isCompleted,
   durationSeconds,
   priority,
-  priorityLabel,
   tagName,
   hasMemo,
   isRepeated,
@@ -65,11 +68,24 @@ export const HomeTodoCard = ({
   onTogglePlay,
   onToggleSubtaskCompleted,
 }: HomeTodoCardProps) => {
+  const tCommon = useTranslations("Common");
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: todoId, disabled: isCompleted });
+
+  const sortableStyle = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    touchAction: "none",
+  };
+
   const isRunning = timerStatus === "RUNNING";
+
+  const priorityLabel = tCommon(`priority.${PRIORITY_MAP[priority]}`);
 
   const titleRow = (
     <div className="flex w-full items-center justify-between gap-2">
-      <div className="flex w-[165px] items-center gap-1">
+      <div className="flex min-w-0 flex-1 items-center gap-1">
         <Checkbox
           checked={isCompleted}
           onChange={onToggleCompleted}
@@ -77,7 +93,7 @@ export const HomeTodoCard = ({
         />
         <p
           className={cn(
-            "typo-body-sb-12 w-[137px] truncate",
+            "typo-body-sb-12 min-w-0 flex-1 truncate",
             isCompleted ? "text-timo-gray-700" : "text-timo-black",
           )}
         >
@@ -103,21 +119,27 @@ export const HomeTodoCard = ({
 
   return (
     <article
+      ref={setNodeRef}
+      style={sortableStyle}
+      {...attributes}
+      {...listeners}
       className={cn(
-        "border-timo-gray-500 flex size-full flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
+        "border-timo-gray-500 flex w-full shrink-0 flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
         isCompleted ? "bg-timo-gray-200" : "bg-white",
       )}
     >
       {subtaskTitle ? (
         <div className="flex w-full flex-col items-start gap-1">
           {titleRow}
-          <div className="flex items-center gap-2">
+          <div className="flex w-full min-w-0 items-center gap-2">
             <Checkbox
               checked={isSubtaskCompleted}
               onChange={(checked) => onToggleSubtaskCompleted?.(checked)}
               disabled={isCompleted}
             />
-            <p className="typo-body-r-12 text-timo-gray-700">{subtaskTitle}</p>
+            <p className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 truncate">
+              {subtaskTitle}
+            </p>
           </div>
         </div>
       ) : (
