@@ -1,0 +1,91 @@
+"use client";
+
+import { cn } from "@repo/timo-design-system/utils";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+
+import type { ReactNode } from "react";
+
+const EXIT_ANIMATION_DURATION = 200;
+
+export interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onExited?: () => void;
+  children: ReactNode;
+  className?: string;
+}
+
+export const Modal = ({
+  isOpen,
+  onClose,
+  onExited,
+  children,
+  className,
+}: ModalProps) => {
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setIsVisible(false);
+
+      const hideTimer = setTimeout(() => {
+        setShouldRender(false);
+        onExited?.();
+      }, EXIT_ANIMATION_DURATION);
+
+      return () => clearTimeout(hideTimer);
+    }
+
+    setShouldRender(true);
+
+    const showFrame = requestAnimationFrame(() => setIsVisible(true));
+
+    return () => cancelAnimationFrame(showFrame);
+  }, [isOpen, onExited]);
+
+  useEffect(() => {
+    if (!shouldRender) return;
+
+    document.body.style.overflow = "hidden";
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [shouldRender, onClose]);
+
+  if (!shouldRender) return null;
+
+  return createPortal(
+    <>
+      <div
+        className={cn(
+          "bg-timo-overlay fixed inset-0 z-40 transition-opacity duration-200 ease-out",
+          isVisible ? "opacity-100" : "opacity-0",
+        )}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        className={cn(
+          "fixed top-1/2 left-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white transition-all duration-200 ease-out",
+          isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0",
+          className,
+        )}
+      >
+        {children}
+      </div>
+    </>,
+    document.body,
+  );
+};
