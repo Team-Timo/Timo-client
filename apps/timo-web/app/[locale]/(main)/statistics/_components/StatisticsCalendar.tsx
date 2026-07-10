@@ -1,3 +1,5 @@
+"use client";
+
 import {
   StatisticsClockEmptyIcon,
   StatisticsClockFilledIcon,
@@ -5,6 +7,7 @@ import {
   StatisticsClockOutlineIcon,
 } from "@repo/timo-design-system/icons";
 import { cn } from "@repo/timo-design-system/utils";
+import { useLocale } from "next-intl";
 
 import type { StatisticsCalendarResponse } from "@/app/[locale]/(main)/statistics/_types/statistics";
 
@@ -52,27 +55,32 @@ const WEEKDAYS = [
 
 interface StatisticsCalendarProps {
   currentMonth: Date;
+  selectedDate: Date;
+  onSelectDate: (date: Date) => void;
   calendarData: StatisticsCalendarResponse;
 }
 
 export const StatisticsCalendar = ({
   currentMonth,
+  selectedDate,
+  onSelectDate,
   calendarData,
 }: StatisticsCalendarProps) => {
+  const locale = useLocale();
   const today = new Date(calendarData.today);
   const calendarDates = getCalendarDates(currentMonth);
   const firstDayOffset = getFirstDayOffset(currentMonth);
   const completionRateByDate = new Map(
     calendarData.days.map(({ date, completionRate }) => [date, completionRate]),
   );
-  const todayLabel = formatStatisticsCalendarDate(today);
+  const todayLabel = formatStatisticsCalendarDate(today, locale);
 
   return (
     <section className="w-full px-14.75 pt-10 pb-13">
       <div className="w-199.5">
         <div className="mb-17.25">
           <h1 className="typo-headline-b-30 text-timo-gray-900">
-            {formatStatisticsMonth(currentMonth)}
+            {formatStatisticsMonth(currentMonth, locale)}
           </h1>
 
           <p className="typo-headline-m-14 text-timo-black mt-2">
@@ -100,17 +108,36 @@ export const StatisticsCalendar = ({
 
           {calendarDates.map((calendarDate) => {
             const dateKey = formatDateKey(calendarDate.date);
+            const isSelected = dateKey === formatDateKey(selectedDate);
             const completionRate = completionRateByDate.get(dateKey) ?? null;
             const status = getIconStatus(completionRate);
             const Icon = STATUS_ICON[status];
 
             return (
-              <div key={dateKey} className="flex flex-col items-center gap-2.5">
-                <Icon />
-                <span className="typo-body-sb-11 text-timo-gray-700">
+              <button
+                key={dateKey}
+                type="button"
+                className="flex flex-col items-center gap-2.5"
+                onClick={() => onSelectDate(calendarDate.date)}
+              >
+                <span
+                  className={cn(
+                    "rounded-full",
+                    isSelected &&
+                      "drop-shadow-[0_0_10px_var(--color-timo-blue-75)]",
+                  )}
+                >
+                  <Icon />
+                </span>
+                <span
+                  className={cn(
+                    "typo-body-sb-11 text-timo-gray-700",
+                    isSelected && "text-timo-blue-300",
+                  )}
+                >
                   {calendarDate.day}
                 </span>
-              </div>
+              </button>
             );
           })}
         </div>
