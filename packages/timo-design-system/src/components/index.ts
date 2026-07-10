@@ -37,4 +37,3 @@ export { WeeklyButton } from "./button/weekly-button/WeeklyButton";
 export { TimeSelector } from "./time/time-selector/TimeSelector";
 export { RepeatSelector } from "./repeat/repeat-selector/RepeatSelector";
 export { TagButton } from "./button/tag-button/TagButton";
-export type { TagButtonVariant } from "./button/tag-button/TagButton";
