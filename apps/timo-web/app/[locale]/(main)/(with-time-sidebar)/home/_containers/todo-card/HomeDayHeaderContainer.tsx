@@ -1,11 +1,12 @@
 "use client";
 
-import { AddTaskButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 
 import type { ApiDayOfWeek } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
+import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { HomeDateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/HomeDateInformation";
+import { HomeDateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeDateInformation";
+import { CreateTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContainer";
 import {
   convertDateToDateText,
   getToday,
@@ -19,6 +20,7 @@ export interface HomeDayHeaderContainerProps {
   isToday: boolean;
   totalCount: number;
   completedCount: number;
+  onCreateTodo: (todo: Todo) => void;
 }
 
 export const HomeDayHeaderContainer = ({
@@ -28,8 +30,8 @@ export const HomeDayHeaderContainer = ({
   isToday,
   totalCount,
   completedCount,
+  onCreateTodo,
 }: HomeDayHeaderContainerProps) => {
-  const t = useTranslations("Home");
   const tCommon = useTranslations("Common");
   const date = parseDateKey(dateKey) ?? getToday();
 
@@ -43,7 +45,7 @@ export const HomeDayHeaderContainer = ({
         totalCount={totalCount}
         completedCount={completedCount}
       />
-      <AddTaskButton text={t("addTask")} />
+      <CreateTodoModalContainer defaultDate={date} onCreate={onCreateTodo} />
     </div>
   );
 };

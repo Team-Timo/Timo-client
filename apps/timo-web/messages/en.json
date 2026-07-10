@@ -34,7 +34,31 @@
     "today": "Today",
     "viewBasic": "Basic",
     "viewWeek": "7 days",
-    "addTask": "Add a task"
+    "addTask": "Add a task",
+    "createModal": {
+      "title": "Add a task",
+      "addIcon": "Add an icon",
+      "titlePlaceholder": "Plan a new task",
+      "subtaskPlaceholder": "Add tasks in small units",
+      "notePlaceholder": "Please enter a note...",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "tagLabel": "Tag",
+      "create": "Create",
+      "repeatDaily": "Daily",
+      "repeatWeekly": "Weekly",
+      "repeatMonthly": "Monthly",
+      "repeatDetailHeading": "Details",
+      "repeatDayUnit": "day(s)",
+      "close": "Close"
+    },
+    "createTagModal": {
+      "title": "Create a tag",
+      "nameLabel": "Tag name",
+      "maxLengthHint": "The tag name can be up to 10 characters long",
+      "duplicateHint": "Names that are already in use cannot be registered",
+      "create": "Create"
+    }
   },
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",

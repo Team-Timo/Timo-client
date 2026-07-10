@@ -16,7 +16,6 @@ export const convertDateToDateText = (date: Date): string => {
   return `${day}`;
 };
 
-/** 주어진 날짜의 자정(00:00:00) 시각을 반환한다. */
 const getStartOfDay = (date: Date): Date =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
@@ -75,4 +74,12 @@ export const parseDateKey = (value: string): Date | null => {
 
   const [, year, month, day] = match;
   return new Date(Number(year), Number(month) - 1, Number(day));
+};
+// API 명세의 date 필드(yyyy-MM-dd) 포맷 변환
+export const formatDateToIsoDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 };

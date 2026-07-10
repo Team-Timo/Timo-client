@@ -30,7 +30,7 @@ const TODO_TEMPLATES: TodoTemplate[] = [
     title: "앱잼 1차 과제 제출",
     completed: false,
     durationSeconds: 5400,
-    priority: "URGENT",
+    priority: "VERY_HIGH",
     tag: { tagId: 1, name: "assignment" },
     hasMemo: true,
     isRepeated: false,

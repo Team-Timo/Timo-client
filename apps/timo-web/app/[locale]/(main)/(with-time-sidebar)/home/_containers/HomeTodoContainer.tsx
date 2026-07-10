@@ -6,8 +6,8 @@ import { useEffect, useMemo } from "react";
 
 import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
-import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/HomeTodoCard";
-import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/HomeDayHeaderContainer";
+import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
+import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
 import { useHomeTodayScrollRef } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeTodayScroll";
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeTodosByDate";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeViewMode";
@@ -50,6 +50,7 @@ export const HomeTodoContainer = () => {
 
   const {
     todosByDate,
+    handleAddTodo,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
@@ -90,6 +91,7 @@ export const HomeTodoContainer = () => {
               isToday={day.isToday}
               totalCount={todos.length}
               completedCount={completedCount}
+              onCreateTodo={(todo) => handleAddTodo(dateKey, todo)}
             />
 
             <DndSortableListProvider
