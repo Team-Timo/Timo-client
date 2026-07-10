@@ -45,7 +45,7 @@ export const SettingsWithdrawalView = ({
         <button
           type="button"
           onClick={onWithdraw}
-          className="bg-timo-gray-500 typo-headline-b-16 text-timo-gray-700 flex items-center justify-center rounded-[4px] px-5 py-2.5"
+          className="bg-timo-gray-500 typo-headline-b-16 text-timo-gray-700 flex items-center justify-center self-start rounded-[4px] px-5 py-2.5"
         >
           {labels.withdraw}
         </button>
