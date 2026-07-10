@@ -6,7 +6,7 @@ import { StatisticsCalendar } from "@/app/[locale]/(main)/statistics/_components
 import { StatisticsHeaderContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsHeaderContainer";
 import { MOCK_STATISTICS_CALENDAR } from "@/app/[locale]/(main)/statistics/_mocks/statisticsCalendar";
 
-export const StatisticsPageContainer = () => {
+export const StatisticsContainer = () => {
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
 
   return (
