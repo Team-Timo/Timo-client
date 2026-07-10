@@ -40,7 +40,15 @@ const getIconStatus = (completionRate: number | null): CalendarIconStatus => {
   return "filled";
 };
 
-const WEEKDAYS = ["M", "T", "W", "T", "F", "S", "S"];
+const WEEKDAYS = [
+  { label: "M", ariaLabel: "Monday" },
+  { label: "T", ariaLabel: "Tuesday" },
+  { label: "W", ariaLabel: "Wednesday" },
+  { label: "T", ariaLabel: "Thursday" },
+  { label: "F", ariaLabel: "Friday" },
+  { label: "S", ariaLabel: "Saturday" },
+  { label: "S", ariaLabel: "Sunday" },
+];
 
 interface StatisticsCalendarProps {
   currentMonth: Date;
@@ -73,15 +81,16 @@ export const StatisticsCalendar = ({
         </div>
 
         <div className="grid grid-cols-7 gap-x-14 gap-y-5">
-          {WEEKDAYS.map((weekday, index) => (
+          {WEEKDAYS.map(({ label, ariaLabel }, index) => (
             <div
-              key={`${weekday}-${index}`}
+              key={ariaLabel}
+              aria-label={ariaLabel}
               className={cn(
                 "typo-body-r-12 flex h-6 items-center justify-center",
                 index >= 5 ? "text-timo-red" : "text-timo-gray-900",
               )}
             >
-              {weekday}
+              {label}
             </div>
           ))}
 
