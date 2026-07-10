@@ -1,5 +1,4 @@
 import {
-  StatisticsClockDisabledIcon,
   StatisticsClockEmptyIcon,
   StatisticsClockFilledIcon,
   StatisticsClockLightIcon,
@@ -21,8 +20,12 @@ import {
 
 type CalendarIconStatus = "disabled" | "empty" | "outline" | "light" | "filled";
 
+const DisabledClockIcon = () => (
+  <div className="bg-timo-gray-300 size-16.5 rounded-full" />
+);
+
 const STATUS_ICON = {
-  disabled: StatisticsClockDisabledIcon,
+  disabled: DisabledClockIcon,
   empty: StatisticsClockEmptyIcon,
   outline: StatisticsClockOutlineIcon,
   light: StatisticsClockLightIcon,
@@ -74,7 +77,7 @@ export const StatisticsCalendar = ({
             <div
               key={`${weekday}-${index}`}
               className={cn(
-                "typo-headline-m-14 flex h-6 items-center justify-center",
+                "typo-body-r-12 flex h-6 items-center justify-center",
                 index >= 5 ? "text-timo-red" : "text-timo-gray-900",
               )}
             >
