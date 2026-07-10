@@ -21,7 +21,7 @@ export interface TodayTodoCardContainerProps {
   onCheck?: () => void;
   onPlay?: () => void;
   onDelete?: () => void;
-  onSubTodoCheck?: (id: string) => void;
+  onSubTodoCheck?: (id: number) => void;
 }
 
 export const TodayTodoCardContainer = ({
@@ -68,7 +68,7 @@ export const TodayTodoCardContainer = ({
     }
   };
 
-  const handleSubTodoCheck = (id: string) => {
+  const handleSubTodoCheck = (id: number) => {
     setSubTodos((prev) =>
       prev.map((s) => (s.id === id ? { ...s, isDone: !s.isDone } : s)),
     );
