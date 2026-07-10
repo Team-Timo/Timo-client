@@ -1,5 +1,5 @@
-import { StatisticsPageContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsPageContainer";
+import { StatisticsContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsContainer";
 
 export default function StatisticsPage() {
-  return <StatisticsPageContainer />;
+  return <StatisticsContainer />;
 }
