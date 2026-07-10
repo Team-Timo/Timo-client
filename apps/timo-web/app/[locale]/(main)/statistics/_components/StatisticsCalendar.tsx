@@ -96,10 +96,7 @@ export const StatisticsCalendar = ({
             const Icon = STATUS_ICON[status];
 
             return (
-              <div
-                key={calendarDate.date.toISOString()}
-                className="flex flex-col items-center gap-2.5"
-              >
+              <div key={dateKey} className="flex flex-col items-center gap-2.5">
                 <Icon />
                 <span className="typo-body-sb-11 text-timo-gray-700">
                   {calendarDate.day}
