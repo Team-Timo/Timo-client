@@ -17,5 +17,5 @@ export interface StatisticsTodoRecord {
   title: string;
   actualTimeMinutes: number;
   estimatedTimeMinutes: number;
-  tagName: string | null;
+  tagName: string;
 }

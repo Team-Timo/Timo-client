@@ -1,34 +1,38 @@
-"use client";
-
 import { TagIcon } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-
-import {
-  formatStatisticsClockText,
-  formatStatisticsHourText,
-} from "../_utils/formatStatisticsTime";
 
 import type {
   StatisticsDayDetail,
   StatisticsMonthSummary,
-} from "../_types/statistics";
+} from "@/app/[locale]/(main)/statistics/_types/statistics";
+
+import {
+  formatStatisticsClockText,
+  formatStatisticsHourText,
+} from "@/app/[locale]/(main)/statistics/_utils/formatStatisticsTime";
+
+
+interface StatisticsMonthSidePanelProps {
+  variant: "month";
+  summary: StatisticsMonthSummary;
+}
+
+interface StatisticsDaySidePanelProps {
+  variant: "day";
+  detail: StatisticsDayDetail;
+}
 
 type StatisticsSidePanelProps =
-  | {
-      variant: "month";
-      summary: StatisticsMonthSummary;
-    }
-  | {
-      variant: "day";
-      detail: StatisticsDayDetail;
-    };
+  | StatisticsMonthSidePanelProps
+  | StatisticsDaySidePanelProps;
 
 const SIDE_PANEL_CLASS_NAME =
   "border-timo-gray-500 min-h-full w-76 border-l text-timo-black";
 
 const getDiffLabel = (diffMinutes: number) => {
+  if (diffMinutes > 0) return "+초과";
   if (diffMinutes < 0) return "-단축";
-  return "+초과";
+  return "";
 };
 
 const getDiffClassName = (diffMinutes: number) => {
