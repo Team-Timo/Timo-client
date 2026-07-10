@@ -87,7 +87,7 @@
       "switchButton": "전환하기"
     },
     "completeModal": {
-      "title": "테스크가 완료 되었어요!",
+      "title": "태스크가 완료되었어요!",
       "defaultFeedback": "이번 작업을 완료했어요. 수고하셨어요!",
       "plannedLabel": "계획",
       "actualLabel": "실제",
