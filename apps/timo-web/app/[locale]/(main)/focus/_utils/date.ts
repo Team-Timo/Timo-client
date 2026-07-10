@@ -1,19 +1,21 @@
-const DAY_OF_WEEK_LABELS = [
-  "일요일",
-  "월요일",
-  "화요일",
-  "수요일",
-  "목요일",
-  "금요일",
-  "토요일",
+export type WeekdayKey = "SUN" | "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT";
+
+const WEEKDAY_KEYS: WeekdayKey[] = [
+  "SUN",
+  "MON",
+  "TUE",
+  "WED",
+  "THU",
+  "FRI",
+  "SAT",
 ];
 
 export const convertDateToDayNumberText = (date: Date): string => {
   return `${date.getDate()}`;
 };
 
-export const convertDateToDayOfWeekText = (date: Date): string => {
-  return DAY_OF_WEEK_LABELS[date.getDay()] ?? "";
+export const convertDateToDayOfWeekKey = (date: Date): WeekdayKey => {
+  return WEEKDAY_KEYS[date.getDay()] ?? "SUN";
 };
 
 export const convertDateToBadgeText = (date: Date): string => {

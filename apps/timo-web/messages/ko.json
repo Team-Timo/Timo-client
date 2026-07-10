@@ -67,7 +67,7 @@
     },
     "stopModal": {
       "title": "지금 멈출까요?",
-      "description": "지금까지 수행한 {minutes}분이 타임박스에 기록됩니다.",
+      "description": "지금까지 수행한 <blue>{minutes}</blue>이 타임박스에 기록됩니다.",
       "continueButton": "계속 진행",
       "switchButton": "전환하기"
     },
@@ -88,6 +88,10 @@
       "customUnitSuffix": "분",
       "closeButton": "닫기",
       "submitButton": "시간 추가하기"
+    },
+    "duration": {
+      "hourUnit": "시간",
+      "minuteUnit": "분"
     }
   }
 }

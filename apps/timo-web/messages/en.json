@@ -67,7 +67,7 @@
     },
     "stopModal": {
       "title": "Shall we stop now?",
-      "description": "The {minutes} minutes completed so far will be recorded in the timebox.",
+      "description": "The <blue>{minutes}</blue> completed so far will be recorded in the timebox.",
       "continueButton": "Continue",
       "switchButton": "Switch"
     },
@@ -88,6 +88,10 @@
       "customUnitSuffix": "M",
       "closeButton": "Close",
       "submitButton": "Add Time"
+    },
+    "duration": {
+      "hourUnit": "h",
+      "minuteUnit": "m"
     }
   }
 }

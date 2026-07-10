@@ -1,7 +1,7 @@
 "use client";
 
 import { Modal } from "@repo/timo-design-system/ui";
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 
 import { TimerCompleteModalPanel } from "@/components/timer/TimerCompleteModalPanel";
 import { TimerControls } from "@/components/timer/TimerControls";
@@ -14,6 +14,10 @@ import { TimerStopModalPanel } from "@/components/timer/TimerStopModalPanel";
 
 type TimerModalStep = "end" | "stop" | "extend" | "complete";
 
+export interface TimerSessionControlsHandle {
+  openStopModal: () => void;
+}
+
 export interface TimerSessionControlsProps {
   isRunning: boolean;
   onTogglePlay: () => void;
@@ -24,16 +28,30 @@ export interface TimerSessionControlsProps {
   onComplete: () => void;
 }
 
-export const TimerSessionControls = ({
-  isRunning,
-  onTogglePlay,
-  plannedMinutes,
-  actualMinutes,
-  feedbackText,
-  onExtend,
-  onComplete,
-}: TimerSessionControlsProps) => {
+export const TimerSessionControls = forwardRef<
+  TimerSessionControlsHandle,
+  TimerSessionControlsProps
+>(function TimerSessionControls(
+  {
+    isRunning,
+    onTogglePlay,
+    plannedMinutes,
+    actualMinutes,
+    feedbackText,
+    onExtend,
+    onComplete,
+  },
+  ref,
+) {
   const [step, setStep] = useState<TimerModalStep>("end");
+  const stopModalTriggerRef = useRef<HTMLButtonElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    openStopModal: () => {
+      setStep("stop");
+      stopModalTriggerRef.current?.click();
+    },
+  }));
   const [selectedPreset, setSelectedPreset] = useState<ExtendTimePreset | null>(
     null,
   );
@@ -69,6 +87,12 @@ export const TimerSessionControls = ({
           resetExtendSelection();
           setStep("extend");
         }}
+      />
+      <Modal.Trigger
+        ref={stopModalTriggerRef}
+        className="hidden"
+        aria-hidden="true"
+        tabIndex={-1}
       />
       <Modal.Overlay />
       <Modal.Panel>
@@ -112,4 +136,4 @@ export const TimerSessionControls = ({
       </Modal.Panel>
     </Modal>
   );
-};
+});

@@ -1,7 +1,8 @@
 "use client";
 
 import { TimerOnIcon } from "@repo/timo-design-system/icons";
-import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useRef, useState } from "react";
 
 import type { FocusTask } from "@/app/[locale]/(main)/focus/_types/task-type";
 
@@ -11,20 +12,25 @@ import { focusTaskMock } from "@/app/[locale]/(main)/focus/_mocks/task-mock";
 import {
   convertDateToBadgeText,
   convertDateToDayNumberText,
-  convertDateToDayOfWeekText,
+  convertDateToDayOfWeekKey,
 } from "@/app/[locale]/(main)/focus/_utils/date";
 import {
   convertDurationToMinutes,
   convertDurationToTimeText,
 } from "@/app/[locale]/(main)/focus/_utils/duration";
 import { Timer } from "@/components/timer/Timer";
-import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
+import {
+  TimerSessionControls,
+  type TimerSessionControlsHandle,
+} from "@/components/timer/TimerSessionControls";
 
 const SECONDS_PER_MINUTE = 60;
 
 export const FocusSessionContainer = () => {
   const [task, setTask] = useState<FocusTask>(focusTaskMock);
   const today = new Date();
+  const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
+  const tWeekday = useTranslations("Common.weekday");
 
   const handleTogglePlay = () => {
     // TODO: API
@@ -53,6 +59,11 @@ export const FocusSessionContainer = () => {
   };
 
   const handleToggleCompleted = (completed: boolean) => {
+    if (completed && task.isRunning) {
+      timerSessionControlsRef.current?.openStopModal();
+      return;
+    }
+
     // TODO: API
     setTask((prev) => ({
       ...prev,
@@ -83,7 +94,7 @@ export const FocusSessionContainer = () => {
         <FocusHeaderContainer />
         <FocusTaskItem
           dayNumber={convertDateToDayNumberText(today)}
-          dayOfWeek={convertDateToDayOfWeekText(today)}
+          dayOfWeek={tWeekday(convertDateToDayOfWeekKey(today))}
           title={task.title}
           completed={task.completed}
           dateText={convertDateToBadgeText(task.scheduledDate)}
@@ -108,6 +119,7 @@ export const FocusSessionContainer = () => {
           />
 
           <TimerSessionControls
+            ref={timerSessionControlsRef}
             isRunning={task.isRunning}
             onTogglePlay={handleTogglePlay}
             plannedMinutes={plannedMinutes}

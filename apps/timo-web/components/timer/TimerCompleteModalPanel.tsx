@@ -1,6 +1,8 @@
 import { Modal } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 
+import { formatDurationLabel } from "@/components/timer/durationLabel";
+
 export interface TimerCompleteModalPanelProps {
   plannedMinutes: number;
   actualMinutes: number;
@@ -15,6 +17,9 @@ export const TimerCompleteModalPanel = ({
   onComplete,
 }: TimerCompleteModalPanelProps) => {
   const t = useTranslations("Focus.completeModal");
+  const tDuration = useTranslations("Focus.duration");
+  const hourUnit = tDuration("hourUnit");
+  const minuteUnit = tDuration("minuteUnit");
 
   return (
     <>
@@ -31,7 +36,7 @@ export const TimerCompleteModalPanel = ({
             {t("plannedLabel")}
           </span>
           <span className="typo-headline-b-20 text-timo-gray-900">
-            {plannedMinutes}m
+            {formatDurationLabel(plannedMinutes, hourUnit, minuteUnit)}
           </span>
         </div>
         <div className="flex flex-col gap-1">
@@ -39,7 +44,7 @@ export const TimerCompleteModalPanel = ({
             {t("actualLabel")}
           </span>
           <span className="typo-headline-m-20 text-timo-blue-300">
-            {actualMinutes}m
+            {formatDurationLabel(actualMinutes, hourUnit, minuteUnit)}
           </span>
         </div>
       </div>

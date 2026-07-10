@@ -8,6 +8,7 @@ import {
   useState,
   type ButtonHTMLAttributes,
   type ReactNode,
+  type Ref,
 } from "react";
 import { createPortal } from "react-dom";
 
@@ -71,14 +72,17 @@ const ModalRoot = ({ children, className }: ModalProps) => {
   );
 };
 
-export type ModalTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export type ModalTriggerProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  ref?: Ref<HTMLButtonElement>;
+};
 
-const ModalTrigger = ({ onClick, ...rest }: ModalTriggerProps) => {
+const ModalTrigger = ({ onClick, ref, ...rest }: ModalTriggerProps) => {
   const { open } = useModalContext();
 
   return (
     <button
       type="button"
+      ref={ref}
       {...rest}
       onClick={(e) => {
         onClick?.(e);

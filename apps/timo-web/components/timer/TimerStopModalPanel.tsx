@@ -1,6 +1,8 @@
 import { Modal, ModalButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 
+import { formatDurationLabel } from "@/components/timer/durationLabel";
+
 const TimerStopIcon = () => (
   //TODO: SVG를 컴포넌트 머지 시 변경 예정
   <svg
@@ -68,6 +70,12 @@ export const TimerStopModalPanel = ({
   onSwitch,
 }: TimerStopModalPanelProps) => {
   const t = useTranslations("Focus.stopModal");
+  const tDuration = useTranslations("Focus.duration");
+  const durationLabel = formatDurationLabel(
+    minutes,
+    tDuration("hourUnit"),
+    tDuration("minuteUnit"),
+  );
 
   return (
     <>
@@ -75,7 +83,14 @@ export const TimerStopModalPanel = ({
         <TimerStopIcon />
       </Modal.Icon>
       <Modal.Title>{t("title")}</Modal.Title>
-      <Modal.Description>{t("description", { minutes })}</Modal.Description>
+      <Modal.Description>
+        {t.rich("description", {
+          minutes: durationLabel,
+          blue: (chunks) => (
+            <span className="text-timo-blue-300">{chunks}</span>
+          ),
+        })}
+      </Modal.Description>
       <Modal.Footer>
         <Modal.BorderButton className="flex-1 px-0">
           {t("continueButton")}
