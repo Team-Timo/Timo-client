@@ -5,7 +5,7 @@ import {
 } from "@repo/timo-design-system/icons";
 import { cn } from "@repo/timo-design-system/utils";
 
-export interface OnboardingButtonProps {
+interface OnboardingButtonProps {
   variant: "next" | "prev" | "start";
   label: string;
   isActive?: boolean;

@@ -1,6 +1,6 @@
 import { cn } from "@repo/timo-design-system/utils";
 
-export interface OnboardingSelectCardProps {
+interface OnboardingSelectCardProps {
   size: "sm" | "lg";
   selected: boolean;
   label: string;

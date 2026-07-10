@@ -5,23 +5,27 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
+import { LottiePlayer } from "@/components/lottie/LottiePlayer";
 
 export const LoginContainer = () => {
   const t = useTranslations("Login");
 
   return (
-    <div className="flex min-h-screen items-center justify-center gap-16 bg-white">
-      {/* TODO: PR#131(feat/web/130-status-screen-lottie) 병합 후 온보딩 Lottie 그래픽으로 교체 */}
-      <div className="size-55" />
+    <main className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
+      <LottiePlayer
+        src="/lottie/onboarding.json"
+        className="hidden shrink-0 lg:block lg:size-[350px] xl:size-[430px] 2xl:size-[500px]"
+        ariaLabel="온보딩 애니메이션"
+      />
 
       <div className="border-timo-gray-500 shadow-timo flex h-110 w-101 flex-col items-center justify-center gap-16 rounded-[4px] border bg-white px-12.5 py-13">
         <div className="flex w-76 flex-col gap-6">
           <div className="flex flex-col items-center gap-4">
             <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
             <div className="flex w-full flex-col items-center gap-0.5">
-              <span className="typo-headline-m-16 text-timo-blue-300">
+              <p className="typo-headline-m-16 text-timo-blue-300">
                 Less Chaos More Focus
-              </span>
+              </p>
               <span className="typo-headline-b-18 text-timo-black">
                 {t("headline")}
               </span>
@@ -65,6 +69,6 @@ export const LoginContainer = () => {
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 };

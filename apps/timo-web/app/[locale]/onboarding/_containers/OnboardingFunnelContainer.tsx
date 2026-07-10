@@ -9,6 +9,7 @@ import { LanguageStepContainer } from "@/app/[locale]/onboarding/_containers/Lan
 import { LifePatternStepContainer } from "@/app/[locale]/onboarding/_containers/LifePatternStepContainer";
 import { TimePredictionStepContainer } from "@/app/[locale]/onboarding/_containers/TimePredictionStepContainer";
 import { OnboardingFunnelSteps } from "@/app/[locale]/onboarding/_types/onboarding-funnel";
+import { LottiePlayer } from "@/components/lottie/LottiePlayer";
 
 const STEP_NUMBER: Record<keyof OnboardingFunnelSteps, 1 | 2 | 3 | 4> = {
   Language: 1,
@@ -28,9 +29,12 @@ export const OnboardingFunnelContainer = () => {
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center gap-16 bg-white">
-      {/* TODO: PR#131(feat/web/130-status-screen-lottie) 병합 후 온보딩 Lottie 그래픽으로 교체 */}
-      <div className="size-55" />
+    <main className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
+      <LottiePlayer
+        src="/lottie/onboarding.json"
+        className="hidden shrink-0 lg:block lg:size-[350px] xl:size-[430px] 2xl:size-[500px]"
+        ariaLabel="온보딩 애니메이션"
+      />
       <div className="border-timo-gray-500 shadow-timo flex min-h-153.5 flex-col rounded-[4px] border bg-white px-16 py-12">
         <div className="flex w-76 flex-1 flex-col gap-10">
           <OnboardingStepButton step={STEP_NUMBER[funnel.step]} />
@@ -119,6 +123,6 @@ export const OnboardingFunnelContainer = () => {
           />
         </div>
       </div>
-    </div>
+    </main>
   );
 };
