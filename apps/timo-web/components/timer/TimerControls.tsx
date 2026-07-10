@@ -6,30 +6,40 @@ import {
   PlusIcon,
   StopIcon,
 } from "@repo/timo-design-system/icons";
+import { Modal } from "@repo/timo-design-system/ui";
 
 import { TimerControlButton } from "@/components/timer/TimerControlButton";
+
+const MODAL_TRIGGER_CLASS =
+  "group bg-timo-gray-300 active:bg-timo-blue-50 flex size-14.5 items-center justify-center rounded-full";
 
 export interface TimerControlsProps {
   isRunning: boolean;
   onTogglePlay: () => void;
-  onEnd: () => void;
-  onAddTime: () => void;
+  onOpenEndModal: () => void;
+  onOpenExtendModal: () => void;
 }
 
 export const TimerControls = ({
   isRunning,
   onTogglePlay,
-  onEnd,
-  onAddTime,
+  onOpenEndModal,
+  onOpenExtendModal,
 }: TimerControlsProps) => {
   return (
     <div className="flex items-center gap-5">
-      <TimerControlButton
-        icon={<EndBlackIcon />}
-        activeIcon={<EndBlueIcon />}
-        label="종료"
-        onClick={onEnd}
-      />
+      <Modal.Trigger
+        aria-label="종료"
+        onClick={onOpenEndModal}
+        className={MODAL_TRIGGER_CLASS}
+      >
+        <span className="group-active:hidden">
+          <EndBlackIcon />
+        </span>
+        <span className="hidden group-active:block">
+          <EndBlueIcon />
+        </span>
+      </Modal.Trigger>
 
       <TimerControlButton
         icon={
@@ -40,12 +50,18 @@ export const TimerControls = ({
         onClick={onTogglePlay}
       />
 
-      <TimerControlButton
-        icon={<PlusIcon width={27} height={27} />}
-        activeIcon={<PlusBlueIcon />}
-        label="시간 추가"
-        onClick={onAddTime}
-      />
+      <Modal.Trigger
+        aria-label="시간 추가"
+        onClick={onOpenExtendModal}
+        className={MODAL_TRIGGER_CLASS}
+      >
+        <span className="group-active:hidden">
+          <PlusIcon width={27} height={27} />
+        </span>
+        <span className="hidden group-active:block">
+          <PlusBlueIcon />
+        </span>
+      </Modal.Trigger>
     </div>
   );
 };

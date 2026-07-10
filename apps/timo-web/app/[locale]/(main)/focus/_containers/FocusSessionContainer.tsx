@@ -13,9 +13,14 @@ import {
   convertDateToDayNumberText,
   convertDateToDayOfWeekText,
 } from "@/app/[locale]/(main)/focus/_utils/date";
-import { convertDurationToTimeText } from "@/app/[locale]/(main)/focus/_utils/duration";
+import {
+  convertDurationToMinutes,
+  convertDurationToTimeText,
+} from "@/app/[locale]/(main)/focus/_utils/duration";
 import { Timer } from "@/components/timer/Timer";
-import { TimerControls } from "@/components/timer/TimerControls";
+import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
+
+const SECONDS_PER_MINUTE = 60;
 
 export const FocusSessionContainer = () => {
   const [task, setTask] = useState<FocusTask>(focusTaskMock);
@@ -26,7 +31,15 @@ export const FocusSessionContainer = () => {
     setTask((prev) => ({ ...prev, isRunning: !prev.isRunning }));
   };
 
-  const handleEnd = () => {
+  const handleExtendTimer = (minutes: number) => {
+    // TODO: API
+    setTask((prev) => ({
+      ...prev,
+      durationSeconds: prev.durationSeconds + minutes * SECONDS_PER_MINUTE,
+    }));
+  };
+
+  const handleCompleteTimer = () => {
     // TODO: API
     setTask((prev) => ({
       ...prev,
@@ -38,8 +51,6 @@ export const FocusSessionContainer = () => {
       })),
     }));
   };
-
-  const handleAddTime = () => {};
 
   const handleToggleCompleted = (completed: boolean) => {
     // TODO: API
@@ -63,6 +74,8 @@ export const FocusSessionContainer = () => {
       ),
     }));
   };
+
+  const plannedMinutes = convertDurationToMinutes(task.durationSeconds);
 
   return (
     <div className="flex h-full overflow-x-auto">
@@ -94,11 +107,13 @@ export const FocusSessionContainer = () => {
             size="lg"
           />
 
-          <TimerControls
+          <TimerSessionControls
             isRunning={task.isRunning}
             onTogglePlay={handleTogglePlay}
-            onEnd={handleEnd}
-            onAddTime={handleAddTime}
+            plannedMinutes={plannedMinutes}
+            actualMinutes={plannedMinutes}
+            onExtend={handleExtendTimer}
+            onComplete={handleCompleteTimer}
           />
         </div>
       </section>

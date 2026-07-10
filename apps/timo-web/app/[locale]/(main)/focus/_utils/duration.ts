@@ -10,3 +10,6 @@ export const convertDurationToTimeText = (durationSeconds: number): string => {
 
   return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
 };
+
+export const convertDurationToMinutes = (durationSeconds: number): number =>
+  Math.round(durationSeconds / SECONDS_PER_MINUTE);
