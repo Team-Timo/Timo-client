@@ -19,7 +19,7 @@ export const OnboardingStepButton = ({ step }: OnboardingStepButtonProps) => {
         >
           <span
             className={cn(
-              "typo-caption-r-10",
+              "typo-caption-r-10 translate-y-px leading-none",
               s === step ? "text-white" : "text-timo-blue-100",
             )}
           >
