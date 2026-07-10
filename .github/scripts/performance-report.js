@@ -58,7 +58,14 @@ const analyzeBundle = () => {
   const appPathsManifest = readJson(path.join(BUILD_DIR, 'server', 'app-paths-manifest.json'));
   if (!buildManifest || !appPathsManifest) return null;
 
-  const sharedFiles = new Set(buildManifest.rootMainFiles ?? []);
+  // Turbopack의 산출물 구조는 비공식이라 rootMainFiles/entryJSFiles 키가
+  // 바뀌면 번들 크기가 조용히 0으로 계산될 수 있다. CI에서 바로 드러나도록 명시적으로 검증한다.
+  if (!Array.isArray(buildManifest.rootMainFiles)) {
+    console.warn('[bundle] build-manifest.json에 rootMainFiles 배열이 없습니다. Next.js 빌드 산출물 구조가 변경되었을 수 있습니다.');
+    return null;
+  }
+
+  const sharedFiles = new Set(buildManifest.rootMainFiles);
   const sharedBytes = [...sharedFiles].reduce((sum, chunk) => sum + gzipSize(path.join(BUILD_DIR, chunk)), 0);
 
   const routes = Object.entries(appPathsManifest)
@@ -67,6 +74,9 @@ const analyzeBundle = () => {
       const routePath = stripRouteGroups(entryKey.replace(/\/page$/, ''));
       const manifestPath = path.join(BUILD_DIR, 'server', relPath.replace(/\.js$/, '_client-reference-manifest.js'));
       const manifest = extractClientReferenceManifest(manifestPath);
+      if (!manifest?.entryJSFiles || typeof manifest.entryJSFiles !== 'object') {
+        console.warn(`[bundle] ${routePath} 라우트의 entryJSFiles를 찾을 수 없습니다 (${manifestPath}).`);
+      }
       const pageFiles = (manifest?.entryJSFiles?.[`${PROJECT_MODULE_PREFIX}${entryKey}`] ?? [])
         .filter((file) => !sharedFiles.has(file));
       const pageBytes = pageFiles.reduce((sum, file) => sum + gzipSize(path.join(BUILD_DIR, file)), 0);
