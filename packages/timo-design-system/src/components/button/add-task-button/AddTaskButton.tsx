@@ -1,12 +1,11 @@
 import { PlusGrayIcon } from "../../../icons";
 import { cn } from "../../../lib";
 
-export type AddTaskButtonVariant = "default" | "weekly" | "big";
+export type AddTaskButtonVariant = "default" | "big";
 
 const ADD_TASK_BUTTON_VARIANT: Record<AddTaskButtonVariant, string> = {
-  default: "min-w-57.5 px-2 typo-body-m-12",
-  weekly: "min-w-29 px-2 typo-body-m-12",
-  big: "h-14.5 min-w-155 px-5 typo-headline-m-14",
+  default: "px-2 typo-body-m-12",
+  big: "h-14.5 px-5 typo-headline-m-14",
 };
 
 export interface AddTaskButtonProps {
@@ -20,14 +19,12 @@ export const AddTaskButton = ({
   variant = "default",
   onClick,
 }: AddTaskButtonProps) => {
-  const isWeekly = variant === "weekly";
-
   return (
     <button
       type="button"
       onClick={onClick}
       className={cn(
-        "bg-timo-gray-300 rounded-4 flex items-center gap-1 py-1.5",
+        "bg-timo-gray-300 rounded-4 flex w-full items-center gap-1 py-1.5",
         ADD_TASK_BUTTON_VARIANT[variant],
       )}
     >
@@ -35,12 +32,7 @@ export const AddTaskButton = ({
         <PlusGrayIcon />
       </span>
 
-      <span
-        className={cn(
-          "text-timo-gray-700",
-          isWeekly ? "min-w-0 flex-1 truncate" : "shrink-0 whitespace-nowrap",
-        )}
-      >
+      <span className="text-timo-gray-700 min-w-0 flex-1 truncate text-left">
         {text}
       </span>
     </button>

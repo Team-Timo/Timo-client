@@ -8,13 +8,13 @@
   },
   "Common": {
     "weekday": {
-      "sunday": "Sunday",
-      "monday": "Monday",
-      "tuesday": "Tuesday",
-      "wednesday": "Wednesday",
-      "thursday": "Thursday",
-      "friday": "Friday",
-      "saturday": "Saturday"
+      "SUN": "Sunday",
+      "MON": "Monday",
+      "TUE": "Tuesday",
+      "WED": "Wednesday",
+      "THU": "Thursday",
+      "FRI": "Friday",
+      "SAT": "Saturday"
     },
     "tag": {
       "dailyLife": "Daily life",
@@ -24,9 +24,9 @@
       "additional": "Additional"
     },
     "priority": {
-      "veryImportant": "Very Important",
-      "important": "Important",
-      "average": "Average",
+      "urgent": "Very Important",
+      "high": "Important",
+      "medium": "Average",
       "low": "Low"
     }
   },
