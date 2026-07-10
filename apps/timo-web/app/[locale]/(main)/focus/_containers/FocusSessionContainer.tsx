@@ -14,15 +14,13 @@ import {
   convertDateToDayNumberText,
   convertDateToDayOfWeekKey,
 } from "@/app/[locale]/(main)/focus/_utils/date";
-import {
-  convertDurationToMinutes,
-  convertDurationToTimeText,
-} from "@/app/[locale]/(main)/focus/_utils/duration";
+import { convertDurationToMinutes } from "@/app/[locale]/(main)/focus/_utils/duration";
 import { Timer } from "@/components/timer/Timer";
 import {
   TimerSessionControls,
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
+import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
 
 const SECONDS_PER_MINUTE = 60;
 
