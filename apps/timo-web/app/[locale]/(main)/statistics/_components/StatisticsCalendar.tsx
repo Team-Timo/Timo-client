@@ -19,22 +19,18 @@ import {
   getFirstDayOffset,
 } from "@/app/[locale]/(main)/statistics/_utils/statisticsCalendar";
 
-type CalendarIconStatus = "empty" | "outline" | "light" | "filled" | "disabled";
+type CalendarIconStatus = "disabled" | "empty" | "outline" | "light" | "filled";
 
 const STATUS_ICON = {
+  disabled: StatisticsClockDisabledIcon,
   empty: StatisticsClockEmptyIcon,
   outline: StatisticsClockOutlineIcon,
   light: StatisticsClockLightIcon,
   filled: StatisticsClockFilledIcon,
-  disabled: StatisticsClockDisabledIcon,
 };
 
-const getIconStatus = (
-  completionRate: number | null,
-  isCurrentMonth: boolean,
-): CalendarIconStatus => {
-  if (!isCurrentMonth) return "disabled";
-  if (completionRate === null) return "empty";
+const getIconStatus = (completionRate: number | null): CalendarIconStatus => {
+  if (completionRate === null) return "disabled";
   if (completionRate === 0) return "empty";
   if (completionRate < 50) return "outline";
   if (completionRate < 100) return "light";
@@ -93,7 +89,7 @@ export const StatisticsCalendar = ({
           {calendarDates.map((calendarDate) => {
             const dateKey = formatDateKey(calendarDate.date);
             const completionRate = completionRateByDate.get(dateKey) ?? null;
-            const status = getIconStatus(completionRate, true);
+            const status = getIconStatus(completionRate);
             const Icon = STATUS_ICON[status];
 
             return (
