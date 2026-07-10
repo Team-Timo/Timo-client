@@ -2,7 +2,7 @@ name: ✨ Performance Report
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
     branches: [main, develop]
   workflow_dispatch:
 

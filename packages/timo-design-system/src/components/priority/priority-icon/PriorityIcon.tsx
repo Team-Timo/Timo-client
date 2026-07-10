@@ -14,7 +14,7 @@ const PRIORITY_COLOR: Record<Priority, string> = {
   high: "bg-timo-orange",
   medium: "bg-timo-gray-600",
   low: "bg-timo-black",
-  Disable: "bg-timo-gray-500",
+  Disable: "bg-timo-gray-700",
   white: "bg-white",
   blue: "bg-timo-blue-300",
 };

@@ -47,6 +47,21 @@
     "connectLabel": "Log in with Google",
     "termsNotice": "By continuing, you agree to the timo <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
   },
+  "Error": {
+    "title": "A problem has occurred.",
+    "description": "We are currently undergoing maintenance for a better experience. Please try again later.",
+    "homeButton": "Return to home"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "You may have entered an invalid address or used an incorrect path.",
+    "homeButton": "Return to home"
+  },
+  "GlobalError": {
+    "title": "An issue has occurred.",
+    "description": "Please try again later or go back to home.",
+    "homeButton": "Return to home"
+  },
   "Onboarding": {
     "button": {
       "next": "Next",
