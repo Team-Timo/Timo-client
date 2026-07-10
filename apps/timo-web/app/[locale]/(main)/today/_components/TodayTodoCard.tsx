@@ -30,7 +30,7 @@ const CARD_STYLE = {
 } as const;
 
 export interface SubTodo {
-  id: string;
+  id: number;
   text: string;
   isDone?: boolean;
 }
@@ -56,7 +56,7 @@ export interface TodayTodoCardProps {
   onCheck: () => void;
   onPlay: () => void;
   onDelete: () => void;
-  onSubTodoCheck: (id: string) => void;
+  onSubTodoCheck: (id: number) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
