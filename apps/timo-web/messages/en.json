@@ -36,6 +36,19 @@
     "viewWeek": "7 days",
     "addTask": "Add a task"
   },
+  "Statistics": {
+    "sidePanel": {
+      "monthTotalRecordTime": "Total record time this month",
+      "activeDays": "Active days",
+      "activeDayCount": "{count} days",
+      "dailyAverage": "Daily average",
+      "accumulatedTasks": "Accumulated tasks",
+      "dayTotalRecordTime": "Total record time today",
+      "plan": "Plan",
+      "overtime": "+Overdue",
+      "shortened": "-Shortened"
+    }
+  },
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",

@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "next-intl";
+
 import type { Dispatch, SetStateAction } from "react";
 
 import { Header } from "@/components/layout/header/Header";
@@ -10,10 +12,6 @@ interface StatisticsHeaderContainerProps {
   onChangeMonth: Dispatch<SetStateAction<Date>>;
 }
 
-const MONTH_LABEL_FORMATTER = new Intl.DateTimeFormat("en-US", {
-  month: "long",
-});
-
 const addMonths = (date: Date, amount: number) =>
   new Date(date.getFullYear(), date.getMonth() + amount, 1);
 
@@ -22,6 +20,10 @@ export const StatisticsHeaderContainer = ({
   onChangeMonth,
 }: StatisticsHeaderContainerProps) => {
   const { isOpen, toggle } = useNavigationSidebar();
+  const locale = useLocale();
+  const monthLabel = new Intl.DateTimeFormat(locale, {
+    month: "long",
+  }).format(currentMonth);
 
   const handlePrev = () => onChangeMonth((prev) => addMonths(prev, -1));
   const handleNext = () => onChangeMonth((prev) => addMonths(prev, 1));
@@ -34,7 +36,7 @@ export const StatisticsHeaderContainer = ({
           <Header.WeeklyNav
             onPrev={handlePrev}
             onNext={handleNext}
-            label={MONTH_LABEL_FORMATTER.format(currentMonth)}
+            label={monthLabel}
           />
         </>
       }
