@@ -13,6 +13,11 @@ export interface SettingsProfile {
   tags: string[];
 }
 
+export interface SettingsProfileFormValues {
+  language: SettingsLanguage;
+  tags: string[];
+}
+
 export interface SettingsTagItem {
   id: string;
   label: string;

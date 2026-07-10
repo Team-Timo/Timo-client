@@ -2,11 +2,13 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import type {
   SettingsDefaultTagKey,
   SettingsLanguage,
   SettingsProfile,
+  SettingsProfileFormValues,
   SettingsProfileLabels,
 } from "@/app/[locale]/(main)/settings/_types/profile-type";
 
@@ -31,11 +33,15 @@ export const SettingsProfileContainer = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
-  const [draftLanguage, setDraftLanguage] = useState<SettingsLanguage>(locale);
-  const [isDirty, setIsDirty] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
-  const tagItems = profile.tags.map((tag) => {
+  const { watch, setValue, handleSubmit, reset, formState } =
+    useForm<SettingsProfileFormValues>({
+      defaultValues: { language: locale, tags: profile.tags },
+    });
+  const language = watch("language");
+  const tags = watch("tags");
+
+  const tagItems = tags.map((tag) => {
     const isDefault = isDefaultTagKey(tag);
 
     return {
@@ -78,26 +84,24 @@ export const SettingsProfileContainer = () => {
     setProfile((prev) => ({ ...prev, isCalendarConnected: true }));
   };
 
-  const handleChangeLanguage = (language: SettingsLanguage) => {
-    setDraftLanguage(language);
-    setIsDirty(true);
+  const handleChangeLanguage = (nextLanguage: SettingsLanguage) => {
+    setValue("language", nextLanguage, { shouldDirty: true });
   };
 
   const handleAddTag = () => {
     // TODO: 실제 태그 추가 모달로 교체
     const newTag = window.prompt("추가할 태그를 입력해주세요")?.trim();
-    if (!newTag || profile.tags.includes(newTag)) return;
+    if (!newTag || tags.includes(newTag)) return;
 
-    setProfile((prev) => ({ ...prev, tags: [...prev.tags, newTag] }));
-    setIsDirty(true);
+    setValue("tags", [...tags, newTag], { shouldDirty: true });
   };
 
   const handleRemoveTag = (tag: string) => {
-    setProfile((prev) => ({
-      ...prev,
-      tags: prev.tags.filter((existingTag) => existingTag !== tag),
-    }));
-    setIsDirty(true);
+    setValue(
+      "tags",
+      tags.filter((existingTag) => existingTag !== tag),
+      { shouldDirty: true },
+    );
   };
 
   const handleLogout = () => {
@@ -107,26 +111,20 @@ export const SettingsProfileContainer = () => {
     console.log("[Login] 페이지로 이동합니다.");
   };
 
-  const handleSave = async () => {
-    if (!isDirty || isSaving) return;
-
-    setIsSaving(true);
-
+  const handleSave = handleSubmit(async (values) => {
     try {
       // TODO: API 연동
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      setIsDirty(false);
+      reset(values);
 
-      if (draftLanguage !== locale) {
-        router.replace(pathname, { locale: draftLanguage });
+      if (values.language !== locale) {
+        router.replace(pathname, { locale: values.language });
       }
     } catch {
       // TODO: 실제 토스트 컴포넌트로 교체
       window.alert("저장에 실패했습니다. 잠시 후 다시 시도해 주세요.");
-    } finally {
-      setIsSaving(false);
     }
-  };
+  });
 
   return (
     <div className="px-15 pt-7.5">
@@ -134,9 +132,9 @@ export const SettingsProfileContainer = () => {
         name={profile.name}
         googleEmail={profile.googleEmail}
         isCalendarConnected={profile.isCalendarConnected}
-        language={draftLanguage}
+        language={language}
         tags={tagItems}
-        isSaveDisabled={!isDirty || isSaving}
+        isSaveDisabled={!formState.isDirty || formState.isSubmitting}
         labels={labels}
         onConnectCalendar={handleConnectCalendar}
         onChangeLanguage={handleChangeLanguage}
