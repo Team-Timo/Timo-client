@@ -35,13 +35,19 @@ const STATUS_ICON = {
   filled: StatisticsClockFilledIcon,
 };
 
-const getIconStatus = (completionRate: number | null): CalendarIconStatus => {
-  if (completionRate === null) return "disabled";
-  if (completionRate === 0) return "empty";
+const getIconStatus = (
+  completionRate: number | null,
+  isFutureDate: boolean,
+): CalendarIconStatus => {
+  if (isFutureDate) return "disabled";
+  if (completionRate === null || completionRate === 0) return "empty";
   if (completionRate < 50) return "outline";
   if (completionRate < 100) return "light";
   return "filled";
 };
+
+const getDateTime = (date: Date) =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
 
 const WEEKDAYS = [
   { label: "M", ariaLabel: "Monday" },
@@ -74,9 +80,10 @@ export const StatisticsCalendar = ({
     calendarData.days.map(({ date, completionRate }) => [date, completionRate]),
   );
   const todayLabel = formatStatisticsCalendarDate(today, locale);
+  const todayTime = getDateTime(today);
 
   return (
-    <section className="w-full px-14.75 pt-10 pb-13">
+    <section className="min-w-0 flex-1 px-14.75 pt-10 pb-13">
       <div className="w-199.5">
         <div className="mb-17.25">
           <h1 className="typo-headline-b-30 text-timo-gray-900">
@@ -109,21 +116,24 @@ export const StatisticsCalendar = ({
           {calendarDates.map((calendarDate) => {
             const dateKey = formatDateKey(calendarDate.date);
             const isSelected = dateKey === formatDateKey(selectedDate);
+            const isFutureDate = getDateTime(calendarDate.date) > todayTime;
             const completionRate = completionRateByDate.get(dateKey) ?? null;
-            const status = getIconStatus(completionRate);
+            const status = getIconStatus(completionRate, isFutureDate);
             const Icon = STATUS_ICON[status];
 
             return (
               <button
                 key={dateKey}
                 type="button"
-                className="flex flex-col items-center gap-2.5"
+                className="flex flex-col items-center gap-2.5 disabled:cursor-default"
+                disabled={isFutureDate}
                 onClick={() => onSelectDate(calendarDate.date)}
               >
                 <span
                   className={cn(
                     "rounded-full",
                     isSelected &&
+                      !isFutureDate &&
                       "drop-shadow-[0_0_10px_var(--color-timo-blue-75)]",
                   )}
                 >
@@ -132,7 +142,7 @@ export const StatisticsCalendar = ({
                 <span
                   className={cn(
                     "typo-body-sb-11 text-timo-gray-700",
-                    isSelected && "text-timo-blue-300",
+                    isSelected && !isFutureDate && "text-timo-blue-300",
                   )}
                 >
                   {calendarDate.day}
