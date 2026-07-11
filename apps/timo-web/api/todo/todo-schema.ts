@@ -1,17 +1,9 @@
+import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { z } from "zod";
 
 import { apiResponseSchema } from "@/api/schema/response";
 
-export const todoIconSchema = z.enum([
-  "ICON_1",
-  "ICON_2",
-  "ICON_3",
-  "ICON_4",
-  "ICON_5",
-  "ICON_6",
-  "ICON_7",
-  "ICON_8",
-]);
+export const todoIconSchema = z.enum(TODO_ICON_VALUES);
 
 export const todoPrioritySchema = z.enum([
   "VERY_HIGH",
