@@ -1,4 +1,4 @@
-import { formatStatisticsHourText } from "@/app/[locale]/(main)/statistics/_utils/formatStatisticsTime";
+import { formatStatisticsHourText } from "@/app/[locale]/(main)/statistics/_utils/format-statistics-time";
 
 interface SummaryTimeBlockProps {
   label: string;

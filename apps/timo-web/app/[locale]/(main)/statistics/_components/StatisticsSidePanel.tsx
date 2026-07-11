@@ -13,7 +13,7 @@ import { SummaryTimeBlock } from "@/app/[locale]/(main)/statistics/_components/S
 import {
   formatStatisticsClockText,
   formatStatisticsHourText,
-} from "@/app/[locale]/(main)/statistics/_utils/formatStatisticsTime";
+} from "@/app/[locale]/(main)/statistics/_utils/format-statistics-time";
 
 interface StatisticsMonthSidePanelProps {
   variant: "month";
@@ -30,7 +30,7 @@ type StatisticsSidePanelProps =
   | StatisticsDaySidePanelProps;
 
 const SIDE_PANEL_CLASS_NAME =
-  "border-timo-gray-500 min-h-full w-76 border-l text-timo-black";
+  "border-timo-gray-500 min-h-full w-[304px] shrink-0 border-l text-timo-black";
 
 const getDiffLabel = (
   diffMinutes: number,
@@ -54,7 +54,7 @@ export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
     const { summary } = props;
 
     return (
-      <aside className={cn(SIDE_PANEL_CLASS_NAME, "w-76 pt-20.75 pb-148")}>
+      <aside className={cn(SIDE_PANEL_CLASS_NAME, "pt-[83px] pb-148")}>
         <div className="flex h-46.25 flex-col gap-5">
           <div className="px-7.5 py-2.5">
             <SummaryTimeBlock
