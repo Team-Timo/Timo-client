@@ -72,6 +72,7 @@ export const CreateTagModalContainer = ({
           onChange={setName}
           maxLength={MAX_TAG_NAME_LENGTH}
           isError={isDuplicate}
+          ariaLabel={t("createTagModal.nameLabel")}
           maxLengthHint={t("createTagModal.maxLengthHint")}
           duplicateHint={t("createTagModal.duplicateHint")}
         />
