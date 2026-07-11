@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 import { cn } from "../../../lib";
 
 const DEFAULT_MAX_LENGTH = 10;
@@ -7,6 +9,7 @@ export interface TagNameInputProps {
   onChange: (value: string) => void;
   maxLength?: number;
   isError?: boolean;
+  ariaLabel: string;
   maxLengthHint: string;
   duplicateHint: string;
 }
@@ -16,9 +19,12 @@ export const TagNameInput = ({
   onChange,
   maxLength = DEFAULT_MAX_LENGTH,
   isError = false,
+  ariaLabel,
   maxLengthHint,
   duplicateHint,
 }: TagNameInputProps) => {
+  const inputId = useId();
+
   return (
     <div className="flex w-full flex-col items-start gap-2">
       <div
@@ -28,10 +34,12 @@ export const TagNameInput = ({
         )}
       >
         <input
+          id={inputId}
+          aria-label={ariaLabel}
           value={value}
           onChange={(event) => onChange(event.target.value.slice(0, maxLength))}
           maxLength={maxLength}
-          className="typo-headline-m-14 text-timo-gray-900 min-w-0 flex-1 outline-none"
+          className="typo-headline-m-14 text-timo-gray-900 focus-visible:ring-timo-blue-300 min-w-0 flex-1 outline-none focus-visible:ring-2"
         />
         <span className="typo-caption-r-10 text-timo-gray-700 shrink-0 whitespace-nowrap">
           {value.length}/{maxLength}

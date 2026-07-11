@@ -6,6 +6,7 @@ import type { TagNameInputProps } from "./TagNameInput";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const HINTS = {
+  ariaLabel: "태그 이름",
   maxLengthHint: "태그 이름은 최대 10자까지 입력할 수 있어요",
   duplicateHint: "이미 사용 중인 이름은 등록할 수 없어요",
 };
