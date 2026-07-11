@@ -1,30 +1,34 @@
 "use client";
 
 import { cn } from "@repo/timo-design-system/utils";
-import { useEffect, useState } from "react";
+import FocusTrap from "focus-trap-react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import type { ReactNode } from "react";
 
 const EXIT_ANIMATION_DURATION = 200;
 
-export interface ModalProps {
+interface OverlayModalProps {
   isOpen: boolean;
   onClose: () => void;
   onExited?: () => void;
   children: ReactNode;
   className?: string;
+  ariaLabel?: string;
 }
 
-export const Modal = ({
+export const OverlayModal = ({
   isOpen,
   onClose,
   onExited,
   children,
   className,
-}: ModalProps) => {
+  ariaLabel,
+}: OverlayModalProps) => {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isVisible, setIsVisible] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) {
@@ -74,17 +78,29 @@ export const Modal = ({
         onClick={onClose}
         aria-hidden="true"
       />
-      <div
-        role="dialog"
-        aria-modal="true"
-        className={cn(
-          "fixed top-1/2 left-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white transition-all duration-200 ease-out",
-          isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0",
-          className,
-        )}
+      <FocusTrap
+        active={shouldRender}
+        focusTrapOptions={{
+          escapeDeactivates: false,
+          clickOutsideDeactivates: false,
+          fallbackFocus: () => dialogRef.current ?? document.body,
+        }}
       >
-        {children}
-      </div>
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={ariaLabel}
+          tabIndex={-1}
+          className={cn(
+            "fixed top-1/2 left-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white transition-all duration-200 ease-out",
+            isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0",
+            className,
+          )}
+        >
+          {children}
+        </div>
+      </FocusTrap>
     </>,
     document.body,
   );

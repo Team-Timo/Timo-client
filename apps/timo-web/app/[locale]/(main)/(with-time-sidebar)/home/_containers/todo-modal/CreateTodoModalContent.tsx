@@ -22,7 +22,7 @@ import {
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-tag-field";
 import { useTimeField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-time-field";
 import { formatDateToIsoDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
-import { Modal } from "@/components/modal/Modal";
+import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
 export interface CreateTodoTag {
@@ -107,7 +107,7 @@ export const CreateTodoModalContent = ({
 
   return (
     <>
-      <Modal
+      <OverlayModal
         isOpen={isOpen}
         onClose={onClose}
         onExited={onExited}
@@ -216,7 +216,7 @@ export const CreateTodoModalContent = ({
             onClick={handleSubmit(handleFormSubmit)}
           />
         </div>
-      </Modal>
+      </OverlayModal>
 
       <AnimatedToast
         isOpen={tagField.isTagLimitToastOpen}

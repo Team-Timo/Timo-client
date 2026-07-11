@@ -5,7 +5,7 @@ import { CreateButton, TagNameInput } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { Modal } from "@/components/modal/Modal";
+import { OverlayModal } from "@/components/modal/OverlayModal";
 
 const MAX_TAG_NAME_LENGTH = 10;
 
@@ -42,7 +42,7 @@ export const CreateTagModalContainer = ({
   };
 
   return (
-    <Modal
+    <OverlayModal
       isOpen={isOpen}
       onClose={onClose}
       onExited={onExited}
@@ -85,6 +85,6 @@ export const CreateTagModalContainer = ({
           onClick={handleCreate}
         />
       </div>
-    </Modal>
+    </OverlayModal>
   );
 };
