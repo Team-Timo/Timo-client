@@ -7,11 +7,8 @@ import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types
 
 import { HomeDateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeDateInformation";
 import { CreateTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContainer";
-import {
-  convertDateToDateText,
-  getToday,
-  parseDateKey,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
+import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
+import { getToday, parseDateKey } from "@/utils/date";
 
 export interface HomeDayHeaderContainerProps {
   dateKey: string;

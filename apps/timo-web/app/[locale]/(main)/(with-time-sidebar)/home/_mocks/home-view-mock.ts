@@ -5,6 +5,7 @@ import type {
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
 import { getTodoMocksByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks/todo-mock";
+import { getApiDayOfWeek } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/day-of-week";
 import {
   addDays,
   buildDateRange,
@@ -12,8 +13,7 @@ import {
   getToday,
   isSameDate,
   parseDateKey,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
-import { getApiDayOfWeek } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/day-of-week";
+} from "@/utils/date";
 
 const BASIC_RANGE_DAYS_BEFORE = 7;
 const BASIC_RANGE_LENGTH = 15;

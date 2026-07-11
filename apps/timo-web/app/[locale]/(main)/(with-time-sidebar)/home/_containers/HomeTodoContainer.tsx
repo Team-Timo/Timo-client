@@ -12,9 +12,9 @@ import { useHomeTodayScrollRef } from "@/app/[locale]/(main)/(with-time-sidebar)
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { getHomeViewMock } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks/home-view-mock";
-import { formatDateKey } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { reorderDaysTodayFirst } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/home-view";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
+import { formatDateKey } from "@/utils/date";
 
 const TAG_LABEL_KEYS = [
   "dailyLife",

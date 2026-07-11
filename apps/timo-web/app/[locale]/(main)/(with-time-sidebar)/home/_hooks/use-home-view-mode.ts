@@ -3,13 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
-import {
-  addDays,
-  formatDateKey,
-  getToday,
-  parseDateKey,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { addDays, formatDateKey, getToday, parseDateKey } from "@/utils/date";
 
 const VIEW_PARAM = "view";
 const DATE_PARAM = "date";
