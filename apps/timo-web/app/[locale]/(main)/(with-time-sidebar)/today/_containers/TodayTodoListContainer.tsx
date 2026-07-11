@@ -10,10 +10,10 @@ import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text
 import { formatDate } from "@/utils/date";
 
 const PRIORITY_MAP = {
-  URGENT: "urgent",
-  HIGH: "high",
-  MEDIUM: "medium",
-  LOW: "low",
+  URGENT: "VERY_HIGH",
+  HIGH: "HIGH",
+  MEDIUM: "MEDIUM",
+  LOW: "LOW",
 } as const;
 
 export const TodayTodoListContainer = () => {
