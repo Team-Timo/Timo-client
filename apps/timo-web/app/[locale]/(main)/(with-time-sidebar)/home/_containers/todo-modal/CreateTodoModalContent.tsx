@@ -111,6 +111,7 @@ export const CreateTodoModalContent = ({
         isOpen={isOpen}
         onClose={onClose}
         onExited={onExited}
+        ariaLabel={t("createModal.title")}
         className="w-[490px] items-center gap-2.5 px-6 py-4"
       >
         <div className="flex w-full items-center justify-between">

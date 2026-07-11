@@ -46,6 +46,7 @@ export const CreateTagModalContainer = ({
       isOpen={isOpen}
       onClose={onClose}
       onExited={onExited}
+      ariaLabel={t("createTagModal.title")}
       className="w-[490px] items-center gap-3 px-6 py-4"
     >
       <div className="flex w-full items-center justify-between">

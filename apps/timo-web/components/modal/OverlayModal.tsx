@@ -15,7 +15,7 @@ interface OverlayModalProps {
   onExited?: () => void;
   children: ReactNode;
   className?: string;
-  ariaLabel?: string;
+  ariaLabel: string;
 }
 
 export const OverlayModal = ({
