@@ -15,7 +15,7 @@ const meta = {
     },
     variant: {
       control: "select",
-      options: ["default", "blue"],
+      options: ["disable", "default", "blue"],
       description: "태그 스타일 베리언트",
     },
   },
@@ -23,6 +23,10 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const Disable: Story = {
+  args: { text: "태그", variant: "disable" },
+};
 
 export const Default: Story = {
   args: { text: "과제", variant: "default" },

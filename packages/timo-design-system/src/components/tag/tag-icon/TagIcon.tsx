@@ -1,11 +1,17 @@
 import { cn } from "../../../lib";
 
-export type TagVariant = "default" | "blue";
+export type TagVariant = "disable" | "default" | "blue";
 
 export interface TagIconProps {
   text: string;
   variant?: TagVariant;
 }
+
+const TEXT_COLOR: Record<TagVariant, string> = {
+  disable: "text-timo-gray-700",
+  default: "text-timo-gray-800",
+  blue: "text-white",
+};
 
 export const TagIcon = ({ text, variant = "default" }: TagIconProps) => {
   const isBlue = variant === "blue";
@@ -20,7 +26,7 @@ export const TagIcon = ({ text, variant = "default" }: TagIconProps) => {
       <span
         className={cn(
           "typo-caption-r-10 whitespace-nowrap",
-          isBlue ? "text-white" : "text-timo-gray-800",
+          TEXT_COLOR[variant],
         )}
       >
         {text}

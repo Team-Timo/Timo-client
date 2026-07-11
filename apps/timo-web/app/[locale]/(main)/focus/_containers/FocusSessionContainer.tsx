@@ -13,9 +13,9 @@ import {
   convertDateToDayNumberText,
   convertDateToDayOfWeekText,
 } from "@/app/[locale]/(main)/focus/_utils/date";
-import { convertDurationToTimeText } from "@/app/[locale]/(main)/focus/_utils/duration";
 import { Timer } from "@/components/timer/Timer";
 import { TimerControls } from "@/components/timer/TimerControls";
+import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
 
 export const FocusSessionContainer = () => {
   const [task, setTask] = useState<FocusTask>(focusTaskMock);
