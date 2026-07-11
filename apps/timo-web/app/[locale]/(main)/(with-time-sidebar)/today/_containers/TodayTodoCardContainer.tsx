@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import type { ReactNode } from "react";
 
@@ -38,14 +38,10 @@ export const TodayTodoCardContainer = ({
   onSubTodoCheck,
 }: TodayTodoCardContainerProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(timerStatus === "RUNNING");
   const [isDone, setIsDone] = useState(initialIsDone);
   const [subTodos, setSubTodos] = useState(initialSubTodos);
 
-  useEffect(() => {
-    setIsPlaying(timerStatus === "RUNNING");
-  }, [timerStatus]);
-
+  const isPlaying = timerStatus === "RUNNING";
   const isDimmed = isDone && !isHovered;
 
   const handleCheck = () => {
@@ -54,7 +50,6 @@ export const TodayTodoCardContainer = ({
     if (next) {
       setSubTodos((prev) => prev.map((s) => ({ ...s, isDone: true })));
       if (isPlaying) {
-        setIsPlaying(false);
         onPlay?.();
       }
     }
@@ -63,7 +58,6 @@ export const TodayTodoCardContainer = ({
 
   const handlePlay = () => {
     if (!isDone) {
-      setIsPlaying((prev) => !prev);
       onPlay?.();
     }
   };
