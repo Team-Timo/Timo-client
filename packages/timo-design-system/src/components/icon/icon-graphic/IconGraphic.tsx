@@ -12,17 +12,7 @@ import { cn } from "../../../lib";
 
 import type { ComponentType, SVGProps } from "react";
 
-export type TodoIconValue =
-  | "ICON_1"
-  | "ICON_2"
-  | "ICON_3"
-  | "ICON_4"
-  | "ICON_5"
-  | "ICON_6"
-  | "ICON_7"
-  | "ICON_8";
-
-export const TODO_ICON_OPTIONS: TodoIconValue[] = [
+export const TODO_ICON_VALUES = [
   "ICON_1",
   "ICON_2",
   "ICON_3",
@@ -31,7 +21,11 @@ export const TODO_ICON_OPTIONS: TodoIconValue[] = [
   "ICON_6",
   "ICON_7",
   "ICON_8",
-];
+] as const;
+
+export type TodoIconValue = (typeof TODO_ICON_VALUES)[number];
+
+export const TODO_ICON_OPTIONS: readonly TodoIconValue[] = TODO_ICON_VALUES;
 
 const ICON_GRAPHIC: Record<
   TodoIconValue,

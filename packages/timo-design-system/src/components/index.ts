@@ -39,4 +39,4 @@ export { DateSelector } from "./calendar/date-selector/DateSelector";
 export { TodoToolbar } from "./todo/todo-toolbar/TodoToolbar";
 export { IconSelector } from "./icon/icon-selector/IconSelector";
 export type { TodoIconValue } from "./icon/icon-selector/IconSelector";
-export { IconGraphic } from "./icon/icon-graphic/IconGraphic";
+export { IconGraphic, TODO_ICON_VALUES } from "./icon/icon-graphic/IconGraphic";
