@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteIcon } from "@repo/timo-design-system/icons";
+import { DeleteIcon, TrashOnIcon } from "@repo/timo-design-system/icons";
 import { TodoToolbar } from "@repo/timo-design-system/ui";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
@@ -24,6 +24,7 @@ export interface DetailTodoModalContentProps {
   onExited: () => void;
   todo: Todo;
   onTogglePlay: () => void;
+  onDelete: () => void;
 }
 
 export const DetailTodoModalContent = ({
@@ -32,10 +33,15 @@ export const DetailTodoModalContent = ({
   onExited,
   todo,
   onTogglePlay,
+  onDelete,
 }: DetailTodoModalContentProps) => {
   const detailTodoForm = useDetailTodoForm({ todo });
   const handleTogglePlay = () => {
     onTogglePlay();
+    onClose();
+  };
+  const handleDelete = () => {
+    onDelete();
     onClose();
   };
 
@@ -84,7 +90,7 @@ export const DetailTodoModalContent = ({
         registerSubtaskInputRef={detailTodoForm.registerSubtaskInputRef}
         onSubtaskInputKeyDown={detailTodoForm.handleSubtaskInputKeyDown}
       />
-      <div className="mt-2 py-3">
+      <div className="mt-2 flex items-center justify-center gap-2 py-3">
         <TodoToolbar
           dateLabel={formatDetailTodoDateLabel(detailTodoForm.date)}
           date={detailTodoForm.date}
@@ -125,6 +131,9 @@ export const DetailTodoModalContent = ({
             },
           }}
         />
+        <button type="button" aria-label="투두 삭제" onClick={handleDelete}>
+          <TrashOnIcon />
+        </button>
       </div>
       <div className="mt-3 w-full">
         <DetailTodoMemoField

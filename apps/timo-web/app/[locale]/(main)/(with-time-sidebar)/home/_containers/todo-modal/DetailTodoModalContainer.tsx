@@ -10,12 +10,14 @@ import { DetailTodoModalContent } from "@/app/[locale]/(main)/(with-time-sidebar
 export interface DetailTodoModalContainerProps {
   todo: Todo;
   onTogglePlay: () => void;
+  onDelete: () => void;
   children: (openDetailTodoModal: () => void) => ReactNode;
 }
 
 export const DetailTodoModalContainer = ({
   todo,
   onTogglePlay,
+  onDelete,
   children,
 }: DetailTodoModalContainerProps) => {
   const openDetailTodoModal = () => {
@@ -26,6 +28,7 @@ export const DetailTodoModalContainer = ({
         onExited={unmount}
         todo={todo}
         onTogglePlay={onTogglePlay}
+        onDelete={onDelete}
       />
     ));
   };

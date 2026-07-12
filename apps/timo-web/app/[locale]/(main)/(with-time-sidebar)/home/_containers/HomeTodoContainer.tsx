@@ -55,6 +55,7 @@ export const HomeTodoContainer = () => {
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
+    handleDeleteTodo,
     handleReorderTodo,
   } = useHomeTodosByDate(apiDays);
 
@@ -113,6 +114,7 @@ export const HomeTodoContainer = () => {
                       onTogglePlay={() =>
                         handleTogglePlay(dateKey, todo.todoId)
                       }
+                      onDelete={() => handleDeleteTodo(dateKey, todo.todoId)}
                     >
                       {(openDetailTodoModal) => (
                         <HomeTodoCard
