@@ -25,6 +25,8 @@
 
 ### Phase 1 — 대상 엔드포인트 확인
 
+- `/v3/api-docs`에서 대상 성공 응답의 `application/json` content type과 필드별 `required`를 확인한다.
+- 확인 결과를 반영하도록 `pnpm gen:api`를 실행한 뒤 생성된 모델·Zod 스키마를 검토한다.
 - `api/generated/endpoints/{domain}/{domain}.ts`에서 필요한 fetcher 함수(예: `getHome`)와 `getGetXxxQueryKey` 헬퍼를 찾는다.
 - 응답이 `BaseResponseXxx { status, message, data }` 형태로 감싸져 있는지 `api/generated/models/`에서 확인한다 — 실제 필요한 값은 `.data`에 있다.
 
