@@ -3,11 +3,10 @@
 import { useLocale } from "next-intl";
 import { useState } from "react";
 
-import { StatisticsCalendar } from "@/app/[locale]/(main)/statistics/_components/StatisticsCalendar";
 import { StatisticsSidePanel } from "@/app/[locale]/(main)/statistics/_components/StatisticsSidePanel";
+import { StatisticsCalendarContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsCalendarContainer";
 import { StatisticsHeaderContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsHeaderContainer";
 import {
-  MOCK_STATISTICS_CALENDAR,
   MOCK_STATISTICS_DAY_DETAILS,
   MOCK_STATISTICS_MONTH_SUMMARY,
 } from "@/app/[locale]/(main)/statistics/_mocks/statistics-calendar";
@@ -19,9 +18,7 @@ type StatisticsPanelMode = "month" | "day";
 export const StatisticsContainer = () => {
   const locale = useLocale();
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
-  const [selectedDate, setSelectedDate] = useState(
-    () => new Date(MOCK_STATISTICS_CALENDAR.today),
-  );
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [panelMode, setPanelMode] = useState<StatisticsPanelMode>("month");
   const selectedDateKey = formatDateKey(selectedDate);
   const selectedDetailBase = MOCK_STATISTICS_DAY_DETAILS[selectedDateKey] ?? {
@@ -33,12 +30,12 @@ export const StatisticsContainer = () => {
     ...selectedDetailBase,
     date: formatStatisticsSidePanelDate(selectedDate, locale),
   };
-  
+
   const handleChangeMonth: typeof setCurrentMonth = (value) => {
     setCurrentMonth(value);
     setPanelMode("month");
   };
-  
+
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
     setPanelMode("day");
@@ -51,11 +48,10 @@ export const StatisticsContainer = () => {
         onChangeMonth={handleChangeMonth}
       />
       <div className="flex min-h-0 flex-1">
-        <StatisticsCalendar
+        <StatisticsCalendarContainer
           currentMonth={currentMonth}
           selectedDate={selectedDate}
           onSelectDate={handleSelectDate}
-          calendarData={MOCK_STATISTICS_CALENDAR}
         />
         {panelMode === "month" ? (
           <StatisticsSidePanel
