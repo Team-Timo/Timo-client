@@ -22,6 +22,7 @@ import type {
   TodoPriorityTypes,
   TodoTimerStatusTypes,
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { KeyboardEvent, MouseEvent } from "react";
 
 import { convertDurationToTimeText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
 
@@ -46,6 +47,7 @@ export interface HomeTodoCardProps {
   timerStatus: TodoTimerStatusTypes;
   subtaskTitle?: string;
   isSubtaskCompleted?: boolean;
+  onClickTodo?: () => void;
   onToggleCompleted: (completed: boolean) => void;
   onTogglePlay: () => void;
   onToggleSubtaskCompleted?: (completed: boolean) => void;
@@ -63,6 +65,7 @@ export const HomeTodoCard = ({
   timerStatus,
   subtaskTitle,
   isSubtaskCompleted = false,
+  onClickTodo,
   onToggleCompleted,
   onTogglePlay,
   onToggleSubtaskCompleted,
@@ -80,6 +83,22 @@ export const HomeTodoCard = ({
   const isRunning = timerStatus === "RUNNING";
 
   const priorityLabel = tCommon(`priority.${PRIORITY_LABEL_KEY[priority]}`);
+
+  const handleCardClick = (event: MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+
+    if (target.closest("button, input, label")) return;
+
+    onClickTodo?.();
+  };
+
+  const handleCardKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!onClickTodo) return;
+    if (event.key !== "Enter" && event.key !== " ") return;
+
+    event.preventDefault();
+    onClickTodo();
+  };
 
   const titleRow = (
     <div className="flex w-full items-center justify-between gap-2">
@@ -116,14 +135,19 @@ export const HomeTodoCard = ({
   );
 
   return (
-    <article
+    <div
       ref={setNodeRef}
       style={sortableStyle}
       {...attributes}
       {...listeners}
+      role={onClickTodo ? "button" : attributes.role}
+      tabIndex={onClickTodo ? 0 : attributes.tabIndex}
+      onClick={onClickTodo ? handleCardClick : undefined}
+      onKeyDown={onClickTodo ? handleCardKeyDown : undefined}
       className={cn(
         "border-timo-gray-500 flex w-full shrink-0 flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
         isCompleted ? "bg-timo-gray-200" : "bg-white",
+        onClickTodo && "cursor-pointer",
       )}
     >
       {subtaskTitle ? (
@@ -172,6 +196,6 @@ export const HomeTodoCard = ({
           {convertDurationToTimeText(durationSeconds)}
         </span>
       </div>
-    </article>
+    </div>
   );
 };
