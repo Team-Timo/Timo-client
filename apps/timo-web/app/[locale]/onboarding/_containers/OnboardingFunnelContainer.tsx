@@ -3,6 +3,8 @@
 import { useFunnel } from "@use-funnel/browser";
 import { useState } from "react";
 
+import { useCompleteOnboarding } from "@/api/generated/endpoints/onboarding/onboarding";
+import { OnboardingRequestLanguage } from "@/api/generated/models";
 import { OnboardingStepButton } from "@/app/[locale]/onboarding/_components/OnboardingStepButton";
 import { CalendarConnectStepContainer } from "@/app/[locale]/onboarding/_containers/CalendarConnectStepContainer";
 import { LanguageStepContainer } from "@/app/[locale]/onboarding/_containers/LanguageStepContainer";
@@ -10,6 +12,8 @@ import { LifePatternStepContainer } from "@/app/[locale]/onboarding/_containers/
 import { TimePredictionStepContainer } from "@/app/[locale]/onboarding/_containers/TimePredictionStepContainer";
 import { OnboardingFunnelSteps } from "@/app/[locale]/onboarding/_types/onboarding-funnel";
 import { LottiePlayer } from "@/components/lottie/LottiePlayer";
+import { ROUTES } from "@/constants/routes";
+import { useRouter } from "@/i18n/navigation";
 
 const STEP_NUMBER: Record<keyof OnboardingFunnelSteps, 1 | 2 | 3 | 4> = {
   Language: 1,
@@ -18,7 +22,14 @@ const STEP_NUMBER: Record<keyof OnboardingFunnelSteps, 1 | 2 | 3 | 4> = {
   CalendarConnect: 4,
 };
 
+const ONBOARDING_LANGUAGE_MAP: Record<"ko" | "en", OnboardingRequestLanguage> =
+  {
+    ko: OnboardingRequestLanguage.KO,
+    en: OnboardingRequestLanguage.EN,
+  };
+
 export const OnboardingFunnelContainer = () => {
+  const router = useRouter();
   const [answers, setAnswers] = useState<
     Partial<OnboardingFunnelSteps["CalendarConnect"]>
   >({});
@@ -27,6 +38,7 @@ export const OnboardingFunnelContainer = () => {
     id: "onboarding",
     initial: { step: "Language", context: {} },
   });
+  const { mutate: completeOnboarding } = useCompleteOnboarding();
 
   return (
     <section className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
@@ -109,7 +121,23 @@ export const OnboardingFunnelContainer = () => {
                     !answers.bedTime
                   )
                     return;
-                  // TODO: 실제 제출 API 연동 + 완료 후 answers.language로 locale 리다이렉트
+                  completeOnboarding(
+                    {
+                      data: {
+                        language: ONBOARDING_LANGUAGE_MAP[answers.language],
+                        predictionAccuracy: answers.predictionAccuracy,
+                        wakeUpTime: answers.wakeUpTime,
+                        bedTime: answers.bedTime,
+                      },
+                    },
+                    {
+                      onSuccess: () => {
+                        router.replace(ROUTES.HOME, {
+                          locale: answers.language,
+                        });
+                      },
+                    },
+                  );
                 }}
               />
             )}
