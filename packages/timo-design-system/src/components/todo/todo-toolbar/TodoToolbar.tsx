@@ -40,11 +40,13 @@ export interface TodoToolbarProps {
   onSelectTime?: (value: TimeSelection) => void;
 
   priority?: PriorityLevel;
+  priorityLabels?: Record<PriorityLevel, string>;
   onSelectPriority?: (priority: PriorityLevel) => void;
 
   tagLabel: string;
   tags: string[];
   selectedTag?: string;
+  addTagLabel?: string;
   onSelectTag?: (tag: string) => void;
   onAddTagClick?: () => void;
 
@@ -67,10 +69,12 @@ export const TodoToolbar = ({
   selectedTime,
   onSelectTime,
   priority,
+  priorityLabels,
   onSelectPriority,
   tagLabel,
   tags,
   selectedTag,
+  addTagLabel,
   onSelectTag,
   onAddTagClick,
   hasMemo = false,
@@ -122,6 +126,7 @@ export const TodoToolbar = ({
       <PrioritySelector
         trigger={<PriorityIcon priority={priority ?? "Disable"} />}
         selected={priority}
+        labels={priorityLabels}
         onSelect={onSelectPriority}
       />
 
@@ -129,6 +134,7 @@ export const TodoToolbar = ({
         trigger={<TagIcon text={tagLabel} />}
         tags={tags}
         selected={selectedTag}
+        addLabel={addTagLabel}
         onSelect={onSelectTag}
         onAddClick={onAddTagClick}
       />
