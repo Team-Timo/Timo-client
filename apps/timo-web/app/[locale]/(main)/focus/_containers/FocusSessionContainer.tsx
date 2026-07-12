@@ -1,7 +1,8 @@
 "use client";
 
 import { TimerOnIcon } from "@repo/timo-design-system/icons";
-import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useRef, useState } from "react";
 
 import type { FocusTask } from "@/app/[locale]/(main)/focus/_types/task-type";
 
@@ -11,22 +12,37 @@ import { focusTaskMock } from "@/app/[locale]/(main)/focus/_mocks/task-mock";
 import {
   convertDateToBadgeText,
   convertDateToDayNumberText,
-  convertDateToDayOfWeekText,
+  convertDateToDayOfWeekKey,
 } from "@/app/[locale]/(main)/focus/_utils/date";
 import { Timer } from "@/components/timer/Timer";
-import { TimerControls } from "@/components/timer/TimerControls";
+import {
+  TimerSessionControls,
+  type TimerSessionControlsHandle,
+} from "@/components/timer/TimerSessionControls";
+import { SECONDS_PER_MINUTE } from "@/constants/time";
+import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
 
 export const FocusSessionContainer = () => {
   const [task, setTask] = useState<FocusTask>(focusTaskMock);
   const today = new Date();
+  const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
+  const tWeekday = useTranslations("Common.weekday");
 
   const handleTogglePlay = () => {
     // TODO: API
     setTask((prev) => ({ ...prev, isRunning: !prev.isRunning }));
   };
 
-  const handleEnd = () => {
+  const handleExtendTimer = (minutes: number) => {
+    // TODO: API
+    setTask((prev) => ({
+      ...prev,
+      durationSeconds: prev.durationSeconds + minutes * SECONDS_PER_MINUTE,
+    }));
+  };
+
+  const handleCompleteTimer = () => {
     // TODO: API
     setTask((prev) => ({
       ...prev,
@@ -39,9 +55,12 @@ export const FocusSessionContainer = () => {
     }));
   };
 
-  const handleAddTime = () => {};
-
   const handleToggleCompleted = (completed: boolean) => {
+    if (completed && task.isRunning) {
+      timerSessionControlsRef.current?.openStopModal();
+      return;
+    }
+
     // TODO: API
     setTask((prev) => ({
       ...prev,
@@ -64,13 +83,15 @@ export const FocusSessionContainer = () => {
     }));
   };
 
+  const plannedMinutes = convertDurationToMinutes(task.durationSeconds);
+
   return (
     <div className="flex h-full overflow-x-auto">
       <div className="flex flex-1 flex-col gap-18">
         <FocusHeaderContainer />
         <FocusTaskItem
           dayNumber={convertDateToDayNumberText(today)}
-          dayOfWeek={convertDateToDayOfWeekText(today)}
+          dayOfWeek={tWeekday(convertDateToDayOfWeekKey(today))}
           title={task.title}
           completed={task.completed}
           dateText={convertDateToBadgeText(task.scheduledDate)}
@@ -94,11 +115,14 @@ export const FocusSessionContainer = () => {
             size="lg"
           />
 
-          <TimerControls
+          <TimerSessionControls
+            ref={timerSessionControlsRef}
             isRunning={task.isRunning}
             onTogglePlay={handleTogglePlay}
-            onEnd={handleEnd}
-            onAddTime={handleAddTime}
+            plannedMinutes={plannedMinutes}
+            actualMinutes={plannedMinutes}
+            onExtend={handleExtendTimer}
+            onComplete={handleCompleteTimer}
           />
         </div>
       </section>

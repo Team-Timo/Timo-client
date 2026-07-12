@@ -4,17 +4,19 @@ import { TimerOnIcon } from "@repo/timo-design-system/icons";
 import { useState } from "react";
 
 import { Timer } from "@/components/timer/Timer";
-import { TimerControls } from "@/components/timer/TimerControls";
+import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
 
 type TimerStatus = "RUNNING" | "PAUSED";
+
+const PLANNED_MINUTES = 12;
 
 export const TimerPanel = () => {
   const [status, setStatus] = useState<TimerStatus>("PAUSED");
 
   const handleTogglePlay = () =>
     setStatus((prev) => (prev === "RUNNING" ? "PAUSED" : "RUNNING"));
-  const handleEnd = () => setStatus("PAUSED");
-  const handleAddTime = () => {};
+  const handleExtendTimer = () => {};
+  const handleCompleteTimer = () => setStatus("PAUSED");
 
   return (
     <div className="flex flex-col items-center gap-11.25">
@@ -26,11 +28,13 @@ export const TimerPanel = () => {
         size="sm"
       />
 
-      <TimerControls
+      <TimerSessionControls
         isRunning={status === "RUNNING"}
         onTogglePlay={handleTogglePlay}
-        onEnd={handleEnd}
-        onAddTime={handleAddTime}
+        plannedMinutes={PLANNED_MINUTES}
+        actualMinutes={PLANNED_MINUTES}
+        onExtend={handleExtendTimer}
+        onComplete={handleCompleteTimer}
       />
     </div>
   );
