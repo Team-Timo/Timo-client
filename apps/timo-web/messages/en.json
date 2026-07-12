@@ -28,18 +28,82 @@
       "high": "Important",
       "medium": "Average",
       "low": "Low"
-    }
+    },
+    "close": "Close"
   },
   "Home": {
     "today": "Today",
     "viewBasic": "Basic",
     "viewWeek": "7 days",
-    "addTask": "Add a task"
+    "addTask": "Add a task",
+    "createModal": {
+      "title": "Add a task",
+      "addIcon": "Add an icon",
+      "titlePlaceholder": "Plan a new task",
+      "subtaskPlaceholder": "Add tasks in small units",
+      "notePlaceholder": "Please enter a note...",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "tagLabel": "Tag",
+      "create": "Create",
+      "repeatDaily": "Daily",
+      "repeatWeekly": "Weekly",
+      "repeatMonthly": "Monthly",
+      "repeatDetailHeading": "Details",
+      "repeatDayUnit": "day(s)"
+    },
+    "createTagModal": {
+      "title": "Create a tag",
+      "nameLabel": "Tag name",
+      "maxLengthHint": "The tag name can be up to 10 characters long",
+      "duplicateHint": "Names that are already in use cannot be registered",
+      "create": "Create"
+    }
+  },
+  "Settings": {
+    "nav": {
+      "account": "Account",
+      "policy": "Terms & Policies",
+      "withdrawal": "Delete account"
+    },
+    "profile": {
+      "title": "Personal information",
+      "profileSection": "Profile",
+      "calendarSection": "Google Calendar integration",
+      "connect": "Integrate",
+      "disconnect": "Disconnect",
+      "languageSection": "Language",
+      "languageKorean": "Korean",
+      "languageEnglish": "English",
+      "tagsSection": "Tags",
+      "addTag": "Add tag",
+      "removeTag": "Delete {tag} tag",
+      "logout": "Log out",
+      "save": "Save changes"
+    },
+    "withdrawal": {
+      "title": "Withdraw",
+      "guideTitle": "Are you no longer using Timo?",
+      "guideDescription": "After withdrawal, your account information and all saved data will be deleted and cannot be recovered.",
+      "warningTitle": "Please check before withdrawing.",
+      "warningSchedule": "Saved schedules and tasks will be deleted.",
+      "warningCalendar": "The linked calendar connection will be disconnected.",
+      "warningIrreversible": "Deleted accounts cannot be recovered.",
+      "withdraw": "Withdraw",
+      "confirmMessage": "Are you sure you want to withdraw? All your data will be deleted and cannot be undone."
+    }
   },
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
     "todoLimitLine2": "To add a new to-do, please complete an existing one."
+  },
+  "Login": {
+    "animationLabel": "Login animation",
+    "headline": "Manage your day with clear timeboxes.",
+    "description": "Please log in to your timo account.",
+    "connectLabel": "Log in with Google",
+    "termsNotice": "By continuing, you agree to the timo <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
   },
   "Error": {
     "title": "A problem has occurred.",
@@ -65,6 +129,46 @@
     "onboardingGoogleButton": {
       "login": "Continue with your Google account",
       "connectCalendar": "Connect Google Calendar"
+    },
+    "language": {
+      "title": "Please select a language to use.",
+      "description": "timo will be displayed in your selected language.\nYou can change it later in settings."
+    },
+    "timePrediction": {
+      "title": "Do you estimate your time well?",
+      "description": "timo provides personalized recommendations.",
+      "options": {
+        "4": {
+          "label": "Very accurate.",
+          "sublabel": "The estimated time matches the actual time."
+        },
+        "3": {
+          "label": "Generally accurate.",
+          "sublabel": "Sometimes incorrect but generally accurate."
+        },
+        "2": {
+          "label": "Often incorrect.",
+          "sublabel": "Always goes differently than expected."
+        },
+        "1": {
+          "label": "I'm not sure.",
+          "sublabel": "I've never thought about it."
+        }
+      }
+    },
+    "lifePattern": {
+      "title": "Set your wake-up and bedtime.",
+      "description": "The information you provide will only be used for time pattern analysis.",
+      "wakeUpTime": "Wake-up time",
+      "bedTime": "Bedtime",
+      "bedTimeError": "Please set your bedtime later than your wake-up time."
+    },
+    "calendarConnect": {
+      "title": "Connect your Google Calendar.",
+      "description": "You can import your existing schedules into timo and manage them in one place.",
+      "connectLabel": "Google Calendar integration",
+      "consentNotice": "Clicking will display the Google authentication and calendar access permission screen.",
+      "permissionNotice": "timo only requests permission to view your schedules."
     }
   },
   "Focus": {

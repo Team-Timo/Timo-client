@@ -9,7 +9,7 @@ import { Dropdown } from "../../layout/dropdown/Dropdown";
 
 import type { ReactNode } from "react";
 
-export type RepeatFrequency = "daily" | "weekly" | "monthly";
+export type RepeatFrequency = "DAILY" | "WEEKLY" | "MONTHLY";
 
 export interface RepeatOption {
   frequency: RepeatFrequency;
@@ -34,9 +34,9 @@ export interface RepeatMonthlyDetail {
 }
 
 const DETAIL_ALIGN: Record<RepeatFrequency, string> = {
-  daily: "items-start",
-  weekly: "items-start",
-  monthly: "items-end",
+  DAILY: "items-start",
+  WEEKLY: "items-start",
+  MONTHLY: "items-end",
 };
 
 export interface RepeatSelectorProps {
@@ -161,7 +161,7 @@ export const RepeatSelector = ({
   };
 
   return (
-    <Dropdown>
+    <Dropdown className="flex justify-center">
       <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel className="w-32.5 gap-1 p-0">
@@ -205,10 +205,10 @@ export const RepeatSelector = ({
               {detailHeading}
             </span>
 
-            {selectedFrequency === "weekly" && (
+            {selectedFrequency === "WEEKLY" && (
               <RepeatWeeklyDetailSection {...weekly} />
             )}
-            {selectedFrequency === "monthly" && (
+            {selectedFrequency === "MONTHLY" && (
               <RepeatMonthlyDetailSection
                 {...monthly}
                 ariaLabel={detailHeading}

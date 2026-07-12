@@ -5,7 +5,7 @@ import {
 } from "@repo/timo-design-system/icons";
 import { cn } from "@repo/timo-design-system/utils";
 
-export interface OnboardingButtonProps {
+interface OnboardingButtonProps {
   variant: "next" | "prev" | "start";
   label: string;
   isActive?: boolean;
@@ -53,7 +53,7 @@ export const OnboardingButton = ({
       onClick={onClick}
       disabled={isDisabled}
       className={cn(
-        "flex items-center justify-center gap-2 rounded-[4px] px-4 py-2",
+        "flex items-center justify-center gap-2 rounded-[4px] px-4 py-2 transition-colors duration-200 ease-in-out",
         isActive ? "bg-timo-blue-300" : "bg-timo-gray-200",
       )}
     >

@@ -8,18 +8,19 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import type { DragEndEvent } from "@dnd-kit/core";
+import type { DragEndEvent, UniqueIdentifier } from "@dnd-kit/core";
 import type { ReactNode } from "react";
 
 export interface DndSortableListProviderProps {
   dndId: string;
-  itemIds: number[];
+  itemIds: UniqueIdentifier[];
   onReorder: (fromIndex: number, toIndex: number) => void;
   children: ReactNode;
 }
@@ -43,8 +44,8 @@ export const DndSortableListProvider = ({
       return;
     }
 
-    const fromIndex = itemIds.indexOf(Number(active.id));
-    const toIndex = itemIds.indexOf(Number(over.id));
+    const fromIndex = itemIds.indexOf(active.id);
+    const toIndex = itemIds.indexOf(over.id);
     if (fromIndex === -1 || toIndex === -1) {
       return;
     }
@@ -57,6 +58,7 @@ export const DndSortableListProvider = ({
       id={dndId}
       sensors={sensors}
       collisionDetection={closestCenter}
+      modifiers={[restrictToVerticalAxis]}
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>

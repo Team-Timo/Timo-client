@@ -28,18 +28,82 @@
       "high": "중요",
       "medium": "보통",
       "low": "낮음"
-    }
+    },
+    "close": "닫기"
   },
   "Home": {
     "today": "오늘",
     "viewBasic": "기본",
     "viewWeek": "7일",
-    "addTask": "할 일을 추가하세요"
+    "addTask": "할 일을 추가하세요",
+    "createModal": {
+      "title": "할 일 추가하기",
+      "addIcon": "아이콘 추가하기",
+      "titlePlaceholder": "새로운 작업을 계획하세요",
+      "subtaskPlaceholder": "작은 단위로 할 일을 나눠보세요",
+      "notePlaceholder": "메모를 입력해주세요...",
+      "dateLabel": "날짜",
+      "timeLabel": "시간",
+      "tagLabel": "태그",
+      "create": "생성하기",
+      "repeatDaily": "매일",
+      "repeatWeekly": "매주",
+      "repeatMonthly": "매달",
+      "repeatDetailHeading": "세부 설정",
+      "repeatDayUnit": "일 마다"
+    },
+    "createTagModal": {
+      "title": "태그 생성하기",
+      "nameLabel": "태그 이름",
+      "maxLengthHint": "태그 이름은 최대 10자까지 입력할 수 있어요",
+      "duplicateHint": "이미 사용 중인 이름은 등록할 수 없어요",
+      "create": "생성하기"
+    }
+  },
+  "Settings": {
+    "nav": {
+      "account": "개인 정보",
+      "policy": "약관",
+      "withdrawal": "회원 탈퇴"
+    },
+    "profile": {
+      "title": "개인 정보",
+      "profileSection": "프로필",
+      "calendarSection": "구글 캘린더 연동",
+      "connect": "연동하기",
+      "disconnect": "연동 해제",
+      "languageSection": "언어",
+      "languageKorean": "한국어",
+      "languageEnglish": "English",
+      "tagsSection": "태그",
+      "addTag": "태그 추가",
+      "removeTag": "{tag} 태그 삭제",
+      "logout": "로그아웃",
+      "save": "변경사항 저장"
+    },
+    "withdrawal": {
+      "title": "탈퇴",
+      "guideTitle": "더이상 Timo를 이용하지 않으시나요?",
+      "guideDescription": "탈퇴 후에는 계정 정보와 저장된 모든 데이터가 삭제되며 복구할 수 없어요.",
+      "warningTitle": "탈퇴 전 꼭 확인해주세요.",
+      "warningSchedule": "저장된 일정 및 할 일이 삭제됩니다.",
+      "warningCalendar": "연동된 캘린더 연결이 해제됩니다.",
+      "warningIrreversible": "삭제된 계정은 복구할 수 없습니다.",
+      "withdraw": "탈퇴하기",
+      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요."
+    }
   },
   "Toast": {
     "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
     "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",
     "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 완료해주세요."
+  },
+  "Login": {
+    "animationLabel": "로그인 애니메이션",
+    "headline": "흩어진 시간을, 실행 가능한 흐름으로.",
+    "description": "timo 계정에 로그인하세요.",
+    "connectLabel": "Google 로그인",
+    "termsNotice": "계속하면 timo <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하게 됩니다."
   },
   "Error": {
     "title": "잠시 문제가 발생했어요.",
@@ -65,6 +129,43 @@
     "onboardingGoogleButton": {
       "login": "Google 계정으로 계속하기",
       "connectCalendar": "Google 캘린더 연결하기"
+    },
+    "language": {
+      "title": "사용할 언어를 선택해 주세요.",
+      "description": "선택한 언어로 timo의 모든 텍스트가 표시돼요.\n나중에 설정에서 변경할 수 있어요."
+    },
+    "timePrediction": {
+      "title": "평소 작업 시간을\n잘 예측하는 편인가요?",
+      "description": "timo가 맞춤 추천을 해드려요.",
+      "options": {
+        "4": {
+          "label": "매우 정확해요.",
+          "sublabel": "예상 시간과 실제 시간이 일치해요."
+        },
+        "3": {
+          "label": "대체로 맞는 편이에요.",
+          "sublabel": "가끔 틀리지만 대체로 맞는 편이에요."
+        },
+        "2": {
+          "label": "자주 틀리는 편이에요.",
+          "sublabel": "예상과 항상 다르게 흘러가요."
+        },
+        "1": { "label": "잘 모르겠어요.", "sublabel": "생각해본 적이 없어요." }
+      }
+    },
+    "lifePattern": {
+      "title": "평소 생활 패턴을 알려주세요.",
+      "description": "입력한 정보는 시간 패턴 분석에만 사용돼요.",
+      "wakeUpTime": "기상 시간",
+      "bedTime": "취침 시간",
+      "bedTimeError": "취침 시간은 기상 시간보다 늦게 설정해 주세요."
+    },
+    "calendarConnect": {
+      "title": "Google 캘린더를 연결하면\n일정을 함께 관리할 수 있어요.",
+      "description": "기존 일정을 timo에 불러와 한 곳에서 관리할 수 있어요.",
+      "connectLabel": "Google 캘린더 연동",
+      "consentNotice": "클릭 시 Google 인증 및 캘린더 접근 권한 동의 화면이 표시됩니다.",
+      "permissionNotice": "timo는 일정 조회 권한만 요청합니다."
     }
   },
   "Focus": {

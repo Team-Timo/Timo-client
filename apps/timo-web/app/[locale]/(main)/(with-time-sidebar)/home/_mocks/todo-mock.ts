@@ -1,10 +1,6 @@
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import {
-  formatDateKey,
-  getToday,
-  isSameDate,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
+import { formatDateKey, getToday, isSameDate } from "@/utils/date";
 
 type TodoTemplate = Omit<Todo, "todoId">;
 
@@ -30,7 +26,7 @@ const TODO_TEMPLATES: TodoTemplate[] = [
     title: "앱잼 1차 과제 제출",
     completed: false,
     durationSeconds: 5400,
-    priority: "URGENT",
+    priority: "VERY_HIGH",
     tag: { tagId: 1, name: "assignment" },
     hasMemo: true,
     isRepeated: false,
