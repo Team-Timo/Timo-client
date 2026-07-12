@@ -14,7 +14,6 @@ export interface SettingsProfile {
 }
 
 export interface SettingsProfileFormValues {
-  language: SettingsLanguage;
   tags: string[];
 }
 

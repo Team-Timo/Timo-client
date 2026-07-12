@@ -1,18 +1,17 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import type {
   SettingsDefaultTagKey,
-  SettingsLanguage,
   SettingsProfile,
   SettingsProfileFormValues,
 } from "@/app/[locale]/(main)/settings/_types/profile-type";
 
+import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
 import { settingsProfileMock } from "@/app/[locale]/(main)/settings/_mocks/profile-mock";
-import { usePathname, useRouter } from "@/i18n/navigation";
 
 const DEFAULT_TAG_KEYS: SettingsDefaultTagKey[] = [
   "assignment",
@@ -26,17 +25,14 @@ const isDefaultTagKey = (tag: string): tag is SettingsDefaultTagKey =>
 
 export const useSettingsProfile = () => {
   const tCommon = useTranslations("Common");
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
+  const { language, setLanguage } = useSettingsLanguageParam();
 
   const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
 
   const { watch, setValue, handleSubmit, reset, formState } =
     useForm<SettingsProfileFormValues>({
-      defaultValues: { language: locale, tags: profile.tags },
+      defaultValues: { tags: profile.tags },
     });
-  const language = watch("language");
   const tags = watch("tags");
 
   const tagItems = tags.map((tag) => {
@@ -64,10 +60,6 @@ export const useSettingsProfile = () => {
     // TODO: Google 계정 인증 및 캘린더 접근 권한 동의 팝업 호출
     console.log("Google Calendar 연동 인증 팝업을 호출합니다.");
     setProfile((prev) => ({ ...prev, isCalendarConnected: true }));
-  };
-
-  const handleChangeLanguage = (nextLanguage: SettingsLanguage) => {
-    setValue("language", nextLanguage, { shouldDirty: true });
   };
 
   const handleAddTag = () => {
@@ -98,10 +90,6 @@ export const useSettingsProfile = () => {
       // TODO: API 연동
       await new Promise((resolve) => setTimeout(resolve, 1000));
       reset(values);
-
-      if (values.language !== locale) {
-        router.replace(pathname, { locale: values.language });
-      }
     } catch {
       // TODO: 실제 토스트 컴포넌트로 교체
       window.alert("저장에 실패했습니다. 잠시 후 다시 시도해 주세요.");
@@ -119,7 +107,7 @@ export const useSettingsProfile = () => {
     },
     profileActions: {
       onConnectCalendar: handleConnectCalendar,
-      onChangeLanguage: handleChangeLanguage,
+      onChangeLanguage: setLanguage,
       onAddTag: handleAddTag,
       onRemoveTag: handleRemoveTag,
       onLogout: handleLogout,
