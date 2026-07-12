@@ -1,8 +1,6 @@
 import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { z } from "zod";
 
-import { apiResponseSchema } from "@/api/schema/response";
-
 export const todoIconSchema = z.enum(TODO_ICON_VALUES);
 
 export const todoPrioritySchema = z.enum([
@@ -73,11 +71,3 @@ export type TodoIcon = z.infer<typeof todoIconSchema>;
 export type TodoPriority = z.infer<typeof todoPrioritySchema>;
 export type TodoRepeatType = z.infer<typeof todoRepeatTypeSchema>;
 export type TodoRepeatWeekday = z.infer<typeof todoRepeatWeekdaySchema>;
-
-export const createTodoResponseSchema = apiResponseSchema(
-  z.object({
-    todoId: z.number(),
-  }),
-);
-
-export type CreateTodoResponse = z.infer<typeof createTodoResponseSchema>;
