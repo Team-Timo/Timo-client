@@ -74,13 +74,15 @@ After:  _hooks/useLoginForm.ts 로 분리, 컴포넌트는 JSX만 반환
 
 - **공통** (여러 도메인에서 재사용 가능) → `apps/timo-web/utils`(함수) 또는 `apps/timo-web/constants`(상수)로 추출
 - **도메인 종속** (특정 기능에서만 사용) → 해당 도메인의 `_utils` 폴더 안에 유지
-- 새로 만들거나 옮길 때는 JSDoc(설명·`@param`·`@returns`·`@example`)을 반드시 작성한다
+- 새로 만들거나 옮길 때는 JSDoc을 반드시 작성한다
+  - **함수(utils)**: 설명, `@param`, `@returns`, 필요 시 `@example`
+  - **상수(constants)**: 설명, 단위(있는 경우), 사용 범위(어디서/왜 쓰이는지)
 
 ```text
 Before: apps/timo-web/app/[locale]/(main)/focus/_utils/duration.ts
-        (SECONDS_PER_MINUTE, convertDurationToMinutes 로컬 정의 — home/timer 등 다른 도메인에도 중복)
+        (SECONDS_PER_MINUTE, convertDurationToTimeText 로컬 정의 — home/timer 등 다른 도메인에도 유사 로직 중복)
 After:  apps/timo-web/constants/time.ts (SECONDS_PER_MINUTE 등 공통 상수)
-        apps/timo-web/utils/convert-duration-to-minutes.ts (JSDoc 포함 공통 함수)
+        apps/timo-web/utils/convert-duration-to-time-text.ts (convertDurationToTimeText, JSDoc 포함 공통 함수)
 ```
 
 ---
