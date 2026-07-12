@@ -1,7 +1,7 @@
 "use client";
 
 import { DeleteIcon } from "@repo/timo-design-system/icons";
-import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
+import { TODO_ICON_VALUES, TodoToolbar } from "@repo/timo-design-system/ui";
 import { useState } from "react";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
@@ -10,6 +10,7 @@ import type { TodoIconValue } from "@repo/timo-design-system/ui";
 import { DetailTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoMemoField";
 import { DetailTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoTaskFields";
 import { TodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/TodoIconField";
+import { convertDurationToTimeText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 
 const isTodoIconValue = (icon: string | null): icon is TodoIconValue =>
@@ -28,6 +29,7 @@ export const DetailTodoModalContent = ({
   onExited,
   todo,
 }: DetailTodoModalContentProps) => {
+  const durationText = convertDurationToTimeText(todo.durationSeconds);
   const [icon, setIcon] = useState<TodoIconValue | null>(
     isTodoIconValue(todo.icon) ? todo.icon : null,
   );
@@ -69,12 +71,54 @@ export const DetailTodoModalContent = ({
         />
       </div>
 
-      <div className="bg-timo-gray-500 mt-3 h-px w-full" />
+      <div className="bg-timo-gray-500 mt-2 h-px w-full" />
       <DetailTodoTaskFields todo={todo} />
+      <div className="mt-2 py-3">
+        <TodoToolbar
+          dateLabel="26.07.01"
+          date={undefined}
+          onDateChange={() => {}}
+          timeLabel={durationText}
+          timeOptions={[]}
+          time={durationText}
+          onTimeChange={() => {}}
+          selectedTime={undefined}
+          onSelectTime={() => {}}
+          priority={todo.priority}
+          onSelectPriority={() => {}}
+          tagLabel={todo.tag.name}
+          tags={[todo.tag.name]}
+          selectedTag={todo.tag.name}
+          onSelectTag={() => {}}
+          onAddTagClick={() => {}}
+          hasMemo={todo.hasMemo}
+          isRepeatActive={todo.isRepeated}
+          repeat={{
+            detailHeading: "세부 설정",
+            options: [
+              { frequency: "DAILY", label: "매일" },
+              { frequency: "WEEKLY", label: "매주" },
+              { frequency: "MONTHLY", label: "매월" },
+            ],
+            frequency: "DAILY",
+            onFrequencyChange: () => {},
+            weekly: {
+              weekdays: [],
+              selectedWeekdayIds: [],
+              onWeekdayToggle: () => {},
+            },
+            monthly: {
+              repeatDayLabel: "일",
+              repeatDay: "",
+              onRepeatDayChange: () => {},
+            },
+          }}
+        />
+      </div>
       <div className="mt-3 w-full">
         <DetailTodoMemoField
           value={null}
-          placeholder="메모를 입력해 주세요.."
+          placeholder="메모를 입력해 주세요..."
         />
       </div>
     </OverlayModal>
