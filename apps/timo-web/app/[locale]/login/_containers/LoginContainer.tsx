@@ -15,7 +15,7 @@ export const LoginContainer = () => {
       <LottiePlayer
         src="/lottie/onboarding.json"
         className="hidden shrink-0 lg:block lg:size-[350px] xl:size-[430px] 2xl:size-[500px]"
-        ariaLabel="온보딩 애니메이션"
+        ariaLabel={t("animationLabel")}
       />
 
       <div className="border-timo-gray-500 shadow-timo flex h-110 w-101 flex-col items-center justify-center gap-16 rounded-[4px] border bg-white px-12.5 py-13">

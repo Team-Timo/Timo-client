@@ -66,6 +66,7 @@
     "todoLimitLine2": "To add a new to-do, please complete an existing one."
   },
   "Login": {
+    "animationLabel": "Login animation",
     "headline": "Manage your day with clear timeboxes.",
     "description": "Please log in to your timo account.",
     "connectLabel": "Log in with Google",
