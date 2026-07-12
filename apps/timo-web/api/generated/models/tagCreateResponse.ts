@@ -7,7 +7,7 @@
  */
 
 export interface TagCreateResponse {
-  tagId?: number;
-  name?: string;
-  isDefault?: boolean;
+  tagId: number;
+  name: string;
+  isDefault: boolean;
 }

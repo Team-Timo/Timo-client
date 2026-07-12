@@ -12,7 +12,11 @@ import {
   type RefObject,
 } from "react";
 
-import { cn } from "../../../lib";
+import {
+  cn,
+  registerOpenFloatingLayer,
+  unregisterOpenFloatingLayer,
+} from "../../../lib";
 
 interface DropdownContextValue {
   isOpen: boolean;
@@ -48,6 +52,8 @@ const DropdownRoot = ({ children, className }: DropdownProps) => {
   useEffect(() => {
     if (!isOpen) return;
 
+    registerOpenFloatingLayer();
+
     const handleOutsideClick = (event: MouseEvent) => {
       if (!rootRef.current?.contains(event.target as Node)) {
         setIsOpen(false);
@@ -65,6 +71,7 @@ const DropdownRoot = ({ children, className }: DropdownProps) => {
     document.addEventListener("keydown", handleEscapeKeydown);
 
     return () => {
+      unregisterOpenFloatingLayer();
       document.removeEventListener("mousedown", handleOutsideClick);
       document.removeEventListener("keydown", handleEscapeKeydown);
     };

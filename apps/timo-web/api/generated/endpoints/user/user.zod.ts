@@ -14,7 +14,22 @@ import * as zod from "zod";
  * Access Token의 사용자 ID와 일치하는 사용자의 정보가 반환됩니다.
  * @summary 내 프로필 조회
  */
-export const GetMyProfileResponse = zod.unknown();
+export const GetMyProfileResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      id: zod.number(),
+      name: zod.string(),
+      email: zod.string(),
+      profileImageUrl: zod.string().optional(),
+      language: zod.string(),
+      zoneId: zod.string(),
+      calendarConnected: zod.boolean(),
+      calendarEmail: zod.string().optional(),
+    })
+    .optional(),
+});
 
 /**
  * 현재 로그인한 사용자의 서비스 언어를 변경합니다.
@@ -27,7 +42,15 @@ export const UpdateLanguageBody = zod.object({
   language: zod.enum(["KO", "EN"]).describe("변경할 서비스 언어"),
 });
 
-export const UpdateLanguageResponse = zod.unknown();
+export const UpdateLanguageResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      language: zod.enum(["KO", "EN"]).describe("변경된 서비스 언어"),
+    })
+    .optional(),
+});
 
 /**
  * 현재 로그인한 사용자의 시간대를 변경합니다.
@@ -42,4 +65,12 @@ export const UpdateTimezoneBody = zod.object({
   zoneId: zod.string().min(1).describe("IANA 시간대 ID"),
 });
 
-export const UpdateTimezoneResponse = zod.unknown();
+export const UpdateTimezoneResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      zoneId: zod.string().describe("변경된 시간대 ID"),
+    })
+    .optional(),
+});

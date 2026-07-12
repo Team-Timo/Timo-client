@@ -9,8 +9,8 @@ import type { DailyTodoResponse } from "./dailyTodoResponse";
 
 export interface StatisticsDailyResponse {
   /** 조회 날짜 */
-  date?: string;
+  date: string;
   /** 해당 날짜의 총 기록시간(분) */
-  totalRecordMinutes?: number;
-  todos?: DailyTodoResponse[];
+  totalRecordMinutes: number;
+  todos: DailyTodoResponse[];
 }

@@ -5,14 +5,16 @@ import {
   useContext,
   useEffect,
   useId,
+  useRef,
   useState,
   type ButtonHTMLAttributes,
   type ReactNode,
   type Ref,
+  type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
 
-import { cn } from "../../../lib";
+import { cn, hasOpenFloatingLayer } from "../../../lib";
 import { ModalButton } from "../../button/modal-button/ModalButton";
 
 interface ModalContextValue {
@@ -20,6 +22,7 @@ interface ModalContextValue {
   open: () => void;
   close: () => void;
   titleId: string;
+  panelRef: RefObject<HTMLDivElement | null>;
 }
 
 const ModalContext = createContext<ModalContextValue | null>(null);
@@ -44,6 +47,7 @@ export interface ModalProps {
 const ModalRoot = ({ children, className }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const titleId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -51,14 +55,24 @@ const ModalRoot = ({ children, className }: ModalProps) => {
     document.body.style.overflow = "hidden";
 
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsOpen(false);
+      if (e.key !== "Escape") return;
+      if (hasOpenFloatingLayer()) return;
+      setIsOpen(false);
+    };
+
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (panelRef.current?.contains(e.target as Node)) return;
+      if (hasOpenFloatingLayer()) return;
+      setIsOpen(false);
     };
 
     document.addEventListener("keydown", handleEscape);
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
       document.body.style.overflow = "";
       document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [isOpen]);
 
@@ -66,7 +80,7 @@ const ModalRoot = ({ children, className }: ModalProps) => {
   const close = () => setIsOpen(false);
 
   return (
-    <ModalContext.Provider value={{ isOpen, open, close, titleId }}>
+    <ModalContext.Provider value={{ isOpen, open, close, titleId, panelRef }}>
       <div className={className}>{children}</div>
     </ModalContext.Provider>
   );
@@ -97,14 +111,13 @@ export interface ModalOverlayProps {
 }
 
 const ModalOverlay = ({ className }: ModalOverlayProps) => {
-  const { isOpen, close } = useModalContext();
+  const { isOpen } = useModalContext();
 
   if (!isOpen) return null;
 
   return createPortal(
     <div
       className={cn("bg-timo-overlay z-modal-overlay fixed inset-0", className)}
-      onClick={close}
       aria-hidden="true"
     />,
     document.body,
@@ -117,12 +130,13 @@ export interface ModalPanelProps {
 }
 
 const ModalPanel = ({ children, className }: ModalPanelProps) => {
-  const { isOpen, titleId } = useModalContext();
+  const { isOpen, titleId, panelRef } = useModalContext();
 
   if (!isOpen) return null;
 
   return createPortal(
     <div
+      ref={panelRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}

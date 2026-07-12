@@ -7,11 +7,11 @@
  */
 
 export interface TimerFinishResponse {
-  timerId?: number;
-  todoId?: number;
-  status?: string;
-  plannedSeconds?: number;
-  actualSeconds?: number;
+  timerId: number;
+  todoId: number;
+  status: string;
+  plannedSeconds: number;
+  actualSeconds: number;
   /**
    * AI 피드백 문구. AI 호출 실패 시 null
    * @nullable

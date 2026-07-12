@@ -7,5 +7,5 @@
  */
 
 export interface TodoCreateResponse {
-  todoId?: number;
+  todoId: number;
 }

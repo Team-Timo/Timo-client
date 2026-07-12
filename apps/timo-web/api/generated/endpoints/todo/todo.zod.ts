@@ -59,7 +59,15 @@ export const CreateTodoBody = zod.object({
   repeatRuleValid: zod.boolean().optional(),
 });
 
-export const CreateTodoResponse = zod.void();
+export const CreateTodoResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      todoId: zod.number(),
+    })
+    .optional(),
+});
 
 /**
  * todoId와 조회 기준 날짜(date)로 단일 TODO의 상세 정보를 조회합니다.
@@ -81,7 +89,45 @@ export const GetTodoDetailQueryParams = zod.object({
   date: zod.string().describe("조회 기준 날짜 (yyyy-MM-dd)"),
 });
 
-export const GetTodoDetailResponse = zod.unknown();
+export const GetTodoDetailResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      todoId: zod.number(),
+      icon: zod.string().optional(),
+      title: zod.string(),
+      completed: zod.boolean(),
+      date: zod.iso.date(),
+      dayOfWeek: zod.string(),
+      durationSeconds: zod.number().optional(),
+      priority: zod.string().optional(),
+      tag: zod
+        .object({
+          tagId: zod.number(),
+          name: zod.string(),
+        })
+        .optional(),
+      repeat: zod.object({
+        type: zod.string(),
+        weekdays: zod
+          .array(zod.enum(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]))
+          .optional(),
+        dayOfMonth: zod.number().optional(),
+      }),
+      timerStatus: zod.enum(["STOPPED", "RUNNING", "PAUSED"]),
+      memo: zod.string().optional(),
+      sortOrder: zod.number().optional(),
+      subtasks: zod.array(
+        zod.object({
+          subtaskId: zod.number(),
+          content: zod.string(),
+          completed: zod.boolean(),
+        }),
+      ),
+    })
+    .optional(),
+});
 
 /**
  * TODO와 연결된 하위 태스크, 반복 규칙을 함께 삭제합니다.
@@ -94,7 +140,11 @@ export const DeleteTodoParams = zod.object({
   todoId: zod.number().describe("삭제할 TODO ID"),
 });
 
-export const DeleteTodoResponse = zod.unknown();
+export const DeleteTodoResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod.unknown().optional(),
+});
 
 /**
  * 기존 TODO의 제목, 메모, 날짜, 태그, 우선순위, 예상 소요 시간, 아이콘, 반복 규칙, 하위 태스크를 부분 수정합니다.
@@ -159,7 +209,11 @@ export const UpdateTodoBody = zod.object({
     .optional(),
 });
 
-export const UpdateTodoResponse = zod.unknown();
+export const UpdateTodoResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod.unknown().optional(),
+});
 
 /**
  * 하위 태스크의 완료 여부를 변경합니다.
@@ -178,7 +232,16 @@ export const ChangeSubtaskStatusBody = zod.object({
   isCompleted: zod.boolean(),
 });
 
-export const ChangeSubtaskStatusResponse = zod.unknown();
+export const ChangeSubtaskStatusResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      subtaskId: zod.number(),
+      completed: zod.boolean(),
+    })
+    .optional(),
+});
 
 /**
  * TODO의 완료 여부를 변경합니다.
@@ -199,7 +262,17 @@ export const ChangeTodoStatusBody = zod.object({
   date: zod.iso.date().optional(),
 });
 
-export const ChangeTodoStatusResponse = zod.unknown();
+export const ChangeTodoStatusResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      todoId: zod.number(),
+      completed: zod.boolean(),
+      sortOrder: zod.number(),
+    })
+    .optional(),
+});
 
 /**
  * 드래그 앤 드롭으로 변경된 TODO의 순서를 반영합니다.
@@ -222,4 +295,13 @@ export const ReorderTodoBody = zod.object({
   date: zod.iso.date().optional(),
 });
 
-export const ReorderTodoResponse = zod.unknown();
+export const ReorderTodoResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      todoId: zod.number(),
+      sortOrder: zod.number(),
+    })
+    .optional(),
+});

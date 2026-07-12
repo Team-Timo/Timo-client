@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@repo/timo-design-system/utils";
+import { cn, hasOpenFloatingLayer } from "@repo/timo-design-system/utils";
 import FocusTrap from "focus-trap-react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -55,7 +55,9 @@ export const OverlayModal = ({
     document.body.style.overflow = "hidden";
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key !== "Escape") return;
+      if (hasOpenFloatingLayer()) return;
+      onClose();
     };
 
     document.addEventListener("keydown", handleEscape);
@@ -75,7 +77,10 @@ export const OverlayModal = ({
           "bg-timo-overlay fixed inset-0 z-40 transition-opacity duration-200 ease-out",
           isVisible ? "opacity-100" : "opacity-0",
         )}
-        onClick={onClose}
+        onClick={() => {
+          if (hasOpenFloatingLayer()) return;
+          onClose();
+        }}
         aria-hidden="true"
       />
       <FocusTrap

@@ -31,4 +31,12 @@ export const RecommendDurationBody = zod.object({
   tagId: zod.number().nullish().describe("투두 태그 ID"),
 });
 
-export const RecommendDurationResponse = zod.unknown();
+export const RecommendDurationResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      recommendedMinutes: zod.number().describe("추천 예상 소요 시간(분)"),
+    })
+    .optional(),
+});
