@@ -28,10 +28,15 @@ export const useSettingsLanguageParam = () => {
     (next: SettingsLanguage) => {
       const params = new URLSearchParams(searchParams);
       params.set(LANGUAGE_PARAM, next);
-      router.replace(`${pathname}?${params.toString()}`, { locale: next });
+      router.replace(`${pathname}?${params.toString()}`);
     },
     [searchParams, router, pathname],
   );
 
-  return { language, setLanguage };
+  const commitLanguage = useCallback(() => {
+    if (language === locale) return;
+    router.replace(pathname, { locale: language });
+  }, [language, locale, router, pathname]);
+
+  return { language, locale, setLanguage, commitLanguage };
 };

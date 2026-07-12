@@ -25,7 +25,8 @@ const isDefaultTagKey = (tag: string): tag is SettingsDefaultTagKey =>
 
 export const useSettingsProfile = () => {
   const tCommon = useTranslations("Common");
-  const { language, setLanguage } = useSettingsLanguageParam();
+  const { language, locale, setLanguage, commitLanguage } =
+    useSettingsLanguageParam();
 
   const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
 
@@ -90,11 +91,14 @@ export const useSettingsProfile = () => {
       // TODO: API 연동
       await new Promise((resolve) => setTimeout(resolve, 1000));
       reset(values);
+      commitLanguage();
     } catch {
       // TODO: 실제 토스트 컴포넌트로 교체
       window.alert("저장에 실패했습니다. 잠시 후 다시 시도해 주세요.");
     }
   });
+
+  const isLanguageDirty = language !== locale;
 
   return {
     profileState: {
@@ -103,7 +107,8 @@ export const useSettingsProfile = () => {
       isCalendarConnected: profile.isCalendarConnected,
       language,
       tags: tagItems,
-      isSaveDisabled: !formState.isDirty || formState.isSubmitting,
+      isSaveDisabled:
+        (!formState.isDirty && !isLanguageDirty) || formState.isSubmitting,
     },
     profileActions: {
       onConnectCalendar: handleConnectCalendar,
