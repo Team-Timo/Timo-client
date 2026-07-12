@@ -2,15 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { useController } from "react-hook-form";
 
 import type { CreateTodoRequest } from "@/api/todo/todo-schema";
+import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type { KeyboardEvent } from "react";
 import type { Control } from "react-hook-form";
 
-const MAX_SUBTASK_COUNT = 10;
+import {
+  addSubtaskInputOnEnter,
+  removeSubtaskInputOnBackspace,
+} from "@/utils/todo/subtask-input-list";
 
-export interface SubtaskInputEntry {
-  id: number;
-  value: string;
-}
+const MAX_SUBTASK_COUNT = 10;
 
 export interface UseSubtaskFieldParams {
   control: Control<CreateTodoRequest>;
@@ -71,25 +72,30 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
       event.preventDefault();
 
       setSubtaskInputs((prev) => {
-        const isLastField = index === prev.length - 1;
-        const hasValue = Boolean(prev[index]?.value.trim());
-        const canAddMore = prev.length < MAX_SUBTASK_COUNT;
+        const { entries, focusIndex } = addSubtaskInputOnEnter(
+          prev,
+          index,
+          createEntry,
+          MAX_SUBTASK_COUNT,
+        );
 
-        if (!isLastField || !hasValue || !canAddMore) return prev;
-
-        pendingFocusIndex.current = prev.length;
-        return [...prev, createEntry()];
+        if (focusIndex !== null) pendingFocusIndex.current = focusIndex;
+        return entries;
       });
       return;
     }
 
-    const isFieldEmpty = subtaskInputs[index]?.value === "";
-    const canMergeIntoPrevious = index > 0;
+    if (event.key === "Backspace") {
+      const { entries, focusIndex } = removeSubtaskInputOnBackspace(
+        subtaskInputs,
+        index,
+      );
 
-    if (event.key === "Backspace" && isFieldEmpty && canMergeIntoPrevious) {
-      event.preventDefault();
-      pendingFocusIndex.current = index - 1;
-      setSubtaskInputs((prev) => prev.filter((_, i) => i !== index));
+      if (focusIndex !== null) {
+        event.preventDefault();
+        pendingFocusIndex.current = focusIndex;
+        setSubtaskInputs(entries);
+      }
     }
   };
 

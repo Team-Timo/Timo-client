@@ -1,6 +1,6 @@
 import { Checkbox } from "@repo/timo-design-system/ui";
 
-import type { SubtaskInputEntry } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
+import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type { KeyboardEvent } from "react";
 
 const resizeTextarea = (element: HTMLTextAreaElement | null) => {
