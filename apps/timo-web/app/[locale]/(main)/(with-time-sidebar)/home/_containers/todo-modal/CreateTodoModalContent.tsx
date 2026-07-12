@@ -11,9 +11,9 @@ import type { CreateTodoRequest } from "@/api/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
 import { createTodoRequestSchema } from "@/api/todo/todo-schema";
-import { CreateTodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoIconField";
 import { CreateTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoMemoField";
 import { CreateTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoTaskFields";
+import { TodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/TodoIconField";
 import { useIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-icon-field";
 import { useRepeatField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-repeat-field";
 import {
@@ -131,7 +131,7 @@ export const CreateTodoModalContent = ({
 
         <div className="flex w-full flex-col items-start gap-3.5">
           <div className="flex w-full flex-col items-start gap-2">
-            <CreateTodoIconField
+            <TodoIconField
               icon={iconField.icon}
               isIconPanelOpen={iconField.isIconPanelOpen}
               addIconLabel={t("createModal.addIcon")}
