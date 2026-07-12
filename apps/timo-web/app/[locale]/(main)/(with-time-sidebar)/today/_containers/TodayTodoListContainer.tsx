@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
 
-import { TodayDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayDayHeaderContainer";
+import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayDateHeaderContainer";
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { todayTodoMocks } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
@@ -72,7 +72,7 @@ export const TodayTodoListContainer = () => {
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <TodayDayHeaderContainer
+      <TodayDateHeaderContainer
         completedCount={completedCount}
         totalCount={todos.length}
       />
