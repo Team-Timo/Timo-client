@@ -1,5 +1,3 @@
-"use client";
-
 import { TagIcon } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
