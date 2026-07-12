@@ -56,6 +56,7 @@ export const TimerSessionControls = forwardRef<
     null,
   );
   const [customMinutes, setCustomMinutes] = useState("");
+  const [cameFromEndModal, setCameFromEndModal] = useState(false);
 
   const resetExtendSelection = () => {
     setSelectedPreset(null);
@@ -71,6 +72,7 @@ export const TimerSessionControls = forwardRef<
     if (minutes > 0) onExtend(minutes);
 
     resetExtendSelection();
+    setCameFromEndModal(false);
   };
 
   const canSubmitExtend =
@@ -85,6 +87,7 @@ export const TimerSessionControls = forwardRef<
         onOpenEndModal={() => setStep(isRunning ? "stop" : "end")}
         onOpenExtendModal={() => {
           resetExtendSelection();
+          setCameFromEndModal(false);
           setStep("extend");
         }}
       />
@@ -100,6 +103,7 @@ export const TimerSessionControls = forwardRef<
           <TimerEndModalPanel
             onContinue={() => {
               resetExtendSelection();
+              setCameFromEndModal(true);
               setStep("extend");
             }}
             onComplete={() => setStep("complete")}
@@ -120,9 +124,16 @@ export const TimerSessionControls = forwardRef<
               if (preset !== "custom") setCustomMinutes("");
             }}
             onCustomMinutesChange={setCustomMinutes}
-            onClose={resetExtendSelection}
+            onClose={() => {
+              resetExtendSelection();
+              if (cameFromEndModal) {
+                setCameFromEndModal(false);
+                setStep("end");
+              }
+            }}
             onSubmit={handleSubmitExtend}
             canSubmit={canSubmitExtend}
+            canGoBack={cameFromEndModal}
           />
         )}
         {step === "complete" && (
