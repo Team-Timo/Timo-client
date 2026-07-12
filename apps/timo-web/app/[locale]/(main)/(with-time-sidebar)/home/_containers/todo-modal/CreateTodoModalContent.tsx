@@ -4,8 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DeleteIcon } from "@repo/timo-design-system/icons";
 import { CreateButton, TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { useController, useForm, useWatch } from "react-hook-form";
+import { useController, useForm } from "react-hook-form";
 
 import type { CreateTodoRequest } from "@/api/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
@@ -16,11 +15,13 @@ import { CreateTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/h
 import { CreateTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoTaskFields";
 import { useIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-icon-field";
 import { useRepeatField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-repeat-field";
+import { useSubtaskField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
 import {
   DEFAULT_TAG,
   useTagField,
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-tag-field";
 import { useTimeField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-time-field";
+import { useTitleField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-title-field";
 import { formatDateToIsoDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
@@ -63,15 +64,11 @@ export const CreateTodoModalContent = ({
   const tCommon = useTranslations("Common");
   const tToast = useTranslations("Toast");
 
-  const [subtaskInput, setSubtaskInput] = useState("");
+  const { control, handleSubmit, reset } = useForm<CreateTodoRequest>({
+    resolver: zodResolver(createTodoRequestSchema),
+    defaultValues: createDefaultValues(defaultDate),
+  });
 
-  const { register, control, handleSubmit, setValue, reset } =
-    useForm<CreateTodoRequest>({
-      resolver: zodResolver(createTodoRequestSchema),
-      defaultValues: createDefaultValues(defaultDate),
-    });
-
-  const title = useWatch({ control, name: "title" });
   const { field: dateField } = useController({ name: "date", control });
   const { field: memoField } = useController({ name: "memo", control });
   const { field: priorityField } = useController({
@@ -83,17 +80,12 @@ export const CreateTodoModalContent = ({
   const tagField = useTagField({ control });
   const timeField = useTimeField({ control });
   const repeatField = useRepeatField({ control });
+  const subtaskField = useSubtaskField({ control });
+  const titleField = useTitleField({ control });
 
   const dateValue = dateField.value
     ? new Date(`${dateField.value}T00:00:00`)
     : undefined;
-
-  const handleSubtaskInputChange = (value: string) => {
-    setSubtaskInput(value);
-    setValue("subtasks", value.trim() ? [value] : [], {
-      shouldValidate: true,
-    });
-  };
 
   const handleFormSubmit = (data: CreateTodoRequest) => {
     const tag = tagField.selectedTagOption ?? DEFAULT_TAG;
@@ -101,7 +93,7 @@ export const CreateTodoModalContent = ({
     onSubmit(data, { id: data.tagId ?? tag.id, name: tag.name });
 
     reset(createDefaultValues(defaultDate));
-    setSubtaskInput("");
+    subtaskField.reset();
     timeField.resetTime();
     onClose();
   };
@@ -142,11 +134,14 @@ export const CreateTodoModalContent = ({
             />
 
             <CreateTodoTaskFields
-              register={register}
+              titleValue={titleField.title}
               titlePlaceholder={t("createModal.titlePlaceholder")}
-              subtaskInput={subtaskInput}
+              onTitleChange={titleField.handleTitleChange}
+              subtaskInputs={subtaskField.subtaskInputs}
               subtaskPlaceholder={t("createModal.subtaskPlaceholder")}
-              onSubtaskInputChange={handleSubtaskInputChange}
+              registerSubtaskInputRef={subtaskField.registerInputRef}
+              onSubtaskInputChange={subtaskField.handleInputChange}
+              onSubtaskInputKeyDown={subtaskField.handleInputKeyDown}
             />
           </div>
 
@@ -214,7 +209,7 @@ export const CreateTodoModalContent = ({
 
           <CreateButton
             label={t("createModal.create")}
-            disabled={!title.trim()}
+            disabled={!titleField.title.trim()}
             onClick={handleSubmit(handleFormSubmit)}
           />
         </div>
