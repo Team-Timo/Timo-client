@@ -62,6 +62,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.101.1
         version: 5.101.1(@tanstack/react-query@5.101.1(react@19.2.0))(react@19.2.0)
+      '@use-funnel/browser':
+        specifier: ^0.0.17
+        version: 0.0.17(react@19.2.0)
       axios:
         specifier: ^1.18.1
         version: 1.18.1
@@ -2237,6 +2240,16 @@ packages:
   '@typescript-eslint/visitor-keys@8.50.0':
     resolution: {integrity: sha512-Xzmnb58+Db78gT/CCj/PVCvK+zxbnsw6F+O1oheYszJbBSdEjVhQi3C/Xttzxgi/GLmpvOggRs1RFpiJ8+c34Q==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@use-funnel/browser@0.0.17':
+    resolution: {integrity: sha512-saexLJSpTwm02If0I6oY6s1Z7cPwkEGqHvBg+IVokDywcrkhZA9MpxDHT27GSrNlhJHRxis/3g/xIQ48UYfp2Q==}
+    peerDependencies:
+      react: '>=16.8'
+
+  '@use-funnel/core@0.1.0':
+    resolution: {integrity: sha512-KEjBKTbOh5wd6CQZ1jYWhI6KuGrI9Pjn9CkmUgAYzonsyZE0lsiZ2/1RwsaWcxVO5RJBgfwCM8dRpibwm7An9w==}
+    peerDependencies:
+      react: '>=16.8'
 
   '@vitest/expect@2.0.5':
     resolution: {integrity: sha512-yHZtwuP7JZivj65Gxoi8upUN2OzHTi3zVfjwdpu2WrvCZPLwsJ2Ey5ILIPccoW23dd/zQBlJ4/dhi7DWNyXCpA==}
@@ -6801,6 +6814,15 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.50.0
       eslint-visitor-keys: 4.2.1
+
+  '@use-funnel/browser@0.0.17(react@19.2.0)':
+    dependencies:
+      '@use-funnel/core': 0.1.0(react@19.2.0)
+      react: 19.2.0
+
+  '@use-funnel/core@0.1.0(react@19.2.0)':
+    dependencies:
+      react: 19.2.0
 
   '@vitest/expect@2.0.5':
     dependencies:
