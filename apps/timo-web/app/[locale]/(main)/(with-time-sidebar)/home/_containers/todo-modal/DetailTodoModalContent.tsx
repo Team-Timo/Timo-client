@@ -1,16 +1,13 @@
 "use client";
 
 import { DeleteIcon } from "@repo/timo-design-system/icons";
-import {
-  Checkbox,
-  PlayButton,
-  TODO_ICON_VALUES,
-} from "@repo/timo-design-system/ui";
+import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useState } from "react";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 import type { TodoIconValue } from "@repo/timo-design-system/ui";
 
+import { DetailTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoTaskFields";
 import { TodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/TodoIconField";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 
@@ -72,36 +69,7 @@ export const DetailTodoModalContent = ({
       </div>
 
       <div className="bg-timo-gray-500 mt-3 h-px w-full" />
-      <div className="mt-3 flex w-full flex-col">
-        <div className="flex w-full items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Checkbox checked={todo.completed} onChange={() => {}} />
-            <p className="typo-headline-b-14 text-timo-black min-w-0 truncate">
-              {todo.title}
-            </p>
-          </div>
-
-          <PlayButton
-            variant={todo.timerStatus === "RUNNING" ? "stop" : "play"}
-            size="lg"
-            disabled={todo.completed}
-            onClick={() => {}}
-          />
-        </div>
-
-        {todo.subtasks.length > 0 && (
-          <div className="flex flex-col">
-            {todo.subtasks.map((subtask) => (
-              <div key={subtask.subtaskId} className="flex items-center gap-2">
-                <Checkbox checked={subtask.completed} onChange={() => {}} />
-                <p className="typo-body-r-12 text-timo-gray-700 min-w-0 truncate">
-                  {subtask.content}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <DetailTodoTaskFields todo={todo} />
     </OverlayModal>
   );
 };
