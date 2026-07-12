@@ -2,6 +2,7 @@
 
 import { DeleteIcon, TrashOnIcon } from "@repo/timo-design-system/icons";
 import { TodoToolbar } from "@repo/timo-design-system/ui";
+import { useTranslations } from "next-intl";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
@@ -35,6 +36,9 @@ export const DetailTodoModalContent = ({
   onTogglePlay,
   onDelete,
 }: DetailTodoModalContentProps) => {
+  const t = useTranslations("Home.detailModal");
+  const tCreateModal = useTranslations("Home.createModal");
+  const tCommon = useTranslations("Common");
   const detailTodoForm = useDetailTodoForm({ todo });
   const handleTogglePlay = () => {
     onTogglePlay();
@@ -50,11 +54,11 @@ export const DetailTodoModalContent = ({
       isOpen={isOpen}
       onClose={onClose}
       onExited={onExited}
-      ariaLabel="투두 상세"
+      ariaLabel={t("ariaLabel")}
       className="w-124 items-start px-7.5 py-5"
     >
       <div className="flex w-full justify-end">
-        <button type="button" aria-label="닫기" onClick={onClose}>
+        <button type="button" aria-label={tCommon("close")} onClick={onClose}>
           <DeleteIcon />
         </button>
       </div>
@@ -62,13 +66,15 @@ export const DetailTodoModalContent = ({
       <div className="flex w-full flex-col gap-2">
         <div className="flex flex-col">
           <p className="typo-headline-b-30 text-timo-black">22</p>
-          <p className="typo-body-m-12 text-timo-gray-700">월요일</p>
+          <p className="typo-body-m-12 text-timo-gray-700">
+            {tCommon("weekday.MON")}
+          </p>
         </div>
 
         <TodoIconField
           icon={detailTodoForm.icon}
           isIconPanelOpen={detailTodoForm.isIconPanelOpen}
-          addIconLabel="아이콘 추가하기"
+          addIconLabel={tCreateModal("addIcon")}
           onOpenPanel={detailTodoForm.openIconPanel}
           onTogglePanel={detailTodoForm.toggleIconPanel}
           onSelectIcon={detailTodoForm.selectIcon}
@@ -102,20 +108,28 @@ export const DetailTodoModalContent = ({
           selectedTime={detailTodoForm.selectedTime}
           onSelectTime={detailTodoForm.selectTime}
           priority={detailTodoForm.priority}
+          priorityLabels={{
+            VERY_HIGH: tCommon("priority.urgent"),
+            HIGH: tCommon("priority.high"),
+            MEDIUM: tCommon("priority.medium"),
+            LOW: tCommon("priority.low"),
+          }}
           onSelectPriority={detailTodoForm.setPriority}
           tagLabel={detailTodoForm.selectedTag}
           tags={[detailTodoForm.tagLabel]}
           selectedTag={detailTodoForm.selectedTag}
+          addTagLabel={tCreateModal("addTag")}
           onSelectTag={detailTodoForm.setSelectedTag}
           onAddTagClick={() => {}}
           hasMemo={todo.hasMemo}
           isRepeatActive={detailTodoForm.isRepeatActive}
           repeat={{
-            detailHeading: "세부 설정",
+            frequencyHeading: t("repeatFrequencyHeading"),
+            detailHeading: tCreateModal("repeatDetailHeading"),
             options: [
-              { frequency: "DAILY", label: "매일" },
-              { frequency: "WEEKLY", label: "매주" },
-              { frequency: "MONTHLY", label: "매월" },
+              { frequency: "DAILY", label: tCreateModal("repeatDaily") },
+              { frequency: "WEEKLY", label: tCreateModal("repeatWeekly") },
+              { frequency: "MONTHLY", label: tCreateModal("repeatMonthly") },
             ],
             frequency: detailTodoForm.repeatFrequency,
             onFrequencyChange: detailTodoForm.changeRepeatFrequency,
@@ -125,20 +139,20 @@ export const DetailTodoModalContent = ({
               onWeekdayToggle: detailTodoForm.toggleWeekday,
             },
             monthly: {
-              repeatDayLabel: "일",
+              repeatDayLabel: t("repeatDayLabel"),
               repeatDay: detailTodoForm.repeatDay,
               onRepeatDayChange: detailTodoForm.setRepeatDay,
             },
           }}
         />
-        <button type="button" aria-label="투두 삭제" onClick={handleDelete}>
+        <button type="button" aria-label={t("delete")} onClick={handleDelete}>
           <TrashOnIcon />
         </button>
       </div>
       <div className="mt-3 w-full">
         <DetailTodoMemoField
           value={detailTodoForm.memo}
-          placeholder="메모를 입력해 주세요..."
+          placeholder={tCreateModal("notePlaceholder")}
           onChange={detailTodoForm.setMemo}
           maxLength={DETAIL_TODO_MEMO_MAX_LENGTH}
         />

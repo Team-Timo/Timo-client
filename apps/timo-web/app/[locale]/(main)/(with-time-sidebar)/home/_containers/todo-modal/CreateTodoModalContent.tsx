@@ -170,12 +170,19 @@ export const CreateTodoModalContent = ({
             selectedTime={timeField.selectedTime}
             onSelectTime={timeField.handleSelectTime}
             priority={priorityField.value ?? undefined}
+            priorityLabels={{
+              VERY_HIGH: tCommon("priority.urgent"),
+              HIGH: tCommon("priority.high"),
+              MEDIUM: tCommon("priority.medium"),
+              LOW: tCommon("priority.low"),
+            }}
             onSelectPriority={(level: PriorityLevel) =>
               priorityField.onChange(level)
             }
             tagLabel={tagField.selectedTagLabel ?? t("createModal.tagLabel")}
             tags={tagField.tagLabels}
             selectedTag={tagField.selectedTagLabel}
+            addTagLabel={t("createModal.addTag")}
             onSelectTag={tagField.handleSelectTag}
             onAddTagClick={tagField.handleAddTagClick}
             hasMemo={Boolean(memoField.value?.trim())}
