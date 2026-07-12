@@ -1,4 +1,4 @@
-const MINUTES_PER_HOUR = 60;
+import { MINUTES_PER_HOUR } from "@/constants/time";
 
 export const formatDurationLabel = (
   totalMinutes: number,
