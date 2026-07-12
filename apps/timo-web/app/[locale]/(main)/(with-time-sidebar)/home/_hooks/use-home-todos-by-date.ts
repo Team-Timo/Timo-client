@@ -32,6 +32,14 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     }));
   };
 
+  const handleAddTodo = (dateKey: string, todo: Todo) => {
+    // TODO: API
+    setTodosByDate((prev) => ({
+      ...prev,
+      [dateKey]: [...(prev[dateKey] ?? []), todo],
+    }));
+  };
+
   const handleToggleCompleted = (
     dateKey: string,
     todoId: number,
@@ -95,6 +103,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
 
   return {
     todosByDate,
+    handleAddTodo,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,

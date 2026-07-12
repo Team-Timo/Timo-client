@@ -41,21 +41,3 @@ export const getFirstDayOffset = (month: Date) => {
 
   return (firstDate.getDay() + 6) % 7;
 };
-
-/**
- * Date 객체를 API 응답 날짜 형식인 yyyy-MM-dd 문자열로 변환합니다.
- * 날짜별 completionRate를 매칭할 때 사용합니다.
- *
- * @param date - 변환할 날짜
- * @returns yyyy-MM-dd 형식의 날짜 문자열
- *
- * @example
- * formatDateKey(new Date(2026, 5, 28)); // "2026-06-28"
- */
-export const formatDateKey = (date: Date) => {
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, "0");
-  const day = `${date.getDate()}`.padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-};

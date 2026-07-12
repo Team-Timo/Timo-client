@@ -28,13 +28,37 @@
       "high": "중요",
       "medium": "보통",
       "low": "낮음"
-    }
+    },
+    "close": "닫기"
   },
   "Home": {
     "today": "오늘",
     "viewBasic": "기본",
     "viewWeek": "7일",
-    "addTask": "할 일을 추가하세요"
+    "addTask": "할 일을 추가하세요",
+    "createModal": {
+      "title": "할 일 추가하기",
+      "addIcon": "아이콘 추가하기",
+      "titlePlaceholder": "새로운 작업을 계획하세요",
+      "subtaskPlaceholder": "작은 단위로 할 일을 나눠보세요",
+      "notePlaceholder": "메모를 입력해주세요...",
+      "dateLabel": "날짜",
+      "timeLabel": "시간",
+      "tagLabel": "태그",
+      "create": "생성하기",
+      "repeatDaily": "매일",
+      "repeatWeekly": "매주",
+      "repeatMonthly": "매달",
+      "repeatDetailHeading": "세부 설정",
+      "repeatDayUnit": "일 마다"
+    },
+    "createTagModal": {
+      "title": "태그 생성하기",
+      "nameLabel": "태그 이름",
+      "maxLengthHint": "태그 이름은 최대 10자까지 입력할 수 있어요",
+      "duplicateHint": "이미 사용 중인 이름은 등록할 수 없어요",
+      "create": "생성하기"
+    }
   },
   "Toast": {
     "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
