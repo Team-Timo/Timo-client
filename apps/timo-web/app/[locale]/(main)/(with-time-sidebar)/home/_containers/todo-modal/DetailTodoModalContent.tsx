@@ -7,6 +7,7 @@ import { useState } from "react";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 import type { TodoIconValue } from "@repo/timo-design-system/ui";
 
+import { DetailTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoMemoField";
 import { DetailTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoTaskFields";
 import { TodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/TodoIconField";
 import { OverlayModal } from "@/components/modal/OverlayModal";
@@ -70,6 +71,12 @@ export const DetailTodoModalContent = ({
 
       <div className="bg-timo-gray-500 mt-3 h-px w-full" />
       <DetailTodoTaskFields todo={todo} />
+      <div className="mt-3 w-full">
+        <DetailTodoMemoField
+          value={null}
+          placeholder="메모를 입력해 주세요.."
+        />
+      </div>
     </OverlayModal>
   );
 };
