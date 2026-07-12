@@ -21,9 +21,11 @@ export const TagSelector = ({
 }: TagSelectorProps) => {
   return (
     <Dropdown className="flex justify-center">
-      <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
+      <Dropdown.Trigger aria-haspopup="menu" className="p-1">
+        {trigger}
+      </Dropdown.Trigger>
 
-      <Dropdown.Panel>
+      <Dropdown.Panel className="shadow-timo">
         {tags.map((tag) => {
           const isSelected = tag === selected;
 
