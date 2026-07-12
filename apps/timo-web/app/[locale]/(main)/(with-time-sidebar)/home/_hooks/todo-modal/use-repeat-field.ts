@@ -8,7 +8,6 @@ import type {
 import type { RepeatFrequency } from "@repo/timo-design-system/ui";
 import type { Control } from "react-hook-form";
 
-
 const WEEKDAY_CODES: TodoRepeatWeekday[] = [
   "MON",
   "TUE",

@@ -34,6 +34,8 @@ export type {
   RepeatOption,
   WeekdayOption,
 } from "./repeat/repeat-selector/RepeatSelector";
+export { PillButton } from "./button/pill-button/PillButton";
+export { TagChip } from "./tag/tag-chip/TagChip";
 export { Calendar } from "./calendar/Calendar";
 export { DateSelector } from "./calendar/date-selector/DateSelector";
 export { TodoToolbar } from "./todo/todo-toolbar/TodoToolbar";

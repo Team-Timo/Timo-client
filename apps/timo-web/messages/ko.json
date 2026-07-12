@@ -60,6 +60,39 @@
       "create": "생성하기"
     }
   },
+  "Settings": {
+    "nav": {
+      "account": "개인 정보",
+      "policy": "약관",
+      "withdrawal": "회원 탈퇴"
+    },
+    "profile": {
+      "title": "개인 정보",
+      "profileSection": "프로필",
+      "calendarSection": "구글 캘린더 연동",
+      "connect": "연동하기",
+      "disconnect": "연동 해제",
+      "languageSection": "언어",
+      "languageKorean": "한국어",
+      "languageEnglish": "English",
+      "tagsSection": "태그",
+      "addTag": "태그 추가",
+      "removeTag": "{tag} 태그 삭제",
+      "logout": "로그아웃",
+      "save": "변경사항 저장"
+    },
+    "withdrawal": {
+      "title": "탈퇴",
+      "guideTitle": "더이상 Timo를 이용하지 않으시나요?",
+      "guideDescription": "탈퇴 후에는 계정 정보와 저장된 모든 데이터가 삭제되며 복구할 수 없어요.",
+      "warningTitle": "탈퇴 전 꼭 확인해주세요.",
+      "warningSchedule": "저장된 일정 및 할 일이 삭제됩니다.",
+      "warningCalendar": "연동된 캘린더 연결이 해제됩니다.",
+      "warningIrreversible": "삭제된 계정은 복구할 수 없습니다.",
+      "withdraw": "탈퇴하기",
+      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요."
+    }
+  },
   "Toast": {
     "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
     "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",
