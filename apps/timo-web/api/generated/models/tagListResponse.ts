@@ -8,5 +8,5 @@
 import type { TagResponse } from "./tagResponse";
 
 export interface TagListResponse {
-  tags?: TagResponse[];
+  tags: TagResponse[];
 }

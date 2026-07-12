@@ -8,5 +8,5 @@
 
 export interface UpdateTimezoneResponse {
   /** 변경된 시간대 ID */
-  zoneId?: string;
+  zoneId: string;
 }

@@ -8,7 +8,7 @@
 import * as zod from "zod";
 
 /**
- * 투두의 타이머를 시작합니다.<br>
+ * 투두의 타이머를 시작합니다.
  * 한 번에 한 개의 타이머만 실행 가능하며, 이미 실행/일시정지 중인 타이머가 있으면 409를 반환합니다.
  * @summary 타이머 시작
  */
@@ -16,7 +16,19 @@ export const StartTimerParams = zod.object({
   todoId: zod.number().describe("타이머를 시작할 투두 ID"),
 });
 
-export const StartTimerResponse = zod.void();
+export const StartTimerResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      timerId: zod.number(),
+      todoId: zod.number(),
+      status: zod.string(),
+      plannedSeconds: zod.number(),
+      startedAt: zod.string(),
+    })
+    .optional(),
+});
 
 /**
  * 사용자의 요청으로 타이머를 종료합니다.
@@ -29,7 +41,23 @@ export const StopTimerParams = zod.object({
   timerId: zod.number().describe("타이머 기록 ID"),
 });
 
-export const StopTimerResponse = zod.unknown();
+export const StopTimerResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      timerId: zod.number(),
+      todoId: zod.number(),
+      status: zod.string(),
+      plannedSeconds: zod.number(),
+      actualSeconds: zod.number(),
+      aiFeedback: zod
+        .string()
+        .nullish()
+        .describe("AI 피드백 문구. AI 호출 실패 시 null"),
+    })
+    .optional(),
+});
 
 /**
  * 실행 중인 타이머의 일시정지 / 재개를 처리합니다.<br>
@@ -45,12 +73,23 @@ export const ChangeStatusBody = zod.object({
   action: zod.enum(["PAUSE", "RESUME"]).describe("타이머 동작 (PAUSE/RESUME)"),
 });
 
-export const ChangeStatusResponse = zod.unknown();
+export const ChangeStatusResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      timerId: zod.number(),
+      status: zod.string(),
+      elapsedSeconds: zod.number(),
+      remainingSeconds: zod.number(),
+    })
+    .optional(),
+});
 
 /**
- *      사용자가 입력한 연장 시간을 현재 타이머에 반영합니다.
- *      연장 시간(분)을 초로 변환하여 extended_seconds에 누적
- *      RUNNING, PAUSED 상태 모두에서 호출 가능하며, 타이머 상태(status)는 변경되지 않습니다.
+ * 사용자가 입력한 연장 시간을 현재 타이머에 반영합니다.
+ * 연장 시간(분)을 초로 변환하여 extended_seconds에 누적
+ * RUNNING, PAUSED 상태 모두에서 호출 가능하며, 타이머 상태(status)는 변경되지 않습니다.
  * @summary 타이머 연장
  */
 export const ExtendTimerParams = zod.object({
@@ -67,7 +106,18 @@ export const ExtendTimerBody = zod.object({
     .describe("연장할 시간 (분), 1 이상"),
 });
 
-export const ExtendTimerResponse = zod.unknown();
+export const ExtendTimerResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      timerId: zod.number(),
+      status: zod.string(),
+      extendedSeconds: zod.number(),
+      remainingSeconds: zod.number(),
+    })
+    .optional(),
+});
 
 /**
  * 예상 소요 시간이 모두 경과하여 타이머를 자동 종료합니다.
@@ -81,12 +131,45 @@ export const CompleteTimerParams = zod.object({
   timerId: zod.number().describe("타이머 기록 ID"),
 });
 
-export const CompleteTimerResponse = zod.unknown();
+export const CompleteTimerResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      timerId: zod.number(),
+      todoId: zod.number(),
+      status: zod.string(),
+      plannedSeconds: zod.number(),
+      actualSeconds: zod.number(),
+      aiFeedback: zod
+        .string()
+        .nullish()
+        .describe("AI 피드백 문구. AI 호출 실패 시 null"),
+    })
+    .optional(),
+});
 
 /**
- * 		로그인한 사용자의 현재 실행 중(RUNNING/PAUSED)인 타이머를 단건 조회합니다.
- *  	한 사용자당 시작 이후 완료/종료되지 않은 타이머는 최대 1개만 존재할 수 있습니다.
- *   실행 중인 타이머가 없으면 data: null을 반환합니다.
+ * 로그인한 사용자의 현재 실행 중(RUNNING/PAUSED)인 타이머를 단건 조회합니다.
+ * 한 사용자당 시작 이후 완료/종료되지 않은 타이머는 최대 1개만 존재할 수 있습니다.
+ * 실행 중인 타이머가 없으면 data: null을 반환합니다.
  * @summary 현재 실행 중인 타이머 조회
  */
-export const GetActiveTimerResponse = zod.unknown();
+export const GetActiveTimerResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      timerId: zod.number(),
+      todoId: zod.number(),
+      todoTitle: zod.string(),
+      iconType: zod.string().optional(),
+      status: zod.string(),
+      plannedSeconds: zod.number(),
+      extendedSeconds: zod.number(),
+      elapsedSeconds: zod.number(),
+      remainingSeconds: zod.number(),
+      startedAt: zod.string(),
+    })
+    .optional(),
+});

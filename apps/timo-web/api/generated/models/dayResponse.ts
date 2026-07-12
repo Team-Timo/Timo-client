@@ -9,11 +9,11 @@ import type { DayResponseDayOfWeek } from "./dayResponseDayOfWeek";
 import type { TodoResponse } from "./todoResponse";
 
 export interface DayResponse {
-  date?: string;
-  dayOfWeek?: DayResponseDayOfWeek;
-  isHoliday?: boolean;
-  isToday?: boolean;
-  totalCount?: number;
-  completedCount?: number;
-  todos?: TodoResponse[];
+  date: string;
+  dayOfWeek: DayResponseDayOfWeek;
+  isHoliday: boolean;
+  isToday: boolean;
+  totalCount: number;
+  completedCount: number;
+  todos: TodoResponse[];
 }

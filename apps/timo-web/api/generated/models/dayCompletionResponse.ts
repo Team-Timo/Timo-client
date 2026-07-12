@@ -8,7 +8,7 @@
 
 export interface DayCompletionResponse {
   /** 통계 날짜 */
-  date?: string;
+  date: string;
   /** 투두 완료율. 투두가 없으면 0 */
-  completionRate?: number;
+  completionRate: number;
 }

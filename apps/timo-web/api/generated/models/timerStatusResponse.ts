@@ -7,8 +7,8 @@
  */
 
 export interface TimerStatusResponse {
-  timerId?: number;
-  status?: string;
-  elapsedSeconds?: number;
-  remainingSeconds?: number;
+  timerId: number;
+  status: string;
+  elapsedSeconds: number;
+  remainingSeconds: number;
 }

@@ -7,6 +7,6 @@
  */
 
 export interface TodoReorderResponse {
-  todoId?: number;
-  sortOrder?: number;
+  todoId: number;
+  sortOrder: number;
 }

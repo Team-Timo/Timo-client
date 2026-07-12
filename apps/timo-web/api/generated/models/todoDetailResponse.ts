@@ -11,18 +11,18 @@ import type { TagResponse } from "./tagResponse";
 import type { TodoDetailResponseTimerStatus } from "./todoDetailResponseTimerStatus";
 
 export interface TodoDetailResponse {
-  todoId?: number;
+  todoId: number;
   icon?: string;
-  title?: string;
-  completed?: boolean;
-  date?: string;
-  dayOfWeek?: string;
+  title: string;
+  completed: boolean;
+  date: string;
+  dayOfWeek: string;
   durationSeconds?: number;
   priority?: string;
   tag?: TagResponse;
-  repeat?: RepeatResponse;
-  timerStatus?: TodoDetailResponseTimerStatus;
+  repeat: RepeatResponse;
+  timerStatus: TodoDetailResponseTimerStatus;
   memo?: string;
   sortOrder?: number;
-  subtasks?: SubtaskResponse[];
+  subtasks: SubtaskResponse[];
 }

@@ -8,7 +8,7 @@
 import type { UserInfo } from "./userInfo";
 
 export interface AuthTokenResponse {
-  accessToken?: string;
-  user?: UserInfo;
-  isNewUser?: boolean;
+  accessToken: string;
+  user: UserInfo;
+  isNewUser: boolean;
 }

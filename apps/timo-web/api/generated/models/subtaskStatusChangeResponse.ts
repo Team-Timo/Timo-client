@@ -7,6 +7,6 @@
  */
 
 export interface SubtaskStatusChangeResponse {
-  subtaskId?: number;
-  completed?: boolean;
+  subtaskId: number;
+  completed: boolean;
 }

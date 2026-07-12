@@ -7,7 +7,7 @@
  */
 
 export interface SubtaskResponse {
-  subtaskId?: number;
-  content?: string;
-  completed?: boolean;
+  subtaskId: number;
+  content: string;
+  completed: boolean;
 }

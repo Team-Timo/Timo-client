@@ -9,8 +9,8 @@ import type { FocusTodoDetailResponse } from "./focusTodoDetailResponse";
 import type { FocusTodoResponseDayOfWeek } from "./focusTodoResponseDayOfWeek";
 
 export interface FocusTodoResponse {
-  date?: string;
-  dayOfWeek?: FocusTodoResponseDayOfWeek;
-  hasTodo?: boolean;
+  date: string;
+  dayOfWeek: FocusTodoResponseDayOfWeek;
+  hasTodo: boolean;
   todo?: FocusTodoDetailResponse;
 }

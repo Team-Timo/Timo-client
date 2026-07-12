@@ -9,11 +9,11 @@ import type { TagResponse } from "./tagResponse";
 
 export interface DailyTodoResponse {
   /** 투두 ID */
-  todoId?: number;
+  todoId: number;
   /** 투두명 */
-  title?: string;
+  title: string;
   /** 실제 소요 시간(분), 기록이 없으면 0 */
-  actualTimeMinutes?: number;
+  actualTimeMinutes: number;
   /** 예상 소요 시간(분) */
   estimatedTimeMinutes?: number;
   /**

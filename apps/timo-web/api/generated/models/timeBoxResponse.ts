@@ -10,17 +10,17 @@ import type { TimeBoxResponseStartAction } from "./timeBoxResponseStartAction";
 
 export interface TimeBoxResponse {
   /** 타임박스의 원본이 되는 타이머 세션 ID */
-  sessionId?: number;
+  sessionId: number;
   /** 타이머 기록 ID */
-  timerId?: number;
+  timerId: number;
   /** 투두 ID */
-  todoId?: number;
+  todoId: number;
   /** 투두명 */
-  todoName?: string;
+  todoName: string;
   /** 타임박스 표시 날짜 */
-  date?: string;
+  date: string;
   /** 해당 날짜에 표시할 시작 일시 */
-  startedAt?: string;
+  startedAt: string;
   /**
    * 시작 일시의 액션. 이전 날짜부터 이어진 구간이면 null
    * @nullable
