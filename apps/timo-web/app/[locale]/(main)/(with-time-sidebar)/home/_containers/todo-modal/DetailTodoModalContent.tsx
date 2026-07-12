@@ -1,61 +1,20 @@
 "use client";
 
 import { DeleteIcon } from "@repo/timo-design-system/icons";
-import { TODO_ICON_VALUES, TodoToolbar } from "@repo/timo-design-system/ui";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { TodoToolbar } from "@repo/timo-design-system/ui";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
-import type {
-  PriorityLevel,
-  RepeatFrequency,
-  TimeOption,
-  TimeSelection,
-  TodoIconValue,
-} from "@repo/timo-design-system/ui";
 
 import { DetailTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoMemoField";
 import { DetailTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoTaskFields";
 import { TodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/TodoIconField";
-import { convertDurationToTimeText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
+import {
+  DETAIL_TODO_TIME_OPTIONS,
+  DETAIL_TODO_WEEKDAYS,
+  formatDetailTodoDateLabel,
+  useDetailTodoForm,
+} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-detail-todo-form";
 import { OverlayModal } from "@/components/modal/OverlayModal";
-
-const isTodoIconValue = (icon: string | null): icon is TodoIconValue =>
-  icon !== null && (TODO_ICON_VALUES as readonly string[]).includes(icon);
-
-const TAG_LABEL_KEYS = [
-  "dailyLife",
-  "work",
-  "exercise",
-  "assignment",
-  "additional",
-] as const;
-
-type TagLabelKey = (typeof TAG_LABEL_KEYS)[number];
-
-const isTagLabelKey = (value: string): value is TagLabelKey =>
-  (TAG_LABEL_KEYS as readonly string[]).includes(value);
-
-const DETAIL_TODO_TIME_OPTIONS: TimeOption[] = [
-  { minute: 15, value: "15", unit: "min" },
-  { minute: 30, value: "30", unit: "min" },
-  { minute: 45, value: "45", unit: "min" },
-  { minute: 60, value: "1", unit: "h" },
-  { minute: 90, value: "1.5", unit: "h" },
-];
-
-const WEEKDAYS = [
-  { id: "MON", label: "월" },
-  { id: "TUE", label: "화" },
-  { id: "WED", label: "수" },
-  { id: "THU", label: "목" },
-  { id: "FRI", label: "금" },
-  { id: "SAT", label: "토" },
-  { id: "SUN", label: "일" },
-];
-
-const formatDateLabel = (date: Date) =>
-  `${String(date.getFullYear()).slice(2)}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
 
 export interface DetailTodoModalContentProps {
   isOpen: boolean;
@@ -70,54 +29,7 @@ export const DetailTodoModalContent = ({
   onExited,
   todo,
 }: DetailTodoModalContentProps) => {
-  const tCommon = useTranslations("Common");
-  const durationText = convertDurationToTimeText(todo.durationSeconds);
-  const tagLabel = isTagLabelKey(todo.tag.name)
-    ? tCommon(`tag.${todo.tag.name}`)
-    : todo.tag.name;
-  const [date, setDate] = useState(new Date(2026, 6, 1));
-  const [time, setTime] = useState(durationText);
-  const [selectedTime, setSelectedTime] = useState<TimeSelection>();
-  const [priority, setPriority] = useState<PriorityLevel>(todo.priority);
-  const [selectedTag, setSelectedTag] = useState(tagLabel);
-  const [isRepeatActive, setIsRepeatActive] = useState(todo.isRepeated);
-  const [repeatFrequency, setRepeatFrequency] =
-    useState<RepeatFrequency>("DAILY");
-  const [selectedWeekdayIds, setSelectedWeekdayIds] = useState<string[]>([]);
-  const [repeatDay, setRepeatDay] = useState("");
-  const [icon, setIcon] = useState<TodoIconValue | null>(
-    isTodoIconValue(todo.icon) ? todo.icon : null,
-  );
-  const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
-
-  const openIconPanel = () => setIsIconPanelOpen(true);
-  const toggleIconPanel = () => setIsIconPanelOpen((prev) => !prev);
-  const selectIcon = (nextIcon: TodoIconValue) => setIcon(nextIcon);
-  const removeIcon = () => setIcon(null);
-  const selectTime = (nextTime: TimeSelection) => {
-    setSelectedTime(nextTime);
-
-    if (nextTime === "ai") return;
-
-    const option = DETAIL_TODO_TIME_OPTIONS.find(
-      (item) => item.minute === nextTime,
-    );
-
-    if (!option) return;
-
-    setTime(`${option.value} ${option.unit}`);
-  };
-  const changeRepeatFrequency = (frequency: RepeatFrequency) => {
-    setIsRepeatActive(true);
-    setRepeatFrequency(frequency);
-  };
-  const toggleWeekday = (weekdayId: string) => {
-    setSelectedWeekdayIds((prev) =>
-      prev.includes(weekdayId)
-        ? prev.filter((item) => item !== weekdayId)
-        : [...prev, weekdayId],
-    );
-  };
+  const detailTodoForm = useDetailTodoForm({ todo });
 
   return (
     <OverlayModal
@@ -140,38 +52,45 @@ export const DetailTodoModalContent = ({
         </div>
 
         <TodoIconField
-          icon={icon}
-          isIconPanelOpen={isIconPanelOpen}
+          icon={detailTodoForm.icon}
+          isIconPanelOpen={detailTodoForm.isIconPanelOpen}
           addIconLabel="아이콘 추가하기"
-          onOpenPanel={openIconPanel}
-          onTogglePanel={toggleIconPanel}
-          onSelectIcon={selectIcon}
-          onRemoveIcon={removeIcon}
+          onOpenPanel={detailTodoForm.openIconPanel}
+          onTogglePanel={detailTodoForm.toggleIconPanel}
+          onSelectIcon={detailTodoForm.selectIcon}
+          onRemoveIcon={detailTodoForm.removeIcon}
         />
       </div>
 
       <div className="bg-timo-gray-500 mt-2 h-px w-full" />
-      <DetailTodoTaskFields todo={todo} />
+      <DetailTodoTaskFields
+        title={todo.title}
+        isCompleted={detailTodoForm.isCompleted}
+        timerStatus={todo.timerStatus}
+        subtasks={detailTodoForm.subtasks}
+        onToggleCompleted={detailTodoForm.setIsCompleted}
+        onToggleSubtaskCompleted={detailTodoForm.toggleSubtaskCompleted}
+      />
       <div className="mt-2 py-3">
         <TodoToolbar
-          dateLabel={formatDateLabel(date)}
-          date={date}
-          onDateChange={setDate}
-          timeLabel={time}
+          dateLabel={formatDetailTodoDateLabel(detailTodoForm.date)}
+          date={detailTodoForm.date}
+          onDateChange={detailTodoForm.setDate}
+          timeLabel={detailTodoForm.time}
           timeOptions={DETAIL_TODO_TIME_OPTIONS}
-          time={time}
-          onTimeChange={setTime}
-          selectedTime={selectedTime}
-          onSelectTime={selectTime}
-          priority={priority}
-          onSelectPriority={setPriority}
-          tagLabel={selectedTag}
-          tags={[tagLabel]}
-          selectedTag={selectedTag}
-          onSelectTag={setSelectedTag}
+          time={detailTodoForm.time}
+          onTimeChange={detailTodoForm.setTime}
+          selectedTime={detailTodoForm.selectedTime}
+          onSelectTime={detailTodoForm.selectTime}
+          priority={detailTodoForm.priority}
+          onSelectPriority={detailTodoForm.setPriority}
+          tagLabel={detailTodoForm.selectedTag}
+          tags={[detailTodoForm.tagLabel]}
+          selectedTag={detailTodoForm.selectedTag}
+          onSelectTag={detailTodoForm.setSelectedTag}
           onAddTagClick={() => {}}
           hasMemo={todo.hasMemo}
-          isRepeatActive={isRepeatActive}
+          isRepeatActive={detailTodoForm.isRepeatActive}
           repeat={{
             detailHeading: "세부 설정",
             options: [
@@ -179,17 +98,17 @@ export const DetailTodoModalContent = ({
               { frequency: "WEEKLY", label: "매주" },
               { frequency: "MONTHLY", label: "매월" },
             ],
-            frequency: repeatFrequency,
-            onFrequencyChange: changeRepeatFrequency,
+            frequency: detailTodoForm.repeatFrequency,
+            onFrequencyChange: detailTodoForm.changeRepeatFrequency,
             weekly: {
-              weekdays: WEEKDAYS,
-              selectedWeekdayIds,
-              onWeekdayToggle: toggleWeekday,
+              weekdays: DETAIL_TODO_WEEKDAYS,
+              selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
+              onWeekdayToggle: detailTodoForm.toggleWeekday,
             },
             monthly: {
               repeatDayLabel: "일",
-              repeatDay,
-              onRepeatDayChange: setRepeatDay,
+              repeatDay: detailTodoForm.repeatDay,
+              onRepeatDayChange: detailTodoForm.setRepeatDay,
             },
           }}
         />
