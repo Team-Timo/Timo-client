@@ -32,3 +32,20 @@ export const formatStatisticsCalendarDate = (date: Date, locale = "ko") => {
     weekday: "long",
   }).format(date);
 };
+
+/**
+ * 통계 사이드 패널 제목에 표시할 날짜 문구를 반환합니다.
+ *
+ * @param date - 표시할 날짜
+ * @param locale - 날짜 표기에 사용할 locale 값
+ * @returns 월과 일이 포함된 짧은 날짜 문구
+ *
+ * @example
+ * formatStatisticsSidePanelDate(new Date(2026, 5, 28)); // "6월 28일"
+ */
+export const formatStatisticsSidePanelDate = (date: Date, locale = "ko") => {
+  return new Intl.DateTimeFormat(locale, {
+    month: "long",
+    day: "numeric",
+  }).format(date);
+};

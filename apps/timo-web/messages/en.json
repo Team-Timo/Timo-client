@@ -93,6 +93,19 @@
       "confirmMessage": "Are you sure you want to withdraw? All your data will be deleted and cannot be undone."
     }
   },
+  "Statistics": {
+    "sidePanel": {
+      "monthTotalRecordTime": "Total record time this month",
+      "activeDays": "Active days",
+      "activeDayCount": "{count} days",
+      "dailyAverage": "Daily average",
+      "accumulatedTasks": "Accumulated tasks",
+      "dayTotalRecordTime": "Total record time today",
+      "plan": "Plan",
+      "overtime": "+Overdue",
+      "shortened": "-Shortened"
+    }
+  },
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
