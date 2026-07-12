@@ -66,6 +66,7 @@ instance.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return instance(originalRequest);
         }
+        window.location.href = ROUTES.LOGIN;
       } catch {
         window.location.href = ROUTES.LOGIN;
       }
