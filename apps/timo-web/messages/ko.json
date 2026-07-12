@@ -109,7 +109,8 @@
   "Toast": {
     "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
     "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",
-    "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 완료해주세요."
+    "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 완료해주세요.",
+    "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요."
   },
   "Login": {
     "animationLabel": "로그인 애니메이션",
@@ -121,7 +122,9 @@
   "Error": {
     "title": "잠시 문제가 발생했어요.",
     "description": "더 나은 경험을 위해 잠시 점검 중입니다. 잠시후 다시 이용해 주세요.",
-    "homeButton": "홈으로 돌아가기"
+    "homeButton": "홈으로 돌아가기",
+    "sectionDescription": "일시적인 문제로 이 영역을 불러오지 못했어요.",
+    "retryButton": "다시 시도"
   },
   "NotFound": {
     "title": "페이지를 찾을 수 없어요.",

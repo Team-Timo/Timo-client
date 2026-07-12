@@ -109,7 +109,8 @@
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
-    "todoLimitLine2": "To add a new to-do, please complete an existing one."
+    "todoLimitLine2": "To add a new to-do, please complete an existing one.",
+    "onboardingSubmitFailed": "Failed to save onboarding. Please try again."
   },
   "Login": {
     "animationLabel": "Login animation",
@@ -121,7 +122,9 @@
   "Error": {
     "title": "A problem has occurred.",
     "description": "We are currently undergoing maintenance for a better experience. Please try again later.",
-    "homeButton": "Return to home"
+    "homeButton": "Return to home",
+    "sectionDescription": "This section couldn't be loaded due to a temporary issue.",
+    "retryButton": "Retry"
   },
   "NotFound": {
     "title": "Page not found",

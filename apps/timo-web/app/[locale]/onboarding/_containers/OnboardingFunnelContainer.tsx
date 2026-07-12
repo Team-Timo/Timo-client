@@ -1,6 +1,7 @@
 "use client";
 
 import { useFunnel } from "@use-funnel/browser";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { useCompleteOnboarding } from "@/api/generated/endpoints/onboarding/onboarding";
@@ -12,6 +13,7 @@ import { LifePatternStepContainer } from "@/app/[locale]/onboarding/_containers/
 import { TimePredictionStepContainer } from "@/app/[locale]/onboarding/_containers/TimePredictionStepContainer";
 import { OnboardingFunnelSteps } from "@/app/[locale]/onboarding/_types/onboarding-funnel";
 import { LottiePlayer } from "@/components/lottie/LottiePlayer";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "@/i18n/navigation";
 
@@ -29,10 +31,12 @@ const ONBOARDING_LANGUAGE_MAP: Record<"ko" | "en", OnboardingRequestLanguage> =
   };
 
 export const OnboardingFunnelContainer = () => {
+  const t = useTranslations("Toast");
   const router = useRouter();
   const [answers, setAnswers] = useState<
     Partial<OnboardingFunnelSteps["CalendarConnect"]>
   >({});
+  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
 
   const funnel = useFunnel<OnboardingFunnelSteps>({
     id: "onboarding",
@@ -42,6 +46,11 @@ export const OnboardingFunnelContainer = () => {
 
   return (
     <section className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
+      <AnimatedToast
+        isOpen={isErrorToastOpen}
+        onClose={() => setIsErrorToastOpen(false)}
+        message={t("onboardingSubmitFailed")}
+      />
       <LottiePlayer
         src="/lottie/onboarding.json"
         className="hidden shrink-0 lg:block lg:size-[350px] xl:size-[430px] 2xl:size-[500px]"
@@ -136,6 +145,9 @@ export const OnboardingFunnelContainer = () => {
                         router.replace(ROUTES.HOME, {
                           locale: answers.language,
                         });
+                      },
+                      onError: () => {
+                        setIsErrorToastOpen(true);
                       },
                     },
                   );
