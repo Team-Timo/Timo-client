@@ -90,4 +90,6 @@ jobs:
 
       - name: Build
         if: steps.affected.outputs.has_changes == 'true'
+        env:
+          NEXT_PUBLIC_API_BASE_URL: ${{ vars.NEXT_PUBLIC_API_BASE_URL }}
         run: pnpm build
