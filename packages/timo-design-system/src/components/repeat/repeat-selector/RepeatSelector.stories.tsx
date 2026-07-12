@@ -11,9 +11,9 @@ const TRIGGER = (
 );
 
 const KOREAN_OPTIONS = [
-  { frequency: "daily", label: "매일" },
-  { frequency: "weekly", label: "매주" },
-  { frequency: "monthly", label: "매달" },
+  { frequency: "DAILY", label: "매일" },
+  { frequency: "WEEKLY", label: "매주" },
+  { frequency: "MONTHLY", label: "매달" },
 ] as const;
 
 const WEEKDAYS_KO = [
@@ -43,7 +43,7 @@ const meta = {
   argTypes: {
     frequency: {
       control: "select",
-      options: ["daily", "weekly", "monthly"],
+      options: ["DAILY", "WEEKLY", "MONTHLY"],
     },
   },
   args: {
@@ -66,7 +66,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Daily: Story = {
   args: {
-    frequency: "daily",
+    frequency: "DAILY",
   },
 };
 
@@ -76,7 +76,7 @@ const WeeklyDemo = (args: RepeatSelectorProps) => {
   return (
     <RepeatSelector
       {...args}
-      frequency="weekly"
+      frequency="WEEKLY"
       weekly={{
         ...args.weekly,
         weekdays: WEEKDAYS_KO,
@@ -94,7 +94,7 @@ const WeeklyDemo = (args: RepeatSelectorProps) => {
 
 export const Weekly: Story = {
   args: {
-    frequency: "weekly",
+    frequency: "WEEKLY",
   },
   render: (args) => <WeeklyDemo {...args} />,
 };
@@ -105,7 +105,7 @@ const MonthlyDemo = (args: RepeatSelectorProps) => {
   return (
     <RepeatSelector
       {...args}
-      frequency="monthly"
+      frequency="MONTHLY"
       monthly={{
         ...args.monthly,
         repeatDayLabel: "일 마다",
@@ -118,7 +118,7 @@ const MonthlyDemo = (args: RepeatSelectorProps) => {
 
 export const Monthly: Story = {
   args: {
-    frequency: "monthly",
+    frequency: "MONTHLY",
   },
   render: (args) => <MonthlyDemo {...args} />,
 };

@@ -7,13 +7,13 @@ import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { todayTodoMocks } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
-import { formatDate } from "@/utils/format-date";
+import { formatDate } from "@/utils/date";
 
 const PRIORITY_MAP = {
-  URGENT: "urgent",
-  HIGH: "high",
-  MEDIUM: "medium",
-  LOW: "low",
+  URGENT: "VERY_HIGH",
+  HIGH: "HIGH",
+  MEDIUM: "MEDIUM",
+  LOW: "LOW",
 } as const;
 
 export const TodayTodoListContainer = () => {

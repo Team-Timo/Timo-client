@@ -11,7 +11,15 @@ const meta = {
   argTypes: {
     priority: {
       control: "select",
-      options: ["urgent", "high", "medium", "low", "Disable", "white", "blue"],
+      options: [
+        "VERY_HIGH",
+        "HIGH",
+        "MEDIUM",
+        "LOW",
+        "Disable",
+        "white",
+        "blue",
+      ],
     },
   },
 } satisfies Meta<typeof PriorityIcon>;
@@ -20,19 +28,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const 매우중요: Story = {
-  args: { priority: "urgent" },
+  args: { priority: "VERY_HIGH" },
 };
 
 export const 중요: Story = {
-  args: { priority: "high" },
+  args: { priority: "HIGH" },
 };
 
 export const 보통: Story = {
-  args: { priority: "medium" },
+  args: { priority: "MEDIUM" },
 };
 
 export const 낮음: Story = {
-  args: { priority: "low" },
+  args: { priority: "LOW" },
 };
 
 export const Disable: Story = {
@@ -57,17 +65,17 @@ export const blue: Story = {
 };
 
 const ALL_PRIORITIES: Priority[] = [
-  "urgent",
-  "high",
-  "medium",
-  "low",
+  "VERY_HIGH",
+  "HIGH",
+  "MEDIUM",
+  "LOW",
   "Disable",
   "white",
   "blue",
 ];
 
 export const AllPriorities: Story = {
-  args: { priority: "urgent" },
+  args: { priority: "VERY_HIGH" },
   parameters: {
     backgrounds: {
       default: "light-gray",

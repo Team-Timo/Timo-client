@@ -2,8 +2,8 @@
 
 import { useTranslations } from "next-intl";
 
-import { triggerScrollToToday } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeTodayScroll";
-import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeViewMode";
+import { triggerScrollToToday } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
+import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { Header } from "@/components/layout/header/Header";
 import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
 

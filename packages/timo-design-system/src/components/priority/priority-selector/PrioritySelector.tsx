@@ -4,22 +4,22 @@ import { PriorityIcon } from "../priority-icon/PriorityIcon";
 
 import type { ReactNode } from "react";
 
-export type PriorityLevel = "urgent" | "high" | "medium" | "low";
+export type PriorityLevel = "VERY_HIGH" | "HIGH" | "MEDIUM" | "LOW";
 
-const PRIORITY_LEVELS: PriorityLevel[] = ["urgent", "high", "medium", "low"];
+const PRIORITY_LEVELS: PriorityLevel[] = ["VERY_HIGH", "HIGH", "MEDIUM", "LOW"];
 
 const PRIORITY_LABEL: Record<PriorityLevel, string> = {
-  urgent: "매우중요",
-  high: "중요",
-  medium: "보통",
-  low: "낮음",
+  VERY_HIGH: "매우중요",
+  HIGH: "중요",
+  MEDIUM: "보통",
+  LOW: "낮음",
 };
 
 const PRIORITY_BG_COLOR: Record<PriorityLevel, string> = {
-  urgent: "bg-timo-red",
-  high: "bg-timo-orange",
-  medium: "bg-timo-gray",
-  low: "bg-timo-gray-900",
+  VERY_HIGH: "bg-timo-red",
+  HIGH: "bg-timo-orange",
+  MEDIUM: "bg-timo-gray",
+  LOW: "bg-timo-gray-900",
 };
 
 export interface PrioritySelectorProps {
@@ -34,7 +34,7 @@ export const PrioritySelector = ({
   onSelect,
 }: PrioritySelectorProps) => {
   return (
-    <Dropdown>
+    <Dropdown className="flex justify-center">
       <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel className="gap-1">
