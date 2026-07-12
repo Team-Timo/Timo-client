@@ -25,11 +25,10 @@ import type {
 
 import { convertDurationToTimeText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
 
-const PRIORITY_MAP: Record<
-  TodoPriorityTypes,
-  "urgent" | "high" | "medium" | "low"
-> = {
-  URGENT: "urgent",
+type PriorityLabelKeyTypes = "urgent" | "high" | "medium" | "low";
+
+const PRIORITY_LABEL_KEY: Record<TodoPriorityTypes, PriorityLabelKeyTypes> = {
+  VERY_HIGH: "urgent",
   HIGH: "high",
   MEDIUM: "medium",
   LOW: "low",
@@ -76,12 +75,11 @@ export const HomeTodoCard = ({
   const sortableStyle = {
     transform: CSS.Transform.toString(transform),
     transition,
-    touchAction: "none",
   };
 
   const isRunning = timerStatus === "RUNNING";
 
-  const priorityLabel = tCommon(`priority.${PRIORITY_MAP[priority]}`);
+  const priorityLabel = tCommon(`priority.${PRIORITY_LABEL_KEY[priority]}`);
 
   const titleRow = (
     <div className="flex w-full items-center justify-between gap-2">
@@ -148,7 +146,7 @@ export const HomeTodoCard = ({
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-1">
           <PriorityIcon
-            priority={isCompleted ? "Disable" : PRIORITY_MAP[priority]}
+            priority={isCompleted ? "Disable" : priority}
             label={priorityLabel}
           />
           {tagName && <TagIcon text={tagName} />}

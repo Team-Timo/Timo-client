@@ -20,7 +20,7 @@ export const TagSelector = ({
   onAddClick,
 }: TagSelectorProps) => {
   return (
-    <Dropdown>
+    <Dropdown className="flex justify-center">
       <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel>
