@@ -1,11 +1,6 @@
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-timo-gray-600) transparent;
-}
-
 *::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 *::-webkit-scrollbar-track {
@@ -17,6 +12,7 @@
   border-radius: 9999px;
 }
 
-*::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-timo-gray-700);
+.scrollbar-sm::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }

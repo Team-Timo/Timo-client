@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-export const todoPrioritySchema = z.enum(["URGENT", "HIGH", "MEDIUM", "LOW"]);
+export const todoPrioritySchema = z.enum([
+  "VERY_HIGH",
+  "HIGH",
+  "MEDIUM",
+  "LOW",
+]);
 export const todoTimerStatusSchema = z.enum(["RUNNING", "STOPPED"]);
 
 export const todoTagSchema = z.object({
@@ -16,7 +21,7 @@ export const todoSubtaskSchema = z.object({
 
 export const todoSchema = z.object({
   todoId: z.number(),
-  icon: z.string(),
+  icon: z.string().nullable(),
   title: z.string(),
   completed: z.boolean(),
   durationSeconds: z.number(),

@@ -28,13 +28,37 @@
       "high": "Important",
       "medium": "Average",
       "low": "Low"
-    }
+    },
+    "close": "Close"
   },
   "Home": {
     "today": "Today",
     "viewBasic": "Basic",
     "viewWeek": "7 days",
-    "addTask": "Add a task"
+    "addTask": "Add a task",
+    "createModal": {
+      "title": "Add a task",
+      "addIcon": "Add an icon",
+      "titlePlaceholder": "Plan a new task",
+      "subtaskPlaceholder": "Add tasks in small units",
+      "notePlaceholder": "Please enter a note...",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "tagLabel": "Tag",
+      "create": "Create",
+      "repeatDaily": "Daily",
+      "repeatWeekly": "Weekly",
+      "repeatMonthly": "Monthly",
+      "repeatDetailHeading": "Details",
+      "repeatDayUnit": "day(s)"
+    },
+    "createTagModal": {
+      "title": "Create a tag",
+      "nameLabel": "Tag name",
+      "maxLengthHint": "The tag name can be up to 10 characters long",
+      "duplicateHint": "Names that are already in use cannot be registered",
+      "create": "Create"
+    }
   },
   "Settings": {
     "nav": {
@@ -73,5 +97,31 @@
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
     "todoLimitLine2": "To add a new to-do, please complete an existing one."
+  },
+  "Error": {
+    "title": "A problem has occurred.",
+    "description": "We are currently undergoing maintenance for a better experience. Please try again later.",
+    "homeButton": "Return to home"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "You may have entered an invalid address or used an incorrect path.",
+    "homeButton": "Return to home"
+  },
+  "GlobalError": {
+    "title": "An issue has occurred.",
+    "description": "Please try again later or go back to home.",
+    "homeButton": "Return to home"
+  },
+  "Onboarding": {
+    "button": {
+      "next": "Next",
+      "prev": "Previous",
+      "start": "Get Started"
+    },
+    "onboardingGoogleButton": {
+      "login": "Continue with your Google account",
+      "connectCalendar": "Connect Google Calendar"
+    }
   }
 }

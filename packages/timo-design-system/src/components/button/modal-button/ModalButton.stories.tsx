@@ -34,7 +34,7 @@ export const AllStates: Story = {
 export const CustomWidth: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="flex w-[400px] gap-3">
+    <div className="flex w-100 gap-3">
       <ModalButton variant="border" className="w-full px-0">
         돌아가기
       </ModalButton>

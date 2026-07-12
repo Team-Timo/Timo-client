@@ -14,3 +14,19 @@ export const convertDurationToTimeText = (durationSeconds: number): string => {
   );
   return `${hours}:${minutes.toString().padStart(2, "0")}`;
 };
+
+// API duration 필드(mm:ss, 분 단위가 60을 넘을 수 있음)와 durationSeconds 간 변환
+export const convertSecondsToApiDuration = (
+  durationSeconds: number,
+): string => {
+  const minutes = Math.floor(durationSeconds / SECONDS_PER_MINUTE);
+  const seconds = durationSeconds % SECONDS_PER_MINUTE;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
+
+export const convertApiDurationToSeconds = (duration: string): number => {
+  const [minutesText, secondsText] = duration.split(":");
+  const minutes = Number(minutesText) || 0;
+  const seconds = Number(secondsText) || 0;
+  return minutes * SECONDS_PER_MINUTE + seconds;
+};

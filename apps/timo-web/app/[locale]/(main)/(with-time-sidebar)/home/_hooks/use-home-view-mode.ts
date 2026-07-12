@@ -3,13 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
-import {
-  addDays,
-  formatDateKey,
-  getToday,
-  parseDateKey,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { addDays, formatDateKey, getToday, parseDateKey } from "@/utils/date";
 
 const VIEW_PARAM = "view";
 const DATE_PARAM = "date";
@@ -32,7 +27,7 @@ export const useHomeViewMode = () => {
   }, [searchParams]);
 
   const navigate = useCallback(
-    (mode: HomeViewMode, date: Date) => {
+    (mode: HomeViewMode, date: Date, options?: { pushHistory?: boolean }) => {
       const params = new URLSearchParams();
 
       if (mode === "week") {
@@ -45,14 +40,24 @@ export const useHomeViewMode = () => {
       }
 
       const query = params.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname);
+      const url = query ? `${pathname}?${query}` : pathname;
+
+      if (options?.pushHistory) {
+        router.push(url);
+        return;
+      }
+
+      router.replace(url);
     },
     [pathname, router],
   );
 
   const setViewMode = useCallback(
     (mode: HomeViewMode) => {
-      navigate(mode, mode === "week" ? referenceDate : getToday());
+      // 뷰 전환은 뒤로가기로 이전 뷰(기본/7일)로 되돌아올 수 있도록 히스토리에 남긴다.
+      navigate(mode, mode === "week" ? referenceDate : getToday(), {
+        pushHistory: true,
+      });
     },
     [navigate, referenceDate],
   );
