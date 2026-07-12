@@ -9,13 +9,13 @@ import type { SubtaskResponse } from "./subtaskResponse";
 import type { TagResponse } from "./tagResponse";
 
 export interface FocusTodoDetailResponse {
-  todoId?: number;
+  todoId: number;
   icon?: string;
-  title?: string;
-  completed?: boolean;
+  title: string;
+  completed: boolean;
   durationSeconds?: number;
   priority?: string;
   tag?: TagResponse;
-  isRepeated?: boolean;
-  subtasks?: SubtaskResponse[];
+  isRepeated: boolean;
+  subtasks: SubtaskResponse[];
 }

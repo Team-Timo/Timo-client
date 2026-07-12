@@ -16,4 +16,21 @@ export const GetTermsQueryParams = zod.object({
   type: zod.string().optional().describe("약관 타입(SERVICE, PRIVACY)"),
 });
 
-export const GetTermsResponse = zod.unknown();
+export const GetTermsResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      terms: zod
+        .array(
+          zod.object({
+            termsId: zod.number().describe("약관 ID"),
+            type: zod.string().describe("약관 타입"),
+            title: zod.string().describe("약관 제목"),
+            content: zod.string().describe("약관 전문"),
+          }),
+        )
+        .describe("약관 목록"),
+    })
+    .optional(),
+});

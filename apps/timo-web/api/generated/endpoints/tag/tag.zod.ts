@@ -12,7 +12,20 @@ import * as zod from "zod";
  * 기본 태그가 먼저 오고, 같은 그룹 안에서는 태그 ID 오름차순으로 정렬됩니다.
  * @summary 태그 목록 조회
  */
-export const GetTagsResponse = zod.unknown();
+export const GetTagsResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      tags: zod.array(
+        zod.object({
+          tagId: zod.number(),
+          name: zod.string(),
+        }),
+      ),
+    })
+    .optional(),
+});
 
 /**
  * 신규 태그를 생성합니다. 생성된 태그는 요청한 사용자만 사용할 수 있으며 isDefault는 항상 false입니다.
@@ -26,7 +39,17 @@ export const CreateTagBody = zod.object({
   name: zod.string().min(createTagBodyNameMin).max(createTagBodyNameMax),
 });
 
-export const CreateTagResponse = zod.void();
+export const CreateTagResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      tagId: zod.number(),
+      name: zod.string(),
+      isDefault: zod.boolean(),
+    })
+    .optional(),
+});
 
 /**
  * 본인이 등록한 태그를 삭제합니다.
@@ -37,4 +60,8 @@ export const DeleteTagParams = zod.object({
   tagId: zod.number().describe("삭제할 태그 ID"),
 });
 
-export const DeleteTagResponse = zod.unknown();
+export const DeleteTagResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod.unknown().optional(),
+});

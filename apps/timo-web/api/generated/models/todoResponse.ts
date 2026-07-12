@@ -10,16 +10,16 @@ import type { TagResponse } from "./tagResponse";
 import type { TodoResponseTimerStatus } from "./todoResponseTimerStatus";
 
 export interface TodoResponse {
-  todoId?: number;
+  todoId: number;
   icon?: string;
-  title?: string;
-  completed?: boolean;
+  title: string;
+  completed: boolean;
   durationSeconds?: number;
   priority?: string;
   tag?: TagResponse;
-  hasMemo?: boolean;
-  isRepeated?: boolean;
-  timerStatus?: TodoResponseTimerStatus;
+  hasMemo: boolean;
+  isRepeated: boolean;
+  timerStatus: TodoResponseTimerStatus;
   sortOrder?: number;
-  subtasks?: SubtaskResponse[];
+  subtasks: SubtaskResponse[];
 }

@@ -8,7 +8,7 @@
 import type { RepeatResponseWeekdaysItem } from "./repeatResponseWeekdaysItem";
 
 export interface RepeatResponse {
-  type?: string;
+  type: string;
   weekdays?: RepeatResponseWeekdaysItem[];
   dayOfMonth?: number;
 }

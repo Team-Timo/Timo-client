@@ -21,24 +21,56 @@ export const TokenBody = zod.object({
     ),
 });
 
-export const TokenResponse = zod.unknown();
+export const TokenResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      accessToken: zod.string(),
+      user: zod.object({
+        id: zod.number(),
+        name: zod.string(),
+        email: zod.string(),
+        profileImageUrl: zod.string().optional(),
+        onboardingCompleted: zod.boolean(),
+      }),
+      isNewUser: zod.boolean(),
+    })
+    .optional(),
+});
 
 /**
  * 쿠키로 전달된 RefreshToken과 sessionId를 검증하여 AccessToken 재발급합니다.<br>
  * 재발급 성공 시 RefreshToken과 sessionId 쿠키를 갱신합니다.
  * @summary AccessToken 재발급
  */
-export const ReissueResponse = zod.unknown();
+export const ReissueResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      accessToken: zod.string().describe("새로 발급된 AccessToken"),
+    })
+    .optional(),
+});
 
 /**
  * 현재 세션을 로그아웃하고 RefreshToken 및 sessionId 쿠키를 만료시킵니다.
  * @summary 로그아웃
  */
-export const LogoutResponse = zod.unknown();
+export const LogoutResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod.unknown().optional(),
+});
 
 /**
  * 회원 탈퇴를 진행하며, 사용자와 관련된 모든 데이터를 영구 삭제합니다.<br>
  * 이 작업은 되돌릴 수 없습니다.
  * @summary 회원 탈퇴
  */
-export const WithdrawResponse = zod.unknown();
+export const WithdrawResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod.unknown().optional(),
+});

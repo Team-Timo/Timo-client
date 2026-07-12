@@ -56,7 +56,7 @@ const withQueryKey = <T extends object, K>(
 };
 
 /**
- * 투두의 타이머를 시작합니다.<br>
+ * 투두의 타이머를 시작합니다.
  * 한 번에 한 개의 타이머만 실행 가능하며, 이미 실행/일시정지 중인 타이머가 있으면 409를 반환합니다.
  * @summary 타이머 시작
  */
@@ -315,9 +315,9 @@ export const useChangeStatus = <
   return useMutation(getChangeStatusMutationOptions(options), queryClient);
 };
 /**
- *      사용자가 입력한 연장 시간을 현재 타이머에 반영합니다.
- *      연장 시간(분)을 초로 변환하여 extended_seconds에 누적
- *      RUNNING, PAUSED 상태 모두에서 호출 가능하며, 타이머 상태(status)는 변경되지 않습니다.
+ * 사용자가 입력한 연장 시간을 현재 타이머에 반영합니다.
+ * 연장 시간(분)을 초로 변환하여 extended_seconds에 누적
+ * RUNNING, PAUSED 상태 모두에서 호출 가능하며, 타이머 상태(status)는 변경되지 않습니다.
  * @summary 타이머 연장
  */
 export const extendTimer = (
@@ -496,9 +496,9 @@ export const useCompleteTimer = <
   return useMutation(getCompleteTimerMutationOptions(options), queryClient);
 };
 /**
- * 		로그인한 사용자의 현재 실행 중(RUNNING/PAUSED)인 타이머를 단건 조회합니다.
- *  	한 사용자당 시작 이후 완료/종료되지 않은 타이머는 최대 1개만 존재할 수 있습니다.
- *   실행 중인 타이머가 없으면 data: null을 반환합니다.
+ * 로그인한 사용자의 현재 실행 중(RUNNING/PAUSED)인 타이머를 단건 조회합니다.
+ * 한 사용자당 시작 이후 완료/종료되지 않은 타이머는 최대 1개만 존재할 수 있습니다.
+ * 실행 중인 타이머가 없으면 data: null을 반환합니다.
  * @summary 현재 실행 중인 타이머 조회
  */
 export const getActiveTimer = (

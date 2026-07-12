@@ -8,13 +8,13 @@
 
 export interface StatisticsSummaryResponse {
   /** 해당 월의 전체 타이머 기록 시간(분) */
-  totalRecordMinutes?: number;
+  totalRecordMinutes: number;
   /** 1개 이상의 투두를 생성한 날짜 수 */
-  activeDayCount?: number;
+  activeDayCount: number;
   /** 타이머를 실행한 날짜 기준 일평균 기록 시간(분) */
-  averageRecordedMinutes?: number;
+  averageRecordedMinutes: number;
   /** 해당 월에 완료한 투두 수 */
-  completedTodoCount?: number;
+  completedTodoCount: number;
   /** 해당 월에 작성된 전체 투두 수 */
-  totalTodoCount?: number;
+  totalTodoCount: number;
 }

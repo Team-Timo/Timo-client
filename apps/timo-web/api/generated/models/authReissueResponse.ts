@@ -8,5 +8,5 @@
 
 export interface AuthReissueResponse {
   /** 새로 발급된 AccessToken */
-  accessToken?: string;
+  accessToken: string;
 }

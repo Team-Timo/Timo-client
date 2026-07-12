@@ -20,7 +20,23 @@ export const GetSummaryQueryParams = zod.object({
   yearMonth: zod.string().describe("조회할 연월. yyyy-MM 형식"),
 });
 
-export const GetSummaryResponse = zod.unknown();
+export const GetSummaryResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      totalRecordMinutes: zod
+        .number()
+        .describe("해당 월의 전체 타이머 기록 시간(분)"),
+      activeDayCount: zod.number().describe("1개 이상의 투두를 생성한 날짜 수"),
+      averageRecordedMinutes: zod
+        .number()
+        .describe("타이머를 실행한 날짜 기준 일평균 기록 시간(분)"),
+      completedTodoCount: zod.number().describe("해당 월에 완료한 투두 수"),
+      totalTodoCount: zod.number().describe("해당 월에 작성된 전체 투두 수"),
+    })
+    .optional(),
+});
 
 /**
  * 특정 날짜의 총 기록시간과 해당 날짜에 계획된 투두 목록을 조회합니다.
@@ -33,7 +49,38 @@ export const GetDailyQueryParams = zod.object({
   date: zod.string().describe("조회 날짜. yyyy-MM-dd 형식"),
 });
 
-export const GetDailyResponse = zod.unknown();
+export const GetDailyResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      date: zod.iso.date().describe("조회 날짜"),
+      totalRecordMinutes: zod.number().describe("해당 날짜의 총 기록시간(분)"),
+      todos: zod.array(
+        zod
+          .object({
+            todoId: zod.number().describe("투두 ID"),
+            title: zod.string().describe("투두명"),
+            actualTimeMinutes: zod
+              .number()
+              .describe("실제 소요 시간(분), 기록이 없으면 0"),
+            estimatedTimeMinutes: zod
+              .number()
+              .optional()
+              .describe("예상 소요 시간(분)"),
+            tag: zod
+              .object({
+                tagId: zod.number(),
+                name: zod.string(),
+              })
+              .optional()
+              .describe("투두에 설정된 태그"),
+          })
+          .describe("해당 날짜에 계획된 투두 목록"),
+      ),
+    })
+    .optional(),
+});
 
 /**
  * 지정한 연월의 일별 투두 완료 현황을 통계 캘린더에 표시하기 위한 API입니다.
@@ -49,4 +96,23 @@ export const GetCalendarQueryParams = zod.object({
   yearMonth: zod.string().describe("조회할 연월. yyyy-MM 형식"),
 });
 
-export const GetCalendarResponse = zod.unknown();
+export const GetCalendarResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      yearMonth: zod.string().describe("조회한 연월"),
+      today: zod.iso.date().describe("UTC 기준 오늘 날짜"),
+      days: zod.array(
+        zod
+          .object({
+            date: zod.iso.date().describe("통계 날짜"),
+            completionRate: zod
+              .number()
+              .describe("투두 완료율. 투두가 없으면 0"),
+          })
+          .describe("조회 월의 날짜별 완료 현황"),
+      ),
+    })
+    .optional(),
+});
