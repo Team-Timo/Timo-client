@@ -1,5 +1,5 @@
-import { SettingsProfileContainer } from "@/app/[locale]/(main)/settings/_containers/SettingsProfileContainer";
+import { SettingsTabsContainer } from "@/app/[locale]/(main)/settings/_containers/SettingsTabsContainer";
 
 export default function SettingsPage() {
-  return <SettingsProfileContainer />;
+  return <SettingsTabsContainer />;
 }

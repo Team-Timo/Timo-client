@@ -3,18 +3,24 @@
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
 
+import type { SettingsTab } from "@/app/[locale]/(main)/settings/_hooks/useSettingsTab";
+
+import { useSettingsTab } from "@/app/[locale]/(main)/settings/_hooks/useSettingsTab";
 import { ROUTES } from "@/constants/routes";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
+
+const getSettingsTabHref = (tab: SettingsTab) =>
+  tab === "account" ? ROUTES.SETTINGS : `${ROUTES.SETTINGS}?tab=${tab}`;
 
 export const SettingsNavContainer = () => {
   const t = useTranslations("Navigation");
   const tSettings = useTranslations("Settings");
-  const pathname = usePathname();
+  const activeTab = useSettingsTab();
 
   const settingsNavItems = [
-    { label: tSettings("nav.account"), href: ROUTES.SETTINGS },
-    { label: tSettings("nav.policy"), href: ROUTES.SETTINGS_POLICY },
-    { label: tSettings("nav.withdrawal"), href: ROUTES.SETTINGS_WITHDRAWAL },
+    { label: tSettings("nav.account"), tab: "account" as const },
+    { label: tSettings("nav.policy"), tab: "policy" as const },
+    { label: tSettings("nav.withdrawal"), tab: "withdrawal" as const },
   ];
 
   return (
@@ -28,12 +34,12 @@ export const SettingsNavContainer = () => {
 
       <ul className="flex flex-col gap-2">
         {settingsNavItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = activeTab === item.tab;
 
           return (
-            <li key={item.href}>
+            <li key={item.tab}>
               <Link
-                href={item.href}
+                href={getSettingsTabHref(item.tab)}
                 className={cn(
                   "typo-headline-m-14 block rounded-[4px] px-2.5 py-1",
                   isActive
