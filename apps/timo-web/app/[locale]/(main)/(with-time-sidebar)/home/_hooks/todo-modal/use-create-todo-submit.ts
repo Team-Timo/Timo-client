@@ -20,8 +20,8 @@ const buildTodoFromRequest = (
   isRepeated: data.repeatType !== "NONE",
   timerStatus: "STOPPED",
   sortOrder: 0,
-  subtasks: (data.subtasks ?? []).map((content) => ({
-    subtaskId: Date.now(),
+  subtasks: (data.subtasks ?? []).map((content, index) => ({
+    subtaskId: Date.now() + index,
     content,
     completed: false,
   })),
