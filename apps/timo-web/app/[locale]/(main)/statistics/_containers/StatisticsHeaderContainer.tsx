@@ -2,14 +2,12 @@
 
 import { useLocale } from "next-intl";
 
-import type { Dispatch, SetStateAction } from "react";
-
 import { Header } from "@/components/layout/header/Header";
 import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
 
 interface StatisticsHeaderContainerProps {
   currentMonth: Date;
-  onChangeMonth: Dispatch<SetStateAction<Date>>;
+  onChangeMonth: (updater: (prev: Date) => Date) => void;
 }
 
 const addMonths = (date: Date, amount: number) =>

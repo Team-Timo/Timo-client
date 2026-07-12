@@ -3,7 +3,10 @@
 import { useLocale } from "next-intl";
 import { useState } from "react";
 
-import { StatisticsSidePanel } from "@/app/[locale]/(main)/statistics/_components/StatisticsSidePanel";
+import {
+  StatisticsSidePanel,
+  type StatisticsSidePanelProps,
+} from "@/app/[locale]/(main)/statistics/_components/StatisticsSidePanel";
 import { StatisticsCalendarContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsCalendarContainer";
 import { StatisticsHeaderContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsHeaderContainer";
 import {
@@ -13,32 +16,44 @@ import {
 import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/_utils/format-statistics-date";
 import { formatDateKey } from "@/utils/date";
 
-type StatisticsPanelMode = "month" | "day";
-
 export const StatisticsContainer = () => {
   const locale = useLocale();
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
   const [selectedDate, setSelectedDate] = useState(() => new Date());
-  const [panelMode, setPanelMode] = useState<StatisticsPanelMode>("month");
-  const selectedDateKey = formatDateKey(selectedDate);
-  const selectedDetailBase = MOCK_STATISTICS_DAY_DETAILS[selectedDateKey] ?? {
-    date: selectedDateKey,
-    totalRecordMinutes: 0,
-    todos: [],
-  };
-  const selectedDetail = {
-    ...selectedDetailBase,
-    date: formatStatisticsSidePanelDate(selectedDate, locale),
+  const [sidePanelProps, setSidePanelProps] =
+    useState<StatisticsSidePanelProps>({
+      variant: "month",
+      summary: MOCK_STATISTICS_MONTH_SUMMARY,
+    });
+
+  const getStatisticsDayDetail = (date: Date) => {
+    const selectedDateKey = formatDateKey(date);
+    const selectedDetailBase = MOCK_STATISTICS_DAY_DETAILS[selectedDateKey] ?? {
+      date: selectedDateKey,
+      totalRecordMinutes: 0,
+      todos: [],
+    };
+
+    return {
+      ...selectedDetailBase,
+      date: formatStatisticsSidePanelDate(date, locale),
+    };
   };
 
-  const handleChangeMonth: typeof setCurrentMonth = (value) => {
-    setCurrentMonth(value);
-    setPanelMode("month");
+  const handleChangeMonth = (updater: (prev: Date) => Date) => {
+    setCurrentMonth(updater);
+    setSidePanelProps({
+      variant: "month",
+      summary: MOCK_STATISTICS_MONTH_SUMMARY,
+    });
   };
 
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
-    setPanelMode("day");
+    setSidePanelProps({
+      variant: "day",
+      detail: getStatisticsDayDetail(date),
+    });
   };
 
   return (
@@ -53,14 +68,7 @@ export const StatisticsContainer = () => {
           selectedDate={selectedDate}
           onSelectDate={handleSelectDate}
         />
-        {panelMode === "month" ? (
-          <StatisticsSidePanel
-            variant="month"
-            summary={MOCK_STATISTICS_MONTH_SUMMARY}
-          />
-        ) : (
-          <StatisticsSidePanel variant="day" detail={selectedDetail} />
-        )}
+        <StatisticsSidePanel {...sidePanelProps} />
       </div>
     </div>
   );

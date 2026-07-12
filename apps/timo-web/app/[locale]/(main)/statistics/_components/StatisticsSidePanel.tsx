@@ -23,7 +23,7 @@ interface StatisticsDaySidePanelProps {
   detail: StatisticsDayDetail;
 }
 
-type StatisticsSidePanelProps =
+export type StatisticsSidePanelProps =
   | StatisticsMonthSidePanelProps
   | StatisticsDaySidePanelProps;
 
