@@ -18,8 +18,8 @@ export const LoginContainer = () => {
         ariaLabel={t("animationLabel")}
       />
 
-      <div className="border-timo-gray-500 shadow-timo flex h-110 w-101 flex-col items-center justify-center gap-16 rounded-[4px] border bg-white px-12.5 py-13">
-        <div className="flex w-76 flex-col gap-6">
+      <div className="border-timo-gray-500 shadow-timo flex flex-col items-center justify-center gap-16 rounded-[4px] border bg-white px-12.5 py-13">
+        <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-4">
             <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
             <div className="flex w-full flex-col items-center gap-0.5">
@@ -44,7 +44,7 @@ export const LoginContainer = () => {
             <OnboardingGoogleButtonContainer
               variant="login"
               onClick={() => {
-                // TODO: 백엔드 OAuth 로그인 URL 확정 후 리다이렉트
+                window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/oauth2/authorization/google`;
               }}
             />
           </div>

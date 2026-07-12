@@ -7,11 +7,13 @@ import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
 
 interface CalendarConnectStepContainerProps {
+  isPending?: boolean;
   onPrev: () => void;
   onStart: () => void;
 }
 
 export const CalendarConnectStepContainer = ({
+  isPending,
   onPrev,
   onStart,
 }: CalendarConnectStepContainerProps) => {
@@ -58,7 +60,11 @@ export const CalendarConnectStepContainer = ({
 
       <div className="mt-auto flex justify-between">
         <OnboardingButtonContainer variant="prev" onClick={onPrev} />
-        <OnboardingButtonContainer variant="start" onClick={onStart} />
+        <OnboardingButtonContainer
+          variant="start"
+          disabled={isPending}
+          onClick={onStart}
+        />
       </div>
     </>
   );

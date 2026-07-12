@@ -1,6 +1,10 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+
+import type { BaseResponseAuthReissueResponse } from "@/api/generated/models";
 
 import { parseApiError } from "@/api/error/api-error";
+import { ROUTES } from "@/constants/routes";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 if (!baseURL)
@@ -8,12 +12,66 @@ if (!baseURL)
 
 export const instance = axios.create({
   baseURL,
+  withCredentials: true,
 });
+
+instance.interceptors.request.use((config) => {
+  const accessToken = useAuthStore.getState().accessToken;
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return config;
+});
+
+const REISSUE_URL = "/api/v1/auth/reissue";
+const retriedRequests = new WeakSet<object>();
+let reissuePromise: Promise<string | undefined> | null = null;
+
+const reissueAccessToken = () => {
+  if (!reissuePromise) {
+    reissuePromise = instance
+      .post<BaseResponseAuthReissueResponse>(REISSUE_URL)
+      .then(({ data }) => {
+        const reissueData = data.data;
+        if (reissueData)
+          useAuthStore.getState().setAccessToken(reissueData.accessToken);
+        return reissueData?.accessToken;
+      })
+      .catch((error) => {
+        useAuthStore.getState().clearAccessToken();
+        throw error;
+      })
+      .finally(() => {
+        reissuePromise = null;
+      });
+  }
+  return reissuePromise;
+};
 
 instance.interceptors.response.use(
   (response) => response,
-  (error) => {
-    // TODO: 추후 인증 방식 확정 후 status(401 등) 기반 사이드 이펙트(리다이렉트 등) 추가
+  async (error: AxiosError) => {
+    const originalRequest = error.config;
+    const isReissueRequest = originalRequest?.url === REISSUE_URL;
+
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !isReissueRequest &&
+      !retriedRequests.has(originalRequest)
+    ) {
+      retriedRequests.add(originalRequest);
+      try {
+        const newAccessToken = await reissueAccessToken();
+        if (newAccessToken) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return instance(originalRequest);
+        }
+        window.location.href = ROUTES.LOGIN;
+      } catch {
+        window.location.href = ROUTES.LOGIN;
+      }
+    }
     return Promise.reject(parseApiError(error));
   },
 );
