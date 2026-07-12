@@ -38,6 +38,7 @@ export const StatisticsContainer = () => {
     setCurrentMonth(value);
     setPanelMode("month");
   };
+  
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
     setPanelMode("day");
