@@ -8,6 +8,7 @@ import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types
 
 import { CreateTodoModalContent } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContent";
 import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-create-todo-submit";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
 export interface CreateTodoModalContainerProps {
   defaultDate?: Date;
@@ -19,7 +20,9 @@ export const CreateTodoModalContainer = ({
   onCreate,
 }: CreateTodoModalContainerProps) => {
   const t = useTranslations("Home");
-  const { handleSubmit } = useCreateTodoSubmit({ onCreate });
+  const tToast = useTranslations("Toast");
+  const { handleSubmit, isErrorToastOpen, closeErrorToast } =
+    useCreateTodoSubmit({ onCreate });
 
   const handleAddClick = () => {
     overlay.open(({ isOpen, close, unmount }) => (
@@ -33,5 +36,15 @@ export const CreateTodoModalContainer = ({
     ));
   };
 
-  return <AddTaskButton text={t("addTask")} onClick={handleAddClick} />;
+  return (
+    <>
+      <AddTaskButton text={t("addTask")} onClick={handleAddClick} />
+
+      <AnimatedToast
+        isOpen={isErrorToastOpen}
+        onClose={closeErrorToast}
+        message={tToast("todoCreateFailed")}
+      />
+    </>
+  );
 };

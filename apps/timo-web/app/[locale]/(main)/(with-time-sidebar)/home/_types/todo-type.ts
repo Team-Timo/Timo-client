@@ -34,8 +34,13 @@ export const todoSchema = z.object({
   subtasks: z.array(todoSubtaskSchema),
 });
 
+export const todoCreateResponseSchema = z.object({
+  todoId: z.number(),
+});
+
 export type TodoPriorityTypes = z.infer<typeof todoPrioritySchema>;
 export type TodoTimerStatusTypes = z.infer<typeof todoTimerStatusSchema>;
 export type TodoTag = z.infer<typeof todoTagSchema>;
 export type TodoSubtask = z.infer<typeof todoSubtaskSchema>;
 export type Todo = z.infer<typeof todoSchema>;
+export type TodoCreateResponseData = z.infer<typeof todoCreateResponseSchema>;
