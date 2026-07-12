@@ -72,13 +72,17 @@ export const DetailTodoModalContent = ({
 
       <div className="bg-timo-gray-500 mt-2 h-px w-full" />
       <DetailTodoTaskFields
-        title={todo.title}
+        titleValue={detailTodoForm.title}
         isCompleted={detailTodoForm.isCompleted}
         timerStatus={todo.timerStatus}
-        subtasks={detailTodoForm.subtasks}
+        subtaskInputs={detailTodoForm.subtaskInputs}
+        onTitleChange={detailTodoForm.changeTitle}
         onToggleCompleted={detailTodoForm.setIsCompleted}
         onTogglePlay={handleTogglePlay}
-        onToggleSubtaskCompleted={detailTodoForm.toggleSubtaskCompleted}
+        onSubtaskInputChange={detailTodoForm.changeSubtaskInput}
+        onToggleSubtaskCompleted={detailTodoForm.changeSubtaskCompleted}
+        registerSubtaskInputRef={detailTodoForm.registerSubtaskInputRef}
+        onSubtaskInputKeyDown={detailTodoForm.handleSubtaskInputKeyDown}
       />
       <div className="mt-2 py-3">
         <TodoToolbar

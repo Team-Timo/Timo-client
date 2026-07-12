@@ -1,8 +1,9 @@
 import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type {
   PriorityLevel,
   RepeatFrequency,
@@ -10,8 +11,24 @@ import type {
   TimeSelection,
   TodoIconValue,
 } from "@repo/timo-design-system/ui";
+import type { KeyboardEvent } from "react";
 
+import {
+  TITLE_MAX_WEIGHTED_LENGTH,
+  truncateToWeightedLength,
+} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/text-length";
 import { convertDurationToTimeText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
+import {
+  addSubtaskInputOnEnter,
+  removeSubtaskInputOnBackspace,
+} from "@/utils/todo/subtask-input-list";
+
+const MAX_DETAIL_SUBTASK_COUNT = 10;
+
+export interface DetailTodoSubtaskInput extends SubtaskInputEntry {
+  subtaskId: number | null;
+  completed: boolean;
+}
 
 const TAG_LABEL_KEYS = [
   "dailyLife",
@@ -72,17 +89,110 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const [selectedWeekdayIds, setSelectedWeekdayIds] = useState<string[]>([]);
   const [repeatDay, setRepeatDay] = useState("");
   const [isCompleted, setIsCompleted] = useState(todo.completed);
-  const [subtasks, setSubtasks] = useState(todo.subtasks);
+  const [title, setTitle] = useState(todo.title);
+  const nextSubtaskInputId = useRef(0);
+  const createSubtaskInput = (value = ""): DetailTodoSubtaskInput => ({
+    id: nextSubtaskInputId.current++,
+    subtaskId: null,
+    completed: false,
+    value,
+  });
+  const [subtaskInputs, setSubtaskInputs] = useState<DetailTodoSubtaskInput[]>(
+    () =>
+      todo.subtasks.length > 0
+        ? todo.subtasks.map((subtask) => ({
+            id: nextSubtaskInputId.current++,
+            subtaskId: subtask.subtaskId,
+            completed: subtask.completed,
+            value: subtask.content,
+          }))
+        : [createSubtaskInput()],
+  );
+  const subtaskInputRefs = useRef<Array<HTMLTextAreaElement | null>>([]);
+  const pendingSubtaskFocusIndex = useRef<number | null>(null);
   const [memo, setMemo] = useState("");
   const [icon, setIcon] = useState<TodoIconValue | null>(
     isTodoIconValue(todo.icon) ? todo.icon : null,
   );
   const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
 
+  useEffect(() => {
+    if (pendingSubtaskFocusIndex.current === null) return;
+
+    const index = pendingSubtaskFocusIndex.current;
+    pendingSubtaskFocusIndex.current = null;
+
+    const element = subtaskInputRefs.current[index];
+    if (!element) return;
+
+    element.focus();
+    const caretPosition = element.value.length;
+    element.setSelectionRange(caretPosition, caretPosition);
+  }, [subtaskInputs.length]);
+
   const openIconPanel = () => setIsIconPanelOpen(true);
   const toggleIconPanel = () => setIsIconPanelOpen((prev) => !prev);
   const selectIcon = (nextIcon: TodoIconValue) => setIcon(nextIcon);
   const removeIcon = () => setIcon(null);
+  const changeTitle = (value: string) => {
+    setTitle(truncateToWeightedLength(value, TITLE_MAX_WEIGHTED_LENGTH));
+  };
+
+  const registerSubtaskInputRef =
+    (index: number) => (element: HTMLTextAreaElement | null) => {
+      subtaskInputRefs.current[index] = element;
+    };
+
+  const changeSubtaskInput = (id: number, value: string) => {
+    setSubtaskInputs((prev) =>
+      prev.map((subtask) =>
+        subtask.id === id ? { ...subtask, value } : subtask,
+      ),
+    );
+  };
+
+  const changeSubtaskCompleted = (id: number, completed: boolean) => {
+    setSubtaskInputs((prev) =>
+      prev.map((subtask) =>
+        subtask.id === id ? { ...subtask, completed } : subtask,
+      ),
+    );
+  };
+
+  const handleSubtaskInputKeyDown = (
+    index: number,
+    event: KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+
+      setSubtaskInputs((prev) => {
+        const { entries, focusIndex } = addSubtaskInputOnEnter(
+          prev,
+          index,
+          createSubtaskInput,
+          MAX_DETAIL_SUBTASK_COUNT,
+        );
+
+        if (focusIndex !== null) pendingSubtaskFocusIndex.current = focusIndex;
+        return entries as DetailTodoSubtaskInput[];
+      });
+      return;
+    }
+
+    if (event.key === "Backspace") {
+      const { entries, focusIndex } = removeSubtaskInputOnBackspace(
+        subtaskInputs,
+        index,
+      );
+
+      if (focusIndex !== null) {
+        event.preventDefault();
+        pendingSubtaskFocusIndex.current = focusIndex;
+        setSubtaskInputs(entries as DetailTodoSubtaskInput[]);
+      }
+    }
+  };
 
   const selectTime = (nextTime: TimeSelection) => {
     setSelectedTime(nextTime);
@@ -111,14 +221,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     );
   };
 
-  const toggleSubtaskCompleted = (subtaskId: number, completed: boolean) => {
-    setSubtasks((prev) =>
-      prev.map((subtask) =>
-        subtask.subtaskId === subtaskId ? { ...subtask, completed } : subtask,
-      ),
-    );
-  };
-
   return {
     date,
     setDate,
@@ -137,7 +239,13 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     setRepeatDay,
     isCompleted,
     setIsCompleted,
-    subtasks,
+    title,
+    changeTitle,
+    subtaskInputs,
+    registerSubtaskInputRef,
+    changeSubtaskInput,
+    changeSubtaskCompleted,
+    handleSubtaskInputKeyDown,
     memo,
     setMemo,
     icon,
@@ -149,6 +257,5 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     selectTime,
     changeRepeatFrequency,
     toggleWeekday,
-    toggleSubtaskCompleted,
   };
 };
