@@ -25,7 +25,7 @@ export const AuthGuardProvider = ({ children }: AuthGuardProviderProps) => {
 
     mutate(undefined, {
       onSuccess: ({ data }) => {
-        if (!data?.accessToken) {
+        if (!data) {
           router.replace(ROUTES.LOGIN);
           return;
         }

@@ -32,9 +32,10 @@ const reissueAccessToken = () => {
     reissuePromise = instance
       .post<BaseResponseAuthReissueResponse>(REISSUE_URL)
       .then(({ data }) => {
-        const accessToken = data.data?.accessToken;
-        if (accessToken) useAuthStore.getState().setAccessToken(accessToken);
-        return accessToken;
+        const reissueData = data.data;
+        if (reissueData)
+          useAuthStore.getState().setAccessToken(reissueData.accessToken);
+        return reissueData?.accessToken;
       })
       .catch((error) => {
         useAuthStore.getState().clearAccessToken();
