@@ -198,8 +198,9 @@
       "title": "지금 멈출까요?",
       "description": "지금까지 수행한 <blue>{minutes}</blue>이 타임박스에 기록됩니다.",
       "continueButton": "계속 진행",
-      "switchButton": "전환하기"
+      "switchButton": "완료하기"
     },
+
     "completeModal": {
       "title": "태스크가 완료되었어요!",
       "defaultFeedback": "이번 작업을 완료했어요. 수고하셨어요!",
