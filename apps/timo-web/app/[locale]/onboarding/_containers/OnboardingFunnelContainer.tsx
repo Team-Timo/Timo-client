@@ -38,7 +38,7 @@ export const OnboardingFunnelContainer = () => {
     id: "onboarding",
     initial: { step: "Language", context: {} },
   });
-  const { mutate: completeOnboarding } = useCompleteOnboarding();
+  const { mutate: completeOnboarding, isPending } = useCompleteOnboarding();
 
   return (
     <section className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
@@ -112,6 +112,7 @@ export const OnboardingFunnelContainer = () => {
             )}
             CalendarConnect={({ history }) => (
               <CalendarConnectStepContainer
+                isPending={isPending}
                 onPrev={() => history.back()}
                 onStart={() => {
                   if (
