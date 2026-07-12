@@ -82,7 +82,8 @@ export const OverlayModal = ({
         active={shouldRender}
         focusTrapOptions={{
           escapeDeactivates: false,
-          clickOutsideDeactivates: true,
+          clickOutsideDeactivates: false,
+          allowOutsideClick: true,
           fallbackFocus: () => dialogRef.current ?? document.body,
         }}
       >
