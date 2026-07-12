@@ -107,7 +107,13 @@ export const HomeTodoContainer = () => {
                   const [firstSubtask] = todo.subtasks;
 
                   return (
-                    <DetailTodoModalContainer key={todo.todoId} todo={todo}>
+                    <DetailTodoModalContainer
+                      key={todo.todoId}
+                      todo={todo}
+                      onTogglePlay={() =>
+                        handleTogglePlay(dateKey, todo.todoId)
+                      }
+                    >
                       {(openDetailTodoModal) => (
                         <HomeTodoCard
                           todoId={todo.todoId}

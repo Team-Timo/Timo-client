@@ -16,6 +16,7 @@ export interface DetailTodoTaskFieldsProps {
   timerStatus: TodoTimerStatusTypes;
   subtasks: TodoSubtask[];
   onToggleCompleted: (completed: boolean) => void;
+  onTogglePlay: () => void;
   onToggleSubtaskCompleted: (subtaskId: number, completed: boolean) => void;
 }
 
@@ -25,6 +26,7 @@ export const DetailTodoTaskFields = ({
   timerStatus,
   subtasks,
   onToggleCompleted,
+  onTogglePlay,
   onToggleSubtaskCompleted,
 }: DetailTodoTaskFieldsProps) => {
   return (
@@ -41,7 +43,7 @@ export const DetailTodoTaskFields = ({
           variant={timerStatus === "RUNNING" ? "stop" : "play"}
           size="lg"
           disabled={isCompleted}
-          onClick={() => {}}
+          onClick={onTogglePlay}
         >
           {isCompleted ? (
             <PlayDisabledIcon width={24} height={24} />

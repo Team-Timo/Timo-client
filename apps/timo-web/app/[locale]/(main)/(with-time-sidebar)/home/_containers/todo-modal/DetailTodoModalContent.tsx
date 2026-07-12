@@ -23,6 +23,7 @@ export interface DetailTodoModalContentProps {
   onClose: () => void;
   onExited: () => void;
   todo: Todo;
+  onTogglePlay: () => void;
 }
 
 export const DetailTodoModalContent = ({
@@ -30,8 +31,13 @@ export const DetailTodoModalContent = ({
   onClose,
   onExited,
   todo,
+  onTogglePlay,
 }: DetailTodoModalContentProps) => {
   const detailTodoForm = useDetailTodoForm({ todo });
+  const handleTogglePlay = () => {
+    onTogglePlay();
+    onClose();
+  };
 
   return (
     <OverlayModal
@@ -71,6 +77,7 @@ export const DetailTodoModalContent = ({
         timerStatus={todo.timerStatus}
         subtasks={detailTodoForm.subtasks}
         onToggleCompleted={detailTodoForm.setIsCompleted}
+        onTogglePlay={handleTogglePlay}
         onToggleSubtaskCompleted={detailTodoForm.toggleSubtaskCompleted}
       />
       <div className="mt-2 py-3">
