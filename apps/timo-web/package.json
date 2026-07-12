@@ -8,26 +8,34 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
-    "check-types": "next typegen && tsc --noEmit"
+    "check-types": "next typegen && tsc --noEmit",
+    "gen:api": "orval --config ./orval.config.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@hookform/resolvers": "^5.4.0",
     "@repo/timo-design-system": "workspace:*",
     "@sentry/nextjs": "^10.61.0",
     "@tanstack/react-query": "^5.101.1",
     "@tanstack/react-query-devtools": "^5.101.1",
+    "@use-funnel/browser": "^0.0.17",
     "axios": "^1.18.1",
+    "focus-trap-react": "^12.0.3",
     "lottie-react": "^2.4.1",
     "next": "16.2.0",
     "next-intl": "^4.13.1",
+    "overlay-kit": "^1.9.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-hook-form": "^7.81.0",
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@next/env": "16.2.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -36,6 +44,7 @@
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "eslint": "^9.39.1",
+    "orval": "^8.20.0",
     "typescript": "5.9.2"
   }
 }

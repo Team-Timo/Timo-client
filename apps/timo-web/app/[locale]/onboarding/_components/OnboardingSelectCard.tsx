@@ -1,6 +1,6 @@
 import { cn } from "@repo/timo-design-system/utils";
 
-export interface OnboardingSelectCardProps {
+interface OnboardingSelectCardProps {
   size: "sm" | "lg";
   selected: boolean;
   label: string;
@@ -31,7 +31,7 @@ export const OnboardingSelectCard = ({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex rounded-[4px] border px-4 py-2 text-left",
+        "flex rounded-[4px] border px-4 py-2 text-left transition-colors duration-200 ease-in-out",
         selected
           ? "border-timo-blue-300 bg-timo-blue-50"
           : "border-timo-gray-500 bg-white",

@@ -2,10 +2,12 @@ import "./globals.css";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 
 import type { Metadata } from "next";
 
 import { routing } from "@/i18n/routing";
+import { OverlayProvider } from "@/providers/OverlayProvider";
 import { QueryProvider } from "@/providers/query/QueryProvider";
 
 const pretendard = localFont({
@@ -39,11 +41,15 @@ export default async function RootLayout({
     notFound();
   }
 
+  setRequestLocale(locale);
+
   return (
     <html lang={locale} className={pretendard.variable}>
       <body>
         <NextIntlClientProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <OverlayProvider>{children}</OverlayProvider>
+          </QueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>

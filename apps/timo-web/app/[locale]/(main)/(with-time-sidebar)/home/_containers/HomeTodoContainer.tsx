@@ -6,15 +6,15 @@ import { useEffect, useMemo } from "react";
 
 import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
-import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/HomeTodoCard";
-import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/HomeDayHeaderContainer";
-import { useHomeTodayScrollRef } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeTodayScroll";
-import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeTodosByDate";
-import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/useHomeViewMode";
+import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
+import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
+import { useHomeTodayScrollRef } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
+import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
+import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { getHomeViewMock } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks/home-view-mock";
-import { formatDateKey } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { reorderDaysTodayFirst } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/home-view";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
+import { formatDateKey } from "@/utils/date";
 
 const TAG_LABEL_KEYS = [
   "dailyLife",
@@ -50,6 +50,7 @@ export const HomeTodoContainer = () => {
 
   const {
     todosByDate,
+    handleAddTodo,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
@@ -90,6 +91,7 @@ export const HomeTodoContainer = () => {
               isToday={day.isToday}
               totalCount={todos.length}
               completedCount={completedCount}
+              onCreateTodo={(todo) => handleAddTodo(dateKey, todo)}
             />
 
             <DndSortableListProvider

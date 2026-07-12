@@ -32,7 +32,7 @@ export const TimeSelector = ({
   const isAiSelected = selected === "ai";
 
   return (
-    <Dropdown>
+    <Dropdown className="flex justify-center">
       <Dropdown.Trigger>{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel className="w-23.75">
