@@ -12,7 +12,7 @@ export const DetailTodoMemoField = ({
       value={value ?? ""}
       placeholder={placeholder}
       readOnly
-      className="typo-body-r-14 text-timo-black placeholder:text-timo-gray-700 min-h-20 w-full resize-none outline-none"
+      className="typo-body-r-14 text-timo-black placeholder:text-timo-gray-700 min-h-20 w-full resize-none p-1 outline-none"
     />
   );
 };
