@@ -1,5 +1,6 @@
 import { Checkbox } from "@repo/timo-design-system/ui";
 
+import type { SubtaskInputEntry } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
 import type { KeyboardEvent } from "react";
 
 const resizeTextarea = (element: HTMLTextAreaElement | null) => {
@@ -12,7 +13,7 @@ export interface CreateTodoTaskFieldsProps {
   titleValue: string;
   titlePlaceholder: string;
   onTitleChange: (value: string) => void;
-  subtaskInputs: string[];
+  subtaskInputs: SubtaskInputEntry[];
   subtaskPlaceholder: string;
   registerSubtaskInputRef: (
     index: number,
@@ -51,14 +52,14 @@ export const CreateTodoTaskFields = ({
         />
       </div>
 
-      {subtaskInputs.map((value, index) => (
+      {subtaskInputs.map((entry, index) => (
         <div
-          key={index}
+          key={entry.id}
           className="flex w-full items-center justify-center gap-2"
         >
           <Checkbox checked={false} onChange={() => {}} />
           <textarea
-            value={value}
+            value={entry.value}
             ref={registerSubtaskInputRef(index)}
             onChange={(event) => {
               onSubtaskInputChange(index, event.target.value);

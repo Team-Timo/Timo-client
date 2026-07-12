@@ -7,13 +7,26 @@ import type { Control } from "react-hook-form";
 
 const MAX_SUBTASK_COUNT = 10;
 
+export interface SubtaskInputEntry {
+  id: number;
+  value: string;
+}
+
 export interface UseSubtaskFieldParams {
   control: Control<CreateTodoRequest>;
 }
 
 export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
   const { field } = useController({ name: "subtasks", control });
-  const [subtaskInputs, setSubtaskInputs] = useState<string[]>([""]);
+  const nextEntryId = useRef(0);
+  const createEntry = (value = ""): SubtaskInputEntry => ({
+    id: nextEntryId.current++,
+    value,
+  });
+
+  const [subtaskInputs, setSubtaskInputs] = useState<SubtaskInputEntry[]>(
+    () => [createEntry()],
+  );
   const inputRefs = useRef<Array<HTMLTextAreaElement | null>>([]);
   const pendingFocusIndex = useRef<number | null>(null);
 
@@ -31,8 +44,8 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
     element.setSelectionRange(caretPosition, caretPosition);
   }, [subtaskInputs.length]);
 
-  const syncFormValue = (inputs: string[]) => {
-    field.onChange(inputs.map((input) => input.trim()).filter(Boolean));
+  const syncFormValue = (entries: SubtaskInputEntry[]) => {
+    field.onChange(entries.map((entry) => entry.value.trim()).filter(Boolean));
   };
 
   const registerInputRef =
@@ -42,7 +55,9 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
 
   const handleInputChange = (index: number, value: string) => {
     setSubtaskInputs((prev) => {
-      const next = prev.map((input, i) => (i === index ? value : input));
+      const next = prev.map((entry, i) =>
+        i === index ? { ...entry, value } : entry,
+      );
       syncFormValue(next);
       return next;
     });
@@ -57,18 +72,18 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
 
       setSubtaskInputs((prev) => {
         const isLastField = index === prev.length - 1;
-        const hasValue = Boolean(prev[index]?.trim());
+        const hasValue = Boolean(prev[index]?.value.trim());
         const canAddMore = prev.length < MAX_SUBTASK_COUNT;
 
         if (!isLastField || !hasValue || !canAddMore) return prev;
 
         pendingFocusIndex.current = prev.length;
-        return [...prev, ""];
+        return [...prev, createEntry()];
       });
       return;
     }
 
-    const isFieldEmpty = subtaskInputs[index] === "";
+    const isFieldEmpty = subtaskInputs[index]?.value === "";
     const canMergeIntoPrevious = index > 0;
 
     if (event.key === "Backspace" && isFieldEmpty && canMergeIntoPrevious) {
@@ -79,7 +94,7 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
   };
 
   const reset = () => {
-    setSubtaskInputs([""]);
+    setSubtaskInputs([createEntry()]);
     inputRefs.current = [];
   };
 
