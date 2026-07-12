@@ -2,17 +2,19 @@
 
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
 import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
 import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
-import { useHomeTodayScrollRef } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
+import {
+  scrollContainerToToday,
+  useHomeTodayScrollRef,
+} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
-import { reorderDaysTodayFirst } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/home-view";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date";
 
@@ -39,12 +41,7 @@ export const HomeTodoContainer = () => {
   const baseDate = formatDateKey(referenceDate);
 
   const { data: homeViewData } = useHomeView({ filter, baseDate });
-  const apiDays = homeViewData.days;
-
-  const days = useMemo(
-    () => (isWeekView ? apiDays : reorderDaysTodayFirst(apiDays)),
-    [isWeekView, apiDays],
-  );
+  const days = homeViewData.days;
 
   const {
     todosByDate,
@@ -53,10 +50,10 @@ export const HomeTodoContainer = () => {
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleReorderTodo,
-  } = useHomeTodosByDate(apiDays);
+  } = useHomeTodosByDate(days);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ left: 0 });
+    scrollContainerToToday(scrollRef.current);
   }, [isWeekView, scrollRef]);
 
   return (
@@ -75,6 +72,7 @@ export const HomeTodoContainer = () => {
         return (
           <div
             key={dateKey}
+            data-today={day.isToday}
             className={cn(
               "flex h-full flex-col gap-2",
               isWeekView
