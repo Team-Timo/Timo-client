@@ -30,6 +30,8 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+export const dynamicParams = false;
+
 export default async function RootLayout({
   children,
   params,
