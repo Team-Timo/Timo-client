@@ -25,6 +25,7 @@ export const CreateTagModalContainer = ({
   onCreate,
 }: CreateTagModalContainerProps) => {
   const t = useTranslations("Home");
+  const tCommon = useTranslations("Common");
   const [name, setName] = useState<string>("");
 
   const trimmedName = name.trim();
@@ -55,7 +56,7 @@ export const CreateTagModalContainer = ({
         </p>
         <button
           type="button"
-          aria-label={t("createModal.close")}
+          aria-label={tCommon("close")}
           onClick={onClose}
           className="shrink-0"
         >

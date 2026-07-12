@@ -28,7 +28,8 @@
       "high": "중요",
       "medium": "보통",
       "low": "낮음"
-    }
+    },
+    "close": "닫기"
   },
   "Home": {
     "today": "오늘",
@@ -49,8 +50,7 @@
       "repeatWeekly": "매주",
       "repeatMonthly": "매달",
       "repeatDetailHeading": "세부 설정",
-      "repeatDayUnit": "일 마다",
-      "close": "닫기"
+      "repeatDayUnit": "일 마다"
     },
     "createTagModal": {
       "title": "태그 생성하기",

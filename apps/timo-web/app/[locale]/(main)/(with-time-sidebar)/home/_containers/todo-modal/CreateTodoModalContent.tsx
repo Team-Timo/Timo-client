@@ -60,6 +60,7 @@ export const CreateTodoModalContent = ({
   onSubmit,
 }: CreateTodoModalContentProps) => {
   const t = useTranslations("Home");
+  const tCommon = useTranslations("Common");
   const tToast = useTranslations("Toast");
 
   const [subtaskInput, setSubtaskInput] = useState("");
@@ -99,7 +100,7 @@ export const CreateTodoModalContent = ({
 
     onSubmit(data, { id: data.tagId ?? tag.id, name: tag.name });
 
-    reset(createDefaultValues());
+    reset(createDefaultValues(defaultDate));
     setSubtaskInput("");
     timeField.resetTime();
     onClose();
@@ -120,7 +121,7 @@ export const CreateTodoModalContent = ({
           </p>
           <button
             type="button"
-            aria-label={t("createModal.close")}
+            aria-label={tCommon("close")}
             onClick={onClose}
             className="shrink-0"
           >

@@ -28,7 +28,8 @@
       "high": "Important",
       "medium": "Average",
       "low": "Low"
-    }
+    },
+    "close": "Close"
   },
   "Home": {
     "today": "Today",
@@ -49,8 +50,7 @@
       "repeatWeekly": "Weekly",
       "repeatMonthly": "Monthly",
       "repeatDetailHeading": "Details",
-      "repeatDayUnit": "day(s)",
-      "close": "Close"
+      "repeatDayUnit": "day(s)"
     },
     "createTagModal": {
       "title": "Create a tag",
