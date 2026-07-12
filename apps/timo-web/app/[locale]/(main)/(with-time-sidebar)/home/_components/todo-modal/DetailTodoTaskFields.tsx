@@ -1,3 +1,8 @@
+import {
+  PlayDisabledIcon,
+  PlayIcon,
+  StopIcon,
+} from "@repo/timo-design-system/icons";
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 
 import type {
@@ -37,7 +42,15 @@ export const DetailTodoTaskFields = ({
           size="lg"
           disabled={isCompleted}
           onClick={() => {}}
-        />
+        >
+          {isCompleted ? (
+            <PlayDisabledIcon width={24} height={24} />
+          ) : timerStatus === "RUNNING" ? (
+            <StopIcon width={24} height={24} />
+          ) : (
+            <PlayIcon width={24} height={24} />
+          )}
+        </PlayButton>
       </div>
 
       {subtasks.length > 0 && (

@@ -73,6 +73,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const [repeatDay, setRepeatDay] = useState("");
   const [isCompleted, setIsCompleted] = useState(todo.completed);
   const [subtasks, setSubtasks] = useState(todo.subtasks);
+  const [memo, setMemo] = useState("");
   const [icon, setIcon] = useState<TodoIconValue | null>(
     isTodoIconValue(todo.icon) ? todo.icon : null,
   );
@@ -137,6 +138,8 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     isCompleted,
     setIsCompleted,
     subtasks,
+    memo,
+    setMemo,
     icon,
     isIconPanelOpen,
     openIconPanel,

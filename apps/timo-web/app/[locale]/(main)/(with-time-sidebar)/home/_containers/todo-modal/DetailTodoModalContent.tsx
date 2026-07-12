@@ -16,6 +16,8 @@ import {
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-detail-todo-form";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 
+const DETAIL_TODO_MEMO_MAX_LENGTH = 300;
+
 export interface DetailTodoModalContentProps {
   isOpen: boolean;
   onClose: () => void;
@@ -115,8 +117,10 @@ export const DetailTodoModalContent = ({
       </div>
       <div className="mt-3 w-full">
         <DetailTodoMemoField
-          value={null}
+          value={detailTodoForm.memo}
           placeholder="메모를 입력해 주세요..."
+          onChange={detailTodoForm.setMemo}
+          maxLength={DETAIL_TODO_MEMO_MAX_LENGTH}
         />
       </div>
     </OverlayModal>
