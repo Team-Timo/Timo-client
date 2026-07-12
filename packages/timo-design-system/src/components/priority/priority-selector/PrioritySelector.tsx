@@ -35,9 +35,11 @@ export const PrioritySelector = ({
 }: PrioritySelectorProps) => {
   return (
     <Dropdown className="flex justify-center">
-      <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
+      <Dropdown.Trigger aria-haspopup="menu" className="py-2">
+        {trigger}
+      </Dropdown.Trigger>
 
-      <Dropdown.Panel className="gap-1">
+      <Dropdown.Panel className="shadow-timo gap-1">
         {PRIORITY_LEVELS.map((priority) => {
           const isSelected = priority === selected;
 

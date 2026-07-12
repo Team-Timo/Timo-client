@@ -164,7 +164,7 @@ export const RepeatSelector = ({
     <Dropdown className="flex justify-center">
       <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
 
-      <Dropdown.Panel className="w-32.5 gap-1 p-0">
+      <Dropdown.Panel className="shadow-timo w-32.5 gap-1 p-0">
         <div className="flex w-full flex-col gap-1 px-3.5 py-2">
           <span className="typo-body-r-12 text-timo-gray-700 w-full whitespace-nowrap">
             반복 일정

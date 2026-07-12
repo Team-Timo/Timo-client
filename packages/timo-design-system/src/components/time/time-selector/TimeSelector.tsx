@@ -35,7 +35,7 @@ export const TimeSelector = ({
     <Dropdown className="flex justify-center">
       <Dropdown.Trigger>{trigger}</Dropdown.Trigger>
 
-      <Dropdown.Panel className="w-23.75">
+      <Dropdown.Panel className="shadow-timo w-23.75">
         <div
           className={cn(
             "rounded-4 flex w-full items-center gap-2 px-[3.5px] py-[2.5px] transition-colors duration-200 ease-in-out",
