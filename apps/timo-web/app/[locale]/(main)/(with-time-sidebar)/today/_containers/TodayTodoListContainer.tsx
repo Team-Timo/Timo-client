@@ -76,7 +76,7 @@ export const TodayTodoListContainer = () => {
         completedCount={completedCount}
         totalCount={todos.length}
       />
-      <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pb-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 pb-4">
         {todos.map((todo) => (
           <TodayTodoCardContainer
             key={todo.todoId}
