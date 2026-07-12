@@ -11,7 +11,7 @@ export const LoginContainer = () => {
   const t = useTranslations("Login");
 
   return (
-    <main className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
+    <section className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
       <LottiePlayer
         src="/lottie/onboarding.json"
         className="hidden shrink-0 lg:block lg:size-[350px] xl:size-[430px] 2xl:size-[500px]"
@@ -69,6 +69,6 @@ export const LoginContainer = () => {
           </p>
         </div>
       </div>
-    </main>
+    </section>
   );
 };
