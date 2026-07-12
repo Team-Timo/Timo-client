@@ -8,11 +8,11 @@
 
 export interface TermsResponse {
   /** 약관 ID */
-  termsId?: number;
+  termsId: number;
   /** 약관 타입 */
-  type?: string;
+  type: string;
   /** 약관 제목 */
-  title?: string;
+  title: string;
   /** 약관 전문 */
-  content?: string;
+  content: string;
 }

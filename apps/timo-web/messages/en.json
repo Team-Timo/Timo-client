@@ -93,6 +93,19 @@
       "confirmMessage": "Are you sure you want to withdraw? All your data will be deleted and cannot be undone."
     }
   },
+  "Statistics": {
+    "sidePanel": {
+      "monthTotalRecordTime": "Total record time this month",
+      "activeDays": "Active days",
+      "activeDayCount": "{count} days",
+      "dailyAverage": "Daily average",
+      "accumulatedTasks": "Accumulated tasks",
+      "dayTotalRecordTime": "Total record time today",
+      "plan": "Plan",
+      "overtime": "+Overdue",
+      "shortened": "-Shortened"
+    }
+  },
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
@@ -169,6 +182,48 @@
       "connectLabel": "Google Calendar integration",
       "consentNotice": "Clicking will display the Google authentication and calendar access permission screen.",
       "permissionNotice": "timo only requests permission to view your schedules."
+    }
+  },
+  "Focus": {
+    "controls": {
+      "end": "End",
+      "pause": "Pause",
+      "play": "Play",
+      "extend": "Add Time"
+    },
+    "endModal": {
+      "title": "Timer Finished!",
+      "description": "Please select the next step.",
+      "continueButton": "Continue",
+      "completeButton": "Exit"
+    },
+    "stopModal": {
+      "title": "Shall we stop now?",
+      "description": "The <blue>{minutes}</blue> completed so far will be recorded in the timebox.",
+      "continueButton": "Continue",
+      "switchButton": "Switch"
+    },
+    "completeModal": {
+      "title": "The task has been completed!",
+      "defaultFeedback": "You've completed this task. Great work!",
+      "plannedLabel": "Plan",
+      "actualLabel": "Actual",
+      "completeButton": "Complete"
+    },
+    "extendModal": {
+      "title": "How much time would you like to add?",
+      "presetTenMin": "+10M",
+      "presetThirtyMin": "+30M",
+      "presetOneHour": "+1H",
+      "customPreset": "Enter",
+      "customInputLabel": "Custom minutes input",
+      "customUnitSuffix": "M",
+      "closeButton": "Close",
+      "submitButton": "Add Time"
+    },
+    "duration": {
+      "hourUnit": "h",
+      "minuteUnit": "m"
     }
   }
 }

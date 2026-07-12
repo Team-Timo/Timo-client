@@ -9,5 +9,5 @@ import type { TermsResponse } from "./termsResponse";
 
 export interface TermsListResponse {
   /** 약관 목록 */
-  terms?: TermsResponse[];
+  terms: TermsResponse[];
 }

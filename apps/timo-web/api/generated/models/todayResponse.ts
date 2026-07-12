@@ -9,9 +9,9 @@ import type { TodayResponseDayOfWeek } from "./todayResponseDayOfWeek";
 import type { TodayTodoResponse } from "./todayTodoResponse";
 
 export interface TodayResponse {
-  date?: string;
-  dayOfWeek?: TodayResponseDayOfWeek;
-  totalCount?: number;
-  completedCount?: number;
-  todos?: TodayTodoResponse[];
+  date: string;
+  dayOfWeek: TodayResponseDayOfWeek;
+  totalCount: number;
+  completedCount: number;
+  todos: TodayTodoResponse[];
 }

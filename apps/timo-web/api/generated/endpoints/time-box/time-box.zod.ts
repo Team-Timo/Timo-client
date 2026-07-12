@@ -22,4 +22,41 @@ export const GetTimeBoxesQueryParams = zod.object({
   date: zod.string().describe("조회 날짜"),
 });
 
-export const GetTimeBoxesResponse = zod.unknown();
+export const GetTimeBoxesResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .array(
+      zod.object({
+        sessionId: zod
+          .number()
+          .describe("타임박스의 원본이 되는 타이머 세션 ID"),
+        timerId: zod.number().describe("타이머 기록 ID"),
+        todoId: zod.number().describe("투두 ID"),
+        todoName: zod.string().describe("투두명"),
+        date: zod.iso.date().describe("타임박스 표시 날짜"),
+        startedAt: zod.iso
+          .datetime({ offset: true })
+          .describe("해당 날짜에 표시할 시작 일시"),
+        startAction: zod
+          .enum(["START", "RESUME"])
+          .nullish()
+          .describe("시작 일시의 액션. 이전 날짜부터 이어진 구간이면 null"),
+        endedAt: zod.iso
+          .datetime({ offset: true })
+          .nullish()
+          .describe("해당 날짜에 표시할 종료 일시. 진행 중이면 null"),
+        endAction: zod
+          .enum(["PAUSE", "COMPLETE"])
+          .nullish()
+          .describe(
+            "종료 일시의 액션. 진행 중이거나 다음 날짜로 이어지면 null",
+          ),
+        actualMinutes: zod
+          .number()
+          .nullish()
+          .describe("전체 실제 수행 시간(분). 완료된 마지막 타임박스에만 포함"),
+      }),
+    )
+    .optional(),
+});

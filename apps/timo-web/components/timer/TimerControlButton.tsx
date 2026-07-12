@@ -30,7 +30,7 @@ export const TimerControlButton = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "group flex size-14.5 items-center justify-center rounded-full",
+        "group focus-visible:border-timo-blue-300 flex size-14.5 items-center justify-center rounded-full border-2 border-transparent outline-none",
         isForcedActive
           ? "bg-timo-blue-50"
           : activeIcon

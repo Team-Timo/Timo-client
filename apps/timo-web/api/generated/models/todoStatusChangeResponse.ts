@@ -7,7 +7,7 @@
  */
 
 export interface TodoStatusChangeResponse {
-  todoId?: number;
-  completed?: boolean;
-  sortOrder?: number;
+  todoId: number;
+  completed: boolean;
+  sortOrder: number;
 }

@@ -7,12 +7,12 @@
  */
 
 export interface UserProfileResponse {
-  id?: number;
-  name?: string;
-  email?: string;
+  id: number;
+  name: string;
+  email: string;
   profileImageUrl?: string;
-  language?: string;
-  zoneId?: string;
-  calendarConnected?: boolean;
+  language: string;
+  zoneId: string;
+  calendarConnected: boolean;
   calendarEmail?: string;
 }

@@ -1,6 +1,4 @@
-const SECONDS_PER_HOUR = 3600;
-
-const SECONDS_PER_MINUTE = 60;
+import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "@/constants/time";
 
 /**
  * 초 단위 duration을 "H:MM" 형식의 텍스트로 변환한다.

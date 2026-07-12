@@ -9,8 +9,8 @@ import type { DayCompletionResponse } from "./dayCompletionResponse";
 
 export interface StatisticsCalendarResponse {
   /** 조회한 연월 */
-  yearMonth?: string;
+  yearMonth: string;
   /** UTC 기준 오늘 날짜 */
-  today?: string;
-  days?: DayCompletionResponse[];
+  today: string;
+  days: DayCompletionResponse[];
 }

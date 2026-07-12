@@ -14,4 +14,38 @@ import * as zod from "zod";
  * 두 경우 모두 hasTodo는 false, todo는 null입니다.
  * @summary 집중 모드 TODO 조회
  */
-export const GetFocusTodoResponse = zod.unknown();
+export const GetFocusTodoResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      date: zod.iso.date(),
+      dayOfWeek: zod.enum(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]),
+      hasTodo: zod.boolean(),
+      todo: zod
+        .object({
+          todoId: zod.number(),
+          icon: zod.string().optional(),
+          title: zod.string(),
+          completed: zod.boolean(),
+          durationSeconds: zod.number().optional(),
+          priority: zod.string().optional(),
+          tag: zod
+            .object({
+              tagId: zod.number(),
+              name: zod.string(),
+            })
+            .optional(),
+          isRepeated: zod.boolean(),
+          subtasks: zod.array(
+            zod.object({
+              subtaskId: zod.number(),
+              content: zod.string(),
+              completed: zod.boolean(),
+            }),
+          ),
+        })
+        .optional(),
+    })
+    .optional(),
+});

@@ -7,6 +7,6 @@
  */
 
 export interface TagResponse {
-  tagId?: number;
-  name?: string;
+  tagId: number;
+  name: string;
 }

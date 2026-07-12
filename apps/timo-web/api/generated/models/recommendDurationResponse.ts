@@ -8,5 +8,5 @@
 
 export interface RecommendDurationResponse {
   /** 추천 예상 소요 시간(분) */
-  recommendedMinutes?: number;
+  recommendedMinutes: number;
 }

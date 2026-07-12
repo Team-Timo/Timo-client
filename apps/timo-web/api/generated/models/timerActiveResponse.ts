@@ -7,14 +7,14 @@
  */
 
 export interface TimerActiveResponse {
-  timerId?: number;
-  todoId?: number;
-  todoTitle?: string;
+  timerId: number;
+  todoId: number;
+  todoTitle: string;
   iconType?: string;
-  status?: string;
-  plannedSeconds?: number;
-  extendedSeconds?: number;
-  elapsedSeconds?: number;
-  remainingSeconds?: number;
-  startedAt?: string;
+  status: string;
+  plannedSeconds: number;
+  extendedSeconds: number;
+  elapsedSeconds: number;
+  remainingSeconds: number;
+  startedAt: string;
 }

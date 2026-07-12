@@ -1,5 +1,6 @@
 import { TagIcon } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
+import { useTranslations } from "next-intl";
 
 import type {
   StatisticsDayDetail,
@@ -10,7 +11,7 @@ import { SummaryTimeBlock } from "@/app/[locale]/(main)/statistics/_components/S
 import {
   formatStatisticsClockText,
   formatStatisticsHourText,
-} from "@/app/[locale]/(main)/statistics/_utils/formatStatisticsTime";
+} from "@/app/[locale]/(main)/statistics/_utils/format-statistics-time";
 
 interface StatisticsMonthSidePanelProps {
   variant: "month";
@@ -22,16 +23,19 @@ interface StatisticsDaySidePanelProps {
   detail: StatisticsDayDetail;
 }
 
-type StatisticsSidePanelProps =
+export type StatisticsSidePanelProps =
   | StatisticsMonthSidePanelProps
   | StatisticsDaySidePanelProps;
 
 const SIDE_PANEL_CLASS_NAME =
-  "border-timo-gray-500 min-h-full w-76 border-l text-timo-black";
+  "border-timo-gray-500 min-h-full w-[304px] shrink-0 border-l text-timo-black";
 
-const getDiffLabel = (diffMinutes: number) => {
-  if (diffMinutes > 0) return "+초과";
-  if (diffMinutes < 0) return "-단축";
+const getDiffLabel = (
+  diffMinutes: number,
+  t: ReturnType<typeof useTranslations<"Statistics.sidePanel">>,
+) => {
+  if (diffMinutes > 0) return t("overtime");
+  if (diffMinutes < 0) return t("shortened");
   return "";
 };
 
@@ -42,34 +46,36 @@ const getDiffClassName = (diffMinutes: number) => {
 };
 
 export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
+  const t = useTranslations("Statistics.sidePanel");
+
   if (props.variant === "month") {
     const { summary } = props;
 
     return (
-      <aside className={cn(SIDE_PANEL_CLASS_NAME, "pt-20.75 pb-148")}>
+      <aside className={cn(SIDE_PANEL_CLASS_NAME, "pt-[83px] pb-148")}>
         <div className="flex h-46.25 flex-col gap-5">
           <div className="px-7.5 py-2.5">
             <SummaryTimeBlock
-              label="이번 달의 총 기록 시간"
+              label={t("monthTotalRecordTime")}
               minutes={summary.totalRecordMinutes}
             />
           </div>
 
           <dl className="typo-headline-r-14 flex flex-col gap-2 px-7.5">
             <div className="flex items-center gap-3">
-              <dt className="text-timo-gray-900">활동일</dt>
-              <dd>{summary.activeDayCount}일</dd>
+              <dt className="text-timo-gray-900">{t("activeDays")}</dt>
+              <dd>{t("activeDayCount", { count: summary.activeDayCount })}</dd>
             </div>
 
             <div className="flex items-center gap-3">
-              <dt className="text-timo-gray-900">일평균</dt>
+              <dt className="text-timo-gray-900">{t("dailyAverage")}</dt>
               <dd>
                 {formatStatisticsHourText(summary.averageRecordedMinutes)}
               </dd>
             </div>
 
             <div className="flex items-center gap-3">
-              <dt className="text-timo-gray-900">누적 태스크</dt>
+              <dt className="text-timo-gray-900">{t("accumulatedTasks")}</dt>
               <dd>
                 {summary.completedTodoCount}/{summary.totalTodoCount}
               </dd>
@@ -88,7 +94,7 @@ export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
         <h2 className="typo-headline-b-24">{detail.date}</h2>
 
         <SummaryTimeBlock
-          label="오늘의 총 기록 시간"
+          label={t("dayTotalRecordTime")}
           minutes={detail.totalRecordMinutes}
         />
       </div>
@@ -116,11 +122,12 @@ export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
                 </strong>
 
                 <span>
-                  계획: {formatStatisticsClockText(todo.estimatedTimeMinutes)}
+                  {t("plan")}:{" "}
+                  {formatStatisticsClockText(todo.estimatedTimeMinutes)}
                 </span>
 
                 <span className={getDiffClassName(diffMinutes)}>
-                  {getDiffLabel(diffMinutes)}
+                  {getDiffLabel(diffMinutes, t)}
                 </span>
               </div>
             </li>

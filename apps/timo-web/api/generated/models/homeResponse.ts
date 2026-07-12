@@ -9,7 +9,7 @@ import type { DayResponse } from "./dayResponse";
 import type { HomeResponseFilter } from "./homeResponseFilter";
 
 export interface HomeResponse {
-  filter?: HomeResponseFilter;
-  baseDate?: string;
-  days?: DayResponse[];
+  filter: HomeResponseFilter;
+  baseDate: string;
+  days: DayResponse[];
 }

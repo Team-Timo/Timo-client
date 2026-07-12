@@ -9,5 +9,5 @@ import type { UpdateLanguageResponseLanguage } from "./updateLanguageResponseLan
 
 export interface UpdateLanguageResponse {
   /** 변경된 서비스 언어 */
-  language?: UpdateLanguageResponseLanguage;
+  language: UpdateLanguageResponseLanguage;
 }

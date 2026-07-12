@@ -21,11 +21,104 @@ export const GetHomeQueryParams = zod.object({
     .describe("기준 날짜(yyyy-MM-dd), 미입력 시 오늘"),
 });
 
-export const GetHomeResponse = zod.unknown();
+export const GetHomeResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      filter: zod.enum(["DEFAULT", "WEEK"]),
+      baseDate: zod.iso.date(),
+      days: zod.array(
+        zod.object({
+          date: zod.iso.date(),
+          dayOfWeek: zod.enum([
+            "MON",
+            "TUE",
+            "WED",
+            "THU",
+            "FRI",
+            "SAT",
+            "SUN",
+          ]),
+          isHoliday: zod.boolean(),
+          isToday: zod.boolean(),
+          totalCount: zod.number(),
+          completedCount: zod.number(),
+          todos: zod.array(
+            zod.object({
+              todoId: zod.number(),
+              icon: zod.string().optional(),
+              title: zod.string(),
+              completed: zod.boolean(),
+              durationSeconds: zod.number().optional(),
+              priority: zod.string().optional(),
+              tag: zod
+                .object({
+                  tagId: zod.number(),
+                  name: zod.string(),
+                })
+                .optional(),
+              hasMemo: zod.boolean(),
+              isRepeated: zod.boolean(),
+              timerStatus: zod.enum(["STOPPED", "RUNNING", "PAUSED"]),
+              sortOrder: zod.number().optional(),
+              subtasks: zod.array(
+                zod.object({
+                  subtaskId: zod.number(),
+                  content: zod.string(),
+                  completed: zod.boolean(),
+                }),
+              ),
+            }),
+          ),
+        }),
+      ),
+    })
+    .optional(),
+});
 
 /**
  * 오늘 하루의 TODO 목록을 하위 태스크 상세 정보까지 포함해 단일 객체로 조회합니다.
  * TODO는 미완료 먼저, 같은 완료 그룹 안에서는 sortOrder 오름차순으로 정렬됩니다.
  * @summary 오늘 뷰 TODO 목록 조회
  */
-export const GetTodayResponse = zod.unknown();
+export const GetTodayResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      date: zod.iso.date(),
+      dayOfWeek: zod.enum(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]),
+      totalCount: zod.number(),
+      completedCount: zod.number(),
+      todos: zod.array(
+        zod.object({
+          todoId: zod.number(),
+          icon: zod.string().optional(),
+          title: zod.string(),
+          completed: zod.boolean(),
+          date: zod.iso.date(),
+          durationSeconds: zod.number().optional(),
+          priority: zod.string().optional(),
+          tag: zod
+            .object({
+              tagId: zod.number(),
+              name: zod.string(),
+            })
+            .optional(),
+          isRepeated: zod.boolean(),
+          hasMemo: zod.boolean(),
+          timerStatus: zod.enum(["STOPPED", "RUNNING", "PAUSED"]),
+          sortOrder: zod.number().optional(),
+          subtasks: zod.array(
+            zod.object({
+              subtaskId: zod.number(),
+              content: zod.string(),
+              completed: zod.boolean(),
+            }),
+          ),
+        }),
+      ),
+    })
+    .optional(),
+});
