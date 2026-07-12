@@ -44,7 +44,7 @@ export const LoginContainer = () => {
             <OnboardingGoogleButtonContainer
               variant="login"
               onClick={() => {
-                // TODO: 백엔드 OAuth 로그인 URL 확정 후 리다이렉트
+                window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/oauth2/authorization/google`;
               }}
             />
           </div>
