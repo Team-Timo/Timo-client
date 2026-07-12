@@ -33,6 +33,7 @@ export const StatisticsContainer = () => {
     ...selectedDetailBase,
     date: formatStatisticsSidePanelDate(selectedDate, locale),
   };
+  
   const handleChangeMonth: typeof setCurrentMonth = (value) => {
     setCurrentMonth(value);
     setPanelMode("month");
