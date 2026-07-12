@@ -26,7 +26,7 @@ export const LifePatternStepContainer = ({
   const t = useTranslations("Onboarding");
 
   const isBedTimeInvalid = Boolean(
-    wakeUpTime && bedTime && bedTime <= wakeUpTime,
+    wakeUpTime && bedTime && bedTime === wakeUpTime,
   );
   const canProceed = Boolean(wakeUpTime && bedTime && !isBedTimeInvalid);
 

@@ -122,9 +122,7 @@
   "Error": {
     "title": "A problem has occurred.",
     "description": "We are currently undergoing maintenance for a better experience. Please try again later.",
-    "homeButton": "Return to home",
-    "sectionDescription": "This section couldn't be loaded due to a temporary issue.",
-    "retryButton": "Retry"
+    "homeButton": "Return to home"
   },
   "NotFound": {
     "title": "Page not found",
@@ -177,7 +175,7 @@
       "description": "The information you provide will only be used for time pattern analysis.",
       "wakeUpTime": "Wake-up time",
       "bedTime": "Bedtime",
-      "bedTimeError": "Please set your bedtime later than your wake-up time."
+      "bedTimeError": "Please set different times for bedtime and wake-up."
     },
     "calendarConnect": {
       "title": "Connect your Google Calendar.",
