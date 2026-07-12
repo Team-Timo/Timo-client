@@ -1,11 +1,11 @@
-import { Suspense } from "react";
-
 import { OauthCallbackContainer } from "@/app/[locale]/oauth/callback/_containers/OauthCallbackContainer";
+import { AsyncBoundary } from "@/components/boundary/AsyncBoundary";
+
 
 export default function OauthCallbackPage() {
   return (
-    <Suspense>
+    <AsyncBoundary>
       <OauthCallbackContainer />
-    </Suspense>
+    </AsyncBoundary>
   );
 }
