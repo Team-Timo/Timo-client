@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import type { BaseResponseAuthReissueResponse } from "@/api/generated/models";
 
 import { parseApiError } from "@/api/error/api-error";
+import { ROUTES } from "@/constants/routes";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -66,7 +67,7 @@ instance.interceptors.response.use(
           return instance(originalRequest);
         }
       } catch {
-        window.location.href = "/login"; // refreshToken도 만료된 경우
+        window.location.href = ROUTES.LOGIN;
       }
     }
     return Promise.reject(parseApiError(error));

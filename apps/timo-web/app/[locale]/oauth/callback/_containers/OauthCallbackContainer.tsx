@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { useToken } from "@/api/generated/endpoints/auth/auth";
+import { ROUTES } from "@/constants/routes";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 
@@ -27,10 +28,10 @@ export const OauthCallbackContainer = () => {
           if (!data?.accessToken) return;
           setAccessToken(data.accessToken);
           queryClient.setQueryData(["user", "me"], data.user);
-          router.replace(data.isNewUser ? "/onboarding" : "/home");
+          router.replace(data.isNewUser ? ROUTES.ONBOARDING : ROUTES.HOME);
         },
         onError: () => {
-          router.replace("/login");
+          router.replace(ROUTES.LOGIN);
         },
       },
     );

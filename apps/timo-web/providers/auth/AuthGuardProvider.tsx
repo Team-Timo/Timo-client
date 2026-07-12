@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useReissue } from "@/api/generated/endpoints/auth/auth";
+import { ROUTES } from "@/constants/routes";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 
@@ -25,14 +26,14 @@ export const AuthGuardProvider = ({ children }: AuthGuardProviderProps) => {
     mutate(undefined, {
       onSuccess: ({ data }) => {
         if (!data?.accessToken) {
-          router.replace("/login");
+          router.replace(ROUTES.LOGIN);
           return;
         }
         setAccessToken(data.accessToken);
         setIsReady(true);
       },
       onError: () => {
-        router.replace("/login");
+        router.replace(ROUTES.LOGIN);
       },
     });
   }, [accessToken, mutate, router, setAccessToken]);
