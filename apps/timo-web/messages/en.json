@@ -226,5 +226,8 @@
       "hourUnit": "h",
       "minuteUnit": "m"
     }
+  },
+  "Policy": {
+    "empty": "This policy content isn't available yet."
   }
 }

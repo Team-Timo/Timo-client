@@ -223,5 +223,8 @@
       "hourUnit": "시간",
       "minuteUnit": "분"
     }
+  },
+  "Policy": {
+    "empty": "약관 내용을 아직 준비 중입니다."
   }
 }
