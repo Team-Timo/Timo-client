@@ -44,6 +44,12 @@ Claude Code / Codex 공통 진입점입니다.
 | 스토리북, storybook              | `.agents/skills/ui/timo-storybook/SKILL.md` |
 | 피그마, figma                    | `.agents/skills/ui/timo-figma/SKILL.md`     |
 
+### API
+
+| 트리거                            | Read 할 파일                                       |
+| --------------------------------- | -------------------------------------------------- |
+| API 연동, 연동 세팅, orval 붙여줘 | `.agents/skills/api/timo-api-integration/SKILL.md` |
+
 ### Quality
 
 | 트리거               | Read 할 파일                                    |
