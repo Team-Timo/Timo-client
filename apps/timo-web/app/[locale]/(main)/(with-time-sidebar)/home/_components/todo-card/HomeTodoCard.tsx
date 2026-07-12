@@ -84,11 +84,7 @@ export const HomeTodoCard = ({
   const titleRow = (
     <div className="flex w-full items-center justify-between gap-2">
       <div className="flex min-w-0 flex-1 items-center gap-1">
-        <Checkbox
-          checked={isCompleted}
-          onChange={onToggleCompleted}
-          disabled={isCompleted}
-        />
+        <Checkbox checked={isCompleted} onChange={onToggleCompleted} />
         <p
           className={cn(
             "typo-body-sb-12 min-w-0 flex-1 truncate",
@@ -133,7 +129,6 @@ export const HomeTodoCard = ({
             <Checkbox
               checked={isSubtaskCompleted}
               onChange={(checked) => onToggleSubtaskCompleted?.(checked)}
-              disabled={isCompleted}
             />
             <p className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 truncate">
               {subtaskTitle}

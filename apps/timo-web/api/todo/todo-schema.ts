@@ -42,7 +42,7 @@ export const createTodoRequestSchema = z
     repeatType: todoRepeatTypeSchema,
     repeatWeekdays: z.array(todoRepeatWeekdaySchema).nullable(),
     repeatDayOfMonth: z.number().int().min(1).max(31).nullable(),
-    memo: z.string().nullable(),
+    memo: z.string().max(300).nullable(),
   })
   .superRefine((value, ctx) => {
     if (
