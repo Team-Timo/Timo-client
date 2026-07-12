@@ -11,7 +11,7 @@ import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar
 import { useHomeTodayScrollRef } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
-import { getHomeViewMock } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks/home-view-mock";
+import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
 import { reorderDaysTodayFirst } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/home-view";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date";
@@ -38,10 +38,8 @@ export const HomeTodoContainer = () => {
   const filter: HomeViewFilter = isWeekView ? "WEEK" : "DEFAULT";
   const baseDate = formatDateKey(referenceDate);
 
-  const apiDays = useMemo(
-    () => getHomeViewMock({ filter, baseDate }).days,
-    [filter, baseDate],
-  );
+  const { data: homeViewData } = useHomeView({ filter, baseDate });
+  const apiDays = homeViewData.days;
 
   const days = useMemo(
     () => (isWeekView ? apiDays : reorderDaysTodayFirst(apiDays)),
@@ -114,9 +112,10 @@ export const HomeTodoContainer = () => {
                       durationSeconds={todo.durationSeconds}
                       priority={todo.priority}
                       tagName={
-                        isTagLabelKey(todo.tag.name)
+                        todo.tag &&
+                        (isTagLabelKey(todo.tag.name)
                           ? tCommon(`tag.${todo.tag.name}`)
-                          : todo.tag.name
+                          : todo.tag.name)
                       }
                       hasMemo={todo.hasMemo}
                       isRepeated={todo.isRepeated}

@@ -6,7 +6,7 @@ export const todoPrioritySchema = z.enum([
   "MEDIUM",
   "LOW",
 ]);
-export const todoTimerStatusSchema = z.enum(["RUNNING", "STOPPED"]);
+export const todoTimerStatusSchema = z.enum(["RUNNING", "STOPPED", "PAUSED"]);
 
 export const todoTagSchema = z.object({
   tagId: z.number(),
@@ -21,16 +21,16 @@ export const todoSubtaskSchema = z.object({
 
 export const todoSchema = z.object({
   todoId: z.number(),
-  icon: z.string().nullable(),
+  icon: z.string().optional(),
   title: z.string(),
   completed: z.boolean(),
-  durationSeconds: z.number(),
-  priority: todoPrioritySchema,
-  tag: todoTagSchema,
+  durationSeconds: z.number().default(0),
+  priority: todoPrioritySchema.default("MEDIUM"),
+  tag: todoTagSchema.optional(),
   hasMemo: z.boolean(),
   isRepeated: z.boolean(),
   timerStatus: todoTimerStatusSchema,
-  sortOrder: z.number(),
+  sortOrder: z.number().default(0),
   subtasks: z.array(todoSubtaskSchema),
 });
 

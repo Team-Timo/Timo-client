@@ -10,7 +10,7 @@ const buildTodoFromRequest = (
   tag: CreateTodoTag,
 ): Todo => ({
   todoId: Date.now(),
-  icon: data.icon,
+  icon: data.icon ?? undefined,
   title: data.title,
   completed: false,
   durationSeconds: convertApiDurationToSeconds(data.duration),
