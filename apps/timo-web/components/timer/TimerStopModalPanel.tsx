@@ -1,7 +1,7 @@
 import { Modal, ModalButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 
-import { formatDurationLabel } from "@/components/timer/durationLabel";
+import { formatDurationLabel } from "@/utils/format-duration-label";
 
 const TimerStopIcon = () => (
   //TODO: SVG를 컴포넌트 머지 시 변경 예정

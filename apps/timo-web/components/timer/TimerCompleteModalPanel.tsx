@@ -1,7 +1,7 @@
 import { Modal } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 
-import { formatDurationLabel } from "@/components/timer/durationLabel";
+import { formatDurationLabel } from "@/utils/format-duration-label";
 
 export interface TimerCompleteModalPanelProps {
   plannedMinutes: number;
