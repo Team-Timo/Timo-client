@@ -225,6 +225,12 @@ export const CreateTodoModalContent = ({
         onClose={timeField.closeAiDurationErrorToast}
         message={tToast("aiDurationRecommendFailed")}
       />
+
+      <AnimatedToast
+        isOpen={tagField.isCreateTagErrorToastOpen}
+        onClose={tagField.closeCreateTagErrorToast}
+        message={tToast("tagCreateFailed")}
+      />
     </>
   );
 };
