@@ -81,7 +81,7 @@ export const StatisticsCalendar = ({
   const todayTime = getDateTime(today);
 
   return (
-    <section className="min-w-0 flex-1 px-14.75 pt-10 pb-13">
+    <section className="min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13">
       <div className="w-199.5">
         <div className="mb-17.25">
           <h1 className="typo-headline-b-30 text-timo-gray-900">
