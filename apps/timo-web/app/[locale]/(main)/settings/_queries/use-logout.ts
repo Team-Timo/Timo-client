@@ -13,7 +13,7 @@ export const useLogoutAction = () => {
   const clearAccessToken = useAuthStore((state) => state.clearAccessToken);
 
   return useMutation({
-    mutationFn: logout,
+    mutationFn: () => logout(),
     onSettled: () => {
       clearAccessToken();
       queryClient.clear();

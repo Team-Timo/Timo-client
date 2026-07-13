@@ -13,7 +13,7 @@ export const useWithdrawAction = () => {
   const clearAccessToken = useAuthStore((state) => state.clearAccessToken);
 
   return useMutation({
-    mutationFn: withdraw,
+    mutationFn: () => withdraw(),
     onSuccess: () => {
       clearAccessToken();
       queryClient.clear();
