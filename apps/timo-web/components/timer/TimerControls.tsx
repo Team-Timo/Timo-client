@@ -19,6 +19,7 @@ export interface TimerControlsProps {
   onTogglePlay: () => void;
   onOpenEndModal: () => void;
   onOpenExtendModal: () => void;
+  disabled?: boolean;
 }
 
 export const TimerControls = ({
@@ -26,6 +27,7 @@ export const TimerControls = ({
   onTogglePlay,
   onOpenEndModal,
   onOpenExtendModal,
+  disabled = false,
 }: TimerControlsProps) => {
   const t = useTranslations("Focus.controls");
 
@@ -34,6 +36,7 @@ export const TimerControls = ({
       <Modal.Trigger
         aria-label={t("end")}
         onClick={onOpenEndModal}
+        disabled={disabled}
         className={MODAL_TRIGGER_CLASS}
       >
         <span className="group-active:hidden">
@@ -51,11 +54,13 @@ export const TimerControls = ({
         label={isRunning ? t("pause") : t("play")}
         variant={isRunning ? "active" : "default"}
         onClick={onTogglePlay}
+        disabled={disabled}
       />
 
       <Modal.Trigger
         aria-label={t("extend")}
         onClick={onOpenExtendModal}
+        disabled={disabled}
         className={MODAL_TRIGGER_CLASS}
       >
         <span className="group-active:hidden">

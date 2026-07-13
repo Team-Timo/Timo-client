@@ -42,9 +42,10 @@ const useDropdownContext = (): DropdownContextValue => {
 export interface DropdownProps {
   children: ReactNode;
   className?: string;
+  onOpenChange?: (isOpen: boolean) => void;
 }
 
-const DropdownRoot = ({ children, className }: DropdownProps) => {
+const DropdownRoot = ({ children, className, onOpenChange }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -77,7 +78,11 @@ const DropdownRoot = ({ children, className }: DropdownProps) => {
     };
   }, [isOpen]);
 
-  const toggle = () => setIsOpen((prev) => !prev);
+  const toggle = () => {
+    const next = !isOpen;
+    setIsOpen(next);
+    onOpenChange?.(next);
+  };
   const close = () => setIsOpen(false);
 
   return (

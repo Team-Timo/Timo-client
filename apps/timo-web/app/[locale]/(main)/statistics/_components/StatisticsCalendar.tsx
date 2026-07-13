@@ -81,32 +81,36 @@ export const StatisticsCalendar = ({
   const todayTime = getDateTime(today);
 
   return (
-    <section className="min-w-0 flex-1 px-14.75 pt-10 pb-13">
+    <section className="min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13">
       <div className="w-199.5">
-        <div className="mb-17.25">
-          <h1 className="typo-headline-b-30 text-timo-gray-900">
-            {formatStatisticsMonth(currentMonth, locale)}
-          </h1>
+        <div className="sticky top-0 z-10 bg-white pb-5">
+          <div className="pb-[69px]">
+            <h1 className="typo-headline-b-30 text-timo-gray-900">
+              {formatStatisticsMonth(currentMonth, locale)}
+            </h1>
 
-          <p className="typo-headline-m-14 text-timo-black mt-2">
-            {todayLabel}
-          </p>
+            <p className="typo-headline-m-14 text-timo-black mt-2">
+              {todayLabel}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-7 gap-x-14">
+            {WEEKDAYS.map(({ label, ariaLabel }, index) => (
+              <div
+                key={ariaLabel}
+                aria-label={ariaLabel}
+                className={cn(
+                  "typo-body-r-12 flex h-6 items-center justify-center",
+                  index >= 5 ? "text-timo-red" : "text-timo-gray-900",
+                )}
+              >
+                {label}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-7 gap-x-14 gap-y-5">
-          {WEEKDAYS.map(({ label, ariaLabel }, index) => (
-            <div
-              key={ariaLabel}
-              aria-label={ariaLabel}
-              className={cn(
-                "typo-body-r-12 flex h-6 items-center justify-center",
-                index >= 5 ? "text-timo-red" : "text-timo-gray-900",
-              )}
-            >
-              {label}
-            </div>
-          ))}
-
+        <div className="grid grid-cols-7 gap-x-14 gap-y-5 bg-white">
           {Array.from({ length: firstDayOffset }, (_, index) => (
             <div key={`empty-${index}`} />
           ))}

@@ -11,6 +11,7 @@ export interface PlayButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   children?: ReactNode;
+  ariaLabel?: string;
 }
 
 const VARIANT_MAP: Record<
@@ -32,6 +33,7 @@ export const PlayButton = ({
   disabled = false,
   onClick,
   children,
+  ariaLabel,
 }: PlayButtonProps) => {
   return (
     <button
@@ -39,9 +41,10 @@ export const PlayButton = ({
       onClick={onClick}
       disabled={disabled}
       aria-label={
-        disabled
+        ariaLabel ??
+        (disabled
           ? `${VARIANT_MAP[variant].label} 불가`
-          : VARIANT_MAP[variant].label
+          : VARIANT_MAP[variant].label)
       }
       className={cn(
         "inline-flex items-center justify-center rounded-full",

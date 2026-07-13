@@ -16,27 +16,19 @@ import { CreateTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/
 import { useIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-icon-field";
 import { useRepeatField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-repeat-field";
 import { useSubtaskField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
-import {
-  DEFAULT_TAG,
-  useTagField,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-tag-field";
+import { useTagField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-tag-field";
 import { useTimeField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-time-field";
 import { useTitleField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-title-field";
 import { formatDateToIsoDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
-export interface CreateTodoTag {
-  id: number;
-  name: string;
-}
-
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   icon: null,
   title: "",
   subtasks: [],
   date: formatDateToIsoDate(defaultDate ?? new Date()),
-  duration: "0:00",
+  duration: "00:00",
   priority: null,
   tagId: null,
   repeatType: "NONE",
@@ -50,7 +42,7 @@ export interface CreateTodoModalContentProps {
   onClose: () => void;
   onExited: () => void;
   defaultDate?: Date;
-  onSubmit: (data: CreateTodoRequest, tag: CreateTodoTag) => void;
+  onSubmit: (data: CreateTodoRequest) => void;
 }
 
 export const CreateTodoModalContent = ({
@@ -88,9 +80,7 @@ export const CreateTodoModalContent = ({
     : undefined;
 
   const handleFormSubmit = (data: CreateTodoRequest) => {
-    const tag = tagField.selectedTagOption ?? DEFAULT_TAG;
-
-    onSubmit(data, { id: data.tagId ?? tag.id, name: tag.name });
+    onSubmit(data);
 
     reset(createDefaultValues(defaultDate));
     subtaskField.reset();
@@ -169,6 +159,7 @@ export const CreateTodoModalContent = ({
             onTimeChange={timeField.handleDurationInputChange}
             selectedTime={timeField.selectedTime}
             onSelectTime={timeField.handleSelectTime}
+            onTimeOpen={timeField.handleTimeSelectorOpen}
             priority={priorityField.value ?? undefined}
             onSelectPriority={(level: PriorityLevel) =>
               priorityField.onChange(level)
@@ -227,6 +218,12 @@ export const CreateTodoModalContent = ({
             })}
           </p>
         }
+      />
+
+      <AnimatedToast
+        isOpen={timeField.isAiDurationErrorToastOpen}
+        onClose={timeField.closeAiDurationErrorToast}
+        message={tToast("aiDurationRecommendFailed")}
       />
     </>
   );

@@ -2,17 +2,19 @@
 
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
 import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
 import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
-import { useHomeTodayScrollRef } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
+import {
+  scrollContainerToToday,
+  useHomeTodayScrollRef,
+} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
-import { getHomeViewMock } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks/home-view-mock";
-import { reorderDaysTodayFirst } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/home-view";
+import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date";
 
@@ -38,27 +40,19 @@ export const HomeTodoContainer = () => {
   const filter: HomeViewFilter = isWeekView ? "WEEK" : "DEFAULT";
   const baseDate = formatDateKey(referenceDate);
 
-  const apiDays = useMemo(
-    () => getHomeViewMock({ filter, baseDate }).days,
-    [filter, baseDate],
-  );
-
-  const days = useMemo(
-    () => (isWeekView ? apiDays : reorderDaysTodayFirst(apiDays)),
-    [isWeekView, apiDays],
-  );
+  const { data: homeViewData } = useHomeView({ filter, baseDate });
+  const days = homeViewData.days;
 
   const {
     todosByDate,
-    handleAddTodo,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleReorderTodo,
-  } = useHomeTodosByDate(apiDays);
+  } = useHomeTodosByDate(days);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ left: 0 });
+    scrollContainerToToday(scrollRef.current);
   }, [isWeekView, scrollRef]);
 
   return (
@@ -77,6 +71,7 @@ export const HomeTodoContainer = () => {
         return (
           <div
             key={dateKey}
+            data-today={day.isToday}
             className={cn(
               "flex h-full flex-col gap-2",
               isWeekView
@@ -91,7 +86,6 @@ export const HomeTodoContainer = () => {
               isToday={day.isToday}
               totalCount={todos.length}
               completedCount={completedCount}
-              onCreateTodo={(todo) => handleAddTodo(dateKey, todo)}
             />
 
             <DndSortableListProvider
@@ -114,9 +108,10 @@ export const HomeTodoContainer = () => {
                       durationSeconds={todo.durationSeconds}
                       priority={todo.priority}
                       tagName={
-                        isTagLabelKey(todo.tag.name)
+                        todo.tag &&
+                        (isTagLabelKey(todo.tag.name)
                           ? tCommon(`tag.${todo.tag.name}`)
-                          : todo.tag.name
+                          : todo.tag.name)
                       }
                       hasMemo={todo.hasMemo}
                       isRepeated={todo.isRepeated}
