@@ -1,6 +1,5 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
@@ -14,16 +13,7 @@ import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useDeleteTag } from "@/queries/tag/use-delete-tag";
 import { useTags } from "@/queries/tag/use-tags";
 
-const DEFAULT_TAG_NAME_KEYS = [
-  "dailyLife",
-  "work",
-  "exercise",
-  "assignment",
-  "additional",
-] as const;
-
 export const useSettingsProfile = () => {
-  const tCommon = useTranslations("Common");
   const { language, locale, setLanguage, commitLanguage } =
     useSettingsLanguageParam();
 
@@ -35,14 +25,10 @@ export const useSettingsProfile = () => {
   const { mutate: createTag } = useCreateTag();
   const { mutate: deleteTag } = useDeleteTag();
 
-  const defaultTagLabels = new Set(
-    DEFAULT_TAG_NAME_KEYS.map((key) => tCommon(`tag.${key}`)),
-  );
-
   const tagItems = (tagsQuery.data?.tags ?? []).map((tag) => ({
     id: tag.tagId,
     label: tag.name,
-    isDefault: defaultTagLabels.has(tag.name),
+    isDefault: tag.isDefault,
   }));
 
   const handleConnectCalendar = () => {

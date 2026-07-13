@@ -3,6 +3,7 @@ import { z } from "zod";
 export const tagSchema = z.object({
   tagId: z.number(),
   name: z.string(),
+  isDefault: z.boolean(),
 });
 
 export const tagListDataSchema = z.object({
