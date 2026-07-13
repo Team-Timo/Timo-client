@@ -13,7 +13,7 @@ import type {
 import { useUpdateLanguage } from "@/api/generated/endpoints/user/user";
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
-import { useSettingsProfileQuery } from "@/app/[locale]/(main)/settings/_queries/use-settings-profile";
+import { useMyProfile } from "@/queries/use-my-profile";
 
 const LANGUAGE_REQUEST_MAP: Record<
   SettingsLanguage,
@@ -38,7 +38,7 @@ export const useSettingsProfile = () => {
   const { language, locale, setLanguage, commitLanguage } =
     useSettingsLanguageParam();
 
-  const { data: profile } = useSettingsProfileQuery();
+  const { data: profile } = useMyProfile();
   const [isCalendarConnected, setIsCalendarConnected] = useState(
     profile.calendarConnected,
   );
