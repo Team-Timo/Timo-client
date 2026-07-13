@@ -19,8 +19,8 @@ import {
 } from "@/components/timer/TimerSessionControls";
 import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimerOvertime } from "@/hooks/use-timer-overtime";
-import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
-import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
+import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
+import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
 export const TimerPanel = () => {
   const queryClient = useQueryClient();

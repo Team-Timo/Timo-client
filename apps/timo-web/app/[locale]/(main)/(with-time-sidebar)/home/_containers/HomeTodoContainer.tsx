@@ -16,7 +16,7 @@ import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/ho
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 
 const TAG_LABEL_KEYS = [
   "dailyLife",

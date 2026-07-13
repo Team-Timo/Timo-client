@@ -14,7 +14,7 @@ import {
 import { Timer } from "@/components/timer/Timer";
 import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
+import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
 export const FocusSessionContainer = () => {
   const tWeekday = useTranslations("Common.weekday");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import type { ReactNode } from "react";
 
@@ -17,10 +17,9 @@ export interface TodayTodoCardContainerProps {
   toolbar: TodayTodoCardToolbar;
   timerStatus: "RUNNING" | "PAUSED" | "STOPPED";
   icon?: ReactNode;
-  onIconClick?: () => void;
+  onCardClick?: () => void;
   onCheck?: () => void;
   onPlay?: () => void;
-  onDelete?: () => void;
   onSubTodoCheck?: (id: number) => void;
 }
 
@@ -28,24 +27,19 @@ export const TodayTodoCardContainer = ({
   title,
   isDone: initialIsDone,
   icon,
-  onIconClick,
   subTodos: initialSubTodos,
   toolbar,
   timerStatus,
+  onCardClick,
   onCheck,
   onPlay,
-  onDelete,
   onSubTodoCheck,
 }: TodayTodoCardContainerProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(timerStatus === "RUNNING");
   const [isDone, setIsDone] = useState(initialIsDone);
   const [subTodos, setSubTodos] = useState(initialSubTodos);
 
-  useEffect(() => {
-    setIsPlaying(timerStatus === "RUNNING");
-  }, [timerStatus]);
-
+  const isPlaying = timerStatus === "RUNNING";
   const isDimmed = isDone && !isHovered;
 
   const handleCheck = () => {
@@ -54,7 +48,6 @@ export const TodayTodoCardContainer = ({
     if (next) {
       setSubTodos((prev) => prev.map((s) => ({ ...s, isDone: true })));
       if (isPlaying) {
-        setIsPlaying(false);
         onPlay?.();
       }
     }
@@ -63,7 +56,6 @@ export const TodayTodoCardContainer = ({
 
   const handlePlay = () => {
     if (!isDone) {
-      setIsPlaying((prev) => !prev);
       onPlay?.();
     }
   };
@@ -82,12 +74,11 @@ export const TodayTodoCardContainer = ({
       isDimmed={isDimmed}
       isPlaying={isPlaying}
       icon={icon}
-      onIconClick={onIconClick}
       subTodos={subTodos}
       toolbar={toolbar}
+      onCardClick={onCardClick}
       onCheck={handleCheck}
       onPlay={handlePlay}
-      onDelete={onDelete ?? (() => {})}
       onSubTodoCheck={handleSubTodoCheck}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

@@ -23,7 +23,7 @@ import { useFocusTodo } from "@/app/[locale]/(main)/focus/_queries/use-focus-tod
 import { convertDateToBadgeText } from "@/app/[locale]/(main)/focus/_utils/date";
 import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimerOvertime } from "@/hooks/use-timer-overtime";
-import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
+import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 
 export const useFocusSession = () => {
   const queryClient = useQueryClient();
