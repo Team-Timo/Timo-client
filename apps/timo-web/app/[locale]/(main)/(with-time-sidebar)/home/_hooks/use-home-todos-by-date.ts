@@ -10,8 +10,8 @@ import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeSubtaskStatus,
   useChangeTodoStatus,
+  useReorderTodo,
 } from "@/api/generated/endpoints/todo/todo";
-import { patchTodoOrderMock } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks/todo-order-mock";
 import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
@@ -21,6 +21,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   const queryClient = useQueryClient();
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
+  const { mutate: reorderTodo } = useReorderTodo();
 
   useEffect(() => {
     setTodosByDate(
@@ -105,7 +106,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     );
   };
 
-  const handleReorderTodo = async (
+  const handleReorderTodo = (
     dateKey: string,
     fromIndex: number,
     toIndex: number,
@@ -119,11 +120,15 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     const reordered = reorderTodos(previous, fromIndex, toIndex);
     setTodosByDate((prev) => ({ ...prev, [dateKey]: reordered }));
 
-    try {
-      await patchTodoOrderMock({ todoId: movedTodo.todoId, newIndex: toIndex });
-    } catch {
-      setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
-    }
+    reorderTodo(
+      { todoId: movedTodo.todoId, data: { newIndex: toIndex, date: dateKey } },
+      {
+        onSuccess: invalidateHomeView,
+        onError: () => {
+          setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
+        },
+      },
+    );
   };
 
   return {
