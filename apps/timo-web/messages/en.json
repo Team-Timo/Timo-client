@@ -63,7 +63,8 @@
   "Settings": {
     "nav": {
       "account": "Account",
-      "policy": "Terms & Policies",
+      "policy": "Terms of Service",
+      "privacy": "Privacy Policy",
       "withdrawal": "Delete account"
     },
     "profile": {

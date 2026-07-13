@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import type { TermsType } from "@/types/terms-type";
 
-import { PolicyDocument } from "@/app/[locale]/policy/_components/PolicyDocument";
+import { PolicyDocument } from "@/components/policy/PolicyDocument";
 import { useTerms } from "@/queries/use-terms";
 
 export interface PolicyContainerProps {

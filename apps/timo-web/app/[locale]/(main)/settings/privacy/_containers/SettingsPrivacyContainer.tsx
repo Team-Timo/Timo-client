@@ -5,9 +5,9 @@ import { useTranslations } from "next-intl";
 import { PolicyDocument } from "@/components/policy/PolicyDocument";
 import { useTerms } from "@/queries/use-terms";
 
-export const SettingsPolicyContainer = () => {
+export const SettingsPrivacyContainer = () => {
   const t = useTranslations("Policy");
-  const { data: terms } = useTerms("SERVICE");
+  const { data: terms } = useTerms("PRIVACY");
   const term = terms[0];
 
   return (
