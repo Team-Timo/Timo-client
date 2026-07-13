@@ -11,6 +11,7 @@ import {
   useCompleteTimer,
   useExtendTimer,
   useStartTimer,
+  useStopTimer,
   getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
 import {
@@ -83,6 +84,16 @@ export const FocusSessionContainer = () => {
       onError: handleMutationError,
     },
   });
+  const { mutate: stopTimer } = useStopTimer({
+    mutation: {
+      onSuccess: (response) => {
+        setFeedbackText(response.data?.aiFeedback ?? undefined);
+        invalidateActiveTimer();
+        invalidateFocusTodo();
+      },
+      onError: handleMutationError,
+    },
+  });
   const { mutate: changeTodoStatus } = useChangeTodoStatus({
     mutation: { onSuccess: invalidateFocusTodo, onError: handleMutationError },
   });
@@ -121,6 +132,12 @@ export const FocusSessionContainer = () => {
     if (!timer) return;
 
     completeTimer({ timerId: timer.timerId });
+  };
+
+  const handleStopTimer = () => {
+    if (!timer) return;
+
+    stopTimer({ timerId: timer.timerId });
   };
 
   const handleToggleCompleted = (completed: boolean) => {
@@ -181,6 +198,7 @@ export const FocusSessionContainer = () => {
               actualMinutes={0}
               onExtend={() => {}}
               onComplete={() => {}}
+              onStop={() => {}}
               disabled
             />
           </div>
@@ -247,6 +265,7 @@ export const FocusSessionContainer = () => {
             feedbackText={feedbackText}
             onExtend={handleExtendTimer}
             onComplete={handleCompleteTimer}
+            onStop={handleStopTimer}
           />
         </div>
       </section>

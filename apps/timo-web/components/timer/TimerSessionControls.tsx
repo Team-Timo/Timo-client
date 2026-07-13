@@ -26,6 +26,7 @@ export interface TimerSessionControlsProps {
   feedbackText?: string;
   onExtend: (minutes: number) => void;
   onComplete: () => void;
+  onStop: () => void;
   disabled?: boolean;
 }
 
@@ -41,11 +42,13 @@ export const TimerSessionControls = forwardRef<
     feedbackText,
     onExtend,
     onComplete,
+    onStop,
     disabled = false,
   },
   ref,
 ) {
   const [step, setStep] = useState<TimerModalStep>("end");
+  const [completeOrigin, setCompleteOrigin] = useState<"end" | "stop">("end");
   const stopModalTriggerRef = useRef<HTMLButtonElement>(null);
 
   useImperativeHandle(ref, () => ({
@@ -109,13 +112,19 @@ export const TimerSessionControls = forwardRef<
               setIsFromEndModal(true);
               setStep("extend");
             }}
-            onComplete={() => setStep("complete")}
+            onComplete={() => {
+              setCompleteOrigin("end");
+              setStep("complete");
+            }}
           />
         )}
         {step === "stop" && (
           <TimerStopModalPanel
             minutes={actualMinutes}
-            onSwitch={() => setStep("complete")}
+            onSwitch={() => {
+              setCompleteOrigin("stop");
+              setStep("complete");
+            }}
           />
         )}
         {step === "extend" && (
@@ -144,7 +153,7 @@ export const TimerSessionControls = forwardRef<
             plannedMinutes={plannedMinutes}
             actualMinutes={actualMinutes}
             feedbackText={feedbackText}
-            onComplete={onComplete}
+            onComplete={completeOrigin === "stop" ? onStop : onComplete}
           />
         )}
       </Modal.Panel>

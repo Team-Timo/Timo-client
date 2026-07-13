@@ -17,6 +17,7 @@ export const TimerPanel = () => {
     setStatus((prev) => (prev === "RUNNING" ? "PAUSED" : "RUNNING"));
   const handleExtendTimer = () => {};
   const handleCompleteTimer = () => setStatus("PAUSED");
+  const handleStopTimer = () => setStatus("PAUSED");
 
   return (
     <div className="flex flex-col items-center gap-11.25">
@@ -35,6 +36,7 @@ export const TimerPanel = () => {
         actualMinutes={PLANNED_MINUTES}
         onExtend={handleExtendTimer}
         onComplete={handleCompleteTimer}
+        onStop={handleStopTimer}
       />
     </div>
   );
