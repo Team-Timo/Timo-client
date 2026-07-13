@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import type { TimerSessionControlsHandle } from "@/components/timer/TimerSessionControls";
 
 import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
+import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useCompleteTimer,
@@ -38,23 +39,34 @@ export const useFocusSession = () => {
     queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+  const invalidateHomeView = () =>
+    queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
   const handleMutationError = () => setIsErrorToastOpen(true);
 
   const { mutate: startTimer } = useStartTimer({
     mutation: {
-      onSuccess: invalidateActiveTimer,
+      onSuccess: () => {
+        invalidateActiveTimer();
+        invalidateHomeView();
+      },
       onError: handleMutationError,
     },
   });
   const { mutate: changeStatus } = useChangeStatus({
     mutation: {
-      onSuccess: invalidateActiveTimer,
+      onSuccess: () => {
+        invalidateActiveTimer();
+        invalidateHomeView();
+      },
       onError: handleMutationError,
     },
   });
   const { mutate: extendTimer } = useExtendTimer({
     mutation: {
-      onSuccess: invalidateActiveTimer,
+      onSuccess: () => {
+        invalidateActiveTimer();
+        invalidateHomeView();
+      },
       onError: handleMutationError,
     },
   });
@@ -64,6 +76,7 @@ export const useFocusSession = () => {
         setFeedbackText(response.data?.aiFeedback ?? undefined);
         invalidateActiveTimer();
         invalidateFocusTodo();
+        invalidateHomeView();
       },
       onError: handleMutationError,
     },
@@ -74,6 +87,7 @@ export const useFocusSession = () => {
         setFeedbackText(response.data?.aiFeedback ?? undefined);
         invalidateActiveTimer();
         invalidateFocusTodo();
+        invalidateHomeView();
       },
       onError: handleMutationError,
     },
