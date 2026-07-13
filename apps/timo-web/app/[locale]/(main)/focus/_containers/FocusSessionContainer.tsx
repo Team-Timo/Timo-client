@@ -1,14 +1,27 @@
 "use client";
 
 import { TimerOnIcon } from "@repo/timo-design-system/icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 
-import type { FocusTask } from "@/app/[locale]/(main)/focus/_types/task-type";
-
+import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
+import {
+  useChangeStatus,
+  useCompleteTimer,
+  useExtendTimer,
+  useStartTimer,
+  getGetActiveTimerQueryKey,
+} from "@/api/generated/endpoints/timer/timer";
+import {
+  useChangeSubtaskStatus,
+  useChangeTodoStatus,
+} from "@/api/generated/endpoints/todo/todo";
+import { FocusEmptyTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusEmptyTaskItem";
 import { FocusTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusTaskItem";
 import { FocusHeaderContainer } from "@/app/[locale]/(main)/focus/_containers/FocusHeaderContainer";
-import { focusTaskMock } from "@/app/[locale]/(main)/focus/_mocks/task-mock";
+import { useActiveTimer } from "@/app/[locale]/(main)/focus/_queries/use-active-timer";
+import { useFocusTodo } from "@/app/[locale]/(main)/focus/_queries/use-focus-todo";
 import {
   convertDateToBadgeText,
   convertDateToDayNumberText,
@@ -19,71 +32,154 @@ import {
   TimerSessionControls,
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
-import { SECONDS_PER_MINUTE } from "@/constants/time";
 import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
+import { formatDurationLabel } from "@/utils/format-duration-label";
 
 export const FocusSessionContainer = () => {
-  const [task, setTask] = useState<FocusTask>(focusTaskMock);
-  const today = new Date();
+  const queryClient = useQueryClient();
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const tWeekday = useTranslations("Common.weekday");
+  const tDuration = useTranslations("Focus.duration");
+  const [feedbackText, setFeedbackText] = useState<string | undefined>();
+
+  const { data: focusView } = useFocusTodo();
+  const { data: activeTimer } = useActiveTimer();
+
+  const invalidateActiveTimer = () =>
+    queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
+  const invalidateFocusTodo = () =>
+    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+
+  const { mutate: startTimer } = useStartTimer({
+    mutation: { onSuccess: invalidateActiveTimer },
+  });
+  const { mutate: changeStatus } = useChangeStatus({
+    mutation: { onSuccess: invalidateActiveTimer },
+  });
+  const { mutate: extendTimer } = useExtendTimer({
+    mutation: { onSuccess: invalidateActiveTimer },
+  });
+  const { mutate: completeTimer } = useCompleteTimer({
+    mutation: {
+      onSuccess: (response) => {
+        setFeedbackText(response.data?.aiFeedback ?? undefined);
+        invalidateActiveTimer();
+        invalidateFocusTodo();
+      },
+    },
+  });
+  const { mutate: changeTodoStatus } = useChangeTodoStatus({
+    mutation: { onSuccess: invalidateFocusTodo },
+  });
+  const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus({
+    mutation: { onSuccess: invalidateFocusTodo },
+  });
+
+  const todo = focusView.todo;
+  const timer =
+    activeTimer && todo && activeTimer.todoId === todo.todoId
+      ? activeTimer
+      : undefined;
+  const isRunning = timer?.status === "RUNNING";
 
   const handleTogglePlay = () => {
-    // TODO: API
-    setTask((prev) => ({ ...prev, isRunning: !prev.isRunning }));
+    if (!todo) return;
+
+    if (!timer) {
+      startTimer({ todoId: todo.todoId });
+      return;
+    }
+
+    changeStatus({
+      timerId: timer.timerId,
+      data: { action: isRunning ? "PAUSE" : "RESUME" },
+    });
   };
 
   const handleExtendTimer = (minutes: number) => {
-    // TODO: API
-    setTask((prev) => ({
-      ...prev,
-      durationSeconds: prev.durationSeconds + minutes * SECONDS_PER_MINUTE,
-    }));
+    if (!timer) return;
+
+    extendTimer({ timerId: timer.timerId, data: { extendMinutes: minutes } });
   };
 
   const handleCompleteTimer = () => {
-    // TODO: API
-    setTask((prev) => ({
-      ...prev,
-      isRunning: false,
-      completed: true,
-      subtasks: prev.subtasks.map((subtask) => ({
-        ...subtask,
-        completed: true,
-      })),
-    }));
+    if (!timer) return;
+
+    completeTimer({ timerId: timer.timerId });
   };
 
   const handleToggleCompleted = (completed: boolean) => {
-    if (completed && task.isRunning) {
+    if (!todo) return;
+
+    if (completed && isRunning) {
       timerSessionControlsRef.current?.openStopModal();
       return;
     }
 
-    // TODO: API
-    setTask((prev) => ({
-      ...prev,
-      completed,
-      isRunning: completed ? false : prev.isRunning,
-      subtasks: prev.subtasks.map((subtask) => ({ ...subtask, completed })),
-    }));
+    changeTodoStatus({
+      todoId: todo.todoId,
+      data: { isCompleted: completed, date: focusView.date },
+    });
   };
 
   const handleToggleSubtaskCompleted = (
     subtaskId: number,
     completed: boolean,
   ) => {
-    // TODO: API
-    setTask((prev) => ({
-      ...prev,
-      subtasks: prev.subtasks.map((subtask) =>
-        subtask.subtaskId === subtaskId ? { ...subtask, completed } : subtask,
-      ),
-    }));
+    if (!todo) return;
+
+    changeSubtaskStatus({
+      todoId: todo.todoId,
+      subtaskId,
+      data: { isCompleted: completed },
+    });
   };
 
-  const plannedMinutes = convertDurationToMinutes(task.durationSeconds);
+  const today = new Date(focusView.date);
+  const dateText = convertDateToBadgeText(today);
+
+  if (!focusView.hasTodo || !todo) {
+    return (
+      <div className="flex h-full overflow-x-auto">
+        <div className="flex flex-1 flex-col gap-18">
+          <FocusHeaderContainer />
+          <FocusEmptyTaskItem
+            dayNumber={convertDateToDayNumberText(today)}
+            dayOfWeek={tWeekday(convertDateToDayOfWeekKey(today))}
+            dateText={dateText}
+          />
+        </div>
+
+        <section className="border-timo-gray-500 flex h-full w-136.5 shrink-0 items-center border-l bg-white">
+          <div className="flex w-full flex-col items-center gap-11.25">
+            <Timer time="00:00" plannedLabel="0M" progress={0} size="lg" />
+
+            <TimerSessionControls
+              isRunning={false}
+              onTogglePlay={() => {}}
+              plannedMinutes={0}
+              actualMinutes={0}
+              onExtend={() => {}}
+              onComplete={() => {}}
+              disabled
+            />
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  const plannedSeconds = timer
+    ? timer.plannedSeconds + timer.extendedSeconds
+    : (todo.durationSeconds ?? 0);
+  const remainingSeconds = timer ? timer.remainingSeconds : plannedSeconds;
+  const progress =
+    plannedSeconds > 0
+      ? ((plannedSeconds - remainingSeconds) / plannedSeconds) * 100
+      : 0;
+  const plannedMinutes = convertDurationToMinutes(plannedSeconds);
+  const actualMinutes = convertDurationToMinutes(timer?.elapsedSeconds ?? 0);
 
   return (
     <div className="flex h-full overflow-x-auto">
@@ -92,13 +188,12 @@ export const FocusSessionContainer = () => {
         <FocusTaskItem
           dayNumber={convertDateToDayNumberText(today)}
           dayOfWeek={tWeekday(convertDateToDayOfWeekKey(today))}
-          title={task.title}
-          completed={task.completed}
-          dateText={convertDateToBadgeText(task.scheduledDate)}
-          durationText={convertDurationToTimeText(task.durationSeconds)}
-          isRunning={task.isRunning}
-          subtasks={task.subtasks}
-          memo={task.memo}
+          title={todo.title}
+          completed={todo.completed}
+          dateText={dateText}
+          durationText={convertDurationToTimeText(todo.durationSeconds ?? 0)}
+          isRunning={isRunning}
+          subtasks={todo.subtasks}
           onToggleCompleted={handleToggleCompleted}
           onTogglePlay={handleTogglePlay}
           onToggleSubtaskCompleted={handleToggleSubtaskCompleted}
@@ -109,18 +204,23 @@ export const FocusSessionContainer = () => {
         <div className="flex w-full flex-col items-center gap-11.25">
           <Timer
             icon={<TimerOnIcon />}
-            time="10:30"
-            plannedLabel="12M"
-            progress={70}
+            time={convertDurationToTimeText(remainingSeconds)}
+            plannedLabel={formatDurationLabel(
+              plannedMinutes,
+              tDuration("hourUnit"),
+              tDuration("minuteUnit"),
+            )}
+            progress={progress}
             size="lg"
           />
 
           <TimerSessionControls
             ref={timerSessionControlsRef}
-            isRunning={task.isRunning}
+            isRunning={isRunning}
             onTogglePlay={handleTogglePlay}
             plannedMinutes={plannedMinutes}
-            actualMinutes={plannedMinutes}
+            actualMinutes={actualMinutes}
+            feedbackText={feedbackText}
             onExtend={handleExtendTimer}
             onComplete={handleCompleteTimer}
           />

@@ -26,6 +26,7 @@ export interface TimerSessionControlsProps {
   feedbackText?: string;
   onExtend: (minutes: number) => void;
   onComplete: () => void;
+  disabled?: boolean;
 }
 
 export const TimerSessionControls = forwardRef<
@@ -40,6 +41,7 @@ export const TimerSessionControls = forwardRef<
     feedbackText,
     onExtend,
     onComplete,
+    disabled = false,
   },
   ref,
 ) {
@@ -87,6 +89,7 @@ export const TimerSessionControls = forwardRef<
           resetExtendSelection();
           setStep("extend");
         }}
+        disabled={disabled}
       />
       <Modal.Trigger
         ref={stopModalTriggerRef}

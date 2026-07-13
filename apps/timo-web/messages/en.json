@@ -225,6 +225,7 @@
     "duration": {
       "hourUnit": "h",
       "minuteUnit": "m"
-    }
+    },
+    "empty": "No to-dos to focus on right now"
   }
 }
