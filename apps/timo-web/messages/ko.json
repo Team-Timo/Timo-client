@@ -29,7 +29,8 @@
       "medium": "보통",
       "low": "낮음"
     },
-    "close": "닫기"
+    "close": "닫기",
+    "delete": "삭제"
   },
   "Home": {
     "today": "오늘",
@@ -64,6 +65,7 @@
     "nav": {
       "account": "개인 정보",
       "policy": "약관",
+      "privacy": "개인 정보 처리 방침",
       "withdrawal": "회원 탈퇴"
     },
     "profile": {
@@ -231,5 +233,8 @@
     },
     "empty": "지금은 집중할 투두가 없어요",
     "emptyPlayDisabled": "재생 불가"
+  },
+  "Policy": {
+    "empty": "약관 내용을 아직 준비 중입니다."
   }
 }

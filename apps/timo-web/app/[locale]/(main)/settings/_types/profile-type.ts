@@ -1,11 +1,5 @@
 export type SettingsLanguage = "ko" | "en";
 
-export interface SettingsProfile {
-  name: string;
-  googleEmail: string;
-  isCalendarConnected: boolean;
-}
-
 export interface SettingsTagItem {
   id: number;
   label: string;

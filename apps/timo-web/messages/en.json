@@ -29,7 +29,8 @@
       "medium": "Average",
       "low": "Low"
     },
-    "close": "Close"
+    "close": "Close",
+    "delete": "Delete"
   },
   "Home": {
     "today": "Today",
@@ -63,7 +64,8 @@
   "Settings": {
     "nav": {
       "account": "Account",
-      "policy": "Terms & Policies",
+      "policy": "Terms of Service",
+      "privacy": "Privacy Policy",
       "withdrawal": "Delete account"
     },
     "profile": {
@@ -233,5 +235,8 @@
     },
     "empty": "No to-dos to focus on right now",
     "emptyPlayDisabled": "Play unavailable"
+  },
+  "Policy": {
+    "empty": "This policy content isn't available yet."
   }
 }

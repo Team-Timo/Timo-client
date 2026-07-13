@@ -1,25 +1,46 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
-import type { SettingsProfile } from "@/app/[locale]/(main)/settings/_types/profile-type";
+import type { BaseResponseUserProfileResponse } from "@/api/generated/models";
+import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/profile-type";
 
+import {
+  getGetMyProfileQueryKey,
+  useUpdateLanguage,
+} from "@/api/generated/endpoints/user/user";
+import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { tagCreateDataSchema } from "@/api/tag/tag-schema";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
-import { settingsProfileMock } from "@/app/[locale]/(main)/settings/_mocks/profile-mock";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useDeleteTag } from "@/queries/tag/use-delete-tag";
 import { useTags } from "@/queries/tag/use-tags";
+import { useMyProfile } from "@/queries/use-my-profile";
+
+const LANGUAGE_REQUEST_MAP: Record<
+  SettingsLanguage,
+  (typeof UpdateLanguageRequestLanguage)[keyof typeof UpdateLanguageRequestLanguage]
+> = {
+  ko: UpdateLanguageRequestLanguage.KO,
+  en: UpdateLanguageRequestLanguage.EN,
+};
 
 export const useSettingsProfile = () => {
   const { language, locale, setLanguage, commitLanguage } =
     useSettingsLanguageParam();
 
-  const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
+  const { data: profile } = useMyProfile();
+  const [isCalendarConnected, setIsCalendarConnected] = useState(
+    profile.calendarConnected,
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [isTagErrorToastOpen, setIsTagErrorToastOpen] = useState(false);
+
+  const { mutateAsync: updateLanguage } = useUpdateLanguage();
+  const queryClient = useQueryClient();
 
   const tagsQuery = useTags();
   const { mutate: createTag } = useCreateTag();
@@ -32,20 +53,20 @@ export const useSettingsProfile = () => {
   }));
 
   const handleConnectCalendar = () => {
-    if (profile.isCalendarConnected) {
+    if (isCalendarConnected) {
       // TODO: 실제 확인 모달로 교체
       const confirmed = window.confirm("구글 캘린더 연동을 해제하시겠습니까?");
       if (!confirmed) return;
 
       // TODO: API - 연동 토큰 파기
       console.log("구글 캘린더 연동 토큰을 파기합니다.");
-      setProfile((prev) => ({ ...prev, isCalendarConnected: false }));
+      setIsCalendarConnected(false);
       return;
     }
 
     // TODO: Google 계정 인증 및 캘린더 접근 권한 동의 팝업 호출
     console.log("Google Calendar 연동 인증 팝업을 호출합니다.");
-    setProfile((prev) => ({ ...prev, isCalendarConnected: true }));
+    setIsCalendarConnected(true);
   };
 
   const handleAddTag = () => {
@@ -103,8 +124,22 @@ export const useSettingsProfile = () => {
 
     setIsSaving(true);
     try {
-      // TODO: API 연동
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const { data } = await updateLanguage({
+        data: { language: LANGUAGE_REQUEST_MAP[language] },
+      });
+
+      if (data) {
+        queryClient.setQueryData(
+          getGetMyProfileQueryKey(),
+          (cached?: BaseResponseUserProfileResponse) =>
+            cached?.data
+              ? {
+                  ...cached,
+                  data: { ...cached.data, language: data.language },
+                }
+              : cached,
+        );
+      }
       commitLanguage();
     } catch {
       // TODO: 실제 토스트 컴포넌트로 교체
@@ -117,8 +152,8 @@ export const useSettingsProfile = () => {
   return {
     profileState: {
       name: profile.name,
-      googleEmail: profile.googleEmail,
-      isCalendarConnected: profile.isCalendarConnected,
+      googleEmail: profile.email,
+      isCalendarConnected,
       language,
       tags: tagItems,
       isSaveDisabled: !isLanguageDirty || isSaving,

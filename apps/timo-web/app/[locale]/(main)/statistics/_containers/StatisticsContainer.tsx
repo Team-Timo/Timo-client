@@ -14,7 +14,7 @@ import {
   MOCK_STATISTICS_MONTH_SUMMARY,
 } from "@/app/[locale]/(main)/statistics/_mocks/statistics-calendar";
 import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/_utils/format-statistics-date";
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 
 export const StatisticsContainer = () => {
   const locale = useLocale();
@@ -57,19 +57,22 @@ export const StatisticsContainer = () => {
   };
 
   return (
-    <div className="flex h-full flex-col">
-      <StatisticsHeaderContainer
-        currentMonth={currentMonth}
-        onChangeMonth={handleChangeMonth}
-      />
-      <div className="flex min-h-0 flex-1">
-        <StatisticsCalendarContainer
+    <div className="flex h-full">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <StatisticsHeaderContainer
           currentMonth={currentMonth}
-          selectedDate={selectedDate}
-          onSelectDate={handleSelectDate}
+          onChangeMonth={handleChangeMonth}
         />
-        <StatisticsSidePanel {...sidePanelProps} />
+        <div className="flex min-h-0 flex-1">
+          <StatisticsCalendarContainer
+            currentMonth={currentMonth}
+            selectedDate={selectedDate}
+            onSelectDate={handleSelectDate}
+          />
+        </div>
       </div>
+
+      <StatisticsSidePanel {...sidePanelProps} />
     </div>
   );
 };

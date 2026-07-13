@@ -1,6 +1,6 @@
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { formatDateKey, getToday, isSameDate } from "@/utils/date";
+import { formatDateKey, getToday, isSameDate } from "@/utils/date/date";
 
 type TodoTemplate = Omit<Todo, "todoId">;
 
