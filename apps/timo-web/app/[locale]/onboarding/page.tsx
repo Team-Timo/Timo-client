@@ -3,7 +3,7 @@ import { AuthGuardProvider } from "@/providers/auth/AuthGuardProvider";
 
 export default function OnboardingPage() {
   return (
-    <AuthGuardProvider>
+    <AuthGuardProvider redirectIfOnboardingCompleted>
       <OnboardingFunnelContainer />
     </AuthGuardProvider>
   );

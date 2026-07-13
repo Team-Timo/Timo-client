@@ -3,12 +3,33 @@
 import timoTextLogo from "@repo/timo-design-system/assets/images/logo/timo-text-logo.svg";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
 import { LottiePlayer } from "@/components/lottie/LottiePlayer";
+import { ROUTES } from "@/constants/routes";
+import { useRouter } from "@/i18n/navigation";
+import { getStoredAccessToken, useAuthStore } from "@/stores/auth/useAuthStore";
 
 export const LoginContainer = () => {
   const t = useTranslations("Login");
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const router = useRouter();
+  // /login은 AuthGuardProvider를 거치지 않아 sessionStorage 복원이 안 되므로,
+  // /home에서 주소창으로 /login을 직접 쳐서 들어오는(콜드 로드) 경우를 여기서 따로 확인한다.
+  const isAuthenticated = !!(accessToken || getStoredAccessToken());
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    if (!accessToken) {
+      const storedToken = getStoredAccessToken();
+      if (storedToken) setAccessToken(storedToken);
+    }
+    router.replace(ROUTES.HOME);
+  }, [isAuthenticated, accessToken, router, setAccessToken]);
+
+  if (isAuthenticated) return null;
 
   return (
     <section className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">

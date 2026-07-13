@@ -16,6 +16,7 @@ import { LottiePlayer } from "@/components/lottie/LottiePlayer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "@/i18n/navigation";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 const STEP_NUMBER: Record<keyof OnboardingFunnelSteps, 1 | 2 | 3 | 4> = {
   Language: 1,
@@ -43,6 +44,9 @@ export const OnboardingFunnelContainer = () => {
     initial: { step: "Language", context: {} },
   });
   const { mutate: completeOnboarding, isPending } = useCompleteOnboarding();
+  const setOnboardingCompleted = useAuthStore(
+    (state) => state.setOnboardingCompleted,
+  );
 
   return (
     <section className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
@@ -142,6 +146,7 @@ export const OnboardingFunnelContainer = () => {
                     },
                     {
                       onSuccess: () => {
+                        setOnboardingCompleted(true);
                         router.replace(ROUTES.HOME, {
                           locale: answers.language,
                         });
