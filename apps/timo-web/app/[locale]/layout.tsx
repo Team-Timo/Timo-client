@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 
 import { routing } from "@/i18n/routing";
 import { AuthProvider } from "@/providers/auth/AuthProvider";
+import { LanguageSyncProvider } from "@/providers/locale/LanguageSyncProvider";
 import { OverlayProvider } from "@/providers/OverlayProvider";
 import { QueryProvider } from "@/providers/query/QueryProvider";
 
@@ -50,7 +51,9 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <QueryProvider>
             <AuthProvider>
-              <OverlayProvider>{children}</OverlayProvider>
+              <LanguageSyncProvider>
+                <OverlayProvider>{children}</OverlayProvider>
+              </LanguageSyncProvider>
             </AuthProvider>
           </QueryProvider>
         </NextIntlClientProvider>
