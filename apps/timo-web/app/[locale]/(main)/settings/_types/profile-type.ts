@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type SettingsLanguage = "ko" | "en";
 
 export type SettingsDefaultTagKey =
@@ -6,12 +8,15 @@ export type SettingsDefaultTagKey =
   | "exercise"
   | "dailyLife";
 
-export interface SettingsProfile {
-  name: string;
-  googleEmail: string;
-  isCalendarConnected: boolean;
-  tags: string[];
-}
+export const settingsProfileResponseSchema = z.object({
+  name: z.string(),
+  email: z.string(),
+  calendarConnected: z.boolean(),
+});
+
+export type SettingsProfileResponse = z.infer<
+  typeof settingsProfileResponseSchema
+>;
 
 export interface SettingsProfileFormValues {
   tags: string[];
