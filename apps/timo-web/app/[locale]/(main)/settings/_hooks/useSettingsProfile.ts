@@ -1,19 +1,24 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import type { BaseResponseUserProfileResponse } from "@/api/generated/models";
 import type {
   SettingsDefaultTagKey,
   SettingsLanguage,
   SettingsProfileFormValues,
 } from "@/app/[locale]/(main)/settings/_types/profile-type";
 
-import { useUpdateLanguage } from "@/api/generated/endpoints/user/user";
+import {
+  getGetMyProfileQueryKey,
+  useUpdateLanguage,
+} from "@/api/generated/endpoints/user/user";
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
-import { useSettingsProfileQuery } from "@/app/[locale]/(main)/settings/_queries/use-settings-profile";
+import { useMyProfile } from "@/queries/use-my-profile";
 
 const LANGUAGE_REQUEST_MAP: Record<
   SettingsLanguage,
@@ -38,11 +43,12 @@ export const useSettingsProfile = () => {
   const { language, locale, setLanguage, commitLanguage } =
     useSettingsLanguageParam();
 
-  const { data: profile } = useSettingsProfileQuery();
+  const { data: profile } = useMyProfile();
   const [isCalendarConnected, setIsCalendarConnected] = useState(
     profile.calendarConnected,
   );
   const { mutateAsync: updateLanguage } = useUpdateLanguage();
+  const queryClient = useQueryClient();
 
   // TODO: 태그 목록 조회 API 연동 후 기본 태그 대신 실제 응답으로 교체
   const { watch, setValue, handleSubmit, reset, formState } =
@@ -106,9 +112,22 @@ export const useSettingsProfile = () => {
   const handleSave = handleSubmit(async (values) => {
     try {
       if (isLanguageDirty) {
-        await updateLanguage({
+        const { data } = await updateLanguage({
           data: { language: LANGUAGE_REQUEST_MAP[language] },
         });
+
+        if (data) {
+          queryClient.setQueryData(
+            getGetMyProfileQueryKey(),
+            (cached?: BaseResponseUserProfileResponse) =>
+              cached?.data
+                ? {
+                    ...cached,
+                    data: { ...cached.data, language: data.language },
+                  }
+                : cached,
+          );
+        }
       }
       reset(values);
       commitLanguage();

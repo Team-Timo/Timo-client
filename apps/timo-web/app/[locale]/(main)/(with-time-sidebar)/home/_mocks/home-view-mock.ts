@@ -13,7 +13,7 @@ import {
   getToday,
   isSameDate,
   parseDateKey,
-} from "@/utils/date";
+} from "@/utils/date/date";
 
 const BASIC_RANGE_DAYS_BEFORE = 7;
 const BASIC_RANGE_LENGTH = 15;

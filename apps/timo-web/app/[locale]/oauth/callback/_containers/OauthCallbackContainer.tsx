@@ -12,6 +12,9 @@ export const OauthCallbackContainer = () => {
   const code = useSearchParams().get("code");
   const router = useRouter();
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const setOnboardingCompleted = useAuthStore(
+    (state) => state.setOnboardingCompleted,
+  );
   const { mutate } = useToken();
   const hasRequested = useRef(false);
 
@@ -32,6 +35,7 @@ export const OauthCallbackContainer = () => {
             return;
           }
           setAccessToken(data.accessToken);
+          setOnboardingCompleted(data.user.onboardingCompleted);
           router.replace(data.isNewUser ? ROUTES.ONBOARDING : ROUTES.HOME);
         },
         onError: () => {
@@ -39,7 +43,7 @@ export const OauthCallbackContainer = () => {
         },
       },
     );
-  }, [code, mutate, router, setAccessToken]);
+  }, [code, mutate, router, setAccessToken, setOnboardingCompleted]);
 
   return null;
 };

@@ -7,8 +7,8 @@ import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_
 import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_components/DateInformation";
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { CreateTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/todo-modal/CreateTodoModalContainer";
-import { getToday } from "@/utils/date";
-import { getDayOfWeekKey } from "@/utils/get-day-of-week-key";
+import { getToday } from "@/utils/date/date";
+import { getDayOfWeekKey } from "@/utils/date/get-day-of-week-key";
 
 interface TodayDateHeaderContainerProps {
   completedCount: number;

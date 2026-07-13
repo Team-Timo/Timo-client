@@ -14,7 +14,7 @@ import {
   MOCK_STATISTICS_MONTH_SUMMARY,
 } from "@/app/[locale]/(main)/statistics/_mocks/statistics-calendar";
 import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/_utils/format-statistics-date";
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 
 export const StatisticsContainer = () => {
   const locale = useLocale();
