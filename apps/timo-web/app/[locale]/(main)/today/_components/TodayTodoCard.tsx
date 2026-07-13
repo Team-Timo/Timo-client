@@ -12,7 +12,6 @@ import {
   type PriorityLevel,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-import { useTranslations } from "next-intl";
 
 import type { KeyboardEvent, ReactNode } from "react";
 
@@ -37,6 +36,7 @@ export interface SubTodo {
 
 export interface TodayTodoCardToolbar {
   date: string;
+  dateValue: Date;
   time: string;
   priority?: PriorityLevel;
   tag?: string;
@@ -55,7 +55,6 @@ export interface TodayTodoCardProps {
   onCardClick?: () => void;
   onCheck: () => void;
   onPlay: () => void;
-  onDelete: () => void;
   onSubTodoCheck: (id: number) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -75,12 +74,10 @@ export const TodayTodoCard = ({
   onCardClick,
   onCheck,
   onPlay,
-  onDelete,
   onSubTodoCheck,
   onMouseEnter,
   onMouseLeave,
 }: TodayTodoCardProps) => {
-  const t = useTranslations("Common");
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
 
   const handleCardKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -163,7 +160,9 @@ export const TodayTodoCard = ({
       <div className="flex items-center justify-end gap-2">
         <div className="pointer-events-none">
           <TodoToolbar
+            date={isDimmed ? undefined : toolbar.dateValue}
             dateLabel={toolbar.date}
+            time={isDimmed ? undefined : toolbar.time}
             timeLabel={toolbar.time}
             timeOptions={[]}
             priority={toolbar.priority}
@@ -185,16 +184,7 @@ export const TodayTodoCard = ({
             }}
           />
         </div>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete();
-          }}
-          aria-label={t("delete")}
-        >
-          {isDimmed ? <TrashDisableIcon /> : <TrashOnIcon />}
-        </button>
+        <span>{isDimmed ? <TrashDisableIcon /> : <TrashOnIcon />}</span>
       </div>
     </div>
   );

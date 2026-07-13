@@ -19,7 +19,6 @@ export const TodayTodoListContainer = () => {
     runningTodoId,
     handlePlay,
     handleCheck,
-    handleDelete,
     handleAddTodo,
     handleSubTodoCheck,
   } = useTodayTodoList();
@@ -42,6 +41,7 @@ export const TodayTodoListContainer = () => {
             timerStatus={runningTodoId === todo.todoId ? "RUNNING" : "STOPPED"}
             toolbar={{
               date: formatDate(todo.date),
+              dateValue: new Date(todo.date),
               time: convertDurationToTimeText(todo.durationSeconds),
               priority: PRIORITY_MAP[todo.priority],
               tag: todo.tag?.name,
@@ -55,7 +55,6 @@ export const TodayTodoListContainer = () => {
             }))}
             onPlay={() => handlePlay(todo.todoId)}
             onCheck={() => handleCheck(todo.todoId)}
-            onDelete={() => handleDelete(todo.todoId)}
             onSubTodoCheck={(id) => handleSubTodoCheck(todo.todoId, id)}
           />
         ))}

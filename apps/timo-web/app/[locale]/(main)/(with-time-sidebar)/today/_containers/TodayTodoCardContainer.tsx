@@ -20,7 +20,6 @@ export interface TodayTodoCardContainerProps {
   onCardClick?: () => void;
   onCheck?: () => void;
   onPlay?: () => void;
-  onDelete?: () => void;
   onSubTodoCheck?: (id: number) => void;
 }
 
@@ -34,7 +33,6 @@ export const TodayTodoCardContainer = ({
   onCardClick,
   onCheck,
   onPlay,
-  onDelete,
   onSubTodoCheck,
 }: TodayTodoCardContainerProps) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -81,7 +79,6 @@ export const TodayTodoCardContainer = ({
       onCardClick={onCardClick}
       onCheck={handleCheck}
       onPlay={handlePlay}
-      onDelete={onDelete ?? (() => {})}
       onSubTodoCheck={handleSubTodoCheck}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
