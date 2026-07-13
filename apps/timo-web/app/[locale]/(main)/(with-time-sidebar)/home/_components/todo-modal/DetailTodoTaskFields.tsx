@@ -48,7 +48,7 @@ export const DetailTodoTaskFields = ({
   onSubtaskInputKeyDown,
 }: DetailTodoTaskFieldsProps) => {
   return (
-    <div className="mt-3 flex w-full flex-col">
+    <div className="flex w-full flex-col">
       <div className="flex w-full items-center justify-between">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <Checkbox checked={isCompleted} onChange={onToggleCompleted} />
