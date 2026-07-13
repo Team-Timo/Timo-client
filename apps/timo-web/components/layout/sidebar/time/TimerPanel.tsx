@@ -19,6 +19,7 @@ import {
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
 import { useActiveTimer } from "@/hooks/use-active-timer";
+import { useTimerOvertime } from "@/hooks/use-timer-overtime";
 import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/format-duration-label";
@@ -27,9 +28,6 @@ export const TimerPanel = () => {
   const queryClient = useQueryClient();
   const tDuration = useTranslations("Focus.duration");
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
-  const [overtimeBaseSeconds, setOvertimeBaseSeconds] = useState<number | null>(
-    null,
-  );
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const wasTimeUpRef = useRef(false);
 
@@ -72,6 +70,8 @@ export const TimerPanel = () => {
 
   const isRunning = activeTimer?.status === "RUNNING";
   const isTimeUp = activeTimer ? activeTimer.remainingSeconds <= 0 : false;
+  const { overtimeBaseSeconds, markOvertimeStart } =
+    useTimerOvertime(activeTimer);
 
   useEffect(() => {
     if (isTimeUp && !wasTimeUpRef.current) {
@@ -79,10 +79,6 @@ export const TimerPanel = () => {
     }
     wasTimeUpRef.current = isTimeUp;
   }, [isTimeUp]);
-
-  useEffect(() => {
-    setOvertimeBaseSeconds(null);
-  }, [activeTimer?.timerId]);
 
   const handleTogglePlay = () => {
     if (!activeTimer) return;
@@ -97,7 +93,8 @@ export const TimerPanel = () => {
     if (!activeTimer) return;
 
     if (isTimeUp) {
-      setOvertimeBaseSeconds(
+      markOvertimeStart(
+        activeTimer.timerId,
         activeTimer.plannedSeconds + activeTimer.extendedSeconds,
       );
     }

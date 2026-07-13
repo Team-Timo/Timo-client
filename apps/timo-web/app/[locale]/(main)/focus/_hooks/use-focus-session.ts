@@ -21,6 +21,7 @@ import {
 import { useFocusTodo } from "@/app/[locale]/(main)/focus/_queries/use-focus-todo";
 import { convertDateToBadgeText } from "@/app/[locale]/(main)/focus/_utils/date";
 import { useActiveTimer } from "@/hooks/use-active-timer";
+import { useTimerOvertime } from "@/hooks/use-timer-overtime";
 import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
 
 export const useFocusSession = () => {
@@ -29,9 +30,6 @@ export const useFocusSession = () => {
   const wasTimeUpRef = useRef(false);
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
   const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
-  const [overtimeBaseSeconds, setOvertimeBaseSeconds] = useState<number | null>(
-    null,
-  );
 
   const { data: focusView } = useFocusTodo();
   const { data: activeTimer } = useActiveTimer();
@@ -94,6 +92,7 @@ export const useFocusSession = () => {
       : undefined;
   const isRunning = timer?.status === "RUNNING";
   const isTimeUp = timer ? timer.remainingSeconds <= 0 : false;
+  const { overtimeBaseSeconds, markOvertimeStart } = useTimerOvertime(timer);
 
   useEffect(() => {
     if (isTimeUp && !wasTimeUpRef.current) {
@@ -101,10 +100,6 @@ export const useFocusSession = () => {
     }
     wasTimeUpRef.current = isTimeUp;
   }, [isTimeUp]);
-
-  useEffect(() => {
-    setOvertimeBaseSeconds(null);
-  }, [timer?.timerId]);
 
   const handleTogglePlay = () => {
     if (!todo) return;
@@ -124,7 +119,10 @@ export const useFocusSession = () => {
     if (!timer) return;
 
     if (isTimeUp) {
-      setOvertimeBaseSeconds(timer.plannedSeconds + timer.extendedSeconds);
+      markOvertimeStart(
+        timer.timerId,
+        timer.plannedSeconds + timer.extendedSeconds,
+      );
     }
 
     extendTimer({ timerId: timer.timerId, data: { extendMinutes: minutes } });
