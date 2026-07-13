@@ -6,10 +6,10 @@ import { useTranslations } from "next-intl";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { DetailTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoMemoField";
-import { DetailTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/DetailTodoTaskFields";
-import { TodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/TodoIconField";
 import { OverlayModal } from "@/components/modal/OverlayModal";
+import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
+import { DetailTodoMemoField } from "@/components/todo-modal/detail/DetailTodoMemoField";
+import { DetailTodoTaskFields } from "@/components/todo-modal/detail/DetailTodoTaskFields";
 import {
   DETAIL_TODO_TIME_OPTIONS,
   DETAIL_TODO_WEEKDAYS,

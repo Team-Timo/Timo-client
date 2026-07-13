@@ -11,12 +11,12 @@ import type { CreateTodoTag } from "@/hooks/todo-modal/use-create-todo-submit";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
 import { createTodoRequestSchema } from "@/api/todo/todo-schema";
-import { CreateTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoMemoField";
-import { CreateTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoTaskFields";
-import { TodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/TodoIconField";
 import { formatDateToIsoDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
+import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
+import { CreateTodoMemoField } from "@/components/todo-modal/create/CreateTodoMemoField";
+import { CreateTodoTaskFields } from "@/components/todo-modal/create/CreateTodoTaskFields";
 import { useIconField } from "@/hooks/todo-modal/use-icon-field";
 import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
 import { useSubtaskField } from "@/hooks/todo-modal/use-subtask-field";

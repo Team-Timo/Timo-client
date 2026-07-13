@@ -6,8 +6,8 @@ import type { ApiDayOfWeek } from "@/app/[locale]/(main)/(with-time-sidebar)/hom
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
 import { HomeDateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeDateInformation";
-import { CreateTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContainer";
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
+import { CreateTodoModalContainer } from "@/components/todo-modal/create/CreateTodoModalContainer";
 import { getToday, parseDateKey } from "@/utils/date";
 
 export interface HomeDayHeaderContainerProps {

@@ -6,7 +6,7 @@ import { overlay } from "overlay-kit";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { CreateTodoModalContent } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContent";
+import { CreateTodoModalContent } from "@/components/todo-modal/create/CreateTodoModalContent";
 import { useCreateTodoSubmit } from "@/hooks/todo-modal/use-create-todo-submit";
 
 export interface CreateTodoModalContainerProps {

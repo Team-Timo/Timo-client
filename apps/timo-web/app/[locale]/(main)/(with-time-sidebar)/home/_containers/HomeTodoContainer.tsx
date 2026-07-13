@@ -8,12 +8,12 @@ import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/h
 
 import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
 import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
-import { DetailTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/DetailTodoModalContainer";
 import { useHomeTodayScrollRef } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { getHomeViewMock } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_mocks/home-view-mock";
 import { reorderDaysTodayFirst } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/home-view";
+import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date";
 

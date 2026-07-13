@@ -5,7 +5,7 @@ import { overlay } from "overlay-kit";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 import type { ReactNode } from "react";
 
-import { DetailTodoModalContent } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/DetailTodoModalContent";
+import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
 
 export interface DetailTodoModalContainerProps {
   todo: Todo;
