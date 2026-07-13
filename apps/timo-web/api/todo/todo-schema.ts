@@ -65,7 +65,14 @@ export const createTodoRequestSchema = z
     }
   });
 
+export const recommendDurationResponseSchema = z.object({
+  recommendedMinutes: z.number(),
+});
+
 export type CreateTodoRequest = z.infer<typeof createTodoRequestSchema>;
+export type RecommendDurationResponseData = z.infer<
+  typeof recommendDurationResponseSchema
+>;
 
 export type TodoIcon = z.infer<typeof todoIconSchema>;
 export type TodoPriority = z.infer<typeof todoPrioritySchema>;
