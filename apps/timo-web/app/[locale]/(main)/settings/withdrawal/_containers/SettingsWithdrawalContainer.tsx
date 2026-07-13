@@ -1,15 +1,18 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/withdrawal/_types/withdrawal-type";
 
 import { SettingsWithdrawalView } from "@/app/[locale]/(main)/settings/withdrawal/_components/SettingsWithdrawalView";
 import { useWithdrawAction } from "@/app/[locale]/(main)/settings/withdrawal/_queries/use-withdraw";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
 export const SettingsWithdrawalContainer = () => {
   const t = useTranslations("Settings.withdrawal");
   const { mutate: withdrawMutate, isPending } = useWithdrawAction();
+  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
 
   const labels: SettingsWithdrawalLabels = {
     title: t("title"),
@@ -30,8 +33,21 @@ export const SettingsWithdrawalContainer = () => {
     const confirmed = window.confirm(t("confirmMessage"));
     if (!confirmed) return;
 
-    withdrawMutate();
+    withdrawMutate(undefined, {
+      onError: () => {
+        setIsErrorToastOpen(true);
+      },
+    });
   };
 
-  return <SettingsWithdrawalView labels={labels} onWithdraw={handleWithdraw} />;
+  return (
+    <>
+      <SettingsWithdrawalView labels={labels} onWithdraw={handleWithdraw} />
+      <AnimatedToast
+        isOpen={isErrorToastOpen}
+        onClose={() => setIsErrorToastOpen(false)}
+        message={t("withdrawError")}
+      />
+    </>
+  );
 };

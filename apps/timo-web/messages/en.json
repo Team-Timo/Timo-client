@@ -90,7 +90,8 @@
       "warningCalendar": "The linked calendar connection will be disconnected.",
       "warningIrreversible": "Deleted accounts cannot be recovered.",
       "withdraw": "Withdraw",
-      "confirmMessage": "Are you sure you want to withdraw? All your data will be deleted and cannot be undone."
+      "confirmMessage": "Are you sure you want to withdraw? All your data will be deleted and cannot be undone.",
+      "withdrawError": "An error occurred during withdrawal. Please try again later."
     }
   },
   "Statistics": {

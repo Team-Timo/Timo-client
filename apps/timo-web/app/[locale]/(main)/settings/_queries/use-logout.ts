@@ -1,23 +1,17 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { logout } from "@/api/generated/endpoints/auth/auth";
-import { ROUTES } from "@/constants/routes";
-import { useRouter } from "@/i18n/navigation";
-import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { useClearSession } from "@/hooks/useClearSession";
 
 export const useLogoutAction = () => {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const clearAccessToken = useAuthStore((state) => state.clearAccessToken);
+  const clearSession = useClearSession();
 
   return useMutation({
     mutationFn: () => logout(),
     onSettled: () => {
-      clearAccessToken();
-      queryClient.clear();
-      router.replace(ROUTES.LOGIN);
+      clearSession();
     },
   });
 };
