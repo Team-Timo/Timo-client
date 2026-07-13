@@ -2,7 +2,7 @@
 
 import { StatisticsCalendar } from "@/app/[locale]/(main)/statistics/_components/StatisticsCalendar";
 import { useStatisticsCalendarQuery } from "@/app/[locale]/(main)/statistics/_queries/statistics-queries";
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 
 interface StatisticsCalendarContainerProps {
   currentMonth: Date;
