@@ -32,6 +32,7 @@ import {
   TimerSessionControls,
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/format-duration-label";
@@ -41,7 +42,9 @@ export const FocusSessionContainer = () => {
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const tWeekday = useTranslations("Common.weekday");
   const tDuration = useTranslations("Focus.duration");
+  const tToast = useTranslations("Toast");
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
+  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
 
   const { data: focusView } = useFocusTodo();
   const { data: activeTimer } = useActiveTimer();
@@ -50,15 +53,25 @@ export const FocusSessionContainer = () => {
     queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+  const handleMutationError = () => setIsErrorToastOpen(true);
 
   const { mutate: startTimer } = useStartTimer({
-    mutation: { onSuccess: invalidateActiveTimer },
+    mutation: {
+      onSuccess: invalidateActiveTimer,
+      onError: handleMutationError,
+    },
   });
   const { mutate: changeStatus } = useChangeStatus({
-    mutation: { onSuccess: invalidateActiveTimer },
+    mutation: {
+      onSuccess: invalidateActiveTimer,
+      onError: handleMutationError,
+    },
   });
   const { mutate: extendTimer } = useExtendTimer({
-    mutation: { onSuccess: invalidateActiveTimer },
+    mutation: {
+      onSuccess: invalidateActiveTimer,
+      onError: handleMutationError,
+    },
   });
   const { mutate: completeTimer } = useCompleteTimer({
     mutation: {
@@ -67,13 +80,14 @@ export const FocusSessionContainer = () => {
         invalidateActiveTimer();
         invalidateFocusTodo();
       },
+      onError: handleMutationError,
     },
   });
   const { mutate: changeTodoStatus } = useChangeTodoStatus({
-    mutation: { onSuccess: invalidateFocusTodo },
+    mutation: { onSuccess: invalidateFocusTodo, onError: handleMutationError },
   });
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus({
-    mutation: { onSuccess: invalidateFocusTodo },
+    mutation: { onSuccess: invalidateFocusTodo, onError: handleMutationError },
   });
 
   const todo = focusView.todo;
@@ -142,6 +156,11 @@ export const FocusSessionContainer = () => {
   if (!focusView.hasTodo || !todo) {
     return (
       <div className="flex h-full overflow-x-auto">
+        <AnimatedToast
+          isOpen={isErrorToastOpen}
+          onClose={() => setIsErrorToastOpen(false)}
+          message={tToast("focusActionFailed")}
+        />
         <div className="flex flex-1 flex-col gap-18">
           <FocusHeaderContainer />
           <FocusEmptyTaskItem
@@ -183,6 +202,11 @@ export const FocusSessionContainer = () => {
 
   return (
     <div className="flex h-full overflow-x-auto">
+      <AnimatedToast
+        isOpen={isErrorToastOpen}
+        onClose={() => setIsErrorToastOpen(false)}
+        message={tToast("focusActionFailed")}
+      />
       <div className="flex flex-1 flex-col gap-18">
         <FocusHeaderContainer />
         <FocusTaskItem
