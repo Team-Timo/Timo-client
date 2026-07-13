@@ -35,6 +35,10 @@ const PRIORITY_LABEL_KEY: Record<TodoPriorityTypes, PriorityLabelKeyTypes> = {
   LOW: "low",
 };
 
+const isInteractiveElement = (target: EventTarget | null) =>
+  target instanceof HTMLElement &&
+  Boolean(target.closest("button, input, label"));
+
 export interface HomeTodoCardProps {
   todoId: number;
   title: string;
@@ -85,14 +89,13 @@ export const HomeTodoCard = ({
   const priorityLabel = tCommon(`priority.${PRIORITY_LABEL_KEY[priority]}`);
 
   const handleCardClick = (event: MouseEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement;
-
-    if (target.closest("button, input, label")) return;
+    if (isInteractiveElement(event.target)) return;
 
     onClickTodo?.();
   };
 
   const handleCardKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (isInteractiveElement(event.target)) return;
     if (!onClickTodo) return;
     if (event.key !== "Enter" && event.key !== " ") return;
 
