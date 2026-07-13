@@ -111,7 +111,8 @@
     "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
     "todoLimitLine2": "To add a new to-do, please complete an existing one.",
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
-    "todoCreateFailed": "Failed to create the to-do. Please try again."
+    "todoCreateFailed": "Failed to create the to-do. Please try again.",
+    "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again."
   },
   "Login": {
     "animationLabel": "Login animation",
