@@ -223,6 +223,7 @@
       "hourUnit": "시간",
       "minuteUnit": "분"
     },
-    "empty": "지금은 집중할 투두가 없어요"
+    "empty": "지금은 집중할 투두가 없어요",
+    "emptyPlayDisabled": "재생 불가"
   }
 }

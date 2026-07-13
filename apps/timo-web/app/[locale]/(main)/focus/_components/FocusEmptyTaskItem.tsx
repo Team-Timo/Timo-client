@@ -27,7 +27,9 @@ export const FocusEmptyTaskItem = ({
       </div>
 
       <div className="flex w-full items-center gap-2.5">
-        <Checkbox checked disabled onChange={() => {}} />
+        <div aria-hidden="true">
+          <Checkbox checked disabled onChange={() => {}} />
+        </div>
         <p className="typo-headline-b-22 text-timo-black min-w-0 flex-1 wrap-break-word">
           {t("empty")}
         </p>
@@ -50,7 +52,12 @@ export const FocusEmptyTaskItem = ({
           </div>
         </div>
 
-        <PlayButton variant="play" size="lg" disabled>
+        <PlayButton
+          variant="play"
+          size="lg"
+          disabled
+          ariaLabel={t("emptyPlayDisabled")}
+        >
           <PlayDisabledIcon width={24} height={24} />
         </PlayButton>
       </div>

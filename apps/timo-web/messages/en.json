@@ -226,6 +226,7 @@
       "hourUnit": "h",
       "minuteUnit": "m"
     },
-    "empty": "No to-dos to focus on right now"
+    "empty": "No to-dos to focus on right now",
+    "emptyPlayDisabled": "Play unavailable"
   }
 }
