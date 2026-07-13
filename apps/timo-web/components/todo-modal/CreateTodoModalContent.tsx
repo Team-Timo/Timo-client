@@ -10,25 +10,25 @@ import type { CreateTodoRequest } from "@/api/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
 import { createTodoRequestSchema } from "@/api/todo/todo-schema";
-import { CreateTodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoIconField";
-import { CreateTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoMemoField";
-import { CreateTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoTaskFields";
-import { useIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-icon-field";
-import { useRepeatField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-repeat-field";
 import { useSubtaskField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
-import { useTagField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-tag-field";
-import { useTimeField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-time-field";
 import { useTitleField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-title-field";
-import { formatDateToIsoDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
+import { CreateTodoIconField } from "@/components/todo-modal/CreateTodoIconField";
+import { CreateTodoMemoField } from "@/components/todo-modal/CreateTodoMemoField";
+import { CreateTodoTaskFields } from "@/components/todo-modal/CreateTodoTaskFields";
+import { useIconField } from "@/hooks/todo-modal/use-icon-field";
+import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
+import { useTagField } from "@/hooks/todo-modal/use-tag-field";
+import { useTimeField } from "@/hooks/todo-modal/use-time-field";
+import { formatDateKey } from "@/utils/date";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   icon: null,
   title: "",
   subtasks: [],
-  date: formatDateToIsoDate(defaultDate ?? new Date()),
-  duration: "00:00",
+  date: formatDateKey(defaultDate ?? new Date()),
+  duration: "0:00",
   priority: null,
   tagId: null,
   repeatType: "NONE",
@@ -150,9 +150,7 @@ export const CreateTodoModalContent = ({
                 : t("createModal.dateLabel")
             }
             date={dateValue}
-            onDateChange={(next) =>
-              dateField.onChange(formatDateToIsoDate(next))
-            }
+            onDateChange={(next) => dateField.onChange(formatDateKey(next))}
             timeLabel={timeField.timeDisplay}
             timeOptions={timeField.timeOptions}
             time={timeField.duration}

@@ -1,7 +1,7 @@
 import { TodayBadge } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 
-interface HomeDateInformationProps {
+interface DateInformationProps {
   date: string;
   dayOfWeek: string;
   isHoliday: boolean;
@@ -10,14 +10,14 @@ interface HomeDateInformationProps {
   completedCount: number;
 }
 
-export const HomeDateInformation = ({
+export const DateInformation = ({
   date,
   dayOfWeek,
   isHoliday,
   isToday,
   totalCount,
   completedCount,
-}: HomeDateInformationProps) => {
+}: DateInformationProps) => {
   return (
     <div className="flex w-full flex-col gap-3">
       <div className="flex w-full flex-col gap-0.5">
