@@ -6,7 +6,7 @@ import {
   getActiveTimer,
   getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
-import { activeTimerSchema } from "@/app/[locale]/(main)/focus/_types/timer-type";
+import { activeTimerSchema } from "@/types/timer-type";
 
 export const useActiveTimer = () =>
   useQuery({

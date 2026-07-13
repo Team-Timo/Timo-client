@@ -45,6 +45,7 @@ export const HomeTodoContainer = () => {
 
   const {
     todosByDate,
+    activeTimer,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
@@ -98,6 +99,10 @@ export const HomeTodoContainer = () => {
               <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
                 {todos.map((todo) => {
                   const [firstSubtask] = todo.subtasks;
+                  const durationSeconds =
+                    activeTimer && activeTimer.todoId === todo.todoId
+                      ? activeTimer.plannedSeconds + activeTimer.extendedSeconds
+                      : todo.durationSeconds;
 
                   return (
                     <HomeTodoCard
@@ -105,7 +110,7 @@ export const HomeTodoContainer = () => {
                       todoId={todo.todoId}
                       title={todo.title}
                       isCompleted={todo.completed}
-                      durationSeconds={todo.durationSeconds}
+                      durationSeconds={durationSeconds}
                       priority={todo.priority}
                       tagName={
                         todo.tag &&

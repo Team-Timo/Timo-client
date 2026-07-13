@@ -1,42 +1,138 @@
 "use client";
 
 import { TimerOnIcon } from "@repo/timo-design-system/icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
+import {
+  useChangeStatus,
+  useCompleteTimer,
+  useExtendTimer,
+  useStopTimer,
+  getGetActiveTimerQueryKey,
+} from "@/api/generated/endpoints/timer/timer";
 import { Timer } from "@/components/timer/Timer";
 import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
-
-type TimerStatus = "RUNNING" | "PAUSED";
-
-const PLANNED_MINUTES = 12;
+import { useActiveTimer } from "@/hooks/use-active-timer";
+import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
+import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
+import { formatDurationLabel } from "@/utils/format-duration-label";
 
 export const TimerPanel = () => {
-  const [status, setStatus] = useState<TimerStatus>("PAUSED");
+  const queryClient = useQueryClient();
+  const tDuration = useTranslations("Focus.duration");
+  const [feedbackText, setFeedbackText] = useState<string | undefined>();
 
-  const handleTogglePlay = () =>
-    setStatus((prev) => (prev === "RUNNING" ? "PAUSED" : "RUNNING"));
-  const handleExtendTimer = () => {};
-  const handleCompleteTimer = () => setStatus("PAUSED");
-  const handleStopTimer = () => setStatus("PAUSED");
+  const { data: activeTimer } = useActiveTimer();
+
+  const invalidateActiveTimer = () =>
+    queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
+  const invalidateHomeView = () =>
+    queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+
+  const { mutate: changeStatus } = useChangeStatus({
+    mutation: {
+      onSuccess: () => {
+        invalidateActiveTimer();
+        invalidateHomeView();
+      },
+    },
+  });
+  const { mutate: extendTimer } = useExtendTimer({
+    mutation: { onSuccess: invalidateActiveTimer },
+  });
+  const { mutate: completeTimer } = useCompleteTimer({
+    mutation: {
+      onSuccess: (response) => {
+        setFeedbackText(response.data?.aiFeedback ?? undefined);
+        invalidateActiveTimer();
+        invalidateHomeView();
+      },
+    },
+  });
+  const { mutate: stopTimer } = useStopTimer({
+    mutation: {
+      onSuccess: (response) => {
+        setFeedbackText(response.data?.aiFeedback ?? undefined);
+        invalidateActiveTimer();
+        invalidateHomeView();
+      },
+    },
+  });
+
+  const isRunning = activeTimer?.status === "RUNNING";
+  const isTimeUp = activeTimer ? activeTimer.remainingSeconds <= 0 : false;
+
+  const handleTogglePlay = () => {
+    if (!activeTimer) return;
+
+    changeStatus({
+      timerId: activeTimer.timerId,
+      data: { action: isRunning ? "PAUSE" : "RESUME" },
+    });
+  };
+
+  const handleExtendTimer = (minutes: number) => {
+    if (!activeTimer) return;
+
+    extendTimer({
+      timerId: activeTimer.timerId,
+      data: { extendMinutes: minutes },
+    });
+  };
+
+  const handleCompleteTimer = () => {
+    if (!activeTimer) return;
+
+    completeTimer({ timerId: activeTimer.timerId });
+  };
+
+  const handleStopTimer = () => {
+    if (!activeTimer) return;
+
+    stopTimer({ timerId: activeTimer.timerId });
+  };
+
+  const plannedSeconds = activeTimer
+    ? activeTimer.plannedSeconds + activeTimer.extendedSeconds
+    : 0;
+  const remainingSeconds = activeTimer ? activeTimer.remainingSeconds : 0;
+  const progress =
+    plannedSeconds > 0
+      ? ((plannedSeconds - remainingSeconds) / plannedSeconds) * 100
+      : 0;
+  const plannedMinutes = convertDurationToMinutes(plannedSeconds);
+  const actualMinutes = convertDurationToMinutes(
+    activeTimer?.elapsedSeconds ?? 0,
+  );
 
   return (
     <div className="flex flex-col items-center gap-11.25">
       <Timer
-        icon={<TimerOnIcon />}
-        time="10:30"
-        plannedLabel="12M"
-        progress={70}
+        icon={activeTimer ? <TimerOnIcon /> : undefined}
+        time={convertDurationToTimeText(remainingSeconds)}
+        plannedLabel={formatDurationLabel(
+          plannedMinutes,
+          tDuration("hourUnit"),
+          tDuration("minuteUnit"),
+        )}
+        progress={progress}
         size="sm"
       />
 
       <TimerSessionControls
-        isRunning={status === "RUNNING"}
+        isRunning={isRunning}
         onTogglePlay={handleTogglePlay}
-        plannedMinutes={PLANNED_MINUTES}
-        actualMinutes={PLANNED_MINUTES}
+        plannedMinutes={plannedMinutes}
+        actualMinutes={actualMinutes}
+        feedbackText={feedbackText}
+        isTimeUp={isTimeUp}
         onExtend={handleExtendTimer}
         onComplete={handleCompleteTimer}
         onStop={handleStopTimer}
+        disabled={!activeTimer}
       />
     </div>
   );

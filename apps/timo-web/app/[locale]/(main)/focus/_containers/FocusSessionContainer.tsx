@@ -21,7 +21,6 @@ import {
 import { FocusEmptyTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusEmptyTaskItem";
 import { FocusTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusTaskItem";
 import { FocusHeaderContainer } from "@/app/[locale]/(main)/focus/_containers/FocusHeaderContainer";
-import { useActiveTimer } from "@/app/[locale]/(main)/focus/_queries/use-active-timer";
 import { useFocusTodo } from "@/app/[locale]/(main)/focus/_queries/use-focus-todo";
 import {
   convertDateToBadgeText,
@@ -34,6 +33,7 @@ import {
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
+import { useActiveTimer } from "@/hooks/use-active-timer";
 import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/format-duration-label";

@@ -8,20 +8,38 @@ import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types
 
 import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
+  useChangeStatus,
+  useStartTimer,
+  getGetActiveTimerQueryKey,
+} from "@/api/generated/endpoints/timer/timer";
+import {
   useChangeSubtaskStatus,
   useChangeTodoStatus,
   useReorderTodo,
 } from "@/api/generated/endpoints/todo/todo";
 import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
+import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const queryClient = useQueryClient();
+  const { data: activeTimer } = useActiveTimer();
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: reorderTodo } = useReorderTodo();
+
+  const invalidateTimerState = () => {
+    queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
+    queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+  };
+  const { mutate: startTimer } = useStartTimer({
+    mutation: { onSuccess: invalidateTimerState },
+  });
+  const { mutate: changeStatus } = useChangeStatus({
+    mutation: { onSuccess: invalidateTimerState },
+  });
 
   useEffect(() => {
     setTodosByDate(
@@ -66,19 +84,23 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   };
 
   const handleTogglePlay = (dateKey: string, todoId: number) => {
-    // TODO: API
     const willRun =
       todosByDate[dateKey]?.find((todo) => todo.todoId === todoId)
         ?.timerStatus !== "RUNNING";
 
-    updateTodo(dateKey, todoId, (todo) => ({
-      ...todo,
-      timerStatus: todo.timerStatus === "RUNNING" ? "STOPPED" : "RUNNING",
-    }));
-
     if (willRun) {
       openTimerPanel();
     }
+
+    if (activeTimer && activeTimer.todoId === todoId) {
+      changeStatus({
+        timerId: activeTimer.timerId,
+        data: { action: activeTimer.status === "RUNNING" ? "PAUSE" : "RESUME" },
+      });
+      return;
+    }
+
+    startTimer({ todoId });
   };
 
   const handleToggleSubtaskCompleted = (
@@ -133,6 +155,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
 
   return {
     todosByDate,
+    activeTimer,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
