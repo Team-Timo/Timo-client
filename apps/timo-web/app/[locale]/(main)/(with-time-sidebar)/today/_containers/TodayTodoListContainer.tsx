@@ -1,12 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
-import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
-
 import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayDateHeaderContainer";
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
-import { todayTodoMocks } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
 import { formatDate } from "@/utils/date";
 
@@ -18,61 +14,17 @@ const PRIORITY_MAP = {
 } as const;
 
 export const TodayTodoListContainer = () => {
-  const [todos, setTodos] = useState<TodoMock[]>(todayTodoMocks);
-  const runningTodoId =
-    todos.find((todo) => todo.timerStatus === "RUNNING")?.todoId ?? null;
+  const {
+    todos,
+    runningTodoId,
+    handlePlay,
+    handleCheck,
+    handleDelete,
+    handleAddTodo,
+    handleSubTodoCheck,
+  } = useTodayTodoList();
+
   const completedCount = todos.filter((todo) => todo.completed).length;
-
-  const handlePlay = (todoId: number) => {
-    // TODO: API
-    setTodos((prev) =>
-      prev.map((todo) => ({
-        ...todo,
-        timerStatus:
-          todo.todoId === todoId && todo.timerStatus !== "RUNNING"
-            ? "RUNNING"
-            : "STOPPED",
-      })),
-    );
-  };
-
-  const handleCheck = (todoId: number) => {
-    // TODO: API
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.todoId === todoId
-          ? { ...todo, completed: !todo.completed, timerStatus: "STOPPED" }
-          : todo,
-      ),
-    );
-  };
-
-  const handleDelete = (todoId: number) => {
-    // TODO: API
-    setTodos((prev) => prev.filter((todo) => todo.todoId !== todoId));
-  };
-
-  const handleAddTodo = (todo: TodoMock) => {
-    setTodos((prev) => [...prev, todo]);
-  };
-
-  const handleSubTodoCheck = (todoId: number, subtaskId: number) => {
-    // TODO: API
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.todoId === todoId
-          ? {
-              ...todo,
-              subtasks: todo.subtasks.map((s) =>
-                s.subtaskId === subtaskId
-                  ? { ...s, completed: !s.completed }
-                  : s,
-              ),
-            }
-          : todo,
-      ),
-    );
-  };
 
   return (
     <div className="flex h-full flex-col gap-2">
