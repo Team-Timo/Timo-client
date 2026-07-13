@@ -1,46 +1,60 @@
+"use client";
+
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+
+import type { TodoCreateRequest } from "@/api/generated/models";
 import type { CreateTodoRequest } from "@/api/todo/todo-schema";
-import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { convertApiDurationToSeconds } from "@/utils/todo/todo-time";
+import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
+import { useCreateTodo } from "@/api/generated/endpoints/todo/todo";
+import { todoCreateResponseSchema } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-export interface CreateTodoTag {
-  id: number;
-  name: string;
-}
-
-// 목데이터: 실제 API 호출 없이 로컬 상태에만 즉시 반영한다.
-const buildTodoFromRequest = (
+const buildCreateTodoRequestBody = (
   data: CreateTodoRequest,
-  tag: CreateTodoTag,
-): Todo => ({
-  todoId: Date.now(),
-  icon: data.icon,
+): TodoCreateRequest => ({
+  icon: data.icon ?? undefined,
   title: data.title,
-  completed: false,
-  durationSeconds: convertApiDurationToSeconds(data.duration),
-  priority: data.priority ?? "MEDIUM",
-  tag: { tagId: tag.id, name: tag.name },
-  hasMemo: Boolean(data.memo?.trim()),
-  isRepeated: data.repeatType !== "NONE",
-  timerStatus: "STOPPED",
-  sortOrder: 0,
-  subtasks: (data.subtasks ?? []).map((content, index) => ({
-    subtaskId: Date.now() + index,
-    content,
-    completed: false,
-  })),
+  subtasks: data.subtasks?.length ? data.subtasks : undefined,
+  date: data.date,
+  duration: data.duration,
+  priority: data.priority ?? undefined,
+  tagId: data.tagId ?? undefined,
+  repeatType: data.repeatType,
+  repeatWeekdays: data.repeatWeekdays?.length ? data.repeatWeekdays : undefined,
+  repeatDayOfMonth: data.repeatDayOfMonth ?? undefined,
+  memo: data.memo?.trim() ? data.memo : undefined,
 });
 
-export interface UseCreateTodoSubmitParams {
-  onCreate: (todo: Todo) => void;
-}
+export const useCreateTodoSubmit = () => {
+  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
+  const { mutate: createTodo } = useCreateTodo();
+  const queryClient = useQueryClient();
 
-export const useCreateTodoSubmit = ({
-  onCreate,
-}: UseCreateTodoSubmitParams) => {
-  const handleSubmit = (data: CreateTodoRequest, tag: CreateTodoTag) => {
-    onCreate(buildTodoFromRequest(data, tag));
+  const handleSubmit = (data: CreateTodoRequest) => {
+    createTodo(
+      { data: buildCreateTodoRequestBody(data) },
+      {
+        onSuccess: (response) => {
+          const parsed = todoCreateResponseSchema.safeParse(response.data);
+
+          if (!parsed.success) {
+            setIsErrorToastOpen(true);
+            return;
+          }
+
+          queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+        },
+        onError: () => {
+          setIsErrorToastOpen(true);
+        },
+      },
+    );
   };
 
-  return { handleSubmit };
+  return {
+    handleSubmit,
+    isErrorToastOpen,
+    closeErrorToast: () => setIsErrorToastOpen(false),
+  };
 };

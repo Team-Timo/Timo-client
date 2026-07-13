@@ -29,7 +29,8 @@
       "medium": "보통",
       "low": "낮음"
     },
-    "close": "닫기"
+    "close": "닫기",
+    "delete": "삭제"
   },
   "Home": {
     "today": "오늘",
@@ -71,6 +72,7 @@
     "nav": {
       "account": "개인 정보",
       "policy": "약관",
+      "privacy": "개인 정보 처리 방침",
       "withdrawal": "회원 탈퇴"
     },
     "profile": {
@@ -117,7 +119,10 @@
     "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
     "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",
     "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 완료해주세요.",
-    "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요."
+    "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요.",
+    "todoCreateFailed": "투두 생성에 실패했어요. 다시 시도해 주세요.",
+    "aiDurationRecommendFailed": "AI 추천 소요 시간을 가져오지 못했어요. 다시 시도해 주세요.",
+    "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요."
   },
   "Login": {
     "animationLabel": "로그인 애니메이션",
@@ -206,8 +211,9 @@
       "title": "지금 멈출까요?",
       "description": "지금까지 수행한 <blue>{minutes}</blue>이 타임박스에 기록됩니다.",
       "continueButton": "계속 진행",
-      "switchButton": "전환하기"
+      "switchButton": "완료하기"
     },
+
     "completeModal": {
       "title": "태스크가 완료되었어요!",
       "defaultFeedback": "이번 작업을 완료했어요. 수고하셨어요!",
@@ -229,6 +235,11 @@
     "duration": {
       "hourUnit": "시간",
       "minuteUnit": "분"
-    }
+    },
+    "empty": "지금은 집중할 투두가 없어요",
+    "emptyPlayDisabled": "재생 불가"
+  },
+  "Policy": {
+    "empty": "약관 내용을 아직 준비 중입니다."
   }
 }

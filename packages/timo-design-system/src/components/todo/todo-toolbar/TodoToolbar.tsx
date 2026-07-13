@@ -38,6 +38,7 @@ export interface TodoToolbarProps {
   onTimeChange?: (time: string) => void;
   selectedTime?: TimeSelection;
   onSelectTime?: (value: TimeSelection) => void;
+  onTimeOpen?: () => void;
 
   priority?: PriorityLevel;
   priorityLabels?: Record<PriorityLevel, string>;
@@ -68,6 +69,7 @@ export const TodoToolbar = ({
   onTimeChange,
   selectedTime,
   onSelectTime,
+  onTimeOpen,
   priority,
   priorityLabels,
   onSelectPriority,
@@ -121,6 +123,7 @@ export const TodoToolbar = ({
         times={timeOptions}
         selected={selectedTime}
         onSelect={onSelectTime}
+        onOpen={onTimeOpen}
       />
 
       <PrioritySelector

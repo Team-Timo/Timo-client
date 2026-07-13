@@ -57,19 +57,22 @@ export const StatisticsContainer = () => {
   };
 
   return (
-    <div className="flex h-full flex-col">
-      <StatisticsHeaderContainer
-        currentMonth={currentMonth}
-        onChangeMonth={handleChangeMonth}
-      />
-      <div className="flex min-h-0 flex-1">
-        <StatisticsCalendarContainer
+    <div className="flex h-full">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <StatisticsHeaderContainer
           currentMonth={currentMonth}
-          selectedDate={selectedDate}
-          onSelectDate={handleSelectDate}
+          onChangeMonth={handleChangeMonth}
         />
-        <StatisticsSidePanel {...sidePanelProps} />
+        <div className="flex min-h-0 flex-1">
+          <StatisticsCalendarContainer
+            currentMonth={currentMonth}
+            selectedDate={selectedDate}
+            onSelectDate={handleSelectDate}
+          />
+        </div>
       </div>
+
+      <StatisticsSidePanel {...sidePanelProps} />
     </div>
   );
 };

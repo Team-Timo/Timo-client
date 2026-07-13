@@ -19,6 +19,7 @@ export interface TimeSelectorProps {
   times: TimeOption[];
   selected?: TimeSelection;
   onSelect?: (value: TimeSelection) => void;
+  onOpen?: () => void;
 }
 
 export const TimeSelector = ({
@@ -28,11 +29,17 @@ export const TimeSelector = ({
   times,
   selected,
   onSelect,
+  onOpen,
 }: TimeSelectorProps) => {
   const isAiSelected = selected === "ai";
 
   return (
-    <Dropdown className="flex justify-center">
+    <Dropdown
+      className="flex justify-center"
+      onOpenChange={(isOpen) => {
+        if (isOpen) onOpen?.();
+      }}
+    >
       <Dropdown.Trigger>{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel className="shadow-timo w-23.75">

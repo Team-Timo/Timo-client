@@ -3,9 +3,8 @@
 import { useTranslations } from "next-intl";
 
 import type { ApiDayOfWeek } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
-import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { HomeDateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeDateInformation";
+import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_components/DateInformation";
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { CreateTodoModalContainer } from "@/components/todo-modal/create/CreateTodoModalContainer";
 import { getToday, parseDateKey } from "@/utils/date";
@@ -17,7 +16,6 @@ export interface HomeDayHeaderContainerProps {
   isToday: boolean;
   totalCount: number;
   completedCount: number;
-  onCreateTodo: (todo: Todo) => void;
 }
 
 export const HomeDayHeaderContainer = ({
@@ -27,14 +25,13 @@ export const HomeDayHeaderContainer = ({
   isToday,
   totalCount,
   completedCount,
-  onCreateTodo,
 }: HomeDayHeaderContainerProps) => {
   const tCommon = useTranslations("Common");
   const date = parseDateKey(dateKey) ?? getToday();
 
   return (
     <div className="flex flex-col gap-3 pb-2">
-      <HomeDateInformation
+      <DateInformation
         date={convertDateToDateText(date)}
         dayOfWeek={tCommon(`weekday.${dayOfWeek}`)}
         isHoliday={isHoliday}
@@ -42,7 +39,7 @@ export const HomeDayHeaderContainer = ({
         totalCount={totalCount}
         completedCount={completedCount}
       />
-      <CreateTodoModalContainer defaultDate={date} onCreate={onCreateTodo} />
+      <CreateTodoModalContainer defaultDate={date} />
     </div>
   );
 };

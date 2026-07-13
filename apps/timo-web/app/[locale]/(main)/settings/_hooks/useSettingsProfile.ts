@@ -6,12 +6,22 @@ import { useForm } from "react-hook-form";
 
 import type {
   SettingsDefaultTagKey,
-  SettingsProfile,
+  SettingsLanguage,
   SettingsProfileFormValues,
 } from "@/app/[locale]/(main)/settings/_types/profile-type";
 
+import { useUpdateLanguage } from "@/api/generated/endpoints/user/user";
+import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
-import { settingsProfileMock } from "@/app/[locale]/(main)/settings/_mocks/profile-mock";
+import { useSettingsProfileQuery } from "@/app/[locale]/(main)/settings/_queries/use-settings-profile";
+
+const LANGUAGE_REQUEST_MAP: Record<
+  SettingsLanguage,
+  (typeof UpdateLanguageRequestLanguage)[keyof typeof UpdateLanguageRequestLanguage]
+> = {
+  ko: UpdateLanguageRequestLanguage.KO,
+  en: UpdateLanguageRequestLanguage.EN,
+};
 
 const DEFAULT_TAG_KEYS: SettingsDefaultTagKey[] = [
   "assignment",
@@ -28,11 +38,16 @@ export const useSettingsProfile = () => {
   const { language, locale, setLanguage, commitLanguage } =
     useSettingsLanguageParam();
 
-  const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
+  const { data: profile } = useSettingsProfileQuery();
+  const [isCalendarConnected, setIsCalendarConnected] = useState(
+    profile.calendarConnected,
+  );
+  const { mutateAsync: updateLanguage } = useUpdateLanguage();
 
+  // TODO: 태그 목록 조회 API 연동 후 기본 태그 대신 실제 응답으로 교체
   const { watch, setValue, handleSubmit, reset, formState } =
     useForm<SettingsProfileFormValues>({
-      defaultValues: { tags: profile.tags },
+      defaultValues: { tags: DEFAULT_TAG_KEYS },
     });
   const tags = watch("tags");
 
@@ -47,20 +62,20 @@ export const useSettingsProfile = () => {
   });
 
   const handleConnectCalendar = () => {
-    if (profile.isCalendarConnected) {
+    if (isCalendarConnected) {
       // TODO: 실제 확인 모달로 교체
       const confirmed = window.confirm("구글 캘린더 연동을 해제하시겠습니까?");
       if (!confirmed) return;
 
       // TODO: API - 연동 토큰 파기
       console.log("구글 캘린더 연동 토큰을 파기합니다.");
-      setProfile((prev) => ({ ...prev, isCalendarConnected: false }));
+      setIsCalendarConnected(false);
       return;
     }
 
     // TODO: Google 계정 인증 및 캘린더 접근 권한 동의 팝업 호출
     console.log("Google Calendar 연동 인증 팝업을 호출합니다.");
-    setProfile((prev) => ({ ...prev, isCalendarConnected: true }));
+    setIsCalendarConnected(true);
   };
 
   const handleAddTag = () => {
@@ -86,10 +101,15 @@ export const useSettingsProfile = () => {
     console.log("[Login] 페이지로 이동합니다.");
   };
 
+  const isLanguageDirty = language !== locale;
+
   const handleSave = handleSubmit(async (values) => {
     try {
-      // TODO: API 연동
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (isLanguageDirty) {
+        await updateLanguage({
+          data: { language: LANGUAGE_REQUEST_MAP[language] },
+        });
+      }
       reset(values);
       commitLanguage();
     } catch {
@@ -98,13 +118,11 @@ export const useSettingsProfile = () => {
     }
   });
 
-  const isLanguageDirty = language !== locale;
-
   return {
     profileState: {
       name: profile.name,
-      googleEmail: profile.googleEmail,
-      isCalendarConnected: profile.isCalendarConnected,
+      googleEmail: profile.email,
+      isCalendarConnected,
       language,
       tags: tagItems,
       isSaveDisabled:

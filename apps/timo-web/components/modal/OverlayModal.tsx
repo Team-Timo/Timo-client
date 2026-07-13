@@ -29,6 +29,7 @@ export const OverlayModal = ({
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isVisible, setIsVisible] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const wasFloatingLayerOpenRef = useRef(false);
 
   useEffect(() => {
     if (!isOpen) {
@@ -77,8 +78,11 @@ export const OverlayModal = ({
           "bg-timo-overlay fixed inset-0 z-40 transition-opacity duration-200 ease-out",
           isVisible ? "opacity-100" : "opacity-0",
         )}
+        onPointerDownCapture={() => {
+          wasFloatingLayerOpenRef.current = hasOpenFloatingLayer();
+        }}
         onClick={() => {
-          if (hasOpenFloatingLayer()) return;
+          if (wasFloatingLayerOpenRef.current) return;
           onClose();
         }}
         aria-hidden="true"

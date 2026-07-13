@@ -79,9 +79,11 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const tCommon = useTranslations("Common");
 
   const durationText = convertDurationToTimeText(todo.durationSeconds);
-  const tagLabel = isTagLabelKey(todo.tag.name)
-    ? tCommon(`tag.${todo.tag.name}`)
-    : todo.tag.name;
+  const todoTagName = todo.tag?.name ?? "";
+  const todoIcon = todo.icon ?? null;
+  const tagLabel = isTagLabelKey(todoTagName)
+    ? tCommon(`tag.${todoTagName}`)
+    : todoTagName;
 
   const { control, handleSubmit, formState } = useForm<DetailTodoFormValues>({
     defaultValues: {
@@ -96,7 +98,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
       isCompleted: todo.completed,
       title: todo.title,
       memo: "",
-      icon: isTodoIconValue(todo.icon) ? todo.icon : null,
+      icon: isTodoIconValue(todoIcon) ? todoIcon : null,
     },
   });
 
