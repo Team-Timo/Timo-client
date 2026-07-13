@@ -77,7 +77,7 @@ export const StatisticsCalendar = ({
   const completionRateByDate = new Map(
     calendarData.days.map(({ date, completionRate }) => [date, completionRate]),
   );
-  const todayLabel = formatStatisticsCalendarDate(today, locale);
+  const selectedDateLabel = formatStatisticsCalendarDate(selectedDate, locale);
   const todayTime = getDateTime(today);
 
   return (
@@ -88,8 +88,8 @@ export const StatisticsCalendar = ({
             {formatStatisticsMonth(currentMonth, locale)}
           </h1>
 
-          <p className="typo-headline-m-14 text-timo-black mt-2">
-            {todayLabel}
+          <p className="typo-headline-m-14 text-timo-black mt-2 whitespace-pre-line">
+            {selectedDateLabel}
           </p>
         </div>
 
