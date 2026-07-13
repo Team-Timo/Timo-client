@@ -12,7 +12,7 @@ import { DetailTodoMemoField } from "@/components/todo-modal/detail/DetailTodoMe
 import { DetailTodoTaskFields } from "@/components/todo-modal/detail/DetailTodoTaskFields";
 import {
   DETAIL_TODO_TIME_OPTIONS,
-  DETAIL_TODO_WEEKDAYS,
+  DETAIL_TODO_WEEKDAY_IDS,
   formatDetailTodoDateLabel,
   useDetailTodoForm,
 } from "@/hooks/todo-modal/use-detail-todo-form";
@@ -40,10 +40,16 @@ export const DetailTodoModalContent = ({
   const tCreateModal = useTranslations("Home.createModal");
   const tCommon = useTranslations("Common");
   const detailTodoForm = useDetailTodoForm({ todo });
+  const weekdays = DETAIL_TODO_WEEKDAY_IDS.map((weekdayId) => ({
+    id: weekdayId,
+    label: tCommon(`weekday.${weekdayId}`),
+  }));
+
   const handleTogglePlay = () => {
     onTogglePlay();
     onClose();
   };
+
   const handleDelete = () => {
     onDelete();
     onClose();
@@ -142,7 +148,7 @@ export const DetailTodoModalContent = ({
                 frequency: detailTodoForm.repeatFrequency,
                 onFrequencyChange: detailTodoForm.changeRepeatFrequency,
                 weekly: {
-                  weekdays: DETAIL_TODO_WEEKDAYS,
+                  weekdays,
                   selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
                   onWeekdayToggle: detailTodoForm.toggleWeekday,
                 },

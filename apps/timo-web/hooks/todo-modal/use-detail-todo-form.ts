@@ -42,15 +42,15 @@ export const DETAIL_TODO_TIME_OPTIONS: TimeOption[] = [
   { minute: 90, value: "1.5", unit: "h" },
 ];
 
-export const DETAIL_TODO_WEEKDAYS = [
-  { id: "MON", label: "월" },
-  { id: "TUE", label: "화" },
-  { id: "WED", label: "수" },
-  { id: "THU", label: "목" },
-  { id: "FRI", label: "금" },
-  { id: "SAT", label: "토" },
-  { id: "SUN", label: "일" },
-];
+export const DETAIL_TODO_WEEKDAY_IDS = [
+  "MON",
+  "TUE",
+  "WED",
+  "THU",
+  "FRI",
+  "SAT",
+  "SUN",
+] as const;
 
 export const formatDetailTodoDateLabel = (date: Date) =>
   `${String(date.getFullYear()).slice(2)}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
@@ -61,6 +61,7 @@ export interface UseDetailTodoFormParams {
 
 export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const tCommon = useTranslations("Common");
+
   const durationText = convertDurationToTimeText(todo.durationSeconds);
   const tagLabel = isTagLabelKey(todo.tag.name)
     ? tCommon(`tag.${todo.tag.name}`)
@@ -78,6 +79,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const [repeatDay, setRepeatDay] = useState("");
   const [isCompleted, setIsCompleted] = useState(todo.completed);
   const [title, setTitle] = useState(todo.title);
+
   const nextSubtaskInputId = useRef(0);
   const createSubtaskInput = (value = ""): DetailTodoSubtaskInput => ({
     id: nextSubtaskInputId.current++,
@@ -85,6 +87,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     completed: false,
     value,
   });
+
   const [subtaskInputs, setSubtaskInputs] = useState<DetailTodoSubtaskInput[]>(
     () =>
       todo.subtasks.length > 0
@@ -122,6 +125,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const toggleIconPanel = () => setIsIconPanelOpen((prev) => !prev);
   const selectIcon = (nextIcon: TodoIconValue) => setIcon(nextIcon);
   const removeIcon = () => setIcon(null);
+
   const changeTitle = (value: string) => {
     setTitle(truncateToWeightedLength(value, TITLE_MAX_WEIGHTED_LENGTH));
   };
