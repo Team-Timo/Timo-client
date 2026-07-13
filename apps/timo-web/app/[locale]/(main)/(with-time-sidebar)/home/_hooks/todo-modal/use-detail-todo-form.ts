@@ -14,14 +14,14 @@ import type {
 import type { KeyboardEvent } from "react";
 
 import {
-  TITLE_MAX_WEIGHTED_LENGTH,
-  truncateToWeightedLength,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/text-length";
-import { convertDurationToTimeText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
-import {
   addSubtaskInputOnEnter,
   removeSubtaskInputOnBackspace,
 } from "@/utils/todo/subtask-input-list";
+import {
+  TITLE_MAX_WEIGHTED_LENGTH,
+  truncateToWeightedLength,
+} from "@/utils/todo/text-length";
+import { convertDurationToTimeText } from "@/utils/todo/todo-time";
 
 const MAX_DETAIL_SUBTASK_COUNT = 10;
 

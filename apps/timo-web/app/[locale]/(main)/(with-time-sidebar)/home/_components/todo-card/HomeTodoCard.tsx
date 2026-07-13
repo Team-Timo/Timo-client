@@ -24,7 +24,7 @@ import type {
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 import type { KeyboardEvent, MouseEvent } from "react";
 
-import { convertDurationToTimeText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
+import { convertDurationToTimeText } from "@/utils/todo/todo-time";
 
 type PriorityLabelKeyTypes = "urgent" | "high" | "medium" | "low";
 
