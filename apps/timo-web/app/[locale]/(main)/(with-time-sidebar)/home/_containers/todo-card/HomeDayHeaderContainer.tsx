@@ -4,10 +4,10 @@ import { useTranslations } from "next-intl";
 
 import type { ApiDayOfWeek } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
-import { HomeDateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeDateInformation";
+import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_components/DateInformation";
 import { CreateTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContainer";
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
-import { getToday, parseDateKey } from "@/utils/date";
+import { getToday, parseDateKey } from "@/utils/date/date";
 
 export interface HomeDayHeaderContainerProps {
   dateKey: string;
@@ -31,7 +31,7 @@ export const HomeDayHeaderContainer = ({
 
   return (
     <div className="flex flex-col gap-3 pb-2">
-      <HomeDateInformation
+      <DateInformation
         date={convertDateToDateText(date)}
         dayOfWeek={tCommon(`weekday.${dayOfWeek}`)}
         isHoliday={isHoliday}

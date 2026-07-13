@@ -4,7 +4,7 @@ import { SidebarButton } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
 
-import { getDayOfWeekKey } from "@/utils/get-day-of-week-key";
+import { getDayOfWeekKey } from "@/utils/date/get-day-of-week-key";
 
 export interface TimeSidebarHeaderProps {
   date: Date;

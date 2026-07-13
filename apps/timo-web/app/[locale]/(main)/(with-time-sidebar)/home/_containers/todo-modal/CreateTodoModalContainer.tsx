@@ -4,9 +4,9 @@ import { AddTaskButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 
-import { CreateTodoModalContent } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContent";
 import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-create-todo-submit";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
+import { CreateTodoModalContent } from "@/components/todo-modal/CreateTodoModalContent";
 
 export interface CreateTodoModalContainerProps {
   defaultDate?: Date;

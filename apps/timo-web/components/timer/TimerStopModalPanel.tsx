@@ -3,7 +3,7 @@ import { Modal, ModalButton } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-import { formatDurationLabel } from "@/utils/format-duration-label";
+import { formatDurationLabel } from "@/utils/duration/format-duration-label";
 
 export interface TimerStopModalPanelProps {
   minutes: number;

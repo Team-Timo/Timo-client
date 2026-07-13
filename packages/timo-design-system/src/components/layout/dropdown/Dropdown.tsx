@@ -18,11 +18,14 @@ import {
   unregisterOpenFloatingLayer,
 } from "../../../lib";
 
+export type DropdownAlign = "left" | "right";
+
 interface DropdownContextValue {
   isOpen: boolean;
   toggle: () => void;
   close: () => void;
   triggerRef: RefObject<HTMLButtonElement | null>;
+  align: DropdownAlign;
 }
 
 const DropdownContext = createContext<DropdownContextValue | null>(null);
@@ -42,10 +45,16 @@ const useDropdownContext = (): DropdownContextValue => {
 export interface DropdownProps {
   children: ReactNode;
   className?: string;
+  align?: DropdownAlign;
   onOpenChange?: (isOpen: boolean) => void;
 }
 
-const DropdownRoot = ({ children, className, onOpenChange }: DropdownProps) => {
+const DropdownRoot = ({
+  children,
+  className,
+  align = "left",
+  onOpenChange,
+}: DropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -86,7 +95,9 @@ const DropdownRoot = ({ children, className, onOpenChange }: DropdownProps) => {
   const close = () => setIsOpen(false);
 
   return (
-    <DropdownContext.Provider value={{ isOpen, toggle, close, triggerRef }}>
+    <DropdownContext.Provider
+      value={{ isOpen, toggle, close, triggerRef, align }}
+    >
       <div ref={rootRef} className={cn("relative inline-block", className)}>
         {children}
       </div>
@@ -125,7 +136,7 @@ const DropdownPanel = ({
   className,
   ...rest
 }: DropdownPanelProps) => {
-  const { isOpen } = useDropdownContext();
+  const { isOpen, align } = useDropdownContext();
 
   if (!isOpen) return null;
 
@@ -133,7 +144,8 @@ const DropdownPanel = ({
     <div
       {...rest}
       className={cn(
-        "rounded-4 absolute top-full left-0 z-10 flex flex-col items-start bg-white p-2",
+        "rounded-4 absolute top-full z-10 flex flex-col items-start bg-white p-2",
+        align === "right" ? "right-0" : "left-0",
         className,
       )}
     >
