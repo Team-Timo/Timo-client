@@ -15,6 +15,9 @@ export const OauthCallbackContainer = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const setOnboardingCompleted = useAuthStore(
+    (state) => state.setOnboardingCompleted,
+  );
   const { mutate } = useToken();
   const hasRequested = useRef(false);
 
@@ -35,6 +38,7 @@ export const OauthCallbackContainer = () => {
             return;
           }
           setAccessToken(data.accessToken);
+          setOnboardingCompleted(data.user.onboardingCompleted);
           queryClient.setQueryData(getGetMyProfileQueryKey(), data.user);
           router.replace(data.isNewUser ? ROUTES.ONBOARDING : ROUTES.HOME);
         },
@@ -43,7 +47,14 @@ export const OauthCallbackContainer = () => {
         },
       },
     );
-  }, [code, mutate, queryClient, router, setAccessToken]);
+  }, [
+    code,
+    mutate,
+    queryClient,
+    router,
+    setAccessToken,
+    setOnboardingCompleted,
+  ]);
 
   return null;
 };

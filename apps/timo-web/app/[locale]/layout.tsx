@@ -7,6 +7,7 @@ import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
 import { routing } from "@/i18n/routing";
+import { AuthProvider } from "@/providers/auth/AuthProvider";
 import { OverlayProvider } from "@/providers/OverlayProvider";
 import { QueryProvider } from "@/providers/query/QueryProvider";
 
@@ -48,7 +49,9 @@ export default async function RootLayout({
       <body>
         <NextIntlClientProvider>
           <QueryProvider>
-            <OverlayProvider>{children}</OverlayProvider>
+            <AuthProvider>
+              <OverlayProvider>{children}</OverlayProvider>
+            </AuthProvider>
           </QueryProvider>
         </NextIntlClientProvider>
       </body>

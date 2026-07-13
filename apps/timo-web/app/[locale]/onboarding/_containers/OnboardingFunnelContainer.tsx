@@ -16,6 +16,7 @@ import { LottiePlayer } from "@/components/lottie/LottiePlayer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "@/i18n/navigation";
+import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 const STEP_NUMBER: Record<keyof OnboardingFunnelSteps, 1 | 2 | 3 | 4> = {
   Language: 1,
@@ -33,6 +34,9 @@ const ONBOARDING_LANGUAGE_MAP: Record<"ko" | "en", OnboardingRequestLanguage> =
 export const OnboardingFunnelContainer = () => {
   const t = useTranslations("Toast");
   const router = useRouter();
+  const setOnboardingCompleted = useAuthStore(
+    (state) => state.setOnboardingCompleted,
+  );
   const [answers, setAnswers] = useState<
     Partial<OnboardingFunnelSteps["CalendarConnect"]>
   >({});
@@ -142,6 +146,7 @@ export const OnboardingFunnelContainer = () => {
                     },
                     {
                       onSuccess: () => {
+                        setOnboardingCompleted(true);
                         router.replace(ROUTES.HOME, {
                           locale: answers.language,
                         });
