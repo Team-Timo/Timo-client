@@ -17,7 +17,7 @@ import {
   getCalendarDates,
   getFirstDayOffset,
 } from "@/app/[locale]/(main)/statistics/_utils/statistics-calendar";
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 
 type CalendarIconStatus = "disabled" | "empty" | "outline" | "light" | "filled";
 

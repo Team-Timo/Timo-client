@@ -21,7 +21,7 @@ import { useIconField } from "@/hooks/todo-modal/use-icon-field";
 import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
 import { useTagField } from "@/hooks/todo-modal/use-tag-field";
 import { useTimeField } from "@/hooks/todo-modal/use-time-field";
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   icon: null,
