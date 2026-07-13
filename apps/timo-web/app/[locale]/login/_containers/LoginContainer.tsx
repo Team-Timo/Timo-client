@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
 import { LottiePlayer } from "@/components/lottie/LottiePlayer";
+import { ROUTES } from "@/constants/routes";
+import { Link } from "@/i18n/navigation";
 
 export const LoginContainer = () => {
   const t = useTranslations("Login");
@@ -51,19 +53,25 @@ export const LoginContainer = () => {
 
           <p className="typo-body-r-12 text-timo-gray-700 text-center">
             {t.rich("termsNotice", {
-              // TODO: 실제 이용약관 페이지 URL 나오면 href 교체
               terms: (chunks) => (
-                // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a href="#" className="underline">
+                <Link
+                  href={`${ROUTES.POLICY}?type=SERVICE`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
                   {chunks}
-                </a>
+                </Link>
               ),
-              // TODO: 실제 개인정보 처리방침 페이지 URL 나오면 href 교체
               privacy: (chunks) => (
-                // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <a href="#" className="underline">
+                <Link
+                  href={`${ROUTES.POLICY}?type=PRIVACY`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
                   {chunks}
-                </a>
+                </Link>
               ),
             })}
           </p>

@@ -1,6 +1,8 @@
-import { Modal } from "@repo/timo-design-system/ui";
+import { Modal, ModalButton } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
+
+import { extendTimerBodyExtendMinutesMax } from "@/api/generated/endpoints/timer/timer.zod";
 
 export type ExtendTimePreset = 10 | 30 | 60 | "custom";
 
@@ -18,8 +20,6 @@ const PRESET_OPTIONS: {
   { preset: 60, labelKey: "presetOneHour" },
 ];
 
-const MAX_CUSTOM_MINUTES = 720;
-
 const CHIP_FOCUS_BORDER_CLASS =
   "border-2 border-transparent focus-visible:border-timo-blue-300 outline-none";
 
@@ -31,6 +31,8 @@ export interface TimerExtendModalPanelProps {
   onClose: () => void;
   onSubmit: () => void;
   canSubmit: boolean;
+  /** 이전에 노출되던 팝업(End 모달)으로 돌아갈 수 있는 경우에만 true — 이 경우 닫기 버튼이 모달 자체를 닫지 않고 onClose에서 이전 단계로 전환한다 */
+  canGoBack: boolean;
 }
 
 export const TimerExtendModalPanel = ({
@@ -41,6 +43,7 @@ export const TimerExtendModalPanel = ({
   onClose,
   onSubmit,
   canSubmit,
+  canGoBack,
 }: TimerExtendModalPanelProps) => {
   const t = useTranslations("Focus.extendModal");
   const isCustomSelected = selectedPreset === "custom";
@@ -79,7 +82,12 @@ export const TimerExtendModalPanel = ({
                 const clamped =
                   digitsOnly === ""
                     ? ""
-                    : String(Math.min(Number(digitsOnly), MAX_CUSTOM_MINUTES));
+                    : String(
+                        Math.min(
+                          Number(digitsOnly),
+                          extendTimerBodyExtendMinutesMax,
+                        ),
+                      );
 
                 onCustomMinutesChange(clamped);
               }}
@@ -106,9 +114,19 @@ export const TimerExtendModalPanel = ({
       </div>
 
       <div className="mt-2.5 flex w-full gap-1.5">
-        <Modal.BorderButton className="flex-1 px-0" onClick={onClose}>
-          {t("closeButton")}
-        </Modal.BorderButton>
+        {canGoBack ? (
+          <ModalButton
+            variant="border"
+            className="flex-1 px-0"
+            onClick={onClose}
+          >
+            {t("closeButton")}
+          </ModalButton>
+        ) : (
+          <Modal.BorderButton className="flex-1 px-0" onClick={onClose}>
+            {t("closeButton")}
+          </Modal.BorderButton>
+        )}
         <Modal.FillButton
           className={cn(
             "flex-1 px-0",

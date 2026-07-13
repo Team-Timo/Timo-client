@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { getHourLabel } from "@/utils/get-hour-label";
+import { getHourLabel } from "@/utils/date/get-hour-label";
 
 const HOURS_IN_DAY = 24;
 const HOUR_LINES = HOURS_IN_DAY + 1;

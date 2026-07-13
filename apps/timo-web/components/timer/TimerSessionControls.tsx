@@ -26,6 +26,7 @@ export interface TimerSessionControlsProps {
   feedbackText?: string;
   onExtend: (minutes: number) => void;
   onComplete: () => void;
+  disabled?: boolean;
 }
 
 export const TimerSessionControls = forwardRef<
@@ -40,6 +41,7 @@ export const TimerSessionControls = forwardRef<
     feedbackText,
     onExtend,
     onComplete,
+    disabled = false,
   },
   ref,
 ) {
@@ -56,6 +58,7 @@ export const TimerSessionControls = forwardRef<
     null,
   );
   const [customMinutes, setCustomMinutes] = useState("");
+  const [isFromEndModal, setIsFromEndModal] = useState(false);
 
   const resetExtendSelection = () => {
     setSelectedPreset(null);
@@ -71,6 +74,7 @@ export const TimerSessionControls = forwardRef<
     if (minutes > 0) onExtend(minutes);
 
     resetExtendSelection();
+    setIsFromEndModal(false);
   };
 
   const canSubmitExtend =
@@ -85,8 +89,10 @@ export const TimerSessionControls = forwardRef<
         onOpenEndModal={() => setStep(isRunning ? "stop" : "end")}
         onOpenExtendModal={() => {
           resetExtendSelection();
+          setIsFromEndModal(false);
           setStep("extend");
         }}
+        disabled={disabled}
       />
       <Modal.Trigger
         ref={stopModalTriggerRef}
@@ -100,6 +106,7 @@ export const TimerSessionControls = forwardRef<
           <TimerEndModalPanel
             onContinue={() => {
               resetExtendSelection();
+              setIsFromEndModal(true);
               setStep("extend");
             }}
             onComplete={() => setStep("complete")}
@@ -120,9 +127,16 @@ export const TimerSessionControls = forwardRef<
               if (preset !== "custom") setCustomMinutes("");
             }}
             onCustomMinutesChange={setCustomMinutes}
-            onClose={resetExtendSelection}
+            onClose={() => {
+              resetExtendSelection();
+              if (isFromEndModal) {
+                setIsFromEndModal(false);
+                setStep("end");
+              }
+            }}
             onSubmit={handleSubmitExtend}
             canSubmit={canSubmitExtend}
+            canGoBack={isFromEndModal}
           />
         )}
         {step === "complete" && (

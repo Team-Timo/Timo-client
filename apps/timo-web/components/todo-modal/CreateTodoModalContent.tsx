@@ -10,32 +10,24 @@ import type { CreateTodoRequest } from "@/api/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
 import { createTodoRequestSchema } from "@/api/todo/todo-schema";
-import { CreateTodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoIconField";
-import { CreateTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoMemoField";
-import { CreateTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoTaskFields";
-import { useIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-icon-field";
-import { useRepeatField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-repeat-field";
 import { useSubtaskField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
-import {
-  DEFAULT_TAG,
-  useTagField,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-tag-field";
-import { useTimeField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-time-field";
 import { useTitleField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-title-field";
-import { formatDateToIsoDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-
-export interface CreateTodoTag {
-  id: number;
-  name: string;
-}
+import { CreateTodoIconField } from "@/components/todo-modal/CreateTodoIconField";
+import { CreateTodoMemoField } from "@/components/todo-modal/CreateTodoMemoField";
+import { CreateTodoTaskFields } from "@/components/todo-modal/CreateTodoTaskFields";
+import { useIconField } from "@/hooks/todo-modal/use-icon-field";
+import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
+import { useTagField } from "@/hooks/todo-modal/use-tag-field";
+import { useTimeField } from "@/hooks/todo-modal/use-time-field";
+import { formatDateKey } from "@/utils/date/date";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   icon: null,
   title: "",
   subtasks: [],
-  date: formatDateToIsoDate(defaultDate ?? new Date()),
+  date: formatDateKey(defaultDate ?? new Date()),
   duration: "0:00",
   priority: null,
   tagId: null,
@@ -50,7 +42,7 @@ export interface CreateTodoModalContentProps {
   onClose: () => void;
   onExited: () => void;
   defaultDate?: Date;
-  onSubmit: (data: CreateTodoRequest, tag: CreateTodoTag) => void;
+  onSubmit: (data: CreateTodoRequest) => void;
 }
 
 export const CreateTodoModalContent = ({
@@ -88,9 +80,7 @@ export const CreateTodoModalContent = ({
     : undefined;
 
   const handleFormSubmit = (data: CreateTodoRequest) => {
-    const tag = tagField.selectedTagOption ?? DEFAULT_TAG;
-
-    onSubmit(data, { id: data.tagId ?? tag.id, name: tag.name });
+    onSubmit(data);
 
     reset(createDefaultValues(defaultDate));
     subtaskField.reset();
@@ -160,15 +150,14 @@ export const CreateTodoModalContent = ({
                 : t("createModal.dateLabel")
             }
             date={dateValue}
-            onDateChange={(next) =>
-              dateField.onChange(formatDateToIsoDate(next))
-            }
+            onDateChange={(next) => dateField.onChange(formatDateKey(next))}
             timeLabel={timeField.timeDisplay}
             timeOptions={timeField.timeOptions}
             time={timeField.duration}
             onTimeChange={timeField.handleDurationInputChange}
             selectedTime={timeField.selectedTime}
             onSelectTime={timeField.handleSelectTime}
+            onTimeOpen={timeField.handleTimeSelectorOpen}
             priority={priorityField.value ?? undefined}
             onSelectPriority={(level: PriorityLevel) =>
               priorityField.onChange(level)
@@ -227,6 +216,12 @@ export const CreateTodoModalContent = ({
             })}
           </p>
         }
+      />
+
+      <AnimatedToast
+        isOpen={timeField.isAiDurationErrorToastOpen}
+        onClose={timeField.closeAiDurationErrorToast}
+        message={tToast("aiDurationRecommendFailed")}
       />
     </>
   );

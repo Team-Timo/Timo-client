@@ -3,11 +3,11 @@ import { TodayTodoListContainer } from "@/app/[locale]/(main)/(with-time-sidebar
 
 export default function TodayPage() {
   return (
-    <section>
+    <div className="flex h-full flex-col">
       <TodayHeaderContainer />
-      <div className="p-4">
+      <section className="flex min-h-0 flex-1 flex-col px-20 pt-4">
         <TodayTodoListContainer />
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

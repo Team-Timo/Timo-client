@@ -20,6 +20,7 @@ export const SettingsNavContainer = () => {
   const settingsNavItems = [
     { label: tSettings("nav.account"), tab: "account" as const },
     { label: tSettings("nav.policy"), tab: "policy" as const },
+    { label: tSettings("nav.privacy"), tab: "privacy" as const },
     { label: tSettings("nav.withdrawal"), tab: "withdrawal" as const },
   ];
 

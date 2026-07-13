@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
-import { useReissue } from "@/api/generated/endpoints/auth/auth";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
@@ -13,32 +12,16 @@ interface AuthGuardProviderProps {
 
 export const AuthGuardProvider = ({ children }: AuthGuardProviderProps) => {
   const accessToken = useAuthStore((state) => state.accessToken);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const isInitialized = useAuthStore((state) => state.isInitialized);
   const router = useRouter();
-  const { mutate } = useReissue();
-  const hasChecked = useRef(false);
-  const [isReady, setIsReady] = useState(!!accessToken);
 
   useEffect(() => {
-    if (accessToken || hasChecked.current) return;
-    hasChecked.current = true;
+    if (isInitialized && !accessToken) {
+      router.replace(ROUTES.LOGIN);
+    }
+  }, [accessToken, isInitialized, router]);
 
-    mutate(undefined, {
-      onSuccess: ({ data }) => {
-        if (!data) {
-          router.replace(ROUTES.LOGIN);
-          return;
-        }
-        setAccessToken(data.accessToken);
-        setIsReady(true);
-      },
-      onError: () => {
-        router.replace(ROUTES.LOGIN);
-      },
-    });
-  }, [accessToken, mutate, router, setAccessToken]);
-
-  if (!isReady) return null;
+  if (!isInitialized || !accessToken) return null;
 
   return <>{children}</>;
 };

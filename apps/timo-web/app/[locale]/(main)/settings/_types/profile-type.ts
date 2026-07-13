@@ -6,13 +6,6 @@ export type SettingsDefaultTagKey =
   | "exercise"
   | "dailyLife";
 
-export interface SettingsProfile {
-  name: string;
-  googleEmail: string;
-  isCalendarConnected: boolean;
-  tags: string[];
-}
-
 export interface SettingsProfileFormValues {
   tags: string[];
 }

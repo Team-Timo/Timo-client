@@ -4,22 +4,21 @@ import { AddTaskButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 
-import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
-
-import { CreateTodoModalContent } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContent";
 import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-create-todo-submit";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
+import { CreateTodoModalContent } from "@/components/todo-modal/CreateTodoModalContent";
 
 export interface CreateTodoModalContainerProps {
   defaultDate?: Date;
-  onCreate: (todo: Todo) => void;
 }
 
 export const CreateTodoModalContainer = ({
   defaultDate,
-  onCreate,
 }: CreateTodoModalContainerProps) => {
   const t = useTranslations("Home");
-  const { handleSubmit } = useCreateTodoSubmit({ onCreate });
+  const tToast = useTranslations("Toast");
+  const { handleSubmit, isErrorToastOpen, closeErrorToast } =
+    useCreateTodoSubmit();
 
   const handleAddClick = () => {
     overlay.open(({ isOpen, close, unmount }) => (
@@ -33,5 +32,15 @@ export const CreateTodoModalContainer = ({
     ));
   };
 
-  return <AddTaskButton text={t("addTask")} onClick={handleAddClick} />;
+  return (
+    <>
+      <AddTaskButton text={t("addTask")} onClick={handleAddClick} />
+
+      <AnimatedToast
+        isOpen={isErrorToastOpen}
+        onClose={closeErrorToast}
+        message={tToast("todoCreateFailed")}
+      />
+    </>
+  );
 };
