@@ -96,7 +96,7 @@ export const TimerSessionControls = forwardRef<
       <TimerControls
         isRunning={isRunning}
         onTogglePlay={onTogglePlay}
-        onOpenEndModal={() => setStep(isRunning ? "stop" : "end")}
+        onOpenEndModal={() => setStep(isTimeUp ? "end" : "stop")}
         onOpenExtendModal={() => {
           resetExtendSelection();
           setIsFromEndModal(false);
