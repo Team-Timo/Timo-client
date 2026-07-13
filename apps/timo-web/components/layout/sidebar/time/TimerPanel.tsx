@@ -3,7 +3,7 @@
 import { TimerOnIcon } from "@repo/timo-design-system/icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
@@ -14,7 +14,10 @@ import {
   getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
 import { Timer } from "@/components/timer/Timer";
-import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
+import {
+  TimerSessionControls,
+  type TimerSessionControlsHandle,
+} from "@/components/timer/TimerSessionControls";
 import { useActiveTimer } from "@/hooks/use-active-timer";
 import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
@@ -24,6 +27,11 @@ export const TimerPanel = () => {
   const queryClient = useQueryClient();
   const tDuration = useTranslations("Focus.duration");
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
+  const [overtimeBaseSeconds, setOvertimeBaseSeconds] = useState<number | null>(
+    null,
+  );
+  const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
+  const wasTimeUpRef = useRef(false);
 
   const { data: activeTimer } = useActiveTimer();
 
@@ -65,6 +73,17 @@ export const TimerPanel = () => {
   const isRunning = activeTimer?.status === "RUNNING";
   const isTimeUp = activeTimer ? activeTimer.remainingSeconds <= 0 : false;
 
+  useEffect(() => {
+    if (isTimeUp && !wasTimeUpRef.current) {
+      timerSessionControlsRef.current?.openEndModal();
+    }
+    wasTimeUpRef.current = isTimeUp;
+  }, [isTimeUp]);
+
+  useEffect(() => {
+    setOvertimeBaseSeconds(null);
+  }, [activeTimer?.timerId]);
+
   const handleTogglePlay = () => {
     if (!activeTimer) return;
 
@@ -76,6 +95,12 @@ export const TimerPanel = () => {
 
   const handleExtendTimer = (minutes: number) => {
     if (!activeTimer) return;
+
+    if (isTimeUp) {
+      setOvertimeBaseSeconds(
+        activeTimer.plannedSeconds + activeTimer.extendedSeconds,
+      );
+    }
 
     extendTimer({
       timerId: activeTimer.timerId,
@@ -103,6 +128,24 @@ export const TimerPanel = () => {
     plannedSeconds > 0
       ? ((plannedSeconds - remainingSeconds) / plannedSeconds) * 100
       : 0;
+  const isOvertime = overtimeBaseSeconds !== null;
+  const overtimeTotal = activeTimer
+    ? activeTimer.plannedSeconds +
+      activeTimer.extendedSeconds -
+      (overtimeBaseSeconds ?? 0)
+    : 0;
+  const overtimeProgress =
+    activeTimer && overtimeBaseSeconds !== null && overtimeTotal > 0
+      ? Math.min(
+          100,
+          Math.max(
+            0,
+            ((activeTimer.elapsedSeconds - overtimeBaseSeconds) /
+              overtimeTotal) *
+              100,
+          ),
+        )
+      : 0;
   const plannedMinutes = convertDurationToMinutes(plannedSeconds);
   const actualMinutes = convertDurationToMinutes(
     activeTimer?.elapsedSeconds ?? 0,
@@ -119,10 +162,13 @@ export const TimerPanel = () => {
           tDuration("minuteUnit"),
         )}
         progress={progress}
+        isOvertime={isOvertime}
+        overtimeProgress={overtimeProgress}
         size="sm"
       />
 
       <TimerSessionControls
+        ref={timerSessionControlsRef}
         isRunning={isRunning}
         onTogglePlay={handleTogglePlay}
         plannedMinutes={plannedMinutes}

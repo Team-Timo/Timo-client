@@ -16,6 +16,7 @@ type TimerModalStep = "end" | "stop" | "extend" | "complete";
 
 export interface TimerSessionControlsHandle {
   openStopModal: () => void;
+  openEndModal: () => void;
 }
 
 export interface TimerSessionControlsProps {
@@ -51,12 +52,16 @@ export const TimerSessionControls = forwardRef<
   ref,
 ) {
   const [step, setStep] = useState<TimerModalStep>("end");
-  const stopModalTriggerRef = useRef<HTMLButtonElement>(null);
+  const hiddenModalTriggerRef = useRef<HTMLButtonElement>(null);
 
   useImperativeHandle(ref, () => ({
     openStopModal: () => {
       setStep("stop");
-      stopModalTriggerRef.current?.click();
+      hiddenModalTriggerRef.current?.click();
+    },
+    openEndModal: () => {
+      setStep("end");
+      hiddenModalTriggerRef.current?.click();
     },
   }));
   const [selectedPreset, setSelectedPreset] = useState<ExtendTimePreset | null>(
@@ -100,7 +105,7 @@ export const TimerSessionControls = forwardRef<
         disabled={disabled}
       />
       <Modal.Trigger
-        ref={stopModalTriggerRef}
+        ref={hiddenModalTriggerRef}
         className="hidden"
         aria-hidden="true"
         tabIndex={-1}

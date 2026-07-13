@@ -3,7 +3,7 @@
 import { TimerOnIcon } from "@repo/timo-design-system/icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
@@ -41,11 +41,15 @@ import { formatDurationLabel } from "@/utils/format-duration-label";
 export const FocusSessionContainer = () => {
   const queryClient = useQueryClient();
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
+  const wasTimeUpRef = useRef(false);
   const tWeekday = useTranslations("Common.weekday");
   const tDuration = useTranslations("Focus.duration");
   const tToast = useTranslations("Toast");
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
   const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
+  const [overtimeBaseSeconds, setOvertimeBaseSeconds] = useState<number | null>(
+    null,
+  );
 
   const { data: focusView } = useFocusTodo();
   const { data: activeTimer } = useActiveTimer();
@@ -107,6 +111,18 @@ export const FocusSessionContainer = () => {
       ? activeTimer
       : undefined;
   const isRunning = timer?.status === "RUNNING";
+  const isTimeUp = timer ? timer.remainingSeconds <= 0 : false;
+
+  useEffect(() => {
+    if (isTimeUp && !wasTimeUpRef.current) {
+      timerSessionControlsRef.current?.openEndModal();
+    }
+    wasTimeUpRef.current = isTimeUp;
+  }, [isTimeUp]);
+
+  useEffect(() => {
+    setOvertimeBaseSeconds(null);
+  }, [timer?.timerId]);
 
   const handleTogglePlay = () => {
     if (!todo) return;
@@ -124,6 +140,10 @@ export const FocusSessionContainer = () => {
 
   const handleExtendTimer = (minutes: number) => {
     if (!timer) return;
+
+    if (isTimeUp) {
+      setOvertimeBaseSeconds(timer.plannedSeconds + timer.extendedSeconds);
+    }
 
     extendTimer({ timerId: timer.timerId, data: { extendMinutes: minutes } });
   };
@@ -212,10 +232,24 @@ export const FocusSessionContainer = () => {
     ? timer.plannedSeconds + timer.extendedSeconds
     : (todo.durationSeconds ?? 0);
   const remainingSeconds = timer ? timer.remainingSeconds : plannedSeconds;
-  const isTimeUp = timer ? timer.remainingSeconds <= 0 : false;
   const progress =
     plannedSeconds > 0
       ? ((plannedSeconds - remainingSeconds) / plannedSeconds) * 100
+      : 0;
+  const isOvertime = overtimeBaseSeconds !== null;
+  const overtimeTotal = timer
+    ? timer.plannedSeconds + timer.extendedSeconds - (overtimeBaseSeconds ?? 0)
+    : 0;
+  const overtimeProgress =
+    timer && overtimeBaseSeconds !== null && overtimeTotal > 0
+      ? Math.min(
+          100,
+          Math.max(
+            0,
+            ((timer.elapsedSeconds - overtimeBaseSeconds) / overtimeTotal) *
+              100,
+          ),
+        )
       : 0;
   const plannedMinutes = convertDurationToMinutes(plannedSeconds);
   const actualMinutes = convertDurationToMinutes(timer?.elapsedSeconds ?? 0);
@@ -255,6 +289,8 @@ export const FocusSessionContainer = () => {
               tDuration("minuteUnit"),
             )}
             progress={progress}
+            isOvertime={isOvertime}
+            overtimeProgress={overtimeProgress}
             size="lg"
           />
 
