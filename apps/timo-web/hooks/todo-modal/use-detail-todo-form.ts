@@ -1,6 +1,7 @@
 import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { useController, useForm } from "react-hook-form";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
@@ -29,6 +30,21 @@ const MAX_DETAIL_SUBTASK_COUNT = 10;
 export interface DetailTodoSubtaskInput extends SubtaskInputEntry {
   subtaskId: number | null;
   completed: boolean;
+}
+
+interface DetailTodoFormValues {
+  date: Date;
+  time: string;
+  priority: PriorityLevel;
+  selectedTag: string;
+  isRepeatActive: boolean;
+  repeatFrequency: RepeatFrequency;
+  selectedWeekdayIds: string[];
+  repeatDay: string;
+  isCompleted: boolean;
+  title: string;
+  memo: string;
+  icon: TodoIconValue | null;
 }
 
 const isTodoIconValue = (icon: string | null): icon is TodoIconValue =>
@@ -67,18 +83,58 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     ? tCommon(`tag.${todo.tag.name}`)
     : todo.tag.name;
 
-  const [date, setDate] = useState(new Date(2026, 6, 1));
-  const [time, setTime] = useState(durationText);
+  const { control, handleSubmit, formState } = useForm<DetailTodoFormValues>({
+    defaultValues: {
+      date: new Date(2026, 6, 1),
+      time: durationText,
+      priority: todo.priority,
+      selectedTag: tagLabel,
+      isRepeatActive: todo.isRepeated,
+      repeatFrequency: "DAILY",
+      selectedWeekdayIds: [],
+      repeatDay: "",
+      isCompleted: todo.completed,
+      title: todo.title,
+      memo: "",
+      icon: isTodoIconValue(todo.icon) ? todo.icon : null,
+    },
+  });
+
+  const { field: dateField } = useController({ name: "date", control });
+  const { field: timeField } = useController({ name: "time", control });
+  const { field: priorityField } = useController({
+    name: "priority",
+    control,
+  });
+  const { field: selectedTagField } = useController({
+    name: "selectedTag",
+    control,
+  });
+  const { field: isRepeatActiveField } = useController({
+    name: "isRepeatActive",
+    control,
+  });
+  const { field: repeatFrequencyField } = useController({
+    name: "repeatFrequency",
+    control,
+  });
+  const { field: selectedWeekdayIdsField } = useController({
+    name: "selectedWeekdayIds",
+    control,
+  });
+  const { field: repeatDayField } = useController({
+    name: "repeatDay",
+    control,
+  });
+  const { field: isCompletedField } = useController({
+    name: "isCompleted",
+    control,
+  });
+  const { field: titleField } = useController({ name: "title", control });
+  const { field: memoField } = useController({ name: "memo", control });
+  const { field: iconField } = useController({ name: "icon", control });
+
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
-  const [priority, setPriority] = useState<PriorityLevel>(todo.priority);
-  const [selectedTag, setSelectedTag] = useState(tagLabel);
-  const [isRepeatActive, setIsRepeatActive] = useState(todo.isRepeated);
-  const [repeatFrequency, setRepeatFrequency] =
-    useState<RepeatFrequency>("DAILY");
-  const [selectedWeekdayIds, setSelectedWeekdayIds] = useState<string[]>([]);
-  const [repeatDay, setRepeatDay] = useState("");
-  const [isCompleted, setIsCompleted] = useState(todo.completed);
-  const [title, setTitle] = useState(todo.title);
 
   const nextSubtaskInputId = useRef(0);
   const createSubtaskInput = (value = ""): DetailTodoSubtaskInput => ({
@@ -101,10 +157,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   );
   const subtaskInputRefs = useRef<Array<HTMLTextAreaElement | null>>([]);
   const pendingSubtaskFocusIndex = useRef<number | null>(null);
-  const [memo, setMemo] = useState("");
-  const [icon, setIcon] = useState<TodoIconValue | null>(
-    isTodoIconValue(todo.icon) ? todo.icon : null,
-  );
   const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
 
   useEffect(() => {
@@ -123,11 +175,13 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
 
   const openIconPanel = () => setIsIconPanelOpen(true);
   const toggleIconPanel = () => setIsIconPanelOpen((prev) => !prev);
-  const selectIcon = (nextIcon: TodoIconValue) => setIcon(nextIcon);
-  const removeIcon = () => setIcon(null);
+  const selectIcon = (nextIcon: TodoIconValue) => iconField.onChange(nextIcon);
+  const removeIcon = () => iconField.onChange(null);
 
   const changeTitle = (value: string) => {
-    setTitle(truncateToWeightedLength(value, TITLE_MAX_WEIGHTED_LENGTH));
+    titleField.onChange(
+      truncateToWeightedLength(value, TITLE_MAX_WEIGHTED_LENGTH),
+    );
   };
 
   const registerSubtaskInputRef =
@@ -197,50 +251,50 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
 
     if (!option) return;
 
-    setTime(`${option.value} ${option.unit}`);
+    timeField.onChange(`${option.value} ${option.unit}`);
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {
-    setIsRepeatActive(true);
-    setRepeatFrequency(frequency);
+    isRepeatActiveField.onChange(true);
+    repeatFrequencyField.onChange(frequency);
   };
 
   const toggleWeekday = (weekdayId: string) => {
-    setSelectedWeekdayIds((prev) =>
-      prev.includes(weekdayId)
-        ? prev.filter((item) => item !== weekdayId)
-        : [...prev, weekdayId],
+    selectedWeekdayIdsField.onChange(
+      selectedWeekdayIdsField.value.includes(weekdayId)
+        ? selectedWeekdayIdsField.value.filter((item) => item !== weekdayId)
+        : [...selectedWeekdayIdsField.value, weekdayId],
     );
   };
 
   return {
-    date,
-    setDate,
-    time,
-    setTime,
+    date: dateField.value,
+    setDate: dateField.onChange,
+    time: timeField.value,
+    setTime: timeField.onChange,
     selectedTime,
-    priority,
-    setPriority,
+    priority: priorityField.value,
+    setPriority: priorityField.onChange,
     tagLabel,
-    selectedTag,
-    setSelectedTag,
-    isRepeatActive,
-    repeatFrequency,
-    selectedWeekdayIds,
-    repeatDay,
-    setRepeatDay,
-    isCompleted,
-    setIsCompleted,
-    title,
+    selectedTag: selectedTagField.value,
+    setSelectedTag: selectedTagField.onChange,
+    isRepeatActive: isRepeatActiveField.value,
+    repeatFrequency: repeatFrequencyField.value,
+    selectedWeekdayIds: selectedWeekdayIdsField.value,
+    repeatDay: repeatDayField.value,
+    setRepeatDay: repeatDayField.onChange,
+    isCompleted: isCompletedField.value,
+    setIsCompleted: isCompletedField.onChange,
+    title: titleField.value,
     changeTitle,
     subtaskInputs,
     registerSubtaskInputRef,
     changeSubtaskInput,
     changeSubtaskCompleted,
     handleSubtaskInputKeyDown,
-    memo,
-    setMemo,
-    icon,
+    memo: memoField.value,
+    setMemo: memoField.onChange,
+    icon: iconField.value,
     isIconPanelOpen,
     openIconPanel,
     toggleIconPanel,
@@ -249,5 +303,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     selectTime,
     changeRepeatFrequency,
     toggleWeekday,
+    handleSubmit,
+    dirtyFields: formState.dirtyFields,
   };
 };
