@@ -4,15 +4,15 @@ import { useLocale } from "next-intl";
 import { useState } from "react";
 
 import {
-  useGetDaily,
-  useGetSummary,
-} from "@/api/generated/endpoints/statistics/statistics";
-import {
   StatisticsSidePanel,
   type StatisticsSidePanelProps,
 } from "@/app/[locale]/(main)/statistics/_components/StatisticsSidePanel";
 import { StatisticsCalendarContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsCalendarContainer";
 import { StatisticsHeaderContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsHeaderContainer";
+import {
+  useStatisticsDailyQuery,
+  useStatisticsSummaryQuery,
+} from "@/app/[locale]/(main)/statistics/_queries/statistics-queries";
 import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/_utils/format-statistics-date";
 import { formatDateKey } from "@/utils/date";
 
@@ -24,10 +24,10 @@ export const StatisticsContainer = () => {
     useState<StatisticsSidePanelProps["variant"]>("month");
 
   const yearMonth = formatDateKey(currentMonth).slice(0, 7);
-  const summaryQuery = useGetSummary({ yearMonth });
+  const summaryQuery = useStatisticsSummaryQuery(yearMonth);
 
   const selectedDateKey = formatDateKey(selectedDate);
-  const dailyQuery = useGetDaily({ date: selectedDateKey });
+  const dailyQuery = useStatisticsDailyQuery(selectedDateKey);
   const daily = dailyQuery.data?.data;
 
   const summary = summaryQuery.data?.data ?? {

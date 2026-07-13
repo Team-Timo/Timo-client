@@ -1,7 +1,7 @@
 "use client";
 
-import { useGetCalendar } from "@/api/generated/endpoints/statistics/statistics";
 import { StatisticsCalendar } from "@/app/[locale]/(main)/statistics/_components/StatisticsCalendar";
+import { useStatisticsCalendarQuery } from "@/app/[locale]/(main)/statistics/_queries/statistics-queries";
 import { formatDateKey } from "@/utils/date";
 
 interface StatisticsCalendarContainerProps {
@@ -16,7 +16,7 @@ export const StatisticsCalendarContainer = ({
   onSelectDate,
 }: StatisticsCalendarContainerProps) => {
   const yearMonth = formatDateKey(currentMonth).slice(0, 7);
-  const calendarQuery = useGetCalendar({ yearMonth });
+  const calendarQuery = useStatisticsCalendarQuery(yearMonth);
   const calendarData = calendarQuery.data?.data;
   if (!calendarData) return null;
 
