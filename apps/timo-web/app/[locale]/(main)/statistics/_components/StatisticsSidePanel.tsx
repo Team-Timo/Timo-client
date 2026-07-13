@@ -28,7 +28,7 @@ export type StatisticsSidePanelProps =
   | StatisticsDaySidePanelProps;
 
 const SIDE_PANEL_CLASS_NAME =
-  "border-timo-gray-500 min-h-full w-[304px] shrink-0 border-l text-timo-black";
+  "border-timo-gray-500 bg-white min-h-full w-[304px] shrink-0 border-l text-timo-black";
 
 const getDiffLabel = (
   diffMinutes: number,
