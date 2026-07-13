@@ -4,15 +4,15 @@ import { useLocale } from "next-intl";
 import { useState } from "react";
 
 import {
+  useGetDaily,
+  useGetSummary,
+} from "@/api/generated/endpoints/statistics/statistics";
+import {
   StatisticsSidePanel,
   type StatisticsSidePanelProps,
 } from "@/app/[locale]/(main)/statistics/_components/StatisticsSidePanel";
 import { StatisticsCalendarContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsCalendarContainer";
 import { StatisticsHeaderContainer } from "@/app/[locale]/(main)/statistics/_containers/StatisticsHeaderContainer";
-import {
-  MOCK_STATISTICS_DAY_DETAILS,
-  MOCK_STATISTICS_MONTH_SUMMARY,
-} from "@/app/[locale]/(main)/statistics/_mocks/statistics-calendar";
 import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/_utils/format-statistics-date";
 import { formatDateKey } from "@/utils/date";
 
@@ -20,40 +20,50 @@ export const StatisticsContainer = () => {
   const locale = useLocale();
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
   const [selectedDate, setSelectedDate] = useState(() => new Date());
-  const [sidePanelProps, setSidePanelProps] =
-    useState<StatisticsSidePanelProps>({
-      variant: "month",
-      summary: MOCK_STATISTICS_MONTH_SUMMARY,
-    });
+  const [sidePanelVariant, setSidePanelVariant] =
+    useState<StatisticsSidePanelProps["variant"]>("month");
 
-  const getStatisticsDayDetail = (date: Date) => {
-    const selectedDateKey = formatDateKey(date);
-    const selectedDetailBase = MOCK_STATISTICS_DAY_DETAILS[selectedDateKey] ?? {
-      date: selectedDateKey,
-      totalRecordMinutes: 0,
-      todos: [],
-    };
+  const yearMonth = formatDateKey(currentMonth).slice(0, 7);
+  const summaryQuery = useGetSummary({ yearMonth });
 
-    return {
-      ...selectedDetailBase,
-      date: formatStatisticsSidePanelDate(date, locale),
-    };
+  const selectedDateKey = formatDateKey(selectedDate);
+  const dailyQuery = useGetDaily({ date: selectedDateKey });
+  const daily = dailyQuery.data?.data;
+
+  const summary = summaryQuery.data?.data ?? {
+    totalRecordMinutes: 0,
+    activeDayCount: 0,
+    averageRecordedMinutes: 0,
+    completedTodoCount: 0,
+    totalTodoCount: 0,
   };
+
+  const dayDetail = {
+    date: formatStatisticsSidePanelDate(selectedDate, locale),
+    totalRecordMinutes: daily?.totalRecordMinutes ?? 0,
+    todos:
+      daily?.todos.map((todo) => ({
+        todoId: todo.todoId,
+        title: todo.title,
+        actualTimeMinutes: todo.actualTimeMinutes,
+        estimatedTimeMinutes: todo.estimatedTimeMinutes ?? 0,
+        tagName: todo.tag?.name ?? "",
+      })) ?? [],
+  };
+
+  const sidePanelProps: StatisticsSidePanelProps =
+    sidePanelVariant === "month"
+      ? { variant: "month", summary }
+      : { variant: "day", detail: dayDetail };
 
   const handleChangeMonth = (updater: (prev: Date) => Date) => {
     setCurrentMonth(updater);
-    setSidePanelProps({
-      variant: "month",
-      summary: MOCK_STATISTICS_MONTH_SUMMARY,
-    });
+    setSidePanelVariant("month");
   };
 
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
-    setSidePanelProps({
-      variant: "day",
-      detail: getStatisticsDayDetail(date),
-    });
+    setSidePanelVariant("day");
   };
 
   return (
