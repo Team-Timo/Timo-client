@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
+import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
@@ -62,6 +63,9 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
 
   const invalidateHomeView = () => {
     queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+  };
+  const invalidateFocusTodo = () => {
+    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
   };
 
   const handleToggleCompleted = (
@@ -145,7 +149,10 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     reorderTodo(
       { todoId: movedTodo.todoId, data: { newIndex: toIndex, date: dateKey } },
       {
-        onSuccess: invalidateHomeView,
+        onSuccess: () => {
+          invalidateHomeView();
+          invalidateFocusTodo();
+        },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
         },
