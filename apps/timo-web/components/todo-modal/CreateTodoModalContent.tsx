@@ -19,7 +19,7 @@ import { CreateTodoMemoField } from "@/components/todo-modal/CreateTodoMemoField
 import { CreateTodoTaskFields } from "@/components/todo-modal/CreateTodoTaskFields";
 import { useIconField } from "@/hooks/todo-modal/use-icon-field";
 import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
-import { DEFAULT_TAG, useTagField } from "@/hooks/todo-modal/use-tag-field";
+import { useTagField } from "@/hooks/todo-modal/use-tag-field";
 import { useTimeField } from "@/hooks/todo-modal/use-time-field";
 import { formatDateKey } from "@/utils/date";
 
