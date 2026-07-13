@@ -1,4 +1,4 @@
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 
 /**
  * 날짜를 화면 표시용 텍스트로 변환한다. 매월 1일에는 "M.D" 형식을,

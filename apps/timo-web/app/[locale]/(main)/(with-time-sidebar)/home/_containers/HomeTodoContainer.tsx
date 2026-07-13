@@ -17,7 +17,7 @@ import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
 import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 import { isTagLabelKey } from "@/utils/todo/tag-label";
 
 export const HomeTodoContainer = () => {

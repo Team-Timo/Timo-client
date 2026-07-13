@@ -21,7 +21,7 @@ import { useSubtaskField } from "@/hooks/todo-modal/use-subtask-field";
 import { useTagField } from "@/hooks/todo-modal/use-tag-field";
 import { useTimeField } from "@/hooks/todo-modal/use-time-field";
 import { useTitleField } from "@/hooks/todo-modal/use-title-field";
-import { formatDateKey } from "@/utils/date";
+import { formatDateKey } from "@/utils/date/date";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   icon: null,

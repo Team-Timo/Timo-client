@@ -33,9 +33,9 @@ import {
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
-import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
-import { formatDurationLabel } from "@/utils/format-duration-label";
+import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
+import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
+import { formatDurationLabel } from "@/utils/duration/format-duration-label";
 
 export const FocusSessionContainer = () => {
   const queryClient = useQueryClient();

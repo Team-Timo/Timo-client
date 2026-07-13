@@ -1,6 +1,6 @@
 import type { ApiDayOfWeek } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
-import { getDayOfWeekKey } from "@/utils/get-day-of-week-key";
+import { getDayOfWeekKey } from "@/utils/date/get-day-of-week-key";
 
 /**
  * 날짜를 홈 화면 API/i18n 키 형식의 요일 값으로 변환한다.

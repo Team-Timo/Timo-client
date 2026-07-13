@@ -3,8 +3,8 @@
 import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayDateHeaderContainer";
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
-import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
-import { formatDate } from "@/utils/date";
+import { formatDate } from "@/utils/date/date";
+import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
 const PRIORITY_MAP = {
   URGENT: "VERY_HIGH",
