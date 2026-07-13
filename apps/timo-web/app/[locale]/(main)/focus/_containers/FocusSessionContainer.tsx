@@ -15,11 +15,9 @@ import { Timer } from "@/components/timer/Timer";
 import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
-import { formatDurationLabel } from "@/utils/format-duration-label";
 
 export const FocusSessionContainer = () => {
   const tWeekday = useTranslations("Common.weekday");
-  const tDuration = useTranslations("Focus.duration");
   const tToast = useTranslations("Toast");
 
   const { focusSessionState, focusSessionActions } = useFocusSession();
@@ -101,11 +99,7 @@ export const FocusSessionContainer = () => {
           <Timer
             icon={<TimerOnIcon />}
             time={convertDurationToTimeText(focusSessionState.remainingSeconds)}
-            plannedLabel={formatDurationLabel(
-              focusSessionState.plannedMinutes,
-              tDuration("hourUnit"),
-              tDuration("minuteUnit"),
-            )}
+            plannedLabel={`${focusSessionState.plannedMinutes}M`}
             progress={focusSessionState.progress}
             isOvertime={focusSessionState.isOvertime}
             overtimeProgress={focusSessionState.overtimeProgress}

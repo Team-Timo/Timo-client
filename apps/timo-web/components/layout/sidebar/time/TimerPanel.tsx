@@ -2,7 +2,6 @@
 
 import { TimerOnIcon } from "@repo/timo-design-system/icons";
 import { useQueryClient } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
@@ -22,11 +21,9 @@ import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimerOvertime } from "@/hooks/use-timer-overtime";
 import { convertDurationToMinutes } from "@/utils/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
-import { formatDurationLabel } from "@/utils/format-duration-label";
 
 export const TimerPanel = () => {
   const queryClient = useQueryClient();
-  const tDuration = useTranslations("Focus.duration");
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const wasTimeUpRef = useRef(false);
@@ -153,11 +150,7 @@ export const TimerPanel = () => {
       <Timer
         icon={activeTimer ? <TimerOnIcon /> : undefined}
         time={convertDurationToTimeText(remainingSeconds)}
-        plannedLabel={formatDurationLabel(
-          plannedMinutes,
-          tDuration("hourUnit"),
-          tDuration("minuteUnit"),
-        )}
+        plannedLabel={`${plannedMinutes}M`}
         progress={progress}
         isOvertime={isOvertime}
         overtimeProgress={overtimeProgress}
