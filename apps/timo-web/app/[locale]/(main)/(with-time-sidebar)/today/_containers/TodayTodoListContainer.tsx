@@ -52,6 +52,10 @@ export const TodayTodoListContainer = () => {
     setTodos((prev) => prev.filter((todo) => todo.todoId !== todoId));
   };
 
+  const handleAddTodo = (todo: TodoMock) => {
+    setTodos((prev) => [...prev, todo]);
+  };
+
   const handleSubTodoCheck = (todoId: number, subtaskId: number) => {
     // TODO: API
     setTodos((prev) =>
@@ -75,6 +79,7 @@ export const TodayTodoListContainer = () => {
       <TodayDateHeaderContainer
         completedCount={completedCount}
         totalCount={todos.length}
+        onCreateTodo={handleAddTodo}
       />
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 pb-4">
         {todos.map((todo) => (

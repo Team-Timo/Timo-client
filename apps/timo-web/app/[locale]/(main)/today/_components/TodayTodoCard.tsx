@@ -2,19 +2,18 @@ import {
   PlayDisabledIcon,
   PlayIcon,
   StopIcon,
+  TrashDisableIcon,
+  TrashOnIcon,
 } from "@repo/timo-design-system/icons";
 import {
   Checkbox,
   PlayButton,
-  PriorityIcon,
+  TodoToolbar,
+  type PriorityLevel,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 
-import type { ComponentProps, ReactNode } from "react";
-
-import { CreateTodoToolbar } from "@/components/CreateTodoToolbar";
-
-type PriorityTypes = ComponentProps<typeof PriorityIcon>["priority"];
+import type { ReactNode } from "react";
 
 const CARD_STYLE = {
   active: {
@@ -38,7 +37,7 @@ export interface SubTodo {
 export interface TodayTodoCardToolbar {
   date: string;
   time: string;
-  priority: PriorityTypes;
+  priority?: PriorityLevel;
   tag?: string;
   hasMemo: boolean;
   hasRepeat: boolean;
@@ -139,18 +138,32 @@ export const TodayTodoCard = ({
         </ul>
       )}
 
-      <div className="flex justify-end">
-        <CreateTodoToolbar
-          date={toolbar.date}
-          time={toolbar.time}
+      <div className="flex items-center justify-end gap-2">
+        <TodoToolbar
+          dateLabel={toolbar.date}
+          timeLabel={toolbar.time}
+          timeOptions={[]}
           priority={toolbar.priority}
-          tag={toolbar.tag}
+          tagLabel={toolbar.tag ?? "태그"}
+          tags={[]}
+          selectedTag={toolbar.tag}
           hasMemo={toolbar.hasMemo}
-          hasRepeat={toolbar.hasRepeat}
-          hasDelete
-          isDimmed={isDimmed}
-          onDeleteClick={onDelete}
+          isRepeatActive={toolbar.hasRepeat}
+          repeat={{
+            detailHeading: "상세 설정",
+            options: [
+              { frequency: "DAILY", label: "매일" },
+              { frequency: "WEEKLY", label: "매주" },
+              { frequency: "MONTHLY", label: "매월" },
+            ],
+            frequency: "DAILY",
+            weekly: { weekdays: [], selectedWeekdayIds: [] },
+            monthly: { repeatDayLabel: "일", repeatDay: "1" },
+          }}
         />
+        <button type="button" onClick={onDelete} aria-label="삭제">
+          {isDimmed ? <TrashDisableIcon /> : <TrashOnIcon />}
+        </button>
       </div>
     </div>
   );

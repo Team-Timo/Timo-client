@@ -1,25 +1,26 @@
 "use client";
 
-import { AddTaskButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 
+import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+
 import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_components/DateInformation";
-import {
-  convertDateToDateText,
-  getToday,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
+import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
+import { CreateTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/todo-modal/CreateTodoModalContainer";
+import { getToday } from "@/utils/date";
 import { getDayOfWeekKey } from "@/utils/get-day-of-week-key";
 
 interface TodayDateHeaderContainerProps {
   completedCount: number;
   totalCount: number;
+  onCreateTodo: (todo: TodoMock) => void;
 }
 
 export const TodayDateHeaderContainer = ({
   completedCount,
   totalCount,
+  onCreateTodo,
 }: TodayDateHeaderContainerProps) => {
-  const tHome = useTranslations("Home");
   const tCommon = useTranslations("Common");
 
   const today = getToday();
@@ -37,7 +38,7 @@ export const TodayDateHeaderContainer = ({
         totalCount={totalCount}
         completedCount={completedCount}
       />
-      <AddTaskButton variant="big" text={tHome("addTask")} />
+      <CreateTodoModalContainer defaultDate={today} onCreate={onCreateTodo} />
     </div>
   );
 };
