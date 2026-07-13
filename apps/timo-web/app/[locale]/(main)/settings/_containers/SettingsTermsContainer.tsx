@@ -2,12 +2,20 @@
 
 import { useTranslations } from "next-intl";
 
+import type { TermsType } from "@/types/terms-type";
+
 import { PolicyDocument } from "@/components/policy/PolicyDocument";
 import { useTerms } from "@/queries/use-terms";
 
-export const SettingsPolicyContainer = () => {
+export interface SettingsTermsContainerProps {
+  type: TermsType;
+}
+
+export const SettingsTermsContainer = ({
+  type,
+}: SettingsTermsContainerProps) => {
   const t = useTranslations("Policy");
-  const { data: terms } = useTerms("SERVICE");
+  const { data: terms } = useTerms(type);
   const term = terms[0];
 
   return (

@@ -1,15 +1,11 @@
 import timoTextLogo from "@repo/timo-design-system/assets/images/logo/timo-text-logo.svg";
 import Image from "next/image";
 
-import type { TermsType } from "@/types/terms-type";
-
 import { PolicyContainer } from "@/app/[locale]/policy/_containers/PolicyContainer";
 import { AsyncBoundary } from "@/components/boundary/AsyncBoundary";
 import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
-
-const isTermsType = (value: string | undefined): value is TermsType =>
-  value === "SERVICE" || value === "PRIVACY";
+import { termsTypeSchema } from "@/types/terms-type";
 
 interface PolicyPageProps {
   searchParams: Promise<{ type?: string }>;
@@ -17,6 +13,7 @@ interface PolicyPageProps {
 
 export default async function PolicyPage({ searchParams }: PolicyPageProps) {
   const { type } = await searchParams;
+  const parsedType = termsTypeSchema.safeParse(type);
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center gap-12.5 bg-white">
@@ -28,7 +25,9 @@ export default async function PolicyPage({ searchParams }: PolicyPageProps) {
 
       <div className="flex w-full justify-center px-8 pb-20">
         <AsyncBoundary>
-          <PolicyContainer type={isTermsType(type) ? type : "SERVICE"} />
+          <PolicyContainer
+            type={parsedType.success ? parsedType.data : "SERVICE"}
+          />
         </AsyncBoundary>
       </div>
     </div>
