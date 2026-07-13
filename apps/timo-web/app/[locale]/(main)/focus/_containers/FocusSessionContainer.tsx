@@ -235,7 +235,7 @@ export const FocusSessionContainer = () => {
           title={todo.title}
           completed={todo.completed}
           dateText={dateText}
-          durationText={convertDurationToTimeText(todo.durationSeconds ?? 0)}
+          durationText={convertDurationToTimeText(plannedSeconds)}
           isRunning={isRunning}
           subtasks={todo.subtasks}
           onToggleCompleted={handleToggleCompleted}
