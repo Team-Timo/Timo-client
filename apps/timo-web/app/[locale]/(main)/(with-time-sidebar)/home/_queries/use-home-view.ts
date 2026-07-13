@@ -15,4 +15,5 @@ export const useHomeView = ({ filter, baseDate }: GetHomeViewParams) =>
     queryKey: getGetHomeQueryKey({ filter, baseDate }),
     queryFn: ({ signal }) => getHome({ filter, baseDate }, undefined, signal),
     select: ({ data }) => homeViewDataSchema.parse(data),
+    staleTime: 0,
   });
