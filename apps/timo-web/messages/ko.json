@@ -114,7 +114,8 @@
     "todoCreateFailed": "투두 생성에 실패했어요. 다시 시도해 주세요.",
     "aiDurationRecommendFailed": "AI 추천 소요 시간을 가져오지 못했어요. 다시 시도해 주세요.",
     "tagCreateFailed": "태그 생성에 실패했어요. 다시 시도해 주세요.",
-    "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요."
+    "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요.",
+    "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요."
   },
   "Login": {
     "animationLabel": "로그인 애니메이션",
@@ -203,8 +204,9 @@
       "title": "지금 멈출까요?",
       "description": "지금까지 수행한 <blue>{minutes}</blue>이 타임박스에 기록됩니다.",
       "continueButton": "계속 진행",
-      "switchButton": "전환하기"
+      "switchButton": "완료하기"
     },
+
     "completeModal": {
       "title": "태스크가 완료되었어요!",
       "defaultFeedback": "이번 작업을 완료했어요. 수고하셨어요!",
@@ -226,6 +228,8 @@
     "duration": {
       "hourUnit": "시간",
       "minuteUnit": "분"
-    }
+    },
+    "empty": "지금은 집중할 투두가 없어요",
+    "emptyPlayDisabled": "재생 불가"
   }
 }

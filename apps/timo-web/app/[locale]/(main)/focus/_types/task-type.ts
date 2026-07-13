@@ -1,16 +1,25 @@
-export interface FocusTaskSubtask {
-  subtaskId: number;
-  content: string;
-  completed: boolean;
-}
+import { z } from "zod";
 
-export interface FocusTask {
-  taskId: number;
-  title: string;
-  completed: boolean;
-  scheduledDate: Date;
-  durationSeconds: number;
-  isRunning: boolean;
-  subtasks: FocusTaskSubtask[];
-  memo?: string;
-}
+export const focusTaskSubtaskSchema = z.object({
+  subtaskId: z.number(),
+  content: z.string(),
+  completed: z.boolean(),
+});
+
+export const focusTaskSchema = z.object({
+  todoId: z.number(),
+  title: z.string(),
+  completed: z.boolean(),
+  durationSeconds: z.number().optional(),
+  subtasks: z.array(focusTaskSubtaskSchema),
+});
+
+export const focusViewSchema = z.object({
+  date: z.iso.date(),
+  hasTodo: z.boolean(),
+  todo: focusTaskSchema.nullish(),
+});
+
+export type FocusTaskSubtask = z.infer<typeof focusTaskSubtaskSchema>;
+export type FocusTask = z.infer<typeof focusTaskSchema>;
+export type FocusView = z.infer<typeof focusViewSchema>;
