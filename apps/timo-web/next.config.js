@@ -2,14 +2,15 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import createNextIntlPlugin from "next-intl/plugin";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-if (!apiBaseUrl)
-  throw new Error("NEXT_PUBLIC_API_BASE_URL이 설정되지 않았습니다.");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["@repo/timo-design-system"],
   async rewrites() {
+    // next typegen 등 빌드 외 명령도 next.config.js를 로드하므로,
+    // env 체크는 rewrites()가 실제로 호출될 때(빌드/서버 시작)까지 미룬다.
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!apiBaseUrl)
+      throw new Error("NEXT_PUBLIC_API_BASE_URL이 설정되지 않았습니다.");
     return [
       {
         source: "/api/:path*",
