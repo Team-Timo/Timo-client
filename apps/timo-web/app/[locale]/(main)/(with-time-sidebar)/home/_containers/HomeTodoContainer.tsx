@@ -45,7 +45,6 @@ export const HomeTodoContainer = () => {
 
   const {
     todosByDate,
-    handleAddTodo,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
@@ -87,7 +86,6 @@ export const HomeTodoContainer = () => {
               isToday={day.isToday}
               totalCount={todos.length}
               completedCount={completedCount}
-              onCreateTodo={(todo) => handleAddTodo(dateKey, todo)}
             />
 
             <DndSortableListProvider
