@@ -4,5 +4,4 @@ export const settingsProfileMock: SettingsProfile = {
   name: "김도연",
   googleEmail: "timogoogle@gmail.com",
   isCalendarConnected: false,
-  tags: ["assignment", "work", "exercise", "dailyLife", "안녕"],
 };

@@ -1,11 +1,20 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { SettingsProfileForm } from "@/app/[locale]/(main)/settings/_components/SettingsProfileForm";
 import { useSettingsProfile } from "@/app/[locale]/(main)/settings/_hooks/useSettingsProfile";
 import { useSettingsProfileLabels } from "@/app/[locale]/(main)/settings/_hooks/useSettingsProfileLabels";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
 export const SettingsProfileContainer = () => {
-  const { profileState, profileActions } = useSettingsProfile();
+  const tToast = useTranslations("Toast");
+  const {
+    profileState,
+    profileActions,
+    isTagErrorToastOpen,
+    closeTagErrorToast,
+  } = useSettingsProfile();
   const labels = useSettingsProfileLabels();
 
   return (
@@ -24,6 +33,12 @@ export const SettingsProfileContainer = () => {
         onRemoveTag={profileActions.onRemoveTag}
         onLogout={profileActions.onLogout}
         onSave={profileActions.onSave}
+      />
+
+      <AnimatedToast
+        isOpen={isTagErrorToastOpen}
+        onClose={closeTagErrorToast}
+        message={tToast("tagActionFailed")}
       />
     </div>
   );

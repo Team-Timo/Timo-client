@@ -1,24 +1,13 @@
 export type SettingsLanguage = "ko" | "en";
 
-export type SettingsDefaultTagKey =
-  | "assignment"
-  | "work"
-  | "exercise"
-  | "dailyLife";
-
 export interface SettingsProfile {
   name: string;
   googleEmail: string;
   isCalendarConnected: boolean;
-  tags: string[];
-}
-
-export interface SettingsProfileFormValues {
-  tags: string[];
 }
 
 export interface SettingsTagItem {
-  id: string;
+  id: number;
   label: string;
   isDefault: boolean;
 }

@@ -1,27 +1,26 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { overlay } from "overlay-kit";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 
-import type {
-  SettingsDefaultTagKey,
-  SettingsProfile,
-  SettingsProfileFormValues,
-} from "@/app/[locale]/(main)/settings/_types/profile-type";
+import type { SettingsProfile } from "@/app/[locale]/(main)/settings/_types/profile-type";
 
+import { tagCreateDataSchema } from "@/api/tag/tag-schema";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
 import { settingsProfileMock } from "@/app/[locale]/(main)/settings/_mocks/profile-mock";
+import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
+import { useCreateTag } from "@/queries/tag/use-create-tag";
+import { useDeleteTag } from "@/queries/tag/use-delete-tag";
+import { useTags } from "@/queries/tag/use-tags";
 
-const DEFAULT_TAG_KEYS: SettingsDefaultTagKey[] = [
-  "assignment",
+const DEFAULT_TAG_NAME_KEYS = [
+  "dailyLife",
   "work",
   "exercise",
-  "dailyLife",
-];
-
-const isDefaultTagKey = (tag: string): tag is SettingsDefaultTagKey =>
-  DEFAULT_TAG_KEYS.includes(tag as SettingsDefaultTagKey);
+  "assignment",
+  "additional",
+] as const;
 
 export const useSettingsProfile = () => {
   const tCommon = useTranslations("Common");
@@ -29,22 +28,22 @@ export const useSettingsProfile = () => {
     useSettingsLanguageParam();
 
   const [profile, setProfile] = useState<SettingsProfile>(settingsProfileMock);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isTagErrorToastOpen, setIsTagErrorToastOpen] = useState(false);
 
-  const { watch, setValue, handleSubmit, reset, formState } =
-    useForm<SettingsProfileFormValues>({
-      defaultValues: { tags: profile.tags },
-    });
-  const tags = watch("tags");
+  const tagsQuery = useTags();
+  const { mutate: createTag } = useCreateTag();
+  const { mutate: deleteTag } = useDeleteTag();
 
-  const tagItems = tags.map((tag) => {
-    const isDefault = isDefaultTagKey(tag);
+  const defaultTagLabels = new Set(
+    DEFAULT_TAG_NAME_KEYS.map((key) => tCommon(`tag.${key}`)),
+  );
 
-    return {
-      id: tag,
-      label: isDefault ? tCommon(`tag.${tag}`) : tag,
-      isDefault,
-    };
-  });
+  const tagItems = (tagsQuery.data?.tags ?? []).map((tag) => ({
+    id: tag.tagId,
+    label: tag.name,
+    isDefault: defaultTagLabels.has(tag.name),
+  }));
 
   const handleConnectCalendar = () => {
     if (profile.isCalendarConnected) {
@@ -64,19 +63,44 @@ export const useSettingsProfile = () => {
   };
 
   const handleAddTag = () => {
-    // TODO: 실제 태그 추가 모달로 교체
-    const newTag = window.prompt("추가할 태그를 입력해주세요")?.trim();
-    if (!newTag || tags.includes(newTag)) return;
+    const existingLabels = tagItems.map((tag) => tag.label);
 
-    setValue("tags", [...tags, newTag], { shouldDirty: true });
+    overlay.open(({ isOpen, close, unmount }) => (
+      <CreateTagModalContainer
+        isOpen={isOpen}
+        onClose={close}
+        onExited={unmount}
+        existingLabels={existingLabels}
+        onCreate={(label: string) => {
+          createTag(
+            { name: label },
+            {
+              onSuccess: (response) => {
+                const parsed = tagCreateDataSchema.safeParse(response.data);
+
+                if (!parsed.success) {
+                  setIsTagErrorToastOpen(true);
+                  return;
+                }
+
+                close();
+              },
+              onError: () => {
+                setIsTagErrorToastOpen(true);
+              },
+            },
+          );
+        }}
+      />
+    ));
   };
 
-  const handleRemoveTag = (tag: string) => {
-    setValue(
-      "tags",
-      tags.filter((existingTag) => existingTag !== tag),
-      { shouldDirty: true },
-    );
+  const handleRemoveTag = (tagId: number) => {
+    deleteTag(tagId, {
+      onError: () => {
+        setIsTagErrorToastOpen(true);
+      },
+    });
   };
 
   const handleLogout = () => {
@@ -86,19 +110,23 @@ export const useSettingsProfile = () => {
     console.log("[Login] 페이지로 이동합니다.");
   };
 
-  const handleSave = handleSubmit(async (values) => {
+  const isLanguageDirty = language !== locale;
+
+  const handleSave = async () => {
+    if (!isLanguageDirty) return;
+
+    setIsSaving(true);
     try {
       // TODO: API 연동
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      reset(values);
       commitLanguage();
     } catch {
       // TODO: 실제 토스트 컴포넌트로 교체
       window.alert("저장에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setIsSaving(false);
     }
-  });
-
-  const isLanguageDirty = language !== locale;
+  };
 
   return {
     profileState: {
@@ -107,8 +135,7 @@ export const useSettingsProfile = () => {
       isCalendarConnected: profile.isCalendarConnected,
       language,
       tags: tagItems,
-      isSaveDisabled:
-        (!formState.isDirty && !isLanguageDirty) || formState.isSubmitting,
+      isSaveDisabled: !isLanguageDirty || isSaving,
     },
     profileActions: {
       onConnectCalendar: handleConnectCalendar,
@@ -118,5 +145,7 @@ export const useSettingsProfile = () => {
       onLogout: handleLogout,
       onSave: handleSave,
     },
+    isTagErrorToastOpen,
+    closeTagErrorToast: () => setIsTagErrorToastOpen(false),
   };
 };

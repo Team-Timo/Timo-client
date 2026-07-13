@@ -24,7 +24,7 @@ export interface SettingsProfileFormProps {
   onConnectCalendar: () => void;
   onChangeLanguage: (language: SettingsLanguage) => void;
   onAddTag: () => void;
-  onRemoveTag: (tag: string) => void;
+  onRemoveTag: (tagId: number) => void;
   onLogout: () => void;
   onSave: () => void;
 }
