@@ -154,7 +154,10 @@ export const TimerSessionControls = forwardRef<
             plannedMinutes={plannedMinutes}
             actualMinutes={actualMinutes}
             feedbackText={feedbackText}
-            onComplete={isTimeUp ? onComplete : onStop}
+            onComplete={() => {
+              if (isTimeUp) onComplete();
+              onStop();
+            }}
           />
         )}
       </Modal.Panel>

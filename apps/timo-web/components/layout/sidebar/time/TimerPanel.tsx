@@ -12,6 +12,7 @@ import {
   useStopTimer,
   getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
+import { useChangeTodoStatus } from "@/api/generated/endpoints/todo/todo";
 import { Timer } from "@/components/timer/Timer";
 import {
   TimerSessionControls,
@@ -19,6 +20,7 @@ import {
 } from "@/components/timer/TimerSessionControls";
 import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimerOvertime } from "@/hooks/use-timer-overtime";
+import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
@@ -63,6 +65,9 @@ export const TimerPanel = () => {
         invalidateHomeView();
       },
     },
+  });
+  const { mutate: changeTodoStatus } = useChangeTodoStatus({
+    mutation: { onSuccess: invalidateHomeView },
   });
 
   const isRunning = activeTimer?.status === "RUNNING";
@@ -124,6 +129,10 @@ export const TimerPanel = () => {
     if (!activeTimer) return;
 
     stopTimer({ timerId: activeTimer.timerId });
+    changeTodoStatus({
+      todoId: activeTimer.todoId,
+      data: { isCompleted: true, date: formatDateKey(new Date()) },
+    });
   };
 
   const plannedSeconds = activeTimer

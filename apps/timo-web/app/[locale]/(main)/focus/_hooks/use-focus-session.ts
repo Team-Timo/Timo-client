@@ -155,9 +155,13 @@ export const useFocusSession = () => {
   };
 
   const handleStopTimer = () => {
-    if (!timer) return;
+    if (!timer || !todo) return;
 
     stopTimer({ timerId: timer.timerId });
+    changeTodoStatus({
+      todoId: todo.todoId,
+      data: { isCompleted: true, date: focusView.date },
+    });
   };
 
   const handleToggleCompleted = (completed: boolean) => {
