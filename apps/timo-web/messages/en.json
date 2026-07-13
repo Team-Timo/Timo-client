@@ -112,7 +112,8 @@
     "todoLimitLine2": "To add a new to-do, please complete an existing one.",
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
     "todoCreateFailed": "Failed to create the to-do. Please try again.",
-    "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again."
+    "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again.",
+    "focusActionFailed": "Failed to process the request. Please try again."
   },
   "Login": {
     "animationLabel": "Login animation",
@@ -227,6 +228,8 @@
     "duration": {
       "hourUnit": "h",
       "minuteUnit": "m"
-    }
+    },
+    "empty": "No to-dos to focus on right now",
+    "emptyPlayDisabled": "Play unavailable"
   }
 }
