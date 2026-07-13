@@ -24,6 +24,8 @@ export interface TimerSessionControlsProps {
   plannedMinutes: number;
   actualMinutes: number;
   feedbackText?: string;
+  /** 계획된 시간이 모두 경과했는지 — true면 완료(complete)로, false면 조기 종료(stop)로 처리한다 */
+  isTimeUp: boolean;
   onExtend: (minutes: number) => void;
   onComplete: () => void;
   onStop: () => void;
@@ -40,6 +42,7 @@ export const TimerSessionControls = forwardRef<
     plannedMinutes,
     actualMinutes,
     feedbackText,
+    isTimeUp,
     onExtend,
     onComplete,
     onStop,
@@ -48,7 +51,6 @@ export const TimerSessionControls = forwardRef<
   ref,
 ) {
   const [step, setStep] = useState<TimerModalStep>("end");
-  const [completeOrigin, setCompleteOrigin] = useState<"end" | "stop">("end");
   const stopModalTriggerRef = useRef<HTMLButtonElement>(null);
 
   useImperativeHandle(ref, () => ({
@@ -112,19 +114,13 @@ export const TimerSessionControls = forwardRef<
               setIsFromEndModal(true);
               setStep("extend");
             }}
-            onComplete={() => {
-              setCompleteOrigin("end");
-              setStep("complete");
-            }}
+            onComplete={() => setStep("complete")}
           />
         )}
         {step === "stop" && (
           <TimerStopModalPanel
             minutes={actualMinutes}
-            onSwitch={() => {
-              setCompleteOrigin("stop");
-              setStep("complete");
-            }}
+            onSwitch={() => setStep("complete")}
           />
         )}
         {step === "extend" && (
@@ -153,7 +149,7 @@ export const TimerSessionControls = forwardRef<
             plannedMinutes={plannedMinutes}
             actualMinutes={actualMinutes}
             feedbackText={feedbackText}
-            onComplete={completeOrigin === "stop" ? onStop : onComplete}
+            onComplete={isTimeUp ? onComplete : onStop}
           />
         )}
       </Modal.Panel>

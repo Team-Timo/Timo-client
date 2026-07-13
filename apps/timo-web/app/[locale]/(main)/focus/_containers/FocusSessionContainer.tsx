@@ -143,7 +143,7 @@ export const FocusSessionContainer = () => {
   const handleToggleCompleted = (completed: boolean) => {
     if (!todo) return;
 
-    if (completed && isRunning) {
+    if (completed && timer) {
       timerSessionControlsRef.current?.openStopModal();
       return;
     }
@@ -196,6 +196,7 @@ export const FocusSessionContainer = () => {
               onTogglePlay={() => {}}
               plannedMinutes={0}
               actualMinutes={0}
+              isTimeUp={false}
               onExtend={() => {}}
               onComplete={() => {}}
               onStop={() => {}}
@@ -211,6 +212,7 @@ export const FocusSessionContainer = () => {
     ? timer.plannedSeconds + timer.extendedSeconds
     : (todo.durationSeconds ?? 0);
   const remainingSeconds = timer ? timer.remainingSeconds : plannedSeconds;
+  const isTimeUp = timer ? timer.remainingSeconds <= 0 : false;
   const progress =
     plannedSeconds > 0
       ? ((plannedSeconds - remainingSeconds) / plannedSeconds) * 100
@@ -263,6 +265,7 @@ export const FocusSessionContainer = () => {
             plannedMinutes={plannedMinutes}
             actualMinutes={actualMinutes}
             feedbackText={feedbackText}
+            isTimeUp={isTimeUp}
             onExtend={handleExtendTimer}
             onComplete={handleCompleteTimer}
             onStop={handleStopTimer}
