@@ -9,37 +9,13 @@ interface AuthState {
   setOnboardingCompleted: (completed: boolean) => void;
 }
 
-const SESSION_TOKEN_KEY = "auth-token";
-
-export const getStoredAccessToken = (): string | null => {
-  try {
-    return sessionStorage.getItem(SESSION_TOKEN_KEY);
-  } catch {
-    return null;
-  }
-};
-
 export const useAuthStore = create<AuthState>()(
   persist(
     (set): AuthState => ({
       accessToken: null,
       onboardingCompleted: false,
-      setAccessToken: (token) => {
-        try {
-          sessionStorage.setItem(SESSION_TOKEN_KEY, token);
-        } catch {
-          /* sessionStorage unavailable, ignore */
-        }
-        set({ accessToken: token });
-      },
-      clearAccessToken: () => {
-        try {
-          sessionStorage.removeItem(SESSION_TOKEN_KEY);
-        } catch {
-          /* sessionStorage unavailable, ignore */
-        }
-        set({ accessToken: null });
-      },
+      setAccessToken: (token) => set({ accessToken: token }),
+      clearAccessToken: () => set({ accessToken: null }),
       setOnboardingCompleted: (completed) =>
         set({ onboardingCompleted: completed }),
     }),
