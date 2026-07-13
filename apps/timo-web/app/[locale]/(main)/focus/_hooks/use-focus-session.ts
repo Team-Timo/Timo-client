@@ -111,8 +111,13 @@ export const useFocusSession = () => {
   useEffect(() => {
     if (isTimeUp && !wasTimeUpRef.current) {
       timerSessionControlsRef.current?.openEndModal();
+      if (timer && isRunning) {
+        changeStatus({ timerId: timer.timerId, data: { action: "PAUSE" } });
+      }
     }
     wasTimeUpRef.current = isTimeUp;
+    // isTimeUp이 처음 true가 되는 전환 시점에만 실행되어야 하므로 다른 값은 의도적으로 의존성에서 제외한다
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTimeUp]);
 
   const handleTogglePlay = () => {
@@ -137,6 +142,7 @@ export const useFocusSession = () => {
         timer.timerId,
         timer.plannedSeconds + timer.extendedSeconds,
       );
+      changeStatus({ timerId: timer.timerId, data: { action: "RESUME" } });
     }
 
     extendTimer({ timerId: timer.timerId, data: { extendMinutes: minutes } });
