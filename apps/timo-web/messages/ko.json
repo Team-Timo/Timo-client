@@ -29,7 +29,8 @@
       "medium": "보통",
       "low": "낮음"
     },
-    "close": "닫기"
+    "close": "닫기",
+    "delete": "삭제"
   },
   "Home": {
     "today": "오늘",

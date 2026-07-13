@@ -17,7 +17,7 @@ export interface TodayTodoCardContainerProps {
   toolbar: TodayTodoCardToolbar;
   timerStatus: "RUNNING" | "PAUSED" | "STOPPED";
   icon?: ReactNode;
-  onIconClick?: () => void;
+  onCardClick?: () => void;
   onCheck?: () => void;
   onPlay?: () => void;
   onDelete?: () => void;
@@ -28,10 +28,10 @@ export const TodayTodoCardContainer = ({
   title,
   isDone: initialIsDone,
   icon,
-  onIconClick,
   subTodos: initialSubTodos,
   toolbar,
   timerStatus,
+  onCardClick,
   onCheck,
   onPlay,
   onDelete,
@@ -76,9 +76,9 @@ export const TodayTodoCardContainer = ({
       isDimmed={isDimmed}
       isPlaying={isPlaying}
       icon={icon}
-      onIconClick={onIconClick}
       subTodos={subTodos}
       toolbar={toolbar}
+      onCardClick={onCardClick}
       onCheck={handleCheck}
       onPlay={handlePlay}
       onDelete={onDelete ?? (() => {})}

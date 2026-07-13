@@ -29,7 +29,8 @@
       "medium": "Average",
       "low": "Low"
     },
-    "close": "Close"
+    "close": "Close",
+    "delete": "Delete"
   },
   "Home": {
     "today": "Today",
