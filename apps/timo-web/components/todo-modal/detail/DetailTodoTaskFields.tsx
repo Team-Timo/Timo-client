@@ -81,7 +81,7 @@ export const DetailTodoTaskFields = ({
       </div>
 
       {subtaskInputs.length > 0 && (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-2">
           {subtaskInputs.map((subtask, index) => (
             <div key={subtask.id} className="flex items-center gap-2">
               <Checkbox
