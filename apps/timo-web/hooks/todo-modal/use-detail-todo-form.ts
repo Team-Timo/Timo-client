@@ -17,6 +17,7 @@ import {
   addSubtaskInputOnEnter,
   removeSubtaskInputOnBackspace,
 } from "@/utils/todo/subtask-input-list";
+import { isTagLabelKey } from "@/utils/todo/tag-label";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
@@ -29,19 +30,6 @@ export interface DetailTodoSubtaskInput extends SubtaskInputEntry {
   subtaskId: number | null;
   completed: boolean;
 }
-
-const TAG_LABEL_KEYS = [
-  "dailyLife",
-  "work",
-  "exercise",
-  "assignment",
-  "additional",
-] as const;
-
-type TagLabelKey = (typeof TAG_LABEL_KEYS)[number];
-
-const isTagLabelKey = (value: string): value is TagLabelKey =>
-  (TAG_LABEL_KEYS as readonly string[]).includes(value);
 
 const isTodoIconValue = (icon: string | null): icon is TodoIconValue =>
   icon !== null && (TODO_ICON_VALUES as readonly string[]).includes(icon);

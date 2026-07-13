@@ -16,19 +16,7 @@ import { reorderDaysTodayFirst } from "@/app/[locale]/(main)/(with-time-sidebar)
 import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date";
-
-const TAG_LABEL_KEYS = [
-  "dailyLife",
-  "work",
-  "exercise",
-  "assignment",
-  "additional",
-] as const;
-
-type TagLabelKey = (typeof TAG_LABEL_KEYS)[number];
-
-const isTagLabelKey = (value: string): value is TagLabelKey =>
-  (TAG_LABEL_KEYS as readonly string[]).includes(value);
+import { isTagLabelKey } from "@/utils/todo/tag-label";
 
 export const HomeTodoContainer = () => {
   const tCommon = useTranslations("Common");
