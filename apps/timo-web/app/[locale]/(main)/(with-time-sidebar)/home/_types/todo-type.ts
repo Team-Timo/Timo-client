@@ -21,7 +21,10 @@ export const todoSubtaskSchema = z.object({
 
 export const todoSchema = z.object({
   todoId: z.number(),
-  icon: z.string().optional(),
+  icon: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
   title: z.string(),
   completed: z.boolean(),
   durationSeconds: z.number().default(0),
