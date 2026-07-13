@@ -1,8 +1,12 @@
 import type { CreateTodoRequest } from "@/api/todo/todo-schema";
-import type { CreateTodoTag } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContent";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
 import { convertApiDurationToSeconds } from "@/utils/todo/todo-time";
+
+export interface CreateTodoTag {
+  id: number;
+  name: string;
+}
 
 // 목데이터: 실제 API 호출 없이 로컬 상태에만 즉시 반영한다.
 const buildTodoFromRequest = (

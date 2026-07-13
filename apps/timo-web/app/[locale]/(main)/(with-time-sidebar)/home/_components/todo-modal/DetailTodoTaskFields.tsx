@@ -5,8 +5,8 @@ import {
 } from "@repo/timo-design-system/icons";
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 
-import type { DetailTodoSubtaskInput } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-detail-todo-form";
 import type { TodoTimerStatusTypes } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { DetailTodoSubtaskInput } from "@/hooks/todo-modal/use-detail-todo-form";
 import type { KeyboardEvent } from "react";
 
 const resizeTextarea = (element: HTMLTextAreaElement | null) => {

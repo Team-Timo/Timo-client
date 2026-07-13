@@ -7,7 +7,7 @@ import { overlay } from "overlay-kit";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
 import { CreateTodoModalContent } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContent";
-import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-create-todo-submit";
+import { useCreateTodoSubmit } from "@/hooks/todo-modal/use-create-todo-submit";
 
 export interface CreateTodoModalContainerProps {
   defaultDate?: Date;

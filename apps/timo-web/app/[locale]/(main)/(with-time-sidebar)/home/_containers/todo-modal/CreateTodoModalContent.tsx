@@ -7,29 +7,22 @@ import { useTranslations } from "next-intl";
 import { useController, useForm } from "react-hook-form";
 
 import type { CreateTodoRequest } from "@/api/todo/todo-schema";
+import type { CreateTodoTag } from "@/hooks/todo-modal/use-create-todo-submit";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
 import { createTodoRequestSchema } from "@/api/todo/todo-schema";
 import { CreateTodoMemoField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoMemoField";
 import { CreateTodoTaskFields } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/CreateTodoTaskFields";
 import { TodoIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-modal/TodoIconField";
-import { useIconField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-icon-field";
-import { useRepeatField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-repeat-field";
-import { useSubtaskField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
-import {
-  DEFAULT_TAG,
-  useTagField,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-tag-field";
-import { useTimeField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-time-field";
-import { useTitleField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-title-field";
 import { formatDateToIsoDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-
-export interface CreateTodoTag {
-  id: number;
-  name: string;
-}
+import { useIconField } from "@/hooks/todo-modal/use-icon-field";
+import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
+import { useSubtaskField } from "@/hooks/todo-modal/use-subtask-field";
+import { DEFAULT_TAG, useTagField } from "@/hooks/todo-modal/use-tag-field";
+import { useTimeField } from "@/hooks/todo-modal/use-time-field";
+import { useTitleField } from "@/hooks/todo-modal/use-title-field";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   icon: null,
