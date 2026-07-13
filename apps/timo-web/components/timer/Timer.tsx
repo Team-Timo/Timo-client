@@ -1,6 +1,12 @@
+"use client";
+
 import { cn } from "@repo/timo-design-system/utils";
+import { useRef } from "react";
 
 import type { ReactNode } from "react";
+
+/** 이 값보다 렌더링 간격이 벌어지면(화면 전환, 오버타임 전환 등) 스냅으로 처리하고, 그 이하는 매초 틱으로 보고 부드럽게 이어그린다 */
+const JUMP_GAP_MS = 1500;
 
 export type TimerSize = "sm" | "lg";
 export type IconType = ReactNode;
@@ -54,6 +60,13 @@ export const Timer = ({
   const clampedProgress = Math.min(100, Math.max(0, sweepProgress));
   const dashOffset = circumference * (1 - clampedProgress / 100);
 
+  const prevRenderRef = useRef({ time: Date.now(), isOvertime });
+  const now = Date.now();
+  const isJump =
+    prevRenderRef.current.isOvertime !== isOvertime ||
+    now - prevRenderRef.current.time > JUMP_GAP_MS;
+  prevRenderRef.current = { time: now, isOvertime };
+
   return (
     <div
       className="relative flex items-center justify-center"
@@ -82,7 +95,8 @@ export const Timer = ({
           r={radius}
           fill="none"
           className={cn(
-            "transition-[stroke-dashoffset] duration-1000 ease-linear",
+            !isJump &&
+              "transition-[stroke-dashoffset] duration-1000 ease-linear",
             isOvertime ? "stroke-timo-yellow-300" : "stroke-timo-blue-300",
           )}
           strokeWidth={strokeWidth}
