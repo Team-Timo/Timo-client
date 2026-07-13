@@ -19,5 +19,9 @@ export const SettingsTabsContainer = () => {
     );
   }
   if (tab === "withdrawal") return <SettingsWithdrawalContainer />;
-  return <SettingsProfileContainer />;
+  return (
+    <AsyncBoundary>
+      <SettingsProfileContainer />
+    </AsyncBoundary>
+  );
 };
