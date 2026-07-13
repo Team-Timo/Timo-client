@@ -78,7 +78,7 @@ export const OverlayModal = ({
           "bg-timo-overlay fixed inset-0 z-40 transition-opacity duration-200 ease-out",
           isVisible ? "opacity-100" : "opacity-0",
         )}
-        onMouseDownCapture={() => {
+        onPointerDownCapture={() => {
           wasFloatingLayerOpenRef.current = hasOpenFloatingLayer();
         }}
         onClick={() => {
