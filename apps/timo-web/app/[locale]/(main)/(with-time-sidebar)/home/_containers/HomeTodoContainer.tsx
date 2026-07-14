@@ -72,8 +72,6 @@ export const HomeTodoContainer = () => {
     setPendingCompleteTodo(null);
   };
 
-  const handleCloseTimerRunningToast = () => setIsTimerRunningToastOpen(false);
-
   useEffect(() => {
     scrollContainerToToday(scrollRef.current);
   }, [isWeekView, scrollRef]);
@@ -209,7 +207,7 @@ export const HomeTodoContainer = () => {
 
       <AnimatedToast
         isOpen={isTimerRunningToastOpen}
-        onClose={handleCloseTimerRunningToast}
+        onClose={() => setIsTimerRunningToastOpen(false)}
         message={tToast("timerAlreadyRunning")}
       />
     </div>
