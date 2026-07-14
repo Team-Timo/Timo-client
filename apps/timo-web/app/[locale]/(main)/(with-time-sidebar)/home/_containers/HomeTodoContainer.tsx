@@ -8,7 +8,7 @@ import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/h
 
 import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
 import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
-import { HomeStopCompleteModal } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeStopCompleteModal";
+import { HomeStopCompleteModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeStopCompleteModalContainer";
 import {
   scrollContainerToToday,
   useHomeTodayScrollRef,
@@ -203,7 +203,7 @@ export const HomeTodoContainer = () => {
         );
       })}
 
-      <HomeStopCompleteModal
+      <HomeStopCompleteModalContainer
         pendingToken={pendingCompleteTodo?.token ?? null}
         plannedMinutes={plannedMinutes}
         actualMinutes={actualMinutes}

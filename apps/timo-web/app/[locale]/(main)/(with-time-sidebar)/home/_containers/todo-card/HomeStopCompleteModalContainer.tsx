@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { TimerCompleteModalPanel } from "@/components/timer/TimerCompleteModalPanel";
 import { TimerStopModalPanel } from "@/components/timer/TimerStopModalPanel";
 
-export interface HomeStopCompleteModalProps {
+export interface HomeStopCompleteModalContainerProps {
   pendingToken: number | null;
   plannedMinutes: number;
   actualMinutes: number;
@@ -14,13 +14,13 @@ export interface HomeStopCompleteModalProps {
   onConfirm: () => void;
 }
 
-export const HomeStopCompleteModal = ({
+export const HomeStopCompleteModalContainer = ({
   pendingToken,
   plannedMinutes,
   actualMinutes,
   feedbackText,
   onConfirm,
-}: HomeStopCompleteModalProps) => {
+}: HomeStopCompleteModalContainerProps) => {
   const [step, setStep] = useState<"stop" | "complete">("stop");
   const hiddenTriggerRef = useRef<HTMLButtonElement>(null);
 
