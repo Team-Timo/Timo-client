@@ -73,6 +73,10 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   const invalidateFocusTodo = () => {
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
   };
+  const invalidateHomeAndFocus = () => {
+    invalidateHomeView();
+    invalidateFocusTodo();
+  };
 
   const handleToggleCompleted = (
     dateKey: string,
@@ -90,10 +94,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     changeTodoStatus(
       { todoId, data: { isCompleted: completed, date: dateKey } },
       {
-        onSuccess: () => {
-          invalidateHomeView();
-          invalidateFocusTodo();
-        },
+        onSuccess: invalidateHomeAndFocus,
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
         },
@@ -118,12 +119,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
           }));
           changeTodoStatus(
             { todoId, data: { isCompleted: true, date: dateKey } },
-            {
-              onSuccess: () => {
-                invalidateHomeView();
-                invalidateFocusTodo();
-              },
-            },
+            { onSuccess: invalidateHomeAndFocus },
           );
         },
       },
@@ -175,10 +171,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     changeSubtaskStatus(
       { todoId, subtaskId, data: { isCompleted: completed } },
       {
-        onSuccess: () => {
-          invalidateHomeView();
-          invalidateFocusTodo();
-        },
+        onSuccess: invalidateHomeAndFocus,
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
         },
@@ -203,10 +196,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     reorderTodo(
       { todoId: movedTodo.todoId, data: { newIndex: toIndex, date: dateKey } },
       {
-        onSuccess: () => {
-          invalidateHomeView();
-          invalidateFocusTodo();
-        },
+        onSuccess: invalidateHomeAndFocus,
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
         },
