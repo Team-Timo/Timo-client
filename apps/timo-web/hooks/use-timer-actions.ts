@@ -27,7 +27,6 @@ export interface UseTimerActionsOptions {
   completeTimer: CompleteTimerMutate;
   stopTimer: StopTimerMutate;
   changeTodoStatus: ChangeTodoStatusMutate;
-  /** timer가 없을 때 재생을 누른 경우의 동작 (포커스 페이지의 타이머 시작 등) */
   onNoTimer?: () => void;
 }
 

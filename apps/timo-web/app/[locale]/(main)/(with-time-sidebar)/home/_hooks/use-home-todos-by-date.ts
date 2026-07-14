@@ -23,11 +23,8 @@ import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation"
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export interface UseHomeTodosByDateOptions {
-  /** 완료 처리하려는 투두에 활성 타이머가 걸려있어 먼저 정지 확인이 필요할 때 */
   onNeedStopConfirm: (dateKey: string, todoId: number) => void;
-  /** 다른 투두의 타이머가 이미 실행 중이라 재생을 시작할 수 없을 때 */
   onTimerAlreadyRunning: () => void;
-  /** 타이머 정지 완료 후 받은 AI 피드백 문구 */
   onStopFeedback: (feedbackText: string | undefined) => void;
 }
 

@@ -13,7 +13,6 @@ const HOURS_IN_DAY = 24;
 const HOUR_LINES = HOURS_IN_DAY + 1;
 const ROW_HEIGHT = 50;
 const CLOCK_TICK_INTERVAL_MS = 30_000;
-/** 이 시간(분) 미만인 타임박스는 투두명·시간 라벨을 표시하지 않는다 */
 const MIN_MINUTES_FOR_LABEL = 30;
 
 export interface TimeboxPanelProps {
@@ -65,7 +64,6 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
         const isRelatedToActiveTimer =
           timeBox.timerId === activeTimer?.timerId &&
           timeBox.todoId === activeTimer?.todoId;
-        // 실시간으로 자라는 중인지는 이 세션 자체가 아직 끝나지 않았는지로만 판단한다.
         const isGrowing = !timeBox.endedAt;
 
         const start = new Date(timeBox.startedAt);
