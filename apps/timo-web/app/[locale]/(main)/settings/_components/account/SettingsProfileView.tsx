@@ -14,6 +14,7 @@ import { SettingsTagsSectionContainer } from "@/app/[locale]/(main)/settings/_co
 export interface SettingsProfileViewProps {
   name: string;
   googleEmail: string;
+  profileImageUrl?: string;
   isCalendarConnected: boolean;
   language: SettingsLanguage;
   tags: SettingsTagItem[];
@@ -28,6 +29,7 @@ export interface SettingsProfileViewProps {
 export const SettingsProfileView = ({
   name,
   googleEmail,
+  profileImageUrl,
   isCalendarConnected,
   language,
   tags,
@@ -51,7 +53,17 @@ export const SettingsProfileView = ({
             {labels.profileSection}
           </h2>
           <div className="flex items-center gap-5">
-            <div className="bg-timo-gray-300 size-28.5 shrink-0 rounded-full" />
+            {profileImageUrl ? (
+              <Image
+                src={profileImageUrl}
+                alt={name}
+                width={114}
+                height={114}
+                className="size-28.5 shrink-0 rounded-full object-cover"
+              />
+            ) : (
+              <div className="bg-timo-gray-300 size-28.5 shrink-0 rounded-full" />
+            )}
             <div className="flex flex-col gap-2">
               <p className="typo-headline-b-20 text-timo-black">{name}</p>
               <div className="bg-timo-gray-300 flex items-center gap-2 rounded-lg px-4 py-2">
