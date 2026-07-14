@@ -10,17 +10,17 @@ import type { CreateTodoRequest } from "@/api/common/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
 import { createTodoRequestSchema } from "@/api/common/todo-schema";
-import { useSubtaskField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
-import { useTitleField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-title-field";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-import { CreateTodoIconField } from "@/components/todo-modal/CreateTodoIconField";
-import { CreateTodoMemoField } from "@/components/todo-modal/CreateTodoMemoField";
-import { CreateTodoTaskFields } from "@/components/todo-modal/CreateTodoTaskFields";
+import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
+import { CreateTodoMemoField } from "@/components/todo-modal/create/CreateTodoMemoField";
+import { CreateTodoTaskFields } from "@/components/todo-modal/create/CreateTodoTaskFields";
 import { useIconField } from "@/hooks/todo-modal/use-icon-field";
 import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
+import { useSubtaskField } from "@/hooks/todo-modal/use-subtask-field";
 import { useTagField } from "@/hooks/todo-modal/use-tag-field";
 import { useTimeField } from "@/hooks/todo-modal/use-time-field";
+import { useTitleField } from "@/hooks/todo-modal/use-title-field";
 import { formatDateKey } from "@/utils/date/date";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
@@ -28,7 +28,7 @@ const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   title: "",
   subtasks: [],
   date: formatDateKey(defaultDate ?? new Date()),
-  duration: "0:00",
+  duration: "00:00",
   priority: null,
   tagId: null,
   repeatType: "NONE",
@@ -113,7 +113,7 @@ export const CreateTodoModalContent = ({
 
         <div className="flex w-full flex-col items-start gap-3.5">
           <div className="flex w-full flex-col items-start gap-2">
-            <CreateTodoIconField
+            <TodoIconField
               icon={iconField.icon}
               isIconPanelOpen={iconField.isIconPanelOpen}
               addIconLabel={t("createModal.addIcon")}
@@ -159,12 +159,19 @@ export const CreateTodoModalContent = ({
             onSelectTime={timeField.handleSelectTime}
             onTimeOpen={timeField.handleTimeSelectorOpen}
             priority={priorityField.value ?? undefined}
+            priorityLabels={{
+              VERY_HIGH: tCommon("priority.urgent"),
+              HIGH: tCommon("priority.high"),
+              MEDIUM: tCommon("priority.medium"),
+              LOW: tCommon("priority.low"),
+            }}
             onSelectPriority={(level: PriorityLevel) =>
               priorityField.onChange(level)
             }
             tagLabel={tagField.selectedTagLabel ?? t("createModal.tagLabel")}
             tags={tagField.tagLabels}
             selectedTag={tagField.selectedTagLabel}
+            addTagLabel={t("createModal.addTag")}
             onSelectTag={tagField.handleSelectTag}
             onAddTagClick={tagField.handleAddTagClick}
             hasMemo={Boolean(memoField.value?.trim())}

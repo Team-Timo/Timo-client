@@ -6,7 +6,7 @@ import type { Control } from "react-hook-form";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
-} from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/text-length";
+} from "@/utils/todo/text-length";
 
 export interface UseTitleFieldParams {
   control: Control<CreateTodoRequest>;

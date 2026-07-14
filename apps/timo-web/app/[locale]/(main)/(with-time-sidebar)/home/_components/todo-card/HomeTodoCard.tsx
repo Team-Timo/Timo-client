@@ -22,8 +22,9 @@ import type {
   TodoPriorityTypes,
   TodoTimerStatusTypes,
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { KeyboardEvent, MouseEvent } from "react";
 
-import { convertDurationToTimeText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-time";
+import { convertDurationToTimeText } from "@/utils/todo/todo-time";
 
 type PriorityLabelKeyTypes = "urgent" | "high" | "medium" | "low";
 
@@ -33,6 +34,10 @@ const PRIORITY_LABEL_KEY: Record<TodoPriorityTypes, PriorityLabelKeyTypes> = {
   MEDIUM: "medium",
   LOW: "low",
 };
+
+const isInteractiveElement = (target: EventTarget | null) =>
+  target instanceof HTMLElement &&
+  Boolean(target.closest("button, input, label"));
 
 export interface HomeTodoCardProps {
   todoId: number;
@@ -46,6 +51,7 @@ export interface HomeTodoCardProps {
   timerStatus: TodoTimerStatusTypes;
   subtaskTitle?: string;
   isSubtaskCompleted?: boolean;
+  onClickTodo?: () => void;
   onToggleCompleted: (completed: boolean) => void;
   onTogglePlay: () => void;
   onToggleSubtaskCompleted?: (completed: boolean) => void;
@@ -63,6 +69,7 @@ export const HomeTodoCard = ({
   timerStatus,
   subtaskTitle,
   isSubtaskCompleted = false,
+  onClickTodo,
   onToggleCompleted,
   onTogglePlay,
   onToggleSubtaskCompleted,
@@ -80,6 +87,21 @@ export const HomeTodoCard = ({
   const isRunning = timerStatus === "RUNNING";
 
   const priorityLabel = tCommon(`priority.${PRIORITY_LABEL_KEY[priority]}`);
+
+  const handleCardClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (isInteractiveElement(event.target)) return;
+
+    onClickTodo?.();
+  };
+
+  const handleCardKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (isInteractiveElement(event.target)) return;
+    if (!onClickTodo) return;
+    if (event.key !== "Enter" && event.key !== " ") return;
+
+    event.preventDefault();
+    onClickTodo();
+  };
 
   const titleRow = (
     <div className="flex w-full items-center justify-between gap-2">
@@ -112,14 +134,19 @@ export const HomeTodoCard = ({
   );
 
   return (
-    <article
+    <div
       ref={setNodeRef}
       style={sortableStyle}
       {...attributes}
       {...listeners}
+      role={onClickTodo ? "button" : attributes.role}
+      tabIndex={onClickTodo ? 0 : attributes.tabIndex}
+      onClick={onClickTodo ? handleCardClick : undefined}
+      onKeyDown={onClickTodo ? handleCardKeyDown : undefined}
       className={cn(
         "border-timo-gray-500 flex w-full shrink-0 flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
         isCompleted ? "bg-timo-gray-200" : "bg-white",
+        onClickTodo && "cursor-pointer",
       )}
     >
       {subtaskTitle ? (
@@ -167,6 +194,6 @@ export const HomeTodoCard = ({
           {convertDurationToTimeText(durationSeconds)}
         </span>
       </div>
-    </article>
+    </div>
   );
 };

@@ -46,12 +46,19 @@
       "dateLabel": "Date",
       "timeLabel": "Time",
       "tagLabel": "Tag",
+      "addTag": "Add",
       "create": "Create",
       "repeatDaily": "Daily",
       "repeatWeekly": "Weekly",
       "repeatMonthly": "Monthly",
       "repeatDetailHeading": "Details",
       "repeatDayUnit": "day(s)"
+    },
+    "detailModal": {
+      "ariaLabel": "To-do details",
+      "delete": "Delete to-do",
+      "repeatFrequencyHeading": "Repeat",
+      "repeatDayLabel": "day(s)"
     },
     "createTagModal": {
       "title": "Create a tag",

@@ -15,21 +15,10 @@ import {
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
+import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
-
-const TAG_LABEL_KEYS = [
-  "dailyLife",
-  "work",
-  "exercise",
-  "assignment",
-  "additional",
-] as const;
-
-type TagLabelKey = (typeof TAG_LABEL_KEYS)[number];
-
-const isTagLabelKey = (value: string): value is TagLabelKey =>
-  (TAG_LABEL_KEYS as readonly string[]).includes(value);
+import { isTagLabelKey } from "@/utils/todo/tag-label";
 
 export const HomeTodoContainer = () => {
   const tCommon = useTranslations("Common");
@@ -48,6 +37,7 @@ export const HomeTodoContainer = () => {
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
+    handleDeleteTodo,
     handleReorderTodo,
   } = useHomeTodosByDate(days);
 
@@ -100,42 +90,57 @@ export const HomeTodoContainer = () => {
                   const [firstSubtask] = todo.subtasks;
 
                   return (
-                    <HomeTodoCard
+                    <DetailTodoModalContainer
                       key={todo.todoId}
-                      todoId={todo.todoId}
-                      title={todo.title}
-                      isCompleted={todo.completed}
-                      durationSeconds={todo.durationSeconds}
-                      priority={todo.priority}
-                      tagName={
-                        todo.tag &&
-                        (isTagLabelKey(todo.tag.name)
-                          ? tCommon(`tag.${todo.tag.name}`)
-                          : todo.tag.name)
-                      }
-                      hasMemo={todo.hasMemo}
-                      isRepeated={todo.isRepeated}
-                      timerStatus={todo.timerStatus}
-                      subtaskTitle={firstSubtask?.content}
-                      isSubtaskCompleted={firstSubtask?.completed}
-                      onToggleCompleted={(completed) =>
-                        handleToggleCompleted(dateKey, todo.todoId, completed)
-                      }
+                      todo={todo}
                       onTogglePlay={() =>
                         handleTogglePlay(dateKey, todo.todoId)
                       }
-                      onToggleSubtaskCompleted={
-                        firstSubtask
-                          ? (completed) =>
-                              handleToggleSubtaskCompleted(
-                                dateKey,
-                                todo.todoId,
-                                firstSubtask.subtaskId,
-                                completed,
-                              )
-                          : undefined
-                      }
-                    />
+                      onDelete={() => handleDeleteTodo(dateKey, todo.todoId)}
+                    >
+                      {(openDetailTodoModal) => (
+                        <HomeTodoCard
+                          todoId={todo.todoId}
+                          title={todo.title}
+                          isCompleted={todo.completed}
+                          durationSeconds={todo.durationSeconds}
+                          priority={todo.priority}
+                          tagName={
+                            todo.tag &&
+                            (isTagLabelKey(todo.tag.name)
+                              ? tCommon(`tag.${todo.tag.name}`)
+                              : todo.tag.name)
+                          }
+                          hasMemo={todo.hasMemo}
+                          isRepeated={todo.isRepeated}
+                          timerStatus={todo.timerStatus}
+                          subtaskTitle={firstSubtask?.content}
+                          isSubtaskCompleted={firstSubtask?.completed}
+                          onClickTodo={openDetailTodoModal}
+                          onToggleCompleted={(completed) =>
+                            handleToggleCompleted(
+                              dateKey,
+                              todo.todoId,
+                              completed,
+                            )
+                          }
+                          onTogglePlay={() =>
+                            handleTogglePlay(dateKey, todo.todoId)
+                          }
+                          onToggleSubtaskCompleted={
+                            firstSubtask
+                              ? (completed) =>
+                                  handleToggleSubtaskCompleted(
+                                    dateKey,
+                                    todo.todoId,
+                                    firstSubtask.subtaskId,
+                                    completed,
+                                  )
+                              : undefined
+                          }
+                        />
+                      )}
+                    </DetailTodoModalContainer>
                   );
                 })}
               </div>

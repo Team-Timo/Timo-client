@@ -4,7 +4,7 @@ import { cn } from "@repo/timo-design-system/utils";
 
 import type { TodoIconValue } from "@repo/timo-design-system/ui";
 
-export interface CreateTodoIconFieldProps {
+export interface TodoIconFieldProps {
   icon: TodoIconValue | null;
   isIconPanelOpen: boolean;
   addIconLabel: string;
@@ -14,7 +14,7 @@ export interface CreateTodoIconFieldProps {
   onRemoveIcon: () => void;
 }
 
-export const CreateTodoIconField = ({
+export const TodoIconField = ({
   icon,
   isIconPanelOpen,
   addIconLabel,
@@ -22,7 +22,7 @@ export const CreateTodoIconField = ({
   onTogglePanel,
   onSelectIcon,
   onRemoveIcon,
-}: CreateTodoIconFieldProps) => {
+}: TodoIconFieldProps) => {
   return (
     <div className="flex w-full flex-col items-start gap-2">
       {!isIconPanelOpen && icon ? (

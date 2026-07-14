@@ -41,6 +41,7 @@ const DETAIL_ALIGN: Record<RepeatFrequency, string> = {
 
 export interface RepeatSelectorProps {
   trigger: ReactNode;
+  frequencyHeading?: string;
   detailHeading: string;
   options: RepeatOption[];
   frequency: RepeatFrequency;
@@ -139,6 +140,7 @@ const RepeatMonthlyDetailSection = ({
 
 export const RepeatSelector = ({
   trigger,
+  frequencyHeading = "반복 일정",
   detailHeading,
   options,
   frequency,
@@ -167,7 +169,7 @@ export const RepeatSelector = ({
       <Dropdown.Panel className="shadow-timo w-32.5 gap-1 p-0">
         <div className="flex w-full flex-col gap-1 px-3.5 py-2">
           <span className="typo-body-r-12 text-timo-gray-700 w-full whitespace-nowrap">
-            반복 일정
+            {frequencyHeading}
           </span>
 
           <button

@@ -25,12 +25,14 @@ const PRIORITY_BG_COLOR: Record<PriorityLevel, string> = {
 export interface PrioritySelectorProps {
   trigger: ReactNode;
   selected?: PriorityLevel;
+  labels?: Record<PriorityLevel, string>;
   onSelect?: (priority: PriorityLevel) => void;
 }
 
 export const PrioritySelector = ({
   trigger,
   selected,
+  labels = PRIORITY_LABEL,
   onSelect,
 }: PrioritySelectorProps) => {
   return (
@@ -61,7 +63,7 @@ export const PrioritySelector = ({
                   isSelected ? "text-white" : "text-timo-black",
                 )}
               >
-                {PRIORITY_LABEL[priority]}
+                {labels[priority]}
               </span>
             </Dropdown.Item>
           );
