@@ -39,7 +39,7 @@ export const HomeDayHeaderContainer = ({
         totalCount={totalCount}
         completedCount={completedCount}
       />
-      <CreateTodoModalContainer defaultDate={date} />
+      <CreateTodoModalContainer defaultDate={date} totalCount={totalCount} />
     </div>
   );
 };
