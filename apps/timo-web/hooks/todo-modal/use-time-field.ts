@@ -27,7 +27,7 @@ export interface UseTimeFieldParams {
 
 /**
  * 숫자와 콜론만 허용한다. 콜론은 첫 번째 것만 유지하고(그 뒤 콜론은 제거),
- * 분(minute) 자릿수는 제한하지 않는다. 초(second)만 2자리로 자른다.
+ * 시(hour) 자릿수는 제한하지 않는다. 분(minute)만 2자리로 자른다.
  */
 const formatDurationInput = (raw: string): string => {
   const sanitized = raw.replace(/[^\d:]/g, "");
@@ -65,7 +65,7 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
   const title = useWatch({ control, name: "title" });
   const tagId = useWatch({ control, name: "tagId" });
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
-  const [timeDisplay, setTimeDisplay] = useState("00:00");
+  const [timeDisplay, setTimeDisplay] = useState("0:00");
   const [recommendedDuration, setRecommendedDuration] = useState<string>();
   const [isAiDurationErrorToastOpen, setIsAiDurationErrorToastOpen] =
     useState(false);
@@ -133,20 +133,32 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
 
   const handleDurationInputChange = (value: string) => {
     setSelectedTime(undefined);
+
+    // TimeSelector 입력창은 "시:분"(h:mm)을 그대로 편집하는 컨트롤이다.
+    // 트리거 라벨(timeDisplay)도 같은 h:mm 표기이므로, 타이핑한 값을 바로 반영한다.
     const formatted = formatDurationInput(value);
-    setRecommendedDuration(formatted);
-    setTimeDisplay(formatDurationAsClockLabel(formatted));
-    field.onChange(formatted);
+    setTimeDisplay(formatted);
+
+    const [hoursText, minutesText = "0"] = formatted.split(":");
+    const hours = Number(hoursText) || 0;
+    const minutes = Number(minutesText) || 0;
+    const totalSeconds =
+      hours * SECONDS_PER_HOUR + minutes * SECONDS_PER_MINUTE;
+
+    // 서버로 전송하는 duration 필드는 "총분:초" 형식이므로 변환해서 저장한다.
+    const apiDuration = convertSecondsToApiDuration(totalSeconds);
+    setRecommendedDuration(apiDuration);
+    field.onChange(apiDuration);
   };
 
   const resetTime = () => {
     setSelectedTime(undefined);
-    setTimeDisplay("00:00");
+    setTimeDisplay("0:00");
     setRecommendedDuration(undefined);
   };
 
   return {
-    duration: recommendedDuration ?? field.value,
+    duration: timeDisplay,
     timeOptions: TIME_OPTIONS,
     selectedTime,
     timeDisplay,
