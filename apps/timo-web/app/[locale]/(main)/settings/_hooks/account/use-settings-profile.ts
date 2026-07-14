@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
 import { tagCreateDataSchema } from "@/api/common/tag-schema";
+import { authorize } from "@/api/generated/endpoints/calendar/calendar";
 import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
@@ -57,7 +58,7 @@ export const useSettingsProfile = () => {
     isDefault: tag.isDefault,
   }));
 
-  const handleConnectCalendar = (
+  const handleConnectCalendar = async (
     isCalendarConnected: boolean,
     handlers: ConnectCalendarHandlers,
   ) => {
@@ -66,15 +67,20 @@ export const useSettingsProfile = () => {
       const confirmed = window.confirm("구글 캘린더 연동을 해제하시겠습니까?");
       if (!confirmed) return;
 
-      // TODO: API - 연동 토큰 파기
-      console.log("구글 캘린더 연동 토큰을 파기합니다.");
+      // TODO: API - 연동 토큰 파기 (다른 담당자 작업)
       handlers.onDisconnect();
       return;
     }
 
-    // TODO: Google 계정 인증 및 캘린더 접근 권한 동의 팝업 호출
-    console.log("Google Calendar 연동 인증 팝업을 호출합니다.");
-    handlers.onConnect();
+    try {
+      const response = await authorize();
+      const url = response.data?.authorizationUrl;
+      if (!url) return;
+      localStorage.setItem("calendarConnectOrigin", "settings");
+      window.location.assign(url);
+    } catch {
+      // authorize 실패 시 아무 동작 없음 — 사용자가 재시도 가능
+    }
   };
 
   const handleCreateTag = (label: string, handlers: CreateTagHandlers) => {
