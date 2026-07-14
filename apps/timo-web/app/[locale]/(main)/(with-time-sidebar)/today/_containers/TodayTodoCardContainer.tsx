@@ -17,6 +17,7 @@ export interface TodayTodoCardContainerProps {
   subTodos: SubTodo[];
   toolbar: TodayTodoCardToolbar;
   timerStatus: TodoTimerStatusTypes;
+  isPlayHighlighted: boolean;
   icon?: ReactNode;
   onCardClick?: () => void;
   onToggleCompleted?: (completed: boolean) => void;
@@ -31,6 +32,7 @@ export const TodayTodoCardContainer = ({
   subTodos,
   toolbar,
   timerStatus,
+  isPlayHighlighted,
   onCardClick,
   onToggleCompleted,
   onTogglePlay,
@@ -47,6 +49,7 @@ export const TodayTodoCardContainer = ({
       isDone={isCompleted}
       isDimmed={isDimmed}
       isPlaying={isPlaying}
+      isPlayHighlighted={isPlayHighlighted}
       icon={icon}
       subTodos={subTodos}
       toolbar={toolbar}

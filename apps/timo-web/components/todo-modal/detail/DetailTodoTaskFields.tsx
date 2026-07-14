@@ -20,6 +20,8 @@ export interface DetailTodoTaskFieldsProps {
   isCompleted: boolean;
   disabled?: boolean;
   timerStatus: TodoDetailResponseTimerStatus;
+  /** 다른 투두에 활성 타이머(재생/일시정지)가 있을 때 이 재생 버튼을 낮춰 보여준다 */
+  isPlayHighlighted: boolean;
   subtaskInputs: DetailTodoSubtaskInput[];
   onTitleChange: (value: string) => void;
   onToggleCompleted: (completed: boolean) => void;
@@ -40,6 +42,7 @@ export const DetailTodoTaskFields = ({
   isCompleted,
   disabled = false,
   timerStatus,
+  isPlayHighlighted,
   subtaskInputs,
   onTitleChange,
   onToggleCompleted,
@@ -72,14 +75,17 @@ export const DetailTodoTaskFields = ({
             variant={timerStatus === "RUNNING" ? "stop" : "play"}
             size="lg"
             disabled={isCompleted}
+            active={isPlayHighlighted}
             onClick={onTogglePlay}
           >
             {isCompleted ? (
               <PlayDisabledIcon width={24} height={24} />
             ) : timerStatus === "RUNNING" ? (
               <StopIcon width={24} height={24} />
-            ) : (
+            ) : isPlayHighlighted ? (
               <PlayIcon width={24} height={24} />
+            ) : (
+              <PlayDisabledIcon width={24} height={24} />
             )}
           </PlayButton>
         </div>

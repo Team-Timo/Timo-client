@@ -92,6 +92,7 @@ export const TodayTodoListContainer = () => {
           const timerStatus = isActiveTodo
             ? activeTimer.status
             : todo.timerStatus;
+          const isPlayHighlighted = !activeTimer || Boolean(isActiveTodo);
 
           return (
             <DetailTodoModalContainer
@@ -110,6 +111,7 @@ export const TodayTodoListContainer = () => {
                   isCompleted={todo.completed}
                   icon={renderTodoIcon(todo.icon)}
                   timerStatus={timerStatus}
+                  isPlayHighlighted={isPlayHighlighted}
                   toolbar={{
                     date: formatDate(todo.date),
                     dateValue: new Date(todo.date),

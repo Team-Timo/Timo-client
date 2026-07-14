@@ -40,6 +40,7 @@ export interface DetailTodoModalContentProps {
   onClose: () => void;
   onExited: () => void;
   todo: TodoDetailResponse;
+  isPlayHighlighted: boolean;
   onTogglePlay: () => void;
   onToggleCompleted: (completed: boolean) => void;
   onDelete: () => void;
@@ -51,6 +52,7 @@ export const DetailTodoModalContent = ({
   onClose,
   onExited,
   todo,
+  isPlayHighlighted,
   onTogglePlay,
   onToggleCompleted,
   onDelete,
@@ -227,6 +229,7 @@ export const DetailTodoModalContent = ({
               isCompleted={todo.completed}
               disabled={!canUpdateTodo}
               timerStatus={todo.timerStatus}
+              isPlayHighlighted={isPlayHighlighted}
               subtaskInputs={detailTodoForm.subtaskInputs}
               onTitleChange={detailTodoForm.changeTitle}
               onToggleCompleted={onToggleCompleted}

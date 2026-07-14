@@ -11,6 +11,7 @@ import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
 import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
+import { useActiveTimer } from "@/hooks/use-active-timer";
 
 export interface DetailTodoModalContainerProps {
   todoId: number;
@@ -42,7 +43,9 @@ export const DetailTodoModalContainer = ({
   );
   const { handleDelete } = useDeleteTodoSubmit();
   const { handleUpdate } = useUpdateTodoSubmit();
+  const { data: activeTimer } = useActiveTimer();
   const todo = data?.data;
+  const isPlayHighlighted = !activeTimer || activeTimer.todoId === todoId;
 
   const openDetailTodoModal = () => {
     setIsMounted(true);
@@ -89,6 +92,7 @@ export const DetailTodoModalContainer = ({
           onClose={closeDetailTodoModal}
           onExited={() => setIsMounted(false)}
           todo={todo}
+          isPlayHighlighted={isPlayHighlighted}
           onTogglePlay={onTogglePlay}
           onToggleCompleted={onToggleCompleted}
           onDelete={deleteTodo}

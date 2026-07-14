@@ -49,6 +49,8 @@ export interface TodayTodoCardProps {
   isDone: boolean;
   isDimmed: boolean;
   isPlaying: boolean;
+  /** 다른 투두에 활성 타이머(재생/일시정지)가 있을 때 이 투두의 재생 버튼을 낮춰 보여준다 */
+  isPlayHighlighted: boolean;
   icon?: ReactNode;
   subTodos: SubTodo[];
   toolbar: TodayTodoCardToolbar;
@@ -68,6 +70,7 @@ export const TodayTodoCard = ({
   isDone,
   isDimmed,
   isPlaying,
+  isPlayHighlighted,
   icon,
   subTodos,
   toolbar,
@@ -123,14 +126,17 @@ export const TodayTodoCard = ({
             variant={isPlaying ? "stop" : "play"}
             size="lg"
             disabled={isDone}
+            active={isPlayHighlighted}
             onClick={onPlay}
           >
             {isDone ? (
               <PlayDisabledIcon width={24} height={24} />
             ) : isPlaying ? (
               <StopIcon width={24} height={24} />
-            ) : (
+            ) : isPlayHighlighted ? (
               <PlayIcon width={24} height={24} />
+            ) : (
+              <PlayDisabledIcon width={24} height={24} />
             )}
           </PlayButton>
         </div>
