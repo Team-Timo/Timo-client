@@ -1,10 +1,13 @@
 import {
+  CalendarBlueIcon,
   CalendarDisableIcon,
   CalendarOnIcon,
+  ClockBlueIcon,
   ClockDisableIcon,
   ClockOnIcon,
   MemoDisableIcon,
   MemoOnIcon,
+  RepeatBlueIcon,
   RepeatDisableIcon,
   RepeatOnIcon,
 } from "../../../icons";
@@ -30,11 +33,13 @@ import {
 export interface TodoToolbarProps {
   dateLabel: string;
   date?: Date;
+  isDateActive?: boolean;
   onDateChange?: (date: Date) => void;
 
   timeLabel: string;
   timeOptions: TimeOption[];
   time?: string;
+  isTimeActive?: boolean;
   onTimeChange?: (time: string) => void;
   selectedTime?: TimeSelection;
   onSelectTime?: (value: TimeSelection) => void;
@@ -62,10 +67,12 @@ export interface TodoToolbarProps {
 export const TodoToolbar = ({
   dateLabel,
   date,
+  isDateActive = Boolean(date),
   onDateChange,
   timeLabel,
   timeOptions,
   time,
+  isTimeActive = Boolean(time),
   onTimeChange,
   selectedTime,
   onSelectTime,
@@ -89,35 +96,55 @@ export const TodoToolbar = ({
       <DateSelector
         value={date}
         onChange={onDateChange}
-        trigger={
+        trigger={(isOpen) => (
           <span className="flex items-center gap-0.5">
-            {date ? <CalendarOnIcon /> : <CalendarDisableIcon />}
+            {isOpen ? (
+              <CalendarBlueIcon />
+            ) : isDateActive ? (
+              <CalendarOnIcon />
+            ) : (
+              <CalendarDisableIcon />
+            )}
             <span
               className={cn(
                 "typo-caption-r-10 whitespace-nowrap",
-                date ? "text-timo-gray-900" : "text-timo-gray-700",
+                isOpen
+                  ? "text-timo-blue-300"
+                  : isDateActive
+                    ? "text-timo-gray-900"
+                    : "text-timo-gray-700",
               )}
             >
               {dateLabel}
             </span>
           </span>
-        }
+        )}
       />
 
       <TimeSelector
-        trigger={
+        trigger={(isOpen) => (
           <span className="flex items-center">
-            {time ? <ClockOnIcon /> : <ClockDisableIcon />}
+            {isOpen ? (
+              <ClockBlueIcon />
+            ) : isTimeActive ? (
+              <ClockOnIcon />
+            ) : (
+              <ClockDisableIcon />
+            )}
             <span
               className={cn(
                 "typo-caption-r-10 w-9 whitespace-nowrap",
-                time ? "text-timo-gray-900" : "text-timo-gray-700",
+                isOpen
+                  ? "text-timo-blue-300"
+                  : isTimeActive
+                    ? "text-timo-gray-900"
+                    : "text-timo-gray-700",
               )}
             >
               {timeLabel}
             </span>
           </span>
-        }
+        )}
         time={time}
         onTimeChange={onTimeChange}
         times={timeOptions}
@@ -134,7 +161,9 @@ export const TodoToolbar = ({
       />
 
       <TagSelector
-        trigger={<TagIcon text={tagLabel} />}
+        trigger={(isOpen) => (
+          <TagIcon text={tagLabel} variant={isOpen ? "blue" : "disable"} />
+        )}
         tags={tags}
         selected={selectedTag}
         addLabel={addTagLabel}
@@ -146,7 +175,15 @@ export const TodoToolbar = ({
 
       <RepeatSelector
         {...repeat}
-        trigger={isRepeatActive ? <RepeatOnIcon /> : <RepeatDisableIcon />}
+        trigger={(isOpen) =>
+          isOpen ? (
+            <RepeatBlueIcon />
+          ) : isRepeatActive ? (
+            <RepeatOnIcon />
+          ) : (
+            <RepeatDisableIcon />
+          )
+        }
       />
     </div>
   );

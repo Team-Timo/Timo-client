@@ -105,11 +105,17 @@ const DropdownRoot = ({
   );
 };
 
-export type DropdownTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export type DropdownTriggerProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "children"
+> & {
+  children?: ReactNode | ((isOpen: boolean) => ReactNode);
+};
 
 const DropdownTrigger = ({
   className,
   onClick,
+  children,
   ...rest
 }: DropdownTriggerProps) => {
   const { isOpen, toggle, triggerRef } = useDropdownContext();
@@ -125,7 +131,9 @@ const DropdownTrigger = ({
       }}
       aria-expanded={isOpen}
       className={className}
-    />
+    >
+      {typeof children === "function" ? children(isOpen) : children}
+    </button>
   );
 };
 

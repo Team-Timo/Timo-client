@@ -136,7 +136,7 @@ export const TodayTodoCard = ({
       </div>
 
       {subTodos.length > 0 && (
-        <ul className="flex flex-col gap-1 pl-8">
+        <ul className="flex flex-col gap-1">
           {subTodos.map((sub) => (
             <li key={sub.id} className="flex items-center gap-2">
               <div

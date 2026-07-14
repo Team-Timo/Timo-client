@@ -60,5 +60,5 @@ export interface IconGraphicProps {
 export const IconGraphic = ({ icon, className }: IconGraphicProps) => {
   const Icon = ICON_GRAPHIC[icon];
 
-  return <Icon className={cn("size-4.5", className)} />;
+  return <Icon className={cn("size-6", className)} />;
 };

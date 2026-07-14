@@ -40,7 +40,7 @@ const DETAIL_ALIGN: Record<RepeatFrequency, string> = {
 };
 
 export interface RepeatSelectorProps {
-  trigger: ReactNode;
+  trigger: ReactNode | ((isOpen: boolean) => ReactNode);
   frequencyHeading?: string;
   detailHeading: string;
   options: RepeatOption[];
@@ -70,7 +70,7 @@ const RepeatFrequencyList = ({
           )}
           <Dropdown.Item
             onClick={() => onSelect(value)}
-            closeOnSelect={false}
+            closeOnSelect={value === "DAILY"}
             aria-pressed={value === selectedFrequency}
           >
             <span className="typo-headline-r-14 text-timo-black whitespace-nowrap">
@@ -159,7 +159,7 @@ export const RepeatSelector = ({
   const handleSelectFrequency = (value: RepeatFrequency) => {
     setSelectedFrequency(value);
     onFrequencyChange?.(value);
-    setIsPicking(false);
+    if (value !== "DAILY") setIsPicking(false);
   };
 
   return (

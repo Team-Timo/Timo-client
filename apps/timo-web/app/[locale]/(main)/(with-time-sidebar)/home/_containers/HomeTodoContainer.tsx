@@ -21,7 +21,7 @@ import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailT
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
-import { isTagLabelKey } from "@/utils/todo/tag-label";
+import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 interface PendingCompleteTodo {
   token: number;
@@ -65,12 +65,12 @@ export const HomeTodoContainer = () => {
 
   const handleConfirmPendingComplete = () => {
     if (!pendingCompleteTodo) return;
-    
+
     confirmStopAndComplete(
       pendingCompleteTodo.dateKey,
       pendingCompleteTodo.todoId,
     );
-    
+
     setPendingCompleteTodo(null);
   };
 
@@ -139,6 +139,15 @@ export const HomeTodoContainer = () => {
                     ? activeTimer.status
                     : todo.timerStatus;
 
+                  const todoTagLabelKey = todo.tag
+                    ? getDefaultTagLabelKey(todo.tag.tagId)
+                    : undefined;
+                  const todoTagName = todo.tag
+                    ? todoTagLabelKey
+                      ? tCommon(`tag.${todoTagLabelKey}`)
+                      : todo.tag.name
+                    : undefined;
+
                   return (
                     <DetailTodoModalContainer
                       key={todo.todoId}
@@ -155,12 +164,7 @@ export const HomeTodoContainer = () => {
                           isCompleted={todo.completed}
                           durationSeconds={durationSeconds}
                           priority={todo.priority}
-                          tagName={
-                            todo.tag &&
-                            (isTagLabelKey(todo.tag.name)
-                              ? tCommon(`tag.${todo.tag.name}`)
-                              : todo.tag.name)
-                          }
+                          tagName={todoTagName}
                           hasMemo={todo.hasMemo}
                           isRepeated={todo.isRepeated}
                           timerStatus={timerStatus}

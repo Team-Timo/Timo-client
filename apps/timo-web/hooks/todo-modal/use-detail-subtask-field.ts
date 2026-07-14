@@ -85,6 +85,8 @@ export const useDetailSubtaskField = ({
     event: KeyboardEvent<HTMLTextAreaElement>,
   ) => {
     if (event.key === "Enter" && !event.shiftKey) {
+      if (event.nativeEvent.isComposing) return;
+
       event.preventDefault();
 
       setSubtaskInputs((prev) => {

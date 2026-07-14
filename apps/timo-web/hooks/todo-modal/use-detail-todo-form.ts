@@ -11,13 +11,17 @@ import type {
   TodoIconValue,
 } from "@repo/timo-design-system/ui";
 
+import { SECONDS_PER_MINUTE } from "@/constants/time";
 import { useDetailSubtaskField } from "@/hooks/todo-modal/use-detail-subtask-field";
-import { isTagLabelKey } from "@/utils/todo/tag-label";
+import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
 } from "@/utils/todo/text-length";
-import { convertDurationToTimeText } from "@/utils/todo/todo-time";
+import {
+  convertDurationToTimeText,
+  convertSecondsToApiDuration,
+} from "@/utils/todo/todo-time";
 
 interface DetailTodoFormValues {
   date: Date;
@@ -41,8 +45,8 @@ export const DETAIL_TODO_TIME_OPTIONS: TimeOption[] = [
   { minute: 15, value: "15", unit: "min" },
   { minute: 30, value: "30", unit: "min" },
   { minute: 45, value: "45", unit: "min" },
-  { minute: 60, value: "1", unit: "h" },
-  { minute: 90, value: "1.5", unit: "h" },
+  { minute: 60, value: "60", unit: "min" },
+  { minute: 90, value: "90", unit: "min" },
 ];
 
 export const DETAIL_TODO_WEEKDAY_IDS = [
@@ -65,8 +69,11 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const durationText = convertDurationToTimeText(todo.durationSeconds);
   const todoTagName = todo.tag?.name ?? "";
   const todoIcon = todo.icon ?? null;
-  const tagLabel = isTagLabelKey(todoTagName)
-    ? tCommon(`tag.${todoTagName}`)
+  const todoTagLabelKey = todo.tag
+    ? getDefaultTagLabelKey(todo.tag.tagId)
+    : undefined;
+  const tagLabel = todoTagLabelKey
+    ? tCommon(`tag.${todoTagLabelKey}`)
     : todoTagName;
 
   const { control, handleSubmit, formState } = useForm<DetailTodoFormValues>({
@@ -140,7 +147,9 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
 
     if (!option) return;
 
-    timeField.onChange(`${option.value} ${option.unit}`);
+    timeField.onChange(
+      convertSecondsToApiDuration(option.minute * SECONDS_PER_MINUTE),
+    );
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {

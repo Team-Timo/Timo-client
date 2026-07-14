@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
-import { todayTodoMocks } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+export const useTodayTodoList = (initialTodos: TodayTodo[]) => {
+  const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
 
-export const useTodayTodoList = () => {
-  const [todos, setTodos] = useState<TodoMock[]>(todayTodoMocks);
+  useEffect(() => {
+    setTodos(initialTodos);
+  }, [initialTodos]);
 
   const runningTodoId =
     todos.find((todo) => todo.timerStatus === "RUNNING")?.todoId ?? null;
@@ -27,22 +29,25 @@ export const useTodayTodoList = () => {
 
   const handleCheck = (todoId: number) => {
     // TODO: API
-    setTodos((prev) =>
-      prev.map((todo) =>
+    setTodos((prev) => {
+      const updated: TodayTodo[] = prev.map((todo) =>
         todo.todoId === todoId
-          ? { ...todo, completed: !todo.completed, timerStatus: "STOPPED" }
+          ? {
+              ...todo,
+              completed: !todo.completed,
+              timerStatus: "STOPPED" as const,
+            }
           : todo,
-      ),
-    );
+      );
+      return [...updated].sort(
+        (a, b) => Number(a.completed) - Number(b.completed),
+      );
+    });
   };
 
   const handleDelete = (todoId: number) => {
     // TODO: API
     setTodos((prev) => prev.filter((todo) => todo.todoId !== todoId));
-  };
-
-  const handleAddTodo = (todo: TodoMock) => {
-    setTodos((prev) => [...prev, todo]);
   };
 
   const handleSubTodoCheck = (todoId: number, subtaskId: number) => {
@@ -69,7 +74,6 @@ export const useTodayTodoList = () => {
     handlePlay,
     handleCheck,
     handleDelete,
-    handleAddTodo,
     handleSubTodoCheck,
   };
 };
