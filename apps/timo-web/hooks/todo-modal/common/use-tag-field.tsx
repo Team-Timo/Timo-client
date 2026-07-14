@@ -9,7 +9,7 @@ import { tagCreateDataSchema } from "@/api/common/tag-schema";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useTags } from "@/queries/tag/use-tags";
-import { getTagLabelKey } from "@/utils/todo/tag-label";
+import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 const MAX_TAG_COUNT = 8;
 
@@ -47,11 +47,11 @@ export const useTagField = <TFieldValues extends FieldValues>({
   const { mutate: createTag } = useCreateTag();
 
   const tagOptions = (tagsQuery.data?.tags ?? []).map((tag) => {
-    const tagLabelKey = getTagLabelKey(tag.name);
+    const defaultLabelKey = getDefaultTagLabelKey(tag.tagId);
 
     return {
       id: tag.tagId,
-      label: tagLabelKey ? tCommon(`tag.${tagLabelKey}`) : tag.name,
+      label: defaultLabelKey ? tCommon(`tag.${defaultLabelKey}`) : tag.name,
     };
   });
   const tagLabels = tagOptions.map((option) => option.label);

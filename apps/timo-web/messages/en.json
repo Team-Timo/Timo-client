@@ -139,7 +139,8 @@
     "tagCreateFailed": "Failed to create the tag. Please try again.",
     "tagActionFailed": "Failed to update the tag. Please try again.",
     "focusActionFailed": "Failed to process the request. Please try again.",
-    "languageChangeFailed": "Failed to change the language. Please try again."
+    "languageChangeFailed": "Failed to change the language. Please try again.",
+    "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first."
   },
   "Login": {
     "animationLabel": "Login animation",

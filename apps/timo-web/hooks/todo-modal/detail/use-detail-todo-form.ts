@@ -13,6 +13,7 @@ import type {
   TodoIconValue,
 } from "@repo/timo-design-system/ui";
 
+import { SECONDS_PER_MINUTE } from "@/constants/time";
 import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
 import { useDetailSubtaskField } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import { parseDateKey } from "@/utils/date/date";
@@ -21,7 +22,10 @@ import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
 } from "@/utils/todo/text-length";
-import { convertDurationToTimeText } from "@/utils/todo/todo-time";
+import {
+  convertDurationToTimeText,
+  convertSecondsToApiDuration,
+} from "@/utils/todo/todo-time";
 
 interface DetailTodoFormValues {
   date: Date;
@@ -58,8 +62,8 @@ export const DETAIL_TODO_TIME_OPTIONS: TimeOption[] = [
   { minute: 15, value: "15", unit: "min" },
   { minute: 30, value: "30", unit: "min" },
   { minute: 45, value: "45", unit: "min" },
-  { minute: 60, value: "1", unit: "h" },
-  { minute: 90, value: "1.5", unit: "h" },
+  { minute: 60, value: "60", unit: "min" },
+  { minute: 90, value: "90", unit: "min" },
 ];
 
 export const DETAIL_TODO_WEEKDAY_IDS = [
@@ -152,7 +156,9 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
 
     if (!option) return;
 
-    timeField.onChange(`${option.value} ${option.unit}`);
+    timeField.onChange(
+      convertSecondsToApiDuration(option.minute * SECONDS_PER_MINUTE),
+    );
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {

@@ -3,31 +3,20 @@ export const TAG_LABEL_KEYS = [
   "work",
   "exercise",
   "assignment",
-  "additional",
 ] as const;
 
 export type TagLabelKey = (typeof TAG_LABEL_KEYS)[number];
 
-const TAG_LABEL_KEY_BY_NAME: Record<string, TagLabelKey> = {
-  dailyLife: "dailyLife",
-  work: "work",
-  exercise: "exercise",
-  assignment: "assignment",
-  additional: "additional",
-  Daily: "dailyLife",
-  Work: "work",
-  Exercise: "exercise",
-  Assignment: "assignment",
-  Additional: "additional",
-  일상: "dailyLife",
-  업무: "work",
-  운동: "exercise",
-  과제: "assignment",
-  기타: "additional",
+/**
+ * 기본 태그 4종은 서버 tagId가 고정값으로 내려오므로,
+ * 이름 문자열이 아닌 tagId로 매핑해 프론트에서 next-intl로 렌더링한다.
+ */
+const DEFAULT_TAG_ID_TO_LABEL_KEY: Record<number, TagLabelKey> = {
+  1: "dailyLife",
+  2: "work",
+  3: "exercise",
+  4: "assignment",
 };
 
-export const isTagLabelKey = (value: string): value is TagLabelKey =>
-  (TAG_LABEL_KEYS as readonly string[]).includes(value);
-
-export const getTagLabelKey = (value: string): TagLabelKey | undefined =>
-  TAG_LABEL_KEY_BY_NAME[value];
+export const getDefaultTagLabelKey = (tagId: number): TagLabelKey | undefined =>
+  DEFAULT_TAG_ID_TO_LABEL_KEY[tagId];

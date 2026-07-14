@@ -4,7 +4,7 @@ import { Calendar } from "../Calendar";
 import type { ReactNode } from "react";
 
 export interface DateSelectorProps {
-  trigger: ReactNode;
+  trigger: ReactNode | ((isOpen: boolean) => ReactNode);
   value?: Date;
   onChange?: (date: Date) => void;
 }
