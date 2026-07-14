@@ -25,10 +25,7 @@ export interface UseTimeFieldParams {
   control: Control<CreateTodoRequest>;
 }
 
-/**
- * 숫자와 콜론만 허용한다. 콜론은 첫 번째 것만 유지하고(그 뒤 콜론은 제거),
- * 시(hour) 자릿수는 제한하지 않는다. 분(minute)만 2자리로 자른다.
- */
+// 숫자와 첫 번째 콜론만 남기고, 분(minute) 부분만 2자리로 자른다.
 const formatDurationInput = (raw: string): string => {
   const sanitized = raw.replace(/[^\d:]/g, "");
   const colonIndex = sanitized.indexOf(":");
@@ -46,11 +43,7 @@ const formatDurationInput = (raw: string): string => {
   return `${hours}:${minutes}`;
 };
 
-/**
- * "mm:ss" duration 문자열을 트리거에 보여줄 "h:mm" 시계 표기로 변환한다.
- * 분(minute)·초(second) 두 자리를 모두 반영해 전체 길이를 기준으로 계산한다.
- * @example formatDurationAsClockLabel("90:00") // "1:30"
- */
+// "mm:ss" duration을 트리거용 "h:mm" 시계 표기로 변환한다. (예: "90:00" → "1:30")
 const formatDurationAsClockLabel = (duration: string): string => {
   const totalSeconds = convertApiDurationToSeconds(duration);
   const hours = Math.floor(totalSeconds / SECONDS_PER_HOUR);
@@ -134,8 +127,7 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
   const handleDurationInputChange = (value: string) => {
     setSelectedTime(undefined);
 
-    // TimeSelector 입력창은 "시:분"(h:mm)을 그대로 편집하는 컨트롤이다.
-    // 트리거 라벨(timeDisplay)도 같은 h:mm 표기이므로, 타이핑한 값을 바로 반영한다.
+    // TimeSelector 입력창은 h:mm을 그대로 편집하므로 타이핑한 값을 트리거 라벨에 즉시 반영한다.
     const formatted = formatDurationInput(value);
     setTimeDisplay(formatted);
 
