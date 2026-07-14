@@ -64,7 +64,6 @@ export const DetailTodoModalContent = ({
 
   const handleDelete = () => {
     onDelete();
-    onClose();
   };
 
   const handleSelectTime = (nextTime: TimeSelection) => {

@@ -6,6 +6,7 @@ import type { UseDetailTodoParams } from "@/queries/todo/use-detail-todo";
 import type { ReactNode } from "react";
 
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
+import { useDeleteTodoSubmit } from "@/hooks/todo-modal/use-delete-todo-submit";
 import { useDetailTodo } from "@/queries/todo/use-detail-todo";
 
 export interface DetailTodoModalContainerProps extends UseDetailTodoParams {
@@ -32,9 +33,19 @@ const DetailTodoModalQuery = ({
   onDelete,
 }: DetailTodoModalQueryProps) => {
   const { data, isError } = useDetailTodo({ todoId, date });
+  const { handleDelete } = useDeleteTodoSubmit();
   const todo = data?.data;
 
   if (isError || !todo) return null;
+
+  const handleDeleteTodo = () => {
+    handleDelete(todoId, {
+      onSuccess: () => {
+        onDelete();
+        onClose();
+      },
+    });
+  };
 
   return (
     <DetailTodoModalContent
@@ -43,7 +54,7 @@ const DetailTodoModalQuery = ({
       onExited={onExited}
       todo={todo}
       onTogglePlay={onTogglePlay}
-      onDelete={onDelete}
+      onDelete={handleDeleteTodo}
     />
   );
 };
