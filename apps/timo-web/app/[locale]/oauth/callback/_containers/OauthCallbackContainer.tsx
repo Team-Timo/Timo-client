@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { useToken } from "@/api/generated/endpoints/auth/auth";
+import { useUpdateTimezone } from "@/api/generated/endpoints/user/user";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
@@ -16,6 +17,7 @@ export const OauthCallbackContainer = () => {
     (state) => state.setOnboardingCompleted,
   );
   const { mutate } = useToken();
+  const { mutate: updateTimezone } = useUpdateTimezone();
   const hasRequested = useRef(false);
 
   useEffect(() => {
@@ -36,6 +38,10 @@ export const OauthCallbackContainer = () => {
           }
           setAccessToken(data.accessToken);
           setOnboardingCompleted(data.user.onboardingCompleted);
+
+          const zoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          updateTimezone({ data: { zoneId } });
+
           router.replace(data.isNewUser ? ROUTES.ONBOARDING : ROUTES.HOME);
         },
         onError: () => {
@@ -43,7 +49,14 @@ export const OauthCallbackContainer = () => {
         },
       },
     );
-  }, [code, mutate, router, setAccessToken, setOnboardingCompleted]);
+  }, [
+    code,
+    mutate,
+    router,
+    setAccessToken,
+    setOnboardingCompleted,
+    updateTimezone,
+  ]);
 
   return null;
 };
