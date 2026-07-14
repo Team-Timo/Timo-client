@@ -44,6 +44,10 @@ export const formatDateKey = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
+/** 날짜를 "yy.MM.dd" 형식의 라벨 문자열로 변환한다. */
+export const formatShortDateLabel = (date: Date): string =>
+  `${String(date.getFullYear()).slice(2)}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
+
 /**
  * "yyyy-MM-dd" 형식의 키 문자열을 Date로 파싱한다.
  * @param value - 파싱할 날짜 키 문자열

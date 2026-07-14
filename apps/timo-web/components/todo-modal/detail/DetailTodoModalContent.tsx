@@ -13,9 +13,9 @@ import { DetailTodoTaskFields } from "@/components/todo-modal/detail/DetailTodoT
 import {
   DETAIL_TODO_TIME_OPTIONS,
   DETAIL_TODO_WEEKDAY_IDS,
-  formatDetailTodoDateLabel,
   useDetailTodoForm,
 } from "@/hooks/todo-modal/use-detail-todo-form";
+import { formatShortDateLabel } from "@/utils/date/date";
 
 const DETAIL_TODO_MEMO_MAX_LENGTH = 300;
 
@@ -109,7 +109,7 @@ export const DetailTodoModalContent = ({
 
           <div className="flex items-center gap-2 py-3">
             <TodoToolbar
-              dateLabel={formatDetailTodoDateLabel(detailTodoForm.date)}
+              dateLabel={formatShortDateLabel(detailTodoForm.date)}
               date={detailTodoForm.date}
               onDateChange={detailTodoForm.setDate}
               timeLabel={detailTodoForm.time}
