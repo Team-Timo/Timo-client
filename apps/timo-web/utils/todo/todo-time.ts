@@ -28,3 +28,28 @@ export const convertApiDurationToSeconds = (duration: string): number => {
   const seconds = Number(secondsText) || 0;
   return minutes * SECONDS_PER_MINUTE + seconds;
 };
+
+export const convertTimeTextToDurationSeconds = (timeText: string): number => {
+  const normalized = timeText.trim().toLowerCase();
+  const hourMatch = /^(\d+(?:\.\d+)?)\s*h$/.exec(normalized);
+  const minuteMatch = /^(\d+)\s*min$/.exec(normalized);
+  const timeMatch = /^(\d+)\s*:\s*([0-5]?\d)$/.exec(normalized);
+
+  if (hourMatch) {
+    return Math.round(Number(hourMatch[1]) * SECONDS_PER_HOUR);
+  }
+
+  if (minuteMatch) {
+    return Number(minuteMatch[1]) * SECONDS_PER_MINUTE;
+  }
+
+  if (timeMatch) {
+    const [, hoursText, minutesText] = timeMatch;
+    return (
+      Number(hoursText) * SECONDS_PER_HOUR +
+      Number(minutesText) * SECONDS_PER_MINUTE
+    );
+  }
+
+  return 0;
+};

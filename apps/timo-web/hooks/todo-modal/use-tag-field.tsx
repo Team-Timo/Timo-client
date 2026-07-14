@@ -18,10 +18,24 @@ export interface UseTagFieldParams<TFieldValues extends FieldValues> {
   name?: Path<TFieldValues>;
 }
 
+export interface UseTagFieldResult {
+  tagOptions: Array<{ id: number; label: string }>;
+  tagLabels: string[];
+  selectedTagOption?: { id: number; label: string };
+  selectedTagId: number | null;
+  selectedTagLabel?: string;
+  isTagLimitToastOpen: boolean;
+  closeTagLimitToast: () => void;
+  isCreateTagErrorToastOpen: boolean;
+  closeCreateTagErrorToast: () => void;
+  handleSelectTag: (label: string) => void;
+  handleAddTagClick: () => void;
+}
+
 export const useTagField = <TFieldValues extends FieldValues>({
   control,
   name = "tagId" as Path<TFieldValues>,
-}: UseTagFieldParams<TFieldValues>) => {
+}: UseTagFieldParams<TFieldValues>): UseTagFieldResult => {
   const tCommon = useTranslations("Common");
   const { field } = useController({ name, control });
   const [isTagLimitToastOpen, setIsTagLimitToastOpen] =
@@ -93,6 +107,7 @@ export const useTagField = <TFieldValues extends FieldValues>({
     tagOptions,
     tagLabels,
     selectedTagOption,
+    selectedTagId: typeof field.value === "number" ? field.value : null,
     selectedTagLabel: selectedTagOption?.label,
     isTagLimitToastOpen,
     closeTagLimitToast: () => setIsTagLimitToastOpen(false),

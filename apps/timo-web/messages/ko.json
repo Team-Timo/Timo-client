@@ -56,6 +56,7 @@
     },
     "detailModal": {
       "ariaLabel": "투두 상세",
+      "save": "저장",
       "delete": "투두 삭제",
       "repeatFrequencyHeading": "반복 일정",
       "repeatDayLabel": "일"
@@ -133,6 +134,7 @@
     "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 완료해주세요.",
     "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요.",
     "todoCreateFailed": "투두 생성에 실패했어요. 다시 시도해 주세요.",
+    "todoUpdateFailed": "투두 수정에 실패했어요. 다시 시도해 주세요.",
     "aiDurationRecommendFailed": "AI 추천 소요 시간을 가져오지 못했어요. 다시 시도해 주세요.",
     "tagCreateFailed": "태그 생성에 실패했어요. 다시 시도해 주세요.",
     "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요.",
