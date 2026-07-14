@@ -64,7 +64,18 @@ export const useTimerActions = ({
         timer.timerId,
         timer.plannedSeconds + timer.extendedSeconds,
       );
-      changeStatus({ timerId: timer.timerId, data: { action: "RESUME" } });
+      changeStatus(
+        { timerId: timer.timerId, data: { action: "RESUME" } },
+        {
+          onSuccess: () => {
+            extendTimer({
+              timerId: timer.timerId,
+              data: { extendMinutes: minutes },
+            });
+          },
+        },
+      );
+      return;
     }
 
     extendTimer({ timerId: timer.timerId, data: { extendMinutes: minutes } });
