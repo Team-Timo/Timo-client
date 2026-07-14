@@ -59,6 +59,7 @@ export const SettingsProfileView = ({
                 alt={name}
                 width={114}
                 height={114}
+                priority
                 className="size-28.5 shrink-0 rounded-full object-cover"
               />
             ) : (
