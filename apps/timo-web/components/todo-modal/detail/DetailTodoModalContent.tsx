@@ -226,10 +226,7 @@ export const DetailTodoModalContent = ({
               subtaskInputs={detailTodoForm.subtaskInputs}
               onTitleChange={detailTodoForm.changeTitle}
               onToggleCompleted={detailTodoForm.setIsCompleted}
-              onTogglePlay={() => {
-                onTogglePlay();
-                onClose();
-              }}
+              onTogglePlay={onTogglePlay}
               onSubtaskInputChange={detailTodoForm.changeSubtaskInput}
               onToggleSubtaskCompleted={handleSubtaskCompletedChange}
               registerSubtaskInputRef={detailTodoForm.registerSubtaskInputRef}
