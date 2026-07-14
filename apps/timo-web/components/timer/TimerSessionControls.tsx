@@ -25,7 +25,6 @@ export interface TimerSessionControlsProps {
   plannedMinutes: number;
   actualMinutes: number;
   feedbackText?: string;
-  /** 계획된 시간이 모두 경과했는지 — true면 완료(complete)로, false면 조기 종료(stop)로 처리한다 */
   isTimeUp: boolean;
   onExtend: (minutes: number) => void;
   onComplete: () => void;

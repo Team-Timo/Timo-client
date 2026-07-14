@@ -7,7 +7,6 @@ import { TimerCompleteModalPanel } from "@/components/timer/TimerCompleteModalPa
 import { TimerStopModalPanel } from "@/components/timer/TimerStopModalPanel";
 
 export interface HomeStopCompleteModalProps {
-  /** 값이 바뀔 때마다(같은 투두를 다시 클릭한 경우 포함) 모달을 새로 연다 */
   pendingToken: number | null;
   plannedMinutes: number;
   actualMinutes: number;

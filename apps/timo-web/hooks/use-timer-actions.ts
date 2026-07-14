@@ -19,7 +19,6 @@ export interface UseTimerActionsOptions {
   timer: ActiveTimer | undefined;
   isRunning: boolean;
   isTimeUp: boolean;
-  /** 정지 시 changeTodoStatus에 넘길 날짜 (포커스 페이지는 focusView.date, 사이드바는 오늘 날짜) */
   dateKey: string;
   markOvertimeStart: (timerId: number, baseSeconds: number) => void;
   changeStatus: ChangeStatusMutate;

@@ -6,7 +6,6 @@ import { useEffect, useRef } from "react";
 
 import type { TodoIconValue } from "@repo/timo-design-system/ui";
 
-/** 이 값보다 렌더링 간격이 벌어지면(화면 전환, 오버타임 전환 등) 스냅으로 처리하고, 그 이하는 매초 틱으로 보고 부드럽게 이어그린다 */
 const JUMP_GAP_MS = 1500;
 
 export type TimerSize = "sm" | "lg";
