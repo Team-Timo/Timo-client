@@ -39,7 +39,6 @@ export const useActiveTimer = () => {
       elapsedSeconds: data.elapsedSeconds + elapsedSinceFetch,
       remainingSeconds: Math.max(0, data.remainingSeconds - elapsedSinceFetch),
     };
-    // tick은 값 자체가 아니라 매 초 재계산을 트리거하기 위한 용도로만 의존성에 둔다
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isRunning, dataUpdatedAt, tick]);
 
