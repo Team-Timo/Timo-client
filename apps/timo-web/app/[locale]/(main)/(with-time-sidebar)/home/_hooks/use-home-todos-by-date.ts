@@ -13,6 +13,7 @@ import {
   useStopTimer,
 } from "@/api/generated/endpoints/timer/timer";
 import {
+  getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
   useReorderTodo,
@@ -80,6 +81,11 @@ export const useHomeTodosByDate = (
     invalidateHomeView();
     invalidateFocusTodo();
   };
+  const invalidateTodoDetail = (dateKey: string, todoId: number) => {
+    queryClient.invalidateQueries({
+      queryKey: getGetTodoDetailQueryKey(todoId, { date: dateKey }),
+    });
+  };
 
   const handleToggleCompleted = (
     dateKey: string,
@@ -141,10 +147,15 @@ export const useHomeTodosByDate = (
     }
 
     if (activeTimer && activeTimer.todoId === todoId) {
-      changeStatus({
-        timerId: activeTimer.timerId,
-        data: { action: activeTimer.status === "RUNNING" ? "PAUSE" : "RESUME" },
-      });
+      changeStatus(
+        {
+          timerId: activeTimer.timerId,
+          data: {
+            action: activeTimer.status === "RUNNING" ? "PAUSE" : "RESUME",
+          },
+        },
+        { onSuccess: () => invalidateTodoDetail(dateKey, todoId) },
+      );
       return;
     }
 
@@ -154,7 +165,10 @@ export const useHomeTodosByDate = (
       return;
     }
 
-    startTimer({ todoId });
+    startTimer(
+      { todoId },
+      { onSuccess: () => invalidateTodoDetail(dateKey, todoId) },
+    );
   };
 
   const handleToggleSubtaskCompleted = (
