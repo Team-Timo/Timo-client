@@ -1,13 +1,18 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/withdrawal/_types/withdrawal-type";
 
 import { SettingsWithdrawalView } from "@/app/[locale]/(main)/settings/withdrawal/_components/SettingsWithdrawalView";
+import { useWithdrawAction } from "@/app/[locale]/(main)/settings/withdrawal/_queries/use-withdraw";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
 export const SettingsWithdrawalContainer = () => {
   const t = useTranslations("Settings.withdrawal");
+  const { mutate: withdrawMutate, isPending } = useWithdrawAction();
+  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
 
   const labels: SettingsWithdrawalLabels = {
     title: t("title"),
@@ -23,13 +28,26 @@ export const SettingsWithdrawalContainer = () => {
   };
 
   const handleWithdraw = () => {
+    if (isPending) return;
     // TODO: 실제 확인 모달로 교체
     const confirmed = window.confirm(t("confirmMessage"));
     if (!confirmed) return;
 
-    // TODO: API - 회원 탈퇴 및 데이터 영구 삭제
-    console.log("회원 탈퇴 API를 호출합니다.");
+    withdrawMutate(undefined, {
+      onError: () => {
+        setIsErrorToastOpen(true);
+      },
+    });
   };
 
-  return <SettingsWithdrawalView labels={labels} onWithdraw={handleWithdraw} />;
+  return (
+    <>
+      <SettingsWithdrawalView labels={labels} onWithdraw={handleWithdraw} />
+      <AnimatedToast
+        isOpen={isErrorToastOpen}
+        onClose={() => setIsErrorToastOpen(false)}
+        message={t("withdrawError")}
+      />
+    </>
+  );
 };

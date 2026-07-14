@@ -1,19 +1,25 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import type { BaseResponseUserProfileResponse } from "@/api/generated/models";
 import type {
   SettingsDefaultTagKey,
   SettingsLanguage,
   SettingsProfileFormValues,
 } from "@/app/[locale]/(main)/settings/_types/profile-type";
 
-import { useUpdateLanguage } from "@/api/generated/endpoints/user/user";
+import {
+  getGetMyProfileQueryKey,
+  useUpdateLanguage,
+} from "@/api/generated/endpoints/user/user";
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
-import { useSettingsProfileQuery } from "@/app/[locale]/(main)/settings/_queries/use-settings-profile";
+import { useLogoutAction } from "@/app/[locale]/(main)/settings/_queries/use-logout";
+import { useMyProfile } from "@/queries/use-my-profile";
 
 const LANGUAGE_REQUEST_MAP: Record<
   SettingsLanguage,
@@ -37,12 +43,14 @@ export const useSettingsProfile = () => {
   const tCommon = useTranslations("Common");
   const { language, locale, setLanguage, commitLanguage } =
     useSettingsLanguageParam();
+  const { mutate: logoutMutate, isPending: isLoggingOut } = useLogoutAction();
 
-  const { data: profile } = useSettingsProfileQuery();
+  const { data: profile } = useMyProfile();
   const [isCalendarConnected, setIsCalendarConnected] = useState(
     profile.calendarConnected,
   );
   const { mutateAsync: updateLanguage } = useUpdateLanguage();
+  const queryClient = useQueryClient();
 
   // TODO: 태그 목록 조회 API 연동 후 기본 태그 대신 실제 응답으로 교체
   const { watch, setValue, handleSubmit, reset, formState } =
@@ -95,10 +103,8 @@ export const useSettingsProfile = () => {
   };
 
   const handleLogout = () => {
-    // TODO: API - 로그아웃 처리 및 브라우저 저장 데이터 파기
-    console.log("로그아웃 API 호출");
-    // TODO: 로그인 페이지 라우트 추가 후 이동 연결 (뒤로가기로 재접근 차단 포함)
-    console.log("[Login] 페이지로 이동합니다.");
+    if (isLoggingOut) return;
+    logoutMutate();
   };
 
   const isLanguageDirty = language !== locale;
@@ -106,9 +112,22 @@ export const useSettingsProfile = () => {
   const handleSave = handleSubmit(async (values) => {
     try {
       if (isLanguageDirty) {
-        await updateLanguage({
+        const { data } = await updateLanguage({
           data: { language: LANGUAGE_REQUEST_MAP[language] },
         });
+
+        if (data) {
+          queryClient.setQueryData(
+            getGetMyProfileQueryKey(),
+            (cached?: BaseResponseUserProfileResponse) =>
+              cached?.data
+                ? {
+                    ...cached,
+                    data: { ...cached.data, language: data.language },
+                  }
+                : cached,
+          );
+        }
       }
       reset(values);
       commitLanguage();

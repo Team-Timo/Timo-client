@@ -92,7 +92,8 @@
       "warningCalendar": "연동된 캘린더 연결이 해제됩니다.",
       "warningIrreversible": "삭제된 계정은 복구할 수 없습니다.",
       "withdraw": "탈퇴하기",
-      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요."
+      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요.",
+      "withdrawError": "탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
     }
   },
   "Statistics": {

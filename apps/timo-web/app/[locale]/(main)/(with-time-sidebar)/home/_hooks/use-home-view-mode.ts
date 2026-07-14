@@ -4,7 +4,12 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { addDays, formatDateKey, getToday, parseDateKey } from "@/utils/date";
+import {
+  addDays,
+  formatDateKey,
+  getToday,
+  parseDateKey,
+} from "@/utils/date/date";
 
 const VIEW_PARAM = "view";
 const DATE_PARAM = "date";

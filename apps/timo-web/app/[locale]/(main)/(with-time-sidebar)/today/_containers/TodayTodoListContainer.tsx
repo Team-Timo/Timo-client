@@ -4,8 +4,8 @@ import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sideb
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
 import { useToday } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today";
-import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
-import { formatDate } from "@/utils/date";
+import { formatDate } from "@/utils/date/date";
+import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
 export const TodayTodoListContainer = () => {
   const { data } = useToday();

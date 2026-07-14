@@ -7,7 +7,7 @@ import type { ApiDayOfWeek } from "@/app/[locale]/(main)/(with-time-sidebar)/hom
 import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_components/DateInformation";
 import { CreateTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-modal/CreateTodoModalContainer";
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
-import { getToday, parseDateKey } from "@/utils/date";
+import { getToday, parseDateKey } from "@/utils/date/date";
 
 export interface HomeDayHeaderContainerProps {
   dateKey: string;
