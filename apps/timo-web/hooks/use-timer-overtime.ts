@@ -10,7 +10,10 @@ const readStoredBase = (timerId: number): number | null => {
   if (typeof window === "undefined") return null;
 
   const raw = window.sessionStorage.getItem(`${STORAGE_KEY_PREFIX}${timerId}`);
-  return raw === null ? null : Number(raw);
+  if (raw === null) return null;
+
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : null;
 };
 
 /**
@@ -20,7 +23,7 @@ const readStoredBase = (timerId: number): number | null => {
 export const useTimerOvertime = (timer: ActiveTimer | undefined) => {
   const timerId = timer?.timerId;
   const [overtimeBaseSeconds, setOvertimeBaseSeconds] = useState<number | null>(
-    () => (timerId ? readStoredBase(timerId) : null),
+    null,
   );
 
   useEffect(() => {
