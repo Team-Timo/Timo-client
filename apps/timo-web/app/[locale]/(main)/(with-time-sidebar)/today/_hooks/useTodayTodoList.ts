@@ -30,9 +30,13 @@ export const useTodayTodoList = (initialTodos: TodayTodo[]) => {
   const handleCheck = (todoId: number) => {
     // TODO: API
     setTodos((prev) => {
-      const updated = prev.map((todo) =>
+      const updated: TodayTodo[] = prev.map((todo) =>
         todo.todoId === todoId
-          ? { ...todo, completed: !todo.completed, timerStatus: "STOPPED" }
+          ? {
+              ...todo,
+              completed: !todo.completed,
+              timerStatus: "STOPPED" as const,
+            }
           : todo,
       );
       return [...updated].sort(
