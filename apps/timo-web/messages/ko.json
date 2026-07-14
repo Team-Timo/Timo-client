@@ -137,7 +137,8 @@
     "tagCreateFailed": "태그 생성에 실패했어요. 다시 시도해 주세요.",
     "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요.",
     "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요.",
-    "languageChangeFailed": "언어 변경에 실패했어요. 다시 시도해 주세요."
+    "languageChangeFailed": "언어 변경에 실패했어요. 다시 시도해 주세요.",
+    "timerAlreadyRunning": "다른 투두의 타이머가 이미 실행 중이에요. 먼저 종료해 주세요."
   },
   "Login": {
     "animationLabel": "로그인 애니메이션",

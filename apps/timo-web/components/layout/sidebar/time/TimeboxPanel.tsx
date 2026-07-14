@@ -1,17 +1,26 @@
 "use client";
 
+import { cn } from "@repo/timo-design-system/utils";
 import { useEffect, useState } from "react";
 
+import { useActiveTimer } from "@/hooks/use-active-timer";
+import { useTimeBoxes } from "@/queries/use-time-boxes";
+import { formatDateKey } from "@/utils/date/date";
 import { getHourLabel } from "@/utils/date/get-hour-label";
+import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
 const HOURS_IN_DAY = 24;
 const HOUR_LINES = HOURS_IN_DAY + 1;
-const ROW_HEIGHT = 30;
+const ROW_HEIGHT = 50;
 const CLOCK_TICK_INTERVAL_MS = 30_000;
+const MIN_MINUTES_FOR_LABEL = 30;
 
 export interface TimeboxPanelProps {
   currentTime?: Date;
 }
+
+const timeToOffset = (date: Date) =>
+  (date.getHours() + date.getMinutes() / 60) * ROW_HEIGHT;
 
 export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
   const [now, setNow] = useState(() => currentTime ?? new Date());
@@ -27,8 +36,10 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
   }, [currentTime]);
 
   const time = currentTime ?? now;
-  const currentMinuteRatio = time.getMinutes() / 60;
-  const currentTimeOffset = (time.getHours() + currentMinuteRatio) * ROW_HEIGHT;
+  const currentTimeOffset = timeToOffset(time);
+
+  const { data: timeBoxes } = useTimeBoxes(formatDateKey(time));
+  const { data: activeTimer } = useActiveTimer();
 
   return (
     <div className="relative" style={{ height: HOURS_IN_DAY * ROW_HEIGHT }}>
@@ -46,6 +57,64 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
           </li>
         ))}
       </ul>
+
+      {timeBoxes?.map((timeBox) => {
+        // 현재 활성 타이머와 같은 timerId(=같은 투두)면, 이전에 일시정지로 끊긴 구간이라도
+        // "진행 중인 투두"로 보고 진한 파랑으로 표시한다.
+        const isRelatedToActiveTimer =
+          timeBox.timerId === activeTimer?.timerId &&
+          timeBox.todoId === activeTimer?.todoId;
+        const isGrowing = !timeBox.endedAt;
+
+        const start = new Date(timeBox.startedAt);
+        const end = timeBox.endedAt ? new Date(timeBox.endedAt) : time;
+
+        const startOffset = timeToOffset(start);
+        const endOffset = timeToOffset(end);
+        const height = Math.max(0, endOffset - startOffset);
+        const durationMinutes = Math.max(
+          0,
+          (end.getTime() - start.getTime()) / 60_000,
+        );
+        const showLabel = durationMinutes >= MIN_MINUTES_FOR_LABEL;
+
+        return (
+          <div
+            key={timeBox.sessionId}
+            className={cn(
+              "absolute right-0 left-10.75 overflow-hidden",
+              isRelatedToActiveTimer ? "bg-timo-blue-300" : "bg-timo-blue-65",
+              isGrowing ? "rounded-t-[4px]" : "rounded-[4px]",
+            )}
+            style={{ top: startOffset, height }}
+          >
+            {showLabel && (
+              <div className="flex items-start gap-1 pt-[2px] pl-[6px]">
+                <span
+                  className={cn(
+                    "typo-body-sb-12 min-w-0 truncate",
+                    isRelatedToActiveTimer
+                      ? "text-white"
+                      : "text-timo-gray-900",
+                  )}
+                >
+                  {timeBox.todoName}
+                </span>
+                <span
+                  className={cn(
+                    "typo-body-r-12 shrink-0",
+                    isRelatedToActiveTimer
+                      ? "text-white"
+                      : "text-timo-gray-900",
+                  )}
+                >
+                  {convertDurationToTimeText(durationMinutes * 60)}
+                </span>
+              </div>
+            )}
+          </div>
+        );
+      })}
 
       <span
         aria-hidden="true"

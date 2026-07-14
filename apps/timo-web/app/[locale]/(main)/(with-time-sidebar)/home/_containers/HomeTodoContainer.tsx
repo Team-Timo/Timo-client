@@ -2,12 +2,13 @@
 
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
 import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
 import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
+import { HomeStopCompleteModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeStopCompleteModalContainer";
 import {
   scrollContainerToToday,
   useHomeTodayScrollRef,
@@ -15,13 +16,22 @@ import {
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
+import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
+
+interface PendingCompleteTodo {
+  token: number;
+  dateKey: string;
+  todoId: number;
+}
 
 export const HomeTodoContainer = () => {
   const tCommon = useTranslations("Common");
+  const tToast = useTranslations("Toast");
   const { isWeekView, referenceDate } = useHomeViewMode();
 
   const scrollRef = useHomeTodayScrollRef<HTMLDivElement>();
@@ -32,18 +42,50 @@ export const HomeTodoContainer = () => {
   const { data: homeViewData } = useHomeView({ filter, baseDate });
   const days = homeViewData.days;
 
+  const [pendingCompleteTodo, setPendingCompleteTodo] =
+    useState<PendingCompleteTodo | null>(null);
+  const [feedbackText, setFeedbackText] = useState<string | undefined>();
+  const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
+
   const {
     todosByDate,
+    activeTimer,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleDeleteTodo,
     handleReorderTodo,
-  } = useHomeTodosByDate(days);
+    confirmStopAndComplete,
+  } = useHomeTodosByDate(days, {
+    onNeedStopConfirm: (dateKey, todoId) =>
+      setPendingCompleteTodo({ token: Date.now(), dateKey, todoId }),
+    onTimerAlreadyRunning: () => setIsTimerRunningToastOpen(true),
+    onStopFeedback: setFeedbackText,
+  });
+
+  const handleConfirmPendingComplete = () => {
+    if (!pendingCompleteTodo) return;
+
+    confirmStopAndComplete(
+      pendingCompleteTodo.dateKey,
+      pendingCompleteTodo.todoId,
+    );
+
+    setPendingCompleteTodo(null);
+  };
 
   useEffect(() => {
     scrollContainerToToday(scrollRef.current);
   }, [isWeekView, scrollRef]);
+
+  const plannedMinutes = activeTimer
+    ? convertDurationToMinutes(
+        activeTimer.plannedSeconds + activeTimer.extendedSeconds,
+      )
+    : 0;
+  const actualMinutes = activeTimer
+    ? convertDurationToMinutes(activeTimer.elapsedSeconds)
+    : 0;
 
   return (
     <div
@@ -88,6 +130,14 @@ export const HomeTodoContainer = () => {
               <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
                 {todos.map((todo) => {
                   const [firstSubtask] = todo.subtasks;
+                  const isActiveTodo =
+                    activeTimer && activeTimer.todoId === todo.todoId;
+                  const durationSeconds = isActiveTodo
+                    ? activeTimer.plannedSeconds + activeTimer.extendedSeconds
+                    : todo.durationSeconds;
+                  const timerStatus = isActiveTodo
+                    ? activeTimer.status
+                    : todo.timerStatus;
 
                   const todoTagLabelKey = todo.tag
                     ? getDefaultTagLabelKey(todo.tag.tagId)
@@ -112,12 +162,12 @@ export const HomeTodoContainer = () => {
                           todoId={todo.todoId}
                           title={todo.title}
                           isCompleted={todo.completed}
-                          durationSeconds={todo.durationSeconds}
+                          durationSeconds={durationSeconds}
                           priority={todo.priority}
                           tagName={todoTagName}
                           hasMemo={todo.hasMemo}
                           isRepeated={todo.isRepeated}
-                          timerStatus={todo.timerStatus}
+                          timerStatus={timerStatus}
                           subtaskTitle={firstSubtask?.content}
                           isSubtaskCompleted={firstSubtask?.completed}
                           onClickTodo={openDetailTodoModal}
@@ -152,6 +202,20 @@ export const HomeTodoContainer = () => {
           </div>
         );
       })}
+
+      <HomeStopCompleteModalContainer
+        pendingToken={pendingCompleteTodo?.token ?? null}
+        plannedMinutes={plannedMinutes}
+        actualMinutes={actualMinutes}
+        feedbackText={feedbackText}
+        onConfirm={handleConfirmPendingComplete}
+      />
+
+      <AnimatedToast
+        isOpen={isTimerRunningToastOpen}
+        onClose={() => setIsTimerRunningToastOpen(false)}
+        message={tToast("timerAlreadyRunning")}
+      />
     </div>
   );
 };

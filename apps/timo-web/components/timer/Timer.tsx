@@ -1,12 +1,17 @@
-import { cn } from "@repo/timo-design-system/utils";
+"use client";
 
-import type { ReactNode } from "react";
+import { IconGraphic } from "@repo/timo-design-system/ui";
+import { cn } from "@repo/timo-design-system/utils";
+import { useEffect, useRef } from "react";
+
+import type { TodoIconValue } from "@repo/timo-design-system/ui";
+
+const JUMP_GAP_MS = 1500;
 
 export type TimerSize = "sm" | "lg";
-export type IconType = ReactNode;
 
 export interface TimerProps {
-  icon?: IconType;
+  icon?: TodoIconValue;
   time: string;
   plannedLabel: string;
   progress: number;
@@ -54,6 +59,16 @@ export const Timer = ({
   const clampedProgress = Math.min(100, Math.max(0, sweepProgress));
   const dashOffset = circumference * (1 - clampedProgress / 100);
 
+  const prevRenderRef = useRef({ time: Date.now(), isOvertime });
+  const now = Date.now();
+  const isJump =
+    prevRenderRef.current.isOvertime !== isOvertime ||
+    now - prevRenderRef.current.time > JUMP_GAP_MS;
+
+  useEffect(() => {
+    prevRenderRef.current = { time: now, isOvertime };
+  });
+
   return (
     <div
       className="relative flex items-center justify-center"
@@ -82,7 +97,8 @@ export const Timer = ({
           r={radius}
           fill="none"
           className={cn(
-            "transition-[stroke-dashoffset] duration-1000 ease-linear",
+            !isJump &&
+              "transition-[stroke-dashoffset] duration-1000 ease-linear",
             isOvertime ? "stroke-timo-yellow-300" : "stroke-timo-blue-300",
           )}
           strokeWidth={strokeWidth}
@@ -92,12 +108,7 @@ export const Timer = ({
       </svg>
 
       <div className="flex w-[130px] flex-col items-center gap-[5px]">
-        {icon && (
-          // TODO: 아이콘 핸드오프시 변경 예정
-          <span className="bg-timo-yellow-300 flex size-10 items-center justify-center rounded-full p-2">
-            {icon}
-          </span>
-        )}
+        {icon && <IconGraphic icon={icon} className="size-10" />}
 
         <p
           className={cn(
