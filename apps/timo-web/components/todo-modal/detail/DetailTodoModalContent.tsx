@@ -142,11 +142,13 @@ export const DetailTodoModalContent = ({
                 LOW: tCommon("priority.low"),
               }}
               onSelectPriority={detailTodoForm.setPriority}
-              tagLabel={detailTodoForm.selectedTag}
-              tags={[detailTodoForm.tagLabel]}
-              selectedTag={detailTodoForm.selectedTag}
+              tagLabel={
+                detailTodoForm.selectedTagLabel ?? tCreateModal("tagLabel")
+              }
+              tags={detailTodoForm.tagLabels}
+              selectedTag={detailTodoForm.selectedTagLabel}
               addTagLabel={tCreateModal("addTag")}
-              onSelectTag={detailTodoForm.setSelectedTag}
+              onSelectTag={detailTodoForm.handleSelectTag}
               onAddTagClick={() => {}}
               hasMemo={Boolean(todo.memo?.trim())}
               isRepeatActive={detailTodoForm.isRepeatActive}

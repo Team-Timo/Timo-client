@@ -17,7 +17,7 @@
       "SAT": "Saturday"
     },
     "tag": {
-      "dailyLife": "Daily life",
+      "dailyLife": "Daily",
       "work": "Work",
       "exercise": "Exercise",
       "assignment": "Assignment",
@@ -46,7 +46,7 @@
       "dateLabel": "Date",
       "timeLabel": "Time",
       "tagLabel": "Tag",
-      "addTag": "Add",
+      "addTag": "Add tag",
       "create": "Create",
       "repeatDaily": "Daily",
       "repeatWeekly": "Weekly",

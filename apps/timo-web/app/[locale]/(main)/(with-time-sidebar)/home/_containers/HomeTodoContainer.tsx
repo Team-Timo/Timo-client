@@ -18,7 +18,7 @@ import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_que
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
-import { isTagLabelKey } from "@/utils/todo/tag-label";
+import { getTagLabelKey } from "@/utils/todo/tag-label";
 
 export const HomeTodoContainer = () => {
   const tCommon = useTranslations("Common");
@@ -88,6 +88,9 @@ export const HomeTodoContainer = () => {
               <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
                 {todos.map((todo) => {
                   const [firstSubtask] = todo.subtasks;
+                  const tagLabelKey = todo.tag
+                    ? getTagLabelKey(todo.tag.name)
+                    : undefined;
 
                   return (
                     <DetailTodoModalContainer
@@ -108,8 +111,8 @@ export const HomeTodoContainer = () => {
                           priority={todo.priority}
                           tagName={
                             todo.tag &&
-                            (isTagLabelKey(todo.tag.name)
-                              ? tCommon(`tag.${todo.tag.name}`)
+                            (tagLabelKey
+                              ? tCommon(`tag.${tagLabelKey}`)
                               : todo.tag.name)
                           }
                           hasMemo={todo.hasMemo}

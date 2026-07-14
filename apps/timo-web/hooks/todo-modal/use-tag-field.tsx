@@ -1,23 +1,29 @@
+import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 import { useController } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
-import type { Control } from "react-hook-form";
+import type { Control, FieldValues, Path } from "react-hook-form";
 
 import { tagCreateDataSchema } from "@/api/common/tag-schema";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useTags } from "@/queries/tag/use-tags";
+import { getTagLabelKey } from "@/utils/todo/tag-label";
 
 const MAX_TAG_COUNT = 8;
 
-export interface UseTagFieldParams {
-  control: Control<CreateTodoRequest>;
+export interface UseTagFieldParams<TFieldValues extends FieldValues> {
+  control: Control<TFieldValues>;
+  name?: Path<TFieldValues>;
 }
 
-export const useTagField = ({ control }: UseTagFieldParams) => {
-  const { field } = useController({ name: "tagId", control });
+export const useTagField = <TFieldValues extends FieldValues>({
+  control,
+  name = "tagId" as Path<TFieldValues>,
+}: UseTagFieldParams<TFieldValues>) => {
+  const tCommon = useTranslations("Common");
+  const { field } = useController({ name, control });
   const [isTagLimitToastOpen, setIsTagLimitToastOpen] =
     useState<boolean>(false);
   const [isCreateTagErrorToastOpen, setIsCreateTagErrorToastOpen] =
@@ -26,10 +32,14 @@ export const useTagField = ({ control }: UseTagFieldParams) => {
   const tagsQuery = useTags();
   const { mutate: createTag } = useCreateTag();
 
-  const tagOptions = (tagsQuery.data?.tags ?? []).map((tag) => ({
-    id: tag.tagId,
-    label: tag.name,
-  }));
+  const tagOptions = (tagsQuery.data?.tags ?? []).map((tag) => {
+    const tagLabelKey = getTagLabelKey(tag.name);
+
+    return {
+      id: tag.tagId,
+      label: tagLabelKey ? tCommon(`tag.${tagLabelKey}`) : tag.name,
+    };
+  });
   const tagLabels = tagOptions.map((option) => option.label);
   const selectedTagOption = tagOptions.find(
     (option) => option.id === field.value,
