@@ -1,6 +1,5 @@
 "use client";
 
-import { TimerOnIcon } from "@repo/timo-design-system/icons";
 import { useTranslations } from "next-intl";
 
 import { FocusEmptyTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusEmptyTaskItem";
@@ -97,7 +96,7 @@ export const FocusSessionContainer = () => {
       <section className="border-timo-gray-500 flex h-full w-136.5 shrink-0 items-center border-l bg-white">
         <div className="flex w-full flex-col items-center gap-11.25">
           <Timer
-            icon={<TimerOnIcon />}
+            icon={todo.icon}
             time={convertDurationToTimeText(focusSessionState.remainingSeconds)}
             plannedLabel={`${focusSessionState.plannedMinutes}M`}
             progress={focusSessionState.progress}

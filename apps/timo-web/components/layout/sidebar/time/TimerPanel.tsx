@@ -1,6 +1,5 @@
 "use client";
 
-import { TimerOnIcon } from "@repo/timo-design-system/icons";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -137,7 +136,7 @@ export const TimerPanel = () => {
   return (
     <div className="flex flex-col items-center gap-11.25">
       <Timer
-        icon={activeTimer ? <TimerOnIcon /> : undefined}
+        icon={activeTimer?.iconType}
         time={convertDurationToTimeText(remainingSeconds)}
         plannedLabel={`${plannedMinutes}M`}
         progress={progress}

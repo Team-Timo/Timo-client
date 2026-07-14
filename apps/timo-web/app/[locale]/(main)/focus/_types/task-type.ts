@@ -1,3 +1,4 @@
+import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { z } from "zod";
 
 export const focusTaskSubtaskSchema = z.object({
@@ -8,6 +9,10 @@ export const focusTaskSubtaskSchema = z.object({
 
 export const focusTaskSchema = z.object({
   todoId: z.number(),
+  icon: z
+    .enum(TODO_ICON_VALUES)
+    .nullish()
+    .transform((v) => v ?? undefined),
   title: z.string(),
   completed: z.boolean(),
   durationSeconds: z.number().optional(),
