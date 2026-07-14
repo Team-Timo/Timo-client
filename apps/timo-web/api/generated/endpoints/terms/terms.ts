@@ -11,9 +11,9 @@ import { customInstance } from "../../../client/custom-instance";
 
 import type { ErrorType } from "../../../client/custom-instance";
 import type {
-  BaseResponseTermsListResponse,
+  BaseResponseTermsDetailResponse,
   ErrorDto,
-  GetTermsParams,
+  GetTermsByConditionParams,
 } from "../../models";
 import type {
   DataTag,
@@ -48,71 +48,81 @@ const withQueryKey = <T extends object, K>(
 };
 
 /**
- * 서비스 이용약관 및 개인정보 처리방침을 조회합니다.
- * type을 지정하지 않으면 전체 약관을 조회하고, SERVICE 또는 PRIVACY를 지정하면 해당 약관만 조회합니다.
- * @summary 약관 내용 조회
+ * 약관 타입과 언어 기준으로 최신 약관 1건을 조회합니다.
+ * @summary 약관 조건 조회
  */
-export const getTerms = (
-  params?: GetTermsParams,
+export const getTermsByCondition = (
+  params: GetTermsByConditionParams,
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<BaseResponseTermsListResponse>(
+  return customInstance<BaseResponseTermsDetailResponse>(
     { url: `/api/v1/terms`, method: "GET", params, signal },
     options,
   );
 };
 
-export const getGetTermsQueryKey = (params?: GetTermsParams) => {
+export const getGetTermsByConditionQueryKey = (
+  params?: GetTermsByConditionParams,
+) => {
   return [`/api/v1/terms`, ...(params ? [params] : [])] as const;
 };
 
-export const getGetTermsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getTerms>>,
+export const getGetTermsByConditionQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTermsByCondition>>,
   TError = ErrorType<ErrorDto>,
 >(
-  params?: GetTermsParams,
+  params: GetTermsByConditionParams,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getTerms>>, TError, TData>
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTermsByCondition>>,
+        TError,
+        TData
+      >
     >;
     request?: SecondParameter<typeof customInstance>;
   },
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetTermsQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTermsByConditionQueryKey(params);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTerms>>> = ({
-    signal,
-  }) => getTerms(params, requestOptions, signal);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTermsByCondition>>
+  > = ({ signal }) => getTermsByCondition(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getTerms>>,
+    Awaited<ReturnType<typeof getTermsByCondition>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
-export type GetTermsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getTerms>>
+export type GetTermsByConditionQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTermsByCondition>>
 >;
-export type GetTermsQueryError = ErrorType<ErrorDto>;
+export type GetTermsByConditionQueryError = ErrorType<ErrorDto>;
 
-export function useGetTerms<
-  TData = Awaited<ReturnType<typeof getTerms>>,
+export function useGetTermsByCondition<
+  TData = Awaited<ReturnType<typeof getTermsByCondition>>,
   TError = ErrorType<ErrorDto>,
 >(
-  params: undefined | GetTermsParams,
+  params: GetTermsByConditionParams,
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getTerms>>, TError, TData>
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTermsByCondition>>,
+        TError,
+        TData
+      >
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTerms>>,
+          Awaited<ReturnType<typeof getTermsByCondition>>,
           TError,
-          Awaited<ReturnType<typeof getTerms>>
+          Awaited<ReturnType<typeof getTermsByCondition>>
         >,
         "initialData"
       >;
@@ -122,20 +132,24 @@ export function useGetTerms<
 ): DefinedUseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTerms<
-  TData = Awaited<ReturnType<typeof getTerms>>,
+export function useGetTermsByCondition<
+  TData = Awaited<ReturnType<typeof getTermsByCondition>>,
   TError = ErrorType<ErrorDto>,
 >(
-  params?: GetTermsParams,
+  params: GetTermsByConditionParams,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getTerms>>, TError, TData>
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTermsByCondition>>,
+        TError,
+        TData
+      >
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTerms>>,
+          Awaited<ReturnType<typeof getTermsByCondition>>,
           TError,
-          Awaited<ReturnType<typeof getTerms>>
+          Awaited<ReturnType<typeof getTermsByCondition>>
         >,
         "initialData"
       >;
@@ -145,14 +159,18 @@ export function useGetTerms<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 };
-export function useGetTerms<
-  TData = Awaited<ReturnType<typeof getTerms>>,
+export function useGetTermsByCondition<
+  TData = Awaited<ReturnType<typeof getTermsByCondition>>,
   TError = ErrorType<ErrorDto>,
 >(
-  params?: GetTermsParams,
+  params: GetTermsByConditionParams,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getTerms>>, TError, TData>
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTermsByCondition>>,
+        TError,
+        TData
+      >
     >;
     request?: SecondParameter<typeof customInstance>;
   },
@@ -161,17 +179,21 @@ export function useGetTerms<
   queryKey: DataTag<QueryKey, TData, TError>;
 };
 /**
- * @summary 약관 내용 조회
+ * @summary 약관 조건 조회
  */
 
-export function useGetTerms<
-  TData = Awaited<ReturnType<typeof getTerms>>,
+export function useGetTermsByCondition<
+  TData = Awaited<ReturnType<typeof getTermsByCondition>>,
   TError = ErrorType<ErrorDto>,
 >(
-  params?: GetTermsParams,
+  params: GetTermsByConditionParams,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getTerms>>, TError, TData>
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTermsByCondition>>,
+        TError,
+        TData
+      >
     >;
     request?: SecondParameter<typeof customInstance>;
   },
@@ -179,7 +201,7 @@ export function useGetTerms<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getGetTermsQueryOptions(params, options);
+  const queryOptions = getGetTermsByConditionQueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
