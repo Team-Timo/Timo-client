@@ -64,24 +64,26 @@ export const DetailTodoTaskFields = ({
           />
         </div>
 
-        <PlayButton
-          variant={timerStatus === "RUNNING" ? "stop" : "play"}
-          size="lg"
-          disabled={isCompleted}
-          onClick={onTogglePlay}
-        >
-          {isCompleted ? (
-            <PlayDisabledIcon width={24} height={24} />
-          ) : timerStatus === "RUNNING" ? (
-            <StopIcon width={24} height={24} />
-          ) : (
-            <PlayIcon width={24} height={24} />
-          )}
-        </PlayButton>
+        <div className="shrink-0">
+          <PlayButton
+            variant={timerStatus === "RUNNING" ? "stop" : "play"}
+            size="lg"
+            disabled={isCompleted}
+            onClick={onTogglePlay}
+          >
+            {isCompleted ? (
+              <PlayDisabledIcon width={24} height={24} />
+            ) : timerStatus === "RUNNING" ? (
+              <StopIcon width={24} height={24} />
+            ) : (
+              <PlayIcon width={24} height={24} />
+            )}
+          </PlayButton>
+        </div>
       </div>
 
       {subtaskInputs.length > 0 && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           {subtaskInputs.map((subtask, index) => (
             <div key={subtask.id} className="flex items-center gap-2">
               <Checkbox

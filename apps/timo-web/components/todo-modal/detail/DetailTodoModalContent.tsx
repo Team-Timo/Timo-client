@@ -96,7 +96,7 @@ export const DetailTodoModalContent = ({
           />
         </div>
 
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col gap-2">
           <div className="flex w-full flex-col gap-3">
             <div className="bg-timo-gray-500 h-px w-full" />
             <DetailTodoTaskFields
@@ -117,71 +117,76 @@ export const DetailTodoModalContent = ({
             />
           </div>
 
-          <div className="flex items-center gap-2 py-3">
-            <TodoToolbar
-              dateLabel={formatShortDateLabel(detailTodoForm.date)}
-              date={detailTodoForm.date}
-              onDateChange={detailTodoForm.setDate}
-              timeLabel={detailTodoForm.time}
-              timeOptions={DETAIL_TODO_TIME_OPTIONS}
-              time={detailTodoForm.time}
-              onTimeChange={detailTodoForm.setTime}
-              selectedTime={selectedTime}
-              onSelectTime={handleSelectTime}
-              priority={detailTodoForm.priority}
-              priorityLabels={{
-                VERY_HIGH: tCommon("priority.urgent"),
-                HIGH: tCommon("priority.high"),
-                MEDIUM: tCommon("priority.medium"),
-                LOW: tCommon("priority.low"),
-              }}
-              onSelectPriority={detailTodoForm.setPriority}
-              tagLabel={
-                detailTodoForm.selectedTagLabel ?? tCreateModal("tagLabel")
-              }
-              tags={detailTodoForm.tagLabels}
-              selectedTag={detailTodoForm.selectedTagLabel}
-              addTagLabel={tCreateModal("addTag")}
-              onSelectTag={detailTodoForm.handleSelectTag}
-              onAddTagClick={() => {}}
-              hasMemo={Boolean(todo.memo?.trim())}
-              isRepeatActive={detailTodoForm.isRepeatActive}
-              repeat={{
-                frequencyHeading: t("repeatFrequencyHeading"),
-                detailHeading: tCreateModal("repeatDetailHeading"),
-                options: [
-                  { frequency: "DAILY", label: tCreateModal("repeatDaily") },
-                  { frequency: "WEEKLY", label: tCreateModal("repeatWeekly") },
-                  {
-                    frequency: "MONTHLY",
-                    label: tCreateModal("repeatMonthly"),
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2 py-3">
+              <TodoToolbar
+                dateLabel={formatShortDateLabel(detailTodoForm.date)}
+                date={detailTodoForm.date}
+                onDateChange={detailTodoForm.setDate}
+                timeLabel={detailTodoForm.time}
+                timeOptions={DETAIL_TODO_TIME_OPTIONS}
+                time={detailTodoForm.time}
+                onTimeChange={detailTodoForm.setTime}
+                selectedTime={selectedTime}
+                onSelectTime={handleSelectTime}
+                priority={detailTodoForm.priority}
+                priorityLabels={{
+                  VERY_HIGH: tCommon("priority.urgent"),
+                  HIGH: tCommon("priority.high"),
+                  MEDIUM: tCommon("priority.medium"),
+                  LOW: tCommon("priority.low"),
+                }}
+                onSelectPriority={detailTodoForm.setPriority}
+                tagLabel={
+                  detailTodoForm.selectedTagLabel ?? tCreateModal("tagLabel")
+                }
+                tags={detailTodoForm.tagLabels}
+                selectedTag={detailTodoForm.selectedTagLabel}
+                addTagLabel={tCreateModal("addTag")}
+                onSelectTag={detailTodoForm.handleSelectTag}
+                onAddTagClick={() => {}}
+                hasMemo={Boolean(todo.memo?.trim())}
+                isRepeatActive={detailTodoForm.isRepeatActive}
+                repeat={{
+                  frequencyHeading: t("repeatFrequencyHeading"),
+                  detailHeading: tCreateModal("repeatDetailHeading"),
+                  options: [
+                    { frequency: "DAILY", label: tCreateModal("repeatDaily") },
+                    {
+                      frequency: "WEEKLY",
+                      label: tCreateModal("repeatWeekly"),
+                    },
+                    {
+                      frequency: "MONTHLY",
+                      label: tCreateModal("repeatMonthly"),
+                    },
+                  ],
+                  frequency: detailTodoForm.repeatFrequency,
+                  onFrequencyChange: detailTodoForm.changeRepeatFrequency,
+                  weekly: {
+                    weekdays,
+                    selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
+                    onWeekdayToggle: detailTodoForm.toggleWeekday,
                   },
-                ],
-                frequency: detailTodoForm.repeatFrequency,
-                onFrequencyChange: detailTodoForm.changeRepeatFrequency,
-                weekly: {
-                  weekdays,
-                  selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
-                  onWeekdayToggle: detailTodoForm.toggleWeekday,
-                },
-                monthly: {
-                  repeatDayLabel: t("repeatDayLabel"),
-                  repeatDay: detailTodoForm.repeatDay,
-                  onRepeatDayChange: detailTodoForm.setRepeatDay,
-                },
-              }}
-            />
-            <button type="button" aria-label={t("delete")} onClick={onDelete}>
-              <TrashOnIcon />
-            </button>
-          </div>
+                  monthly: {
+                    repeatDayLabel: t("repeatDayLabel"),
+                    repeatDay: detailTodoForm.repeatDay,
+                    onRepeatDayChange: detailTodoForm.setRepeatDay,
+                  },
+                }}
+              />
+              <button type="button" aria-label={t("delete")} onClick={onDelete}>
+                <TrashOnIcon />
+              </button>
+            </div>
 
-          <DetailTodoMemoField
-            value={detailTodoForm.memo}
-            placeholder={tCreateModal("notePlaceholder")}
-            onChange={detailTodoForm.setMemo}
-            maxLength={DETAIL_TODO_MEMO_MAX_LENGTH}
-          />
+            <DetailTodoMemoField
+              value={detailTodoForm.memo}
+              placeholder={tCreateModal("notePlaceholder")}
+              onChange={detailTodoForm.setMemo}
+              maxLength={DETAIL_TODO_MEMO_MAX_LENGTH}
+            />
+          </div>
         </div>
       </div>
     </OverlayModal>

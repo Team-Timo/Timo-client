@@ -37,7 +37,7 @@ export const CreateTodoTaskFields = ({
 }: CreateTodoTaskFieldsProps) => {
   return (
     <div className="flex w-full flex-col items-start gap-1.5">
-      <div className="flex w-full items-center justify-center gap-2">
+      <div className="flex w-full items-center justify-center">
         <Checkbox checked={false} onChange={() => {}} />
         <textarea
           value={titleValue}
@@ -53,10 +53,7 @@ export const CreateTodoTaskFields = ({
       </div>
 
       {subtaskInputs.map((entry, index) => (
-        <div
-          key={entry.id}
-          className="flex w-full items-center justify-center gap-2"
-        >
+        <div key={entry.id} className="flex w-full items-center justify-center">
           <Checkbox checked={false} onChange={() => {}} />
           <textarea
             value={entry.value}
