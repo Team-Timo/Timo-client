@@ -179,6 +179,14 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     );
   };
 
+  const handleDeleteTodo = (dateKey: string, todoId: number) => {
+    // TODO: API
+    setTodosByDate((prev) => ({
+      ...prev,
+      [dateKey]: (prev[dateKey] ?? []).filter((todo) => todo.todoId !== todoId),
+    }));
+  };
+
   const handleReorderTodo = (
     dateKey: string,
     fromIndex: number,
@@ -213,6 +221,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
+    handleDeleteTodo,
     handleReorderTodo,
     handleConfirmPendingComplete,
     handleCloseTimerRunningToast: () => setIsTimerRunningToastOpen(false),

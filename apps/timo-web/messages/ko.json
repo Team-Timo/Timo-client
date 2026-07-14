@@ -46,12 +46,19 @@
       "dateLabel": "날짜",
       "timeLabel": "시간",
       "tagLabel": "태그",
+      "addTag": "추가",
       "create": "생성하기",
       "repeatDaily": "매일",
       "repeatWeekly": "매주",
       "repeatMonthly": "매달",
       "repeatDetailHeading": "세부 설정",
       "repeatDayUnit": "일 마다"
+    },
+    "detailModal": {
+      "ariaLabel": "투두 상세",
+      "delete": "투두 삭제",
+      "repeatFrequencyHeading": "반복 일정",
+      "repeatDayLabel": "일"
     },
     "createTagModal": {
       "title": "태그 생성하기",
@@ -92,7 +99,8 @@
       "warningCalendar": "연동된 캘린더 연결이 해제됩니다.",
       "warningIrreversible": "삭제된 계정은 복구할 수 없습니다.",
       "withdraw": "탈퇴하기",
-      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요."
+      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요.",
+      "withdrawError": "탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
     }
   },
   "Statistics": {

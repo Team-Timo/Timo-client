@@ -18,6 +18,7 @@ import {
 } from "@/api/generated/endpoints/user/user";
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
+import { useLogoutAction } from "@/app/[locale]/(main)/settings/_queries/use-logout";
 import { useMyProfile } from "@/queries/use-my-profile";
 
 const LANGUAGE_REQUEST_MAP: Record<
@@ -42,6 +43,7 @@ export const useSettingsProfile = () => {
   const tCommon = useTranslations("Common");
   const { language, locale, setLanguage, commitLanguage } =
     useSettingsLanguageParam();
+  const { mutate: logoutMutate, isPending: isLoggingOut } = useLogoutAction();
 
   const { data: profile } = useMyProfile();
   const [isCalendarConnected, setIsCalendarConnected] = useState(
@@ -101,10 +103,8 @@ export const useSettingsProfile = () => {
   };
 
   const handleLogout = () => {
-    // TODO: API - 로그아웃 처리 및 브라우저 저장 데이터 파기
-    console.log("로그아웃 API 호출");
-    // TODO: 로그인 페이지 라우트 추가 후 이동 연결 (뒤로가기로 재접근 차단 포함)
-    console.log("[Login] 페이지로 이동합니다.");
+    if (isLoggingOut) return;
+    logoutMutate();
   };
 
   const isLanguageDirty = language !== locale;
