@@ -3,9 +3,9 @@
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
 
-import type { SettingsTab } from "@/app/[locale]/(main)/settings/_hooks/useSettingsTab";
+import type { SettingsTab } from "@/app/[locale]/(main)/settings/_hooks/use-settings-tab";
 
-import { useSettingsTab } from "@/app/[locale]/(main)/settings/_hooks/useSettingsTab";
+import { useSettingsTab } from "@/app/[locale]/(main)/settings/_hooks/use-settings-tab";
 import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
 

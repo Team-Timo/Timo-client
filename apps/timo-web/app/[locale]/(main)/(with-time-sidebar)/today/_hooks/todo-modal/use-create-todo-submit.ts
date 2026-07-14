@@ -1,4 +1,4 @@
-import type { CreateTodoRequest, TodoPriority } from "@/api/todo/todo-schema";
+import type { CreateTodoRequest, TodoPriority } from "@/api/common/todo-schema";
 import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
 
 import { convertApiDurationToSeconds } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_utils/todo-time";

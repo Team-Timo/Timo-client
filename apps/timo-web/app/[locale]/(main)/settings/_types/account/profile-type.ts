@@ -1,17 +1,7 @@
 export type SettingsLanguage = "ko" | "en";
 
-export type SettingsDefaultTagKey =
-  | "assignment"
-  | "work"
-  | "exercise"
-  | "dailyLife";
-
-export interface SettingsProfileFormValues {
-  tags: string[];
-}
-
 export interface SettingsTagItem {
-  id: string;
+  id: number;
   label: string;
   isDefault: boolean;
 }
@@ -28,6 +18,17 @@ export interface SettingsProfileLabels {
   tagsSection: string;
   addTag: string;
   logout: string;
-  save: string;
+  languageConfirmTitle: string;
+  languageConfirmDescription: string;
+  languageConfirmCancel: string;
+  languageConfirmConfirm: string;
+  tagDeleteConfirmTitle: string;
+  tagDeleteConfirmDescription: string;
+  tagDeleteConfirmCancel: string;
+  tagDeleteConfirmConfirm: string;
+  logoutConfirmTitle: string;
+  logoutConfirmDescription: string;
+  logoutConfirmCancel: string;
+  logoutConfirmConfirm: string;
   removeTag: (tag: string) => string;
 }

@@ -6,10 +6,10 @@ import { CreateButton, TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useController, useForm } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/todo/todo-schema";
+import type { CreateTodoRequest } from "@/api/common/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
-import { createTodoRequestSchema } from "@/api/todo/todo-schema";
+import { createTodoRequestSchema } from "@/api/common/todo-schema";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
@@ -229,6 +229,12 @@ export const CreateTodoModalContent = ({
         isOpen={timeField.isAiDurationErrorToastOpen}
         onClose={timeField.closeAiDurationErrorToast}
         message={tToast("aiDurationRecommendFailed")}
+      />
+
+      <AnimatedToast
+        isOpen={tagField.isCreateTagErrorToastOpen}
+        onClose={tagField.closeCreateTagErrorToast}
+        message={tToast("tagCreateFailed")}
       />
     </>
   );
