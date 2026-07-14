@@ -29,8 +29,6 @@ export const useFocusSession = () => {
   const queryClient = useQueryClient();
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const wasTimeUpRef = useRef(false);
-  const [feedbackText, setFeedbackText] = useState<string | undefined>();
-  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
 
   const { data: focusView } = useFocusTodo();
   const { data: activeTimer } = useActiveTimer();
