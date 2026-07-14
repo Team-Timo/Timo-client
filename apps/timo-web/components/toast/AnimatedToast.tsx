@@ -23,11 +23,18 @@ export const AnimatedToast = ({
 }: AnimatedToastProps) => {
   const [shouldRender, setShouldRender] = useState<boolean>(isOpen);
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [displayMessage, setDisplayMessage] = useState<ReactNode>(message);
   const onCloseRef = useRef(onClose);
 
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setDisplayMessage(message);
+    }
+  }, [isOpen, message]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -69,7 +76,7 @@ export const AnimatedToast = ({
         isVisible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
       )}
     >
-      <Toast message={message} />
+      <Toast message={displayMessage} />
     </div>
   );
 };
