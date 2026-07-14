@@ -4,7 +4,7 @@ import { AddTaskButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 
-import type { CreateTodoRequest } from "@/api/todo/todo-schema";
+import type { CreateTodoRequest } from "@/api/common/todo-schema";
 
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { CreateTodoModalContent } from "@/components/todo-modal/create/CreateTodoModalContent";

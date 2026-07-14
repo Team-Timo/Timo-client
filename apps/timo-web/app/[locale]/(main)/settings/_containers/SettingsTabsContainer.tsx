@@ -1,9 +1,9 @@
 "use client";
 
-import { SettingsProfileContainer } from "@/app/[locale]/(main)/settings/_containers/SettingsProfileContainer";
-import { SettingsTermsContainer } from "@/app/[locale]/(main)/settings/_containers/SettingsTermsContainer";
-import { useSettingsTab } from "@/app/[locale]/(main)/settings/_hooks/useSettingsTab";
-import { SettingsWithdrawalContainer } from "@/app/[locale]/(main)/settings/withdrawal/_containers/SettingsWithdrawalContainer";
+import { SettingsProfileContainer } from "@/app/[locale]/(main)/settings/_containers/account/SettingsProfileContainer";
+import { SettingsTermsContainer } from "@/app/[locale]/(main)/settings/_containers/terms/SettingsTermsContainer";
+import { SettingsWithdrawalContainer } from "@/app/[locale]/(main)/settings/_containers/withdrawal/SettingsWithdrawalContainer";
+import { useSettingsTab } from "@/app/[locale]/(main)/settings/_hooks/use-settings-tab";
 import { AsyncBoundary } from "@/components/boundary/AsyncBoundary";
 
 export const SettingsTabsContainer = () => {
@@ -18,7 +18,9 @@ export const SettingsTabsContainer = () => {
       </AsyncBoundary>
     );
   }
+
   if (tab === "withdrawal") return <SettingsWithdrawalContainer />;
+
   return (
     <AsyncBoundary>
       <SettingsProfileContainer />

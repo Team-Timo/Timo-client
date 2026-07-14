@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useController } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/todo/todo-schema";
+import type { CreateTodoRequest } from "@/api/common/todo-schema";
 import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type { KeyboardEvent } from "react";
 import type { Control } from "react-hook-form";
