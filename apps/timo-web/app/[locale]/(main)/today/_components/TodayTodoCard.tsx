@@ -49,7 +49,6 @@ export interface TodayTodoCardProps {
   isDone: boolean;
   isDimmed: boolean;
   isPlaying: boolean;
-  /** 다른 투두에 활성 타이머(재생/일시정지)가 있을 때 이 투두의 재생 버튼을 낮춰 보여준다 */
   isPlayHighlighted: boolean;
   icon?: ReactNode;
   subTodos: SubTodo[];

@@ -20,7 +20,6 @@ export interface DetailTodoTaskFieldsProps {
   isCompleted: boolean;
   disabled?: boolean;
   timerStatus: TodoDetailResponseTimerStatus;
-  /** 다른 투두에 활성 타이머(재생/일시정지)가 있을 때 이 재생 버튼을 낮춰 보여준다 */
   isPlayHighlighted: boolean;
   subtaskInputs: DetailTodoSubtaskInput[];
   onTitleChange: (value: string) => void;
