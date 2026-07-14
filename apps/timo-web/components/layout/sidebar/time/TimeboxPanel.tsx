@@ -11,7 +11,7 @@ import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-
 
 const HOURS_IN_DAY = 24;
 const HOUR_LINES = HOURS_IN_DAY + 1;
-const ROW_HEIGHT = 30;
+const ROW_HEIGHT = 50;
 const CLOCK_TICK_INTERVAL_MS = 30_000;
 /** 이 시간(분) 미만인 타임박스는 투두명·시간 라벨을 표시하지 않는다 */
 const MIN_MINUTES_FOR_LABEL = 30;
@@ -91,10 +91,10 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
             style={{ top: startOffset, height }}
           >
             {showLabel && (
-              <div className="flex h-full items-center gap-1">
+              <div className="flex items-start gap-1 pt-[2px] pl-[6px]">
                 <span
                   className={cn(
-                    "typo-body-sb-11 min-w-0 truncate",
+                    "typo-body-sb-12 min-w-0 truncate",
                     isRelatedToActiveTimer
                       ? "text-white"
                       : "text-timo-gray-900",
