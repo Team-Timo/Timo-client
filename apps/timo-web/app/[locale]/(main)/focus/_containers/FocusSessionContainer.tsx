@@ -85,6 +85,7 @@ export const FocusSessionContainer = () => {
           )}
           isRunning={focusSessionState.isRunning}
           subtasks={todo.subtasks}
+          memo={todo.memo}
           onToggleCompleted={focusSessionActions.onToggleCompleted}
           onTogglePlay={focusSessionActions.onTogglePlay}
           onToggleSubtaskCompleted={
@@ -96,7 +97,6 @@ export const FocusSessionContainer = () => {
       <section className="border-timo-gray-500 flex h-full w-136.5 shrink-0 items-center border-l bg-white">
         <div className="flex w-full flex-col items-center gap-11.25">
           <Timer
-            icon={todo.icon}
             time={convertDurationToTimeText(focusSessionState.remainingSeconds)}
             plannedLabel={`${focusSessionState.plannedMinutes}M`}
             progress={focusSessionState.progress}
