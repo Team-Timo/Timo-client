@@ -18,7 +18,7 @@ import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_que
 import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
-import { isTagLabelKey } from "@/utils/todo/tag-label";
+import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 export const HomeTodoContainer = () => {
   const tCommon = useTranslations("Common");
@@ -89,6 +89,15 @@ export const HomeTodoContainer = () => {
                 {todos.map((todo) => {
                   const [firstSubtask] = todo.subtasks;
 
+                  const todoTagLabelKey = todo.tag
+                    ? getDefaultTagLabelKey(todo.tag.tagId)
+                    : undefined;
+                  const todoTagName = todo.tag
+                    ? todoTagLabelKey
+                      ? tCommon(`tag.${todoTagLabelKey}`)
+                      : todo.tag.name
+                    : undefined;
+
                   return (
                     <DetailTodoModalContainer
                       key={todo.todoId}
@@ -105,12 +114,7 @@ export const HomeTodoContainer = () => {
                           isCompleted={todo.completed}
                           durationSeconds={todo.durationSeconds}
                           priority={todo.priority}
-                          tagName={
-                            todo.tag &&
-                            (isTagLabelKey(todo.tag.name)
-                              ? tCommon(`tag.${todo.tag.name}`)
-                              : todo.tag.name)
-                          }
+                          tagName={todoTagName}
                           hasMemo={todo.hasMemo}
                           isRepeated={todo.isRepeated}
                           timerStatus={todo.timerStatus}
