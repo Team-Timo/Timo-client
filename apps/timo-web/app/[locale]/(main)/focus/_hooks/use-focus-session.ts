@@ -6,14 +6,12 @@ import { useEffect, useRef, useState } from "react";
 import type { TimerSessionControlsHandle } from "@/components/timer/TimerSessionControls";
 
 import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
-import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useCompleteTimer,
   useExtendTimer,
   useStartTimer,
   useStopTimer,
-  getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
 import {
   useChangeSubtaskStatus,
@@ -23,6 +21,7 @@ import { useFocusTodo } from "@/app/[locale]/(main)/focus/_queries/use-focus-tod
 import { convertDateToBadgeText } from "@/app/[locale]/(main)/focus/_utils/date";
 import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimerOvertime } from "@/hooks/use-timer-overtime";
+import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 
 export const useFocusSession = () => {
@@ -35,12 +34,10 @@ export const useFocusSession = () => {
   const { data: focusView } = useFocusTodo();
   const { data: activeTimer } = useActiveTimer();
 
-  const invalidateActiveTimer = () =>
-    queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
+  const { invalidateActiveTimer, invalidateHomeView } =
+    useTimerQueryInvalidation();
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
-  const invalidateHomeView = () =>
-    queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
   const handleMutationError = () => setIsErrorToastOpen(true);
 
   const { mutate: startTimer } = useStartTimer({

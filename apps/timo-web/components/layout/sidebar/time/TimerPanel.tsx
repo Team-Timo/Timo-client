@@ -1,16 +1,13 @@
 "use client";
 
 import { TimerOnIcon } from "@repo/timo-design-system/icons";
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 
-import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useCompleteTimer,
   useExtendTimer,
   useStopTimer,
-  getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
 import { useChangeTodoStatus } from "@/api/generated/endpoints/todo/todo";
 import { Timer } from "@/components/timer/Timer";
@@ -20,22 +17,19 @@ import {
 } from "@/components/timer/TimerSessionControls";
 import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimerOvertime } from "@/hooks/use-timer-overtime";
+import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
 export const TimerPanel = () => {
-  const queryClient = useQueryClient();
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const wasTimeUpRef = useRef(false);
 
   const { data: activeTimer } = useActiveTimer();
-
-  const invalidateActiveTimer = () =>
-    queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
-  const invalidateHomeView = () =>
-    queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+  const { invalidateActiveTimer, invalidateHomeView } =
+    useTimerQueryInvalidation();
 
   const { mutate: changeStatus } = useChangeStatus({
     mutation: {

@@ -7,12 +7,10 @@ import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
 import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
-import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useStartTimer,
   useStopTimer,
-  getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
 import {
   useChangeSubtaskStatus,
@@ -21,6 +19,7 @@ import {
 } from "@/api/generated/endpoints/todo/todo";
 import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
 import { useActiveTimer } from "@/hooks/use-active-timer";
+import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 interface PendingCompleteTodo {
@@ -42,11 +41,9 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: reorderTodo } = useReorderTodo();
   const { mutate: stopTimer } = useStopTimer();
+  const { invalidateHomeView, invalidateTimerState } =
+    useTimerQueryInvalidation();
 
-  const invalidateTimerState = () => {
-    queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
-    queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
-  };
   const { mutate: startTimer } = useStartTimer({
     mutation: { onSuccess: invalidateTimerState },
   });
@@ -73,9 +70,6 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     }));
   };
 
-  const invalidateHomeView = () => {
-    queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
-  };
   const invalidateFocusTodo = () => {
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
   };
