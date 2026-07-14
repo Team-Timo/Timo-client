@@ -1,8 +1,6 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { overlay } from "overlay-kit";
-import { useState } from "react";
 
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
@@ -12,9 +10,8 @@ import {
 } from "@/api/generated/endpoints/user/user";
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { tagCreateDataSchema } from "@/api/tag/tag-schema";
-import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/useSettingsLanguageParam";
+import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
 import { useLogoutAction } from "@/app/[locale]/(main)/settings/_queries/account/use-logout";
-import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useDeleteTag } from "@/queries/tag/use-delete-tag";
 import { useTags } from "@/queries/tag/use-tags";
@@ -28,17 +25,23 @@ const LANGUAGE_REQUEST_MAP: Record<
   en: UpdateLanguageRequestLanguage.EN,
 };
 
+export interface ActionErrorHandlers {
+  onError: () => void;
+}
+
+export interface CreateTagHandlers extends ActionErrorHandlers {
+  onSuccess: () => void;
+}
+
+export interface ConnectCalendarHandlers {
+  onConnect: () => void;
+  onDisconnect: () => void;
+}
+
 export const useSettingsProfile = () => {
   const { locale, commitLanguage } = useSettingsLanguageParam();
 
   const { data: profile } = useMyProfile();
-  const [isCalendarConnected, setIsCalendarConnected] = useState(
-    profile.calendarConnected,
-  );
-  const [isTagErrorToastOpen, setIsTagErrorToastOpen] =
-    useState<boolean>(false);
-  const [isLanguageErrorToastOpen, setIsLanguageErrorToastOpen] =
-    useState<boolean>(false);
 
   const { mutateAsync: updateLanguage } = useUpdateLanguage();
   const queryClient = useQueryClient();
@@ -54,7 +57,10 @@ export const useSettingsProfile = () => {
     isDefault: tag.isDefault,
   }));
 
-  const handleConnectCalendar = () => {
+  const handleConnectCalendar = (
+    isCalendarConnected: boolean,
+    handlers: ConnectCalendarHandlers,
+  ) => {
     if (isCalendarConnected) {
       // TODO: 실제 확인 모달로 교체
       const confirmed = window.confirm("구글 캘린더 연동을 해제하시겠습니까?");
@@ -62,52 +68,40 @@ export const useSettingsProfile = () => {
 
       // TODO: API - 연동 토큰 파기
       console.log("구글 캘린더 연동 토큰을 파기합니다.");
-      setIsCalendarConnected(false);
+      handlers.onDisconnect();
       return;
     }
 
     // TODO: Google 계정 인증 및 캘린더 접근 권한 동의 팝업 호출
     console.log("Google Calendar 연동 인증 팝업을 호출합니다.");
-    setIsCalendarConnected(true);
+    handlers.onConnect();
   };
 
-  const handleAddTag = () => {
-    const existingLabels = tagItems.map((tag) => tag.label);
+  const handleCreateTag = (label: string, handlers: CreateTagHandlers) => {
+    createTag(
+      { name: label },
+      {
+        onSuccess: (response) => {
+          const parsed = tagCreateDataSchema.safeParse(response.data);
 
-    overlay.open(({ isOpen, close, unmount }) => (
-      <CreateTagModalContainer
-        isOpen={isOpen}
-        onClose={close}
-        onExited={unmount}
-        existingLabels={existingLabels}
-        onCreate={(label: string) => {
-          createTag(
-            { name: label },
-            {
-              onSuccess: (response) => {
-                const parsed = tagCreateDataSchema.safeParse(response.data);
+          if (!parsed.success) {
+            handlers.onError();
+            return;
+          }
 
-                if (!parsed.success) {
-                  setIsTagErrorToastOpen(true);
-                  return;
-                }
-
-                close();
-              },
-              onError: () => {
-                setIsTagErrorToastOpen(true);
-              },
-            },
-          );
-        }}
-      />
-    ));
+          handlers.onSuccess();
+        },
+        onError: () => {
+          handlers.onError();
+        },
+      },
+    );
   };
 
-  const handleRemoveTag = (tagId: number) => {
+  const handleRemoveTag = (tagId: number, handlers: ActionErrorHandlers) => {
     deleteTag(tagId, {
       onError: () => {
-        setIsTagErrorToastOpen(true);
+        handlers.onError();
       },
     });
   };
@@ -117,7 +111,10 @@ export const useSettingsProfile = () => {
     logoutMutate();
   };
 
-  const handleConfirmLanguageChange = async (next: SettingsLanguage) => {
+  const handleConfirmLanguageChange = async (
+    next: SettingsLanguage,
+    handlers: ActionErrorHandlers,
+  ) => {
     if (next === locale) return;
 
     try {
@@ -130,7 +127,7 @@ export const useSettingsProfile = () => {
       });
       commitLanguage(next);
     } catch {
-      setIsLanguageErrorToastOpen(true);
+      handlers.onError();
     }
   };
 
@@ -138,20 +135,16 @@ export const useSettingsProfile = () => {
     profileState: {
       name: profile.name,
       googleEmail: profile.email,
-      isCalendarConnected,
+      calendarConnected: profile.calendarConnected,
       language: locale,
       tags: tagItems,
     },
     profileActions: {
       onConnectCalendar: handleConnectCalendar,
       onChangeLanguage: handleConfirmLanguageChange,
-      onAddTag: handleAddTag,
+      onCreateTag: handleCreateTag,
       onRemoveTag: handleRemoveTag,
       onLogout: handleLogout,
     },
-    isTagErrorToastOpen,
-    closeTagErrorToast: () => setIsTagErrorToastOpen(false),
-    isLanguageErrorToastOpen,
-    closeLanguageErrorToast: () => setIsLanguageErrorToastOpen(false),
   };
 };
