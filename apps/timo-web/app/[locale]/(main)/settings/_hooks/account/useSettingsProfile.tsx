@@ -4,7 +4,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
-import type { BaseResponseUserProfileResponse } from "@/api/generated/models";
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
 import {
@@ -119,22 +118,13 @@ export const useSettingsProfile = () => {
     if (next === locale) return;
 
     try {
-      const { data } = await updateLanguage({
+      await updateLanguage({
         data: { language: LANGUAGE_REQUEST_MAP[next] },
       });
 
-      if (data) {
-        queryClient.setQueryData(
-          getGetMyProfileQueryKey(),
-          (cached?: BaseResponseUserProfileResponse) =>
-            cached?.data
-              ? {
-                  ...cached,
-                  data: { ...cached.data, language: data.language },
-                }
-              : cached,
-        );
-      }
+      await queryClient.invalidateQueries({
+        queryKey: getGetMyProfileQueryKey(),
+      });
       commitLanguage(next);
     } catch {
       // TODO: 실제 토스트 컴포넌트로 교체
