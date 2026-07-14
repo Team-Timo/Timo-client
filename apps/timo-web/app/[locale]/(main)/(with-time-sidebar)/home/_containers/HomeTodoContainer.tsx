@@ -2,7 +2,7 @@
 
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
@@ -23,6 +23,12 @@ import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { isTagLabelKey } from "@/utils/todo/tag-label";
 
+interface PendingCompleteTodo {
+  token: number;
+  dateKey: string;
+  todoId: number;
+}
+
 export const HomeTodoContainer = () => {
   const tCommon = useTranslations("Common");
   const tToast = useTranslations("Toast");
@@ -36,20 +42,37 @@ export const HomeTodoContainer = () => {
   const { data: homeViewData } = useHomeView({ filter, baseDate });
   const days = homeViewData.days;
 
+  const [pendingCompleteTodo, setPendingCompleteTodo] =
+    useState<PendingCompleteTodo | null>(null);
+  const [feedbackText, setFeedbackText] = useState<string | undefined>();
+  const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
+
   const {
     todosByDate,
     activeTimer,
-    pendingCompleteTodo,
-    feedbackText,
-    isTimerRunningToastOpen,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleDeleteTodo,
     handleReorderTodo,
-    handleConfirmPendingComplete,
-    handleCloseTimerRunningToast,
-  } = useHomeTodosByDate(days);
+    confirmStopAndComplete,
+  } = useHomeTodosByDate(days, {
+    onNeedStopConfirm: (dateKey, todoId) =>
+      setPendingCompleteTodo({ token: Date.now(), dateKey, todoId }),
+    onTimerAlreadyRunning: () => setIsTimerRunningToastOpen(true),
+    onStopFeedback: setFeedbackText,
+  });
+
+  const handleConfirmPendingComplete = () => {
+    if (!pendingCompleteTodo) return;
+    confirmStopAndComplete(
+      pendingCompleteTodo.dateKey,
+      pendingCompleteTodo.todoId,
+    );
+    setPendingCompleteTodo(null);
+  };
+
+  const handleCloseTimerRunningToast = () => setIsTimerRunningToastOpen(false);
 
   useEffect(() => {
     scrollContainerToToday(scrollRef.current);

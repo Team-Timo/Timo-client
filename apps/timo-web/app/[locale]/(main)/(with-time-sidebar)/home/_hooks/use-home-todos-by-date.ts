@@ -22,18 +22,24 @@ import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
-interface PendingCompleteTodo {
-  token: number;
-  dateKey: string;
-  todoId: number;
+export interface UseHomeTodosByDateOptions {
+  /** 완료 처리하려는 투두에 활성 타이머가 걸려있어 먼저 정지 확인이 필요할 때 */
+  onNeedStopConfirm: (dateKey: string, todoId: number) => void;
+  /** 다른 투두의 타이머가 이미 실행 중이라 재생을 시작할 수 없을 때 */
+  onTimerAlreadyRunning: () => void;
+  /** 타이머 정지 완료 후 받은 AI 피드백 문구 */
+  onStopFeedback: (feedbackText: string | undefined) => void;
 }
 
-export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
+export const useHomeTodosByDate = (
+  apiDays: HomeViewDay[],
+  {
+    onNeedStopConfirm,
+    onTimerAlreadyRunning,
+    onStopFeedback,
+  }: UseHomeTodosByDateOptions,
+) => {
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
-  const [pendingCompleteTodo, setPendingCompleteTodo] =
-    useState<PendingCompleteTodo | null>(null);
-  const [feedbackText, setFeedbackText] = useState<string | undefined>();
-  const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const queryClient = useQueryClient();
   const { data: activeTimer } = useActiveTimer();
@@ -84,7 +90,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     completed: boolean,
   ) => {
     if (completed && activeTimer?.todoId === todoId) {
-      setPendingCompleteTodo({ token: Date.now(), dateKey, todoId });
+      onNeedStopConfirm(dateKey, todoId);
       return;
     }
 
@@ -102,15 +108,14 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     );
   };
 
-  const handleConfirmPendingComplete = () => {
-    if (!pendingCompleteTodo || !activeTimer) return;
-    const { dateKey, todoId } = pendingCompleteTodo;
+  const confirmStopAndComplete = (dateKey: string, todoId: number) => {
+    if (!activeTimer) return;
 
     stopTimer(
       { timerId: activeTimer.timerId },
       {
         onSuccess: (response) => {
-          setFeedbackText(response.data?.aiFeedback ?? undefined);
+          onStopFeedback(response.data?.aiFeedback ?? undefined);
           invalidateTimerState();
 
           updateTodo(dateKey, todoId, (todo) => ({
@@ -124,8 +129,6 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
         },
       },
     );
-
-    setPendingCompleteTodo(null);
   };
 
   const handleTogglePlay = (dateKey: string, todoId: number) => {
@@ -147,7 +150,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
 
     // 다른 투두의 타이머가 이미 실행/일시정지 중이면 새 타이머를 시작할 수 없다(409)
     if (activeTimer) {
-      setIsTimerRunningToastOpen(true);
+      onTimerAlreadyRunning();
       return;
     }
 
@@ -215,15 +218,11 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   return {
     todosByDate,
     activeTimer,
-    pendingCompleteTodo,
-    feedbackText,
-    isTimerRunningToastOpen,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleDeleteTodo,
     handleReorderTodo,
-    handleConfirmPendingComplete,
-    handleCloseTimerRunningToast: () => setIsTimerRunningToastOpen(false),
+    confirmStopAndComplete,
   };
 };
