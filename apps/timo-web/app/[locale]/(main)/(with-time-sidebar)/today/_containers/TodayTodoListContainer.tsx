@@ -40,6 +40,7 @@ export const TodayTodoListContainer = () => {
   >(null);
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
   const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
+  const [playErrorMessage, setPlayErrorMessage] = useState<string | null>(null);
 
   const {
     todos,
@@ -56,6 +57,8 @@ export const TodayTodoListContainer = () => {
     },
     onTimerAlreadyRunning: () => setIsTimerRunningToastOpen(true),
     onStopFeedback: setFeedbackText,
+    onPlayError: (message) =>
+      setPlayErrorMessage(message ?? tToast("timerStartFailed")),
   });
 
   const handleConfirmPendingComplete = () => {
@@ -149,6 +152,12 @@ export const TodayTodoListContainer = () => {
         isOpen={isTimerRunningToastOpen}
         onClose={() => setIsTimerRunningToastOpen(false)}
         message={tToast("timerAlreadyRunning")}
+      />
+
+      <AnimatedToast
+        isOpen={playErrorMessage !== null}
+        onClose={() => setPlayErrorMessage(null)}
+        message={playErrorMessage ?? ""}
       />
     </div>
   );
