@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 import { useController } from "react-hook-form";
@@ -9,6 +10,7 @@ import { tagCreateDataSchema } from "@/api/common/tag-schema";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useTags } from "@/queries/tag/use-tags";
+import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 const MAX_TAG_COUNT = 8;
 
@@ -17,6 +19,7 @@ export interface UseTagFieldParams {
 }
 
 export const useTagField = ({ control }: UseTagFieldParams) => {
+  const tCommon = useTranslations("Common");
   const { field } = useController({ name: "tagId", control });
   const [isTagLimitToastOpen, setIsTagLimitToastOpen] =
     useState<boolean>(false);
@@ -26,10 +29,14 @@ export const useTagField = ({ control }: UseTagFieldParams) => {
   const tagsQuery = useTags();
   const { mutate: createTag } = useCreateTag();
 
-  const tagOptions = (tagsQuery.data?.tags ?? []).map((tag) => ({
-    id: tag.tagId,
-    label: tag.name,
-  }));
+  const tagOptions = (tagsQuery.data?.tags ?? []).map((tag) => {
+    const defaultLabelKey = getDefaultTagLabelKey(tag.tagId);
+
+    return {
+      id: tag.tagId,
+      label: defaultLabelKey ? tCommon(`tag.${defaultLabelKey}`) : tag.name,
+    };
+  });
   const tagLabels = tagOptions.map((option) => option.label);
   const selectedTagOption = tagOptions.find(
     (option) => option.id === field.value,
