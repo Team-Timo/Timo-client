@@ -79,7 +79,10 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     changeTodoStatus(
       { todoId, data: { isCompleted: completed, date: dateKey } },
       {
-        onSuccess: invalidateHomeView,
+        onSuccess: () => {
+          invalidateHomeView();
+          invalidateFocusTodo();
+        },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
         },
@@ -124,7 +127,10 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     changeSubtaskStatus(
       { todoId, subtaskId, data: { isCompleted: completed } },
       {
-        onSuccess: invalidateHomeView,
+        onSuccess: () => {
+          invalidateHomeView();
+          invalidateFocusTodo();
+        },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
         },
