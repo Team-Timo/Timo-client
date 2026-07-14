@@ -11,6 +11,7 @@ import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useStartTimer,
+  useStopTimer,
   getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
 import {
@@ -22,14 +23,24 @@ import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_ut
 import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
+interface PendingCompleteTodo {
+  token: number;
+  dateKey: string;
+  todoId: number;
+}
+
 export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
+  const [pendingCompleteTodo, setPendingCompleteTodo] =
+    useState<PendingCompleteTodo | null>(null);
+  const [feedbackText, setFeedbackText] = useState<string | undefined>();
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const queryClient = useQueryClient();
   const { data: activeTimer } = useActiveTimer();
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: reorderTodo } = useReorderTodo();
+  const { mutate: stopTimer } = useStopTimer();
 
   const invalidateTimerState = () => {
     queryClient.invalidateQueries({ queryKey: getGetActiveTimerQueryKey() });
@@ -73,6 +84,11 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     todoId: number,
     completed: boolean,
   ) => {
+    if (completed && activeTimer?.todoId === todoId) {
+      setPendingCompleteTodo({ token: Date.now(), dateKey, todoId });
+      return;
+    }
+
     const previous = todosByDate[dateKey] ?? [];
     updateTodo(dateKey, todoId, (todo) => ({ ...todo, completed }));
 
@@ -88,6 +104,37 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
         },
       },
     );
+  };
+
+  const handleConfirmPendingComplete = () => {
+    if (!pendingCompleteTodo || !activeTimer) return;
+    const { dateKey, todoId } = pendingCompleteTodo;
+
+    stopTimer(
+      { timerId: activeTimer.timerId },
+      {
+        onSuccess: (response) => {
+          setFeedbackText(response.data?.aiFeedback ?? undefined);
+          invalidateTimerState();
+
+          updateTodo(dateKey, todoId, (todo) => ({
+            ...todo,
+            completed: true,
+          }));
+          changeTodoStatus(
+            { todoId, data: { isCompleted: true, date: dateKey } },
+            {
+              onSuccess: () => {
+                invalidateHomeView();
+                invalidateFocusTodo();
+              },
+            },
+          );
+        },
+      },
+    );
+
+    setPendingCompleteTodo(null);
   };
 
   const handleTogglePlay = (dateKey: string, todoId: number) => {
@@ -169,9 +216,12 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   return {
     todosByDate,
     activeTimer,
+    pendingCompleteTodo,
+    feedbackText,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleReorderTodo,
+    handleConfirmPendingComplete,
   };
 };

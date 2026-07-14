@@ -1,0 +1,61 @@
+"use client";
+
+import { Modal } from "@repo/timo-design-system/ui";
+import { useEffect, useRef, useState } from "react";
+
+import { TimerCompleteModalPanel } from "@/components/timer/TimerCompleteModalPanel";
+import { TimerStopModalPanel } from "@/components/timer/TimerStopModalPanel";
+
+export interface HomeStopCompleteModalProps {
+  /** 값이 바뀔 때마다(같은 투두를 다시 클릭한 경우 포함) 모달을 새로 연다 */
+  pendingToken: number | null;
+  plannedMinutes: number;
+  actualMinutes: number;
+  feedbackText?: string;
+  onConfirm: () => void;
+}
+
+export const HomeStopCompleteModal = ({
+  pendingToken,
+  plannedMinutes,
+  actualMinutes,
+  feedbackText,
+  onConfirm,
+}: HomeStopCompleteModalProps) => {
+  const [step, setStep] = useState<"stop" | "complete">("stop");
+  const hiddenTriggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (pendingToken === null) return;
+
+    setStep("stop");
+    hiddenTriggerRef.current?.click();
+  }, [pendingToken]);
+
+  return (
+    <Modal>
+      <Modal.Trigger
+        ref={hiddenTriggerRef}
+        className="hidden"
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+      <Modal.Overlay />
+      <Modal.Panel>
+        {step === "stop" ? (
+          <TimerStopModalPanel
+            minutes={actualMinutes}
+            onSwitch={() => setStep("complete")}
+          />
+        ) : (
+          <TimerCompleteModalPanel
+            plannedMinutes={plannedMinutes}
+            actualMinutes={actualMinutes}
+            feedbackText={feedbackText}
+            onComplete={onConfirm}
+          />
+        )}
+      </Modal.Panel>
+    </Modal>
+  );
+};

@@ -8,6 +8,7 @@ import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/h
 
 import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
 import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
+import { HomeStopCompleteModal } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeStopCompleteModal";
 import {
   scrollContainerToToday,
   useHomeTodayScrollRef,
@@ -17,6 +18,7 @@ import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
+import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 
 const TAG_LABEL_KEYS = [
   "dailyLife",
@@ -46,15 +48,27 @@ export const HomeTodoContainer = () => {
   const {
     todosByDate,
     activeTimer,
+    pendingCompleteTodo,
+    feedbackText,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleReorderTodo,
+    handleConfirmPendingComplete,
   } = useHomeTodosByDate(days);
 
   useEffect(() => {
     scrollContainerToToday(scrollRef.current);
   }, [isWeekView, scrollRef]);
+
+  const plannedMinutes = activeTimer
+    ? convertDurationToMinutes(
+        activeTimer.plannedSeconds + activeTimer.extendedSeconds,
+      )
+    : 0;
+  const actualMinutes = activeTimer
+    ? convertDurationToMinutes(activeTimer.elapsedSeconds)
+    : 0;
 
   return (
     <div
@@ -152,6 +166,14 @@ export const HomeTodoContainer = () => {
           </div>
         );
       })}
+
+      <HomeStopCompleteModal
+        pendingToken={pendingCompleteTodo?.token ?? null}
+        plannedMinutes={plannedMinutes}
+        actualMinutes={actualMinutes}
+        feedbackText={feedbackText}
+        onConfirm={handleConfirmPendingComplete}
+      />
     </div>
   );
 };
