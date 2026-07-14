@@ -96,7 +96,7 @@ export const TodayTodoCard = ({
       onClick={onCardClick}
       onKeyDown={onCardClick ? handleCardKeyDown : undefined}
       className={cn(
-        "border-timo-gray-500 flex w-full flex-col gap-1 rounded-[4px] border px-5 py-4",
+        "border-timo-gray-500 flex min-w-80 flex-col gap-1 rounded-[4px] border px-5 py-4",
         style.card,
         onCardClick && "cursor-pointer",
       )}
@@ -105,6 +105,7 @@ export const TodayTodoCard = ({
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <div
             role="none"
+            className="inline-flex items-center"
             onClick={stopPropagation}
             onKeyDown={stopPropagation}
           >
