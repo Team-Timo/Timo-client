@@ -14,6 +14,7 @@ import {
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { tagCreateDataSchema } from "@/api/tag/tag-schema";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/useSettingsLanguageParam";
+import { useLogoutAction } from "@/app/[locale]/(main)/settings/_queries/account/use-logout";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useDeleteTag } from "@/queries/tag/use-delete-tag";
@@ -43,6 +44,7 @@ export const useSettingsProfile = () => {
   const tagsQuery = useTags();
   const { mutate: createTag } = useCreateTag();
   const { mutate: deleteTag } = useDeleteTag();
+  const { mutate: logoutMutate, isPending: isLoggingOut } = useLogoutAction();
 
   const tagItems = (tagsQuery.data?.tags ?? []).map((tag) => ({
     id: tag.tagId,
@@ -109,10 +111,8 @@ export const useSettingsProfile = () => {
   };
 
   const handleLogout = () => {
-    // TODO: API - 로그아웃 처리 및 브라우저 저장 데이터 파기
-    console.log("로그아웃 API 호출");
-    // TODO: 로그인 페이지 라우트 추가 후 이동 연결 (뒤로가기로 재접근 차단 포함)
-    console.log("[Login] 페이지로 이동합니다.");
+    if (isLoggingOut) return;
+    logoutMutate();
   };
 
   const handleConfirmLanguageChange = async (next: SettingsLanguage) => {
