@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 
-import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
-import { todayTodoMocks } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
-
-export const useTodayTodoList = () => {
-  const [todos, setTodos] = useState<TodoMock[]>(todayTodoMocks);
+export const useTodayTodoList = (initialTodos: TodayTodo[]) => {
+  const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
 
   const runningTodoId =
     todos.find((todo) => todo.timerStatus === "RUNNING")?.todoId ?? null;
@@ -41,7 +39,7 @@ export const useTodayTodoList = () => {
     setTodos((prev) => prev.filter((todo) => todo.todoId !== todoId));
   };
 
-  const handleAddTodo = (todo: TodoMock) => {
+  const handleAddTodo = (todo: TodayTodo) => {
     setTodos((prev) => [...prev, todo]);
   };
 

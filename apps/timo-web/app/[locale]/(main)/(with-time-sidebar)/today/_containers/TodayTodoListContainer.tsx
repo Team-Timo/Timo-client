@@ -3,17 +3,12 @@
 import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayDateHeaderContainer";
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
+import { useToday } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today";
 import { convertDurationToTimeText } from "@/utils/convert-duration-to-time-text";
 import { formatDate } from "@/utils/date";
 
-const PRIORITY_MAP = {
-  URGENT: "VERY_HIGH",
-  HIGH: "HIGH",
-  MEDIUM: "MEDIUM",
-  LOW: "LOW",
-} as const;
-
 export const TodayTodoListContainer = () => {
+  const { data } = useToday();
   const {
     todos,
     runningTodoId,
@@ -21,7 +16,7 @@ export const TodayTodoListContainer = () => {
     handleCheck,
     handleAddTodo,
     handleSubTodoCheck,
-  } = useTodayTodoList();
+  } = useTodayTodoList(data.todos);
 
   const completedCount = todos.filter((todo) => todo.completed).length;
 
@@ -43,7 +38,7 @@ export const TodayTodoListContainer = () => {
               date: formatDate(todo.date),
               dateValue: new Date(todo.date),
               time: convertDurationToTimeText(todo.durationSeconds),
-              priority: PRIORITY_MAP[todo.priority],
+              priority: todo.priority,
               tag: todo.tag?.name,
               hasMemo: todo.hasMemo,
               hasRepeat: todo.isRepeated,

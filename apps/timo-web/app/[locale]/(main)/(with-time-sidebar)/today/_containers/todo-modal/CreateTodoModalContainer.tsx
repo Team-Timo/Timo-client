@@ -4,14 +4,14 @@ import { AddTaskButton } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 
-import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
 import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/todo-modal/use-create-todo-submit";
 import { CreateTodoModalContent } from "@/components/todo-modal/CreateTodoModalContent";
 
 export interface CreateTodoModalContainerProps {
   defaultDate?: Date;
-  onCreate: (todo: TodoMock) => void;
+  onCreate: (todo: TodayTodo) => void;
 }
 
 export const CreateTodoModalContainer = ({

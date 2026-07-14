@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
 import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_components/DateInformation";
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
@@ -13,7 +13,7 @@ import { getDayOfWeekKey } from "@/utils/get-day-of-week-key";
 interface TodayDateHeaderContainerProps {
   completedCount: number;
   totalCount: number;
-  onCreateTodo: (todo: TodoMock) => void;
+  onCreateTodo: (todo: TodayTodo) => void;
 }
 
 export const TodayDateHeaderContainer = ({
