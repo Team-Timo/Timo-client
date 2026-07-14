@@ -1,6 +1,7 @@
-import { ReactNode } from "react";
-
 import { cn } from "../../../lib";
+
+import type { MouseEventHandler, PointerEventHandler, ReactNode } from "react";
+
 
 export type PlayButtonVariant = "play" | "stop";
 export type PlayButtonSize = "sm" | "lg";
@@ -9,7 +10,8 @@ export interface PlayButtonProps {
   variant: PlayButtonVariant;
   size?: PlayButtonSize;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onPointerDown?: PointerEventHandler<HTMLButtonElement>;
   children?: ReactNode;
   ariaLabel?: string;
 }
@@ -32,6 +34,7 @@ export const PlayButton = ({
   size = "sm",
   disabled = false,
   onClick,
+  onPointerDown,
   children,
   ariaLabel,
 }: PlayButtonProps) => {
@@ -39,6 +42,7 @@ export const PlayButton = ({
     <button
       type="button"
       onClick={onClick}
+      onPointerDown={onPointerDown}
       disabled={disabled}
       aria-label={
         ariaLabel ??
