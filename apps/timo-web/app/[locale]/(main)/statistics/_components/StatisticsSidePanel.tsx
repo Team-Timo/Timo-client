@@ -91,7 +91,9 @@ export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
   return (
     <aside className={cn(SIDE_PANEL_CLASS_NAME, "px-7.5 pt-20.5 pb-76")}>
       <div className="flex flex-col gap-6">
-        <h2 className="typo-headline-b-24">{detail.date}</h2>
+        <h2 className="typo-headline-b-24 whitespace-pre-line">
+          {detail.date}
+        </h2>
 
         <SummaryTimeBlock
           label={t("dayTotalRecordTime")}
