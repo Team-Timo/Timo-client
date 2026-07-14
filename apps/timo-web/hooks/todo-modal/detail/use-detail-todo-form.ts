@@ -1,11 +1,7 @@
 import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useController, useForm } from "react-hook-form";
 
-import type {
-  TodoDetailResponse,
-  TodoUpdateRequest,
-} from "@/api/generated/models";
-import type { BuildDetailTodoUpdateRequestParams } from "@/utils/todo/detail-todo-update-request";
+import type { TodoDetailResponse } from "@/api/generated/models";
 import type {
   PriorityLevel,
   RepeatFrequency,
@@ -18,7 +14,6 @@ import { SECONDS_PER_MINUTE } from "@/constants/time";
 import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
 import { useDetailSubtaskField } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import { parseDateKey } from "@/utils/date/date";
-import { buildDetailTodoUpdateRequest } from "@/utils/todo/detail-todo-update-request";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
@@ -79,9 +74,6 @@ export const DETAIL_TODO_WEEKDAY_IDS = [
 export interface UseDetailTodoFormParams {
   todo: TodoDetailResponse;
 }
-
-export type DetailTodoUpdateRequestOverrides =
-  Partial<BuildDetailTodoUpdateRequestParams>;
 
 export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const durationText = convertDurationToTimeText(todo.durationSeconds ?? 0);
@@ -196,28 +188,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     return nextSubtasks;
   };
 
-  const buildUpdateRequest = (
-    overrides: DetailTodoUpdateRequestOverrides = {},
-  ): TodoUpdateRequest => {
-    const params: BuildDetailTodoUpdateRequestParams = {
-      icon: iconField.value,
-      title: titleField.value,
-      date: dateField.value,
-      time: timeField.value,
-      priority: priorityField.value,
-      tagId: tagField.selectedTagId,
-      isRepeatActive: isRepeatActiveField.value,
-      repeatFrequency: repeatFrequencyField.value,
-      selectedWeekdayIds: selectedWeekdayIdsField.value,
-      repeatDay: repeatDayField.value,
-      memo: memoField.value,
-      subtasks: subtaskField.subtaskInputs,
-      ...overrides,
-    };
-
-    return buildDetailTodoUpdateRequest(params);
-  };
-
   return {
     date: dateField.value,
     setDate: dateField.onChange,
@@ -248,7 +218,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     selectTime,
     changeRepeatFrequency,
     toggleWeekday,
-    buildUpdateRequest,
     handleSubmit,
     dirtyFields: formState.dirtyFields,
   };

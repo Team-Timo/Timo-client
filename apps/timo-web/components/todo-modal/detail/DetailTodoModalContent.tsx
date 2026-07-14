@@ -1,7 +1,7 @@
 import { DeleteIcon, TrashOnIcon } from "@repo/timo-design-system/icons";
 import { TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type {
   TodoDetailResponse,
@@ -21,13 +21,18 @@ import { DetailTodoTaskFields } from "@/components/todo-modal/detail/DetailTodoT
 import {
   DETAIL_TODO_TIME_OPTIONS,
   DETAIL_TODO_WEEKDAY_IDS,
-  type DetailTodoUpdateRequestOverrides,
   useDetailTodoForm,
 } from "@/hooks/todo-modal/detail/use-detail-todo-form";
-import { formatShortDateLabel } from "@/utils/date/date";
+import { formatDateKey, formatShortDateLabel } from "@/utils/date/date";
+import {
+  buildDetailTodoSubtasksUpdateRequest,
+  buildDetailTodoTextUpdateRequest,
+  isTodoUpdateRepeatWeekday,
+} from "@/utils/todo/detail-todo-update-request";
+import { convertTimeTextToDurationSeconds } from "@/utils/todo/todo-time";
 
 const DETAIL_TODO_MEMO_MAX_LENGTH = 300;
-const TEXT_UPDATE_DEBOUNCE_MS = 3000;
+const TEXT_UPDATE_DEBOUNCE_MS = 2000;
 type DetailTodoWeekdayId = (typeof DETAIL_TODO_WEEKDAY_IDS)[number];
 
 const isDetailTodoWeekdayId = (
@@ -62,7 +67,6 @@ export const DetailTodoModalContent = ({
   const detailTodoForm = useDetailTodoForm({ todo });
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
   const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
-  const canUpdateTodo = todo.timerStatus === "STOPPED";
   const dateNumber = detailTodoForm.date.getDate();
   const dayOfWeek = isDetailTodoWeekdayId(todo.dayOfWeek)
     ? todo.dayOfWeek
@@ -72,7 +76,16 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
   const latestOnUpdateRef = useRef(onUpdate);
-  const latestBuildUpdateRequestRef = useRef(detailTodoForm.buildUpdateRequest);
+  const buildTextUpdateRequest = useCallback(
+    (): TodoUpdateRequest =>
+      buildDetailTodoTextUpdateRequest({
+        title: detailTodoForm.title,
+        memo: detailTodoForm.memo,
+        subtasks: detailTodoForm.subtaskInputs,
+      }),
+    [detailTodoForm.memo, detailTodoForm.subtaskInputs, detailTodoForm.title],
+  );
+  const latestBuildTextUpdateRequestRef = useRef(buildTextUpdateRequest);
   const didStartTextUpdateRef = useRef(false);
   const textUpdateSignature = useMemo(
     () =>
@@ -87,18 +100,16 @@ export const DetailTodoModalContent = ({
       }),
     [detailTodoForm.memo, detailTodoForm.subtaskInputs, detailTodoForm.title],
   );
-
   useEffect(() => {
     latestOnUpdateRef.current = onUpdate;
   }, [onUpdate]);
 
   useEffect(() => {
-    latestBuildUpdateRequestRef.current = detailTodoForm.buildUpdateRequest;
-  }, [detailTodoForm.buildUpdateRequest]);
+    latestBuildTextUpdateRequestRef.current = buildTextUpdateRequest;
+  }, [buildTextUpdateRequest]);
 
   useEffect(() => {
     if (!isOpen) return;
-    if (!canUpdateTodo) return;
 
     if (!didStartTextUpdateRef.current) {
       didStartTextUpdateRef.current = true;
@@ -108,18 +119,14 @@ export const DetailTodoModalContent = ({
     if (!detailTodoForm.title.trim()) return;
 
     const updateTimer = window.setTimeout(() => {
-      latestOnUpdateRef.current(latestBuildUpdateRequestRef.current());
+      latestOnUpdateRef.current(latestBuildTextUpdateRequestRef.current());
     }, TEXT_UPDATE_DEBOUNCE_MS);
 
     return () => window.clearTimeout(updateTimer);
-  }, [canUpdateTodo, detailTodoForm.title, isOpen, textUpdateSignature]);
+  }, [detailTodoForm.title, isOpen, textUpdateSignature]);
 
-  const updateTodo = (overrides: DetailTodoUpdateRequestOverrides = {}) => {
-    if (!canUpdateTodo) return;
-
-    const updateData = detailTodoForm.buildUpdateRequest(overrides);
-    if (!updateData.title?.trim()) return;
-
+  const updateTodo = (updateData: TodoUpdateRequest) => {
+    if ("title" in updateData && !updateData.title?.trim()) return;
     onUpdate(updateData);
   };
 
@@ -130,24 +137,29 @@ export const DetailTodoModalContent = ({
 
   const handleRemoveIcon = () => {
     detailTodoForm.removeIcon();
-    updateTodo({ icon: null });
   };
 
   const handleSelectTime = (nextTime: TimeSelection) => {
     setSelectedTime(nextTime);
     const time = detailTodoForm.selectTime(nextTime);
 
-    if (time) updateTodo({ time });
+    const durationSeconds = time
+      ? convertTimeTextToDurationSeconds(time)
+      : undefined;
+
+    if (durationSeconds) updateTodo({ durationSeconds });
   };
 
   const handleDateChange = (nextDate: Date) => {
     detailTodoForm.setDate(nextDate);
-    updateTodo({ date: nextDate });
+    updateTodo({ date: formatDateKey(nextDate) });
   };
 
   const handleTimeChange = (time: string) => {
     detailTodoForm.setTime(time);
-    updateTodo({ time });
+    const durationSeconds = convertTimeTextToDurationSeconds(time);
+
+    if (durationSeconds) updateTodo({ durationSeconds });
   };
 
   const handleSelectPriority = (priority: PriorityLevel) => {
@@ -163,24 +175,33 @@ export const DetailTodoModalContent = ({
 
   const handleRepeatFrequencyChange = (repeatFrequency: RepeatFrequency) => {
     detailTodoForm.changeRepeatFrequency(repeatFrequency);
-    updateTodo({ isRepeatActive: true, repeatFrequency });
+    updateTodo({ repeatType: repeatFrequency });
   };
 
   const handleWeekdayToggle = (weekdayId: string) => {
     const selectedWeekdayIds = detailTodoForm.toggleWeekday(weekdayId);
-    updateTodo({ selectedWeekdayIds });
+    updateTodo({
+      repeatType: "WEEKLY",
+      repeatWeekdays: selectedWeekdayIds.filter(isTodoUpdateRepeatWeekday),
+    });
   };
 
   const handleRepeatDayChange = (repeatDay: string) => {
     detailTodoForm.setRepeatDay(repeatDay);
-    updateTodo({ repeatDay });
+    const repeatDayOfMonth = Number(repeatDay);
+
+    if (
+      Number.isInteger(repeatDayOfMonth) &&
+      repeatDayOfMonth >= 1 &&
+      repeatDayOfMonth <= 31
+    ) {
+      updateTodo({ repeatType: "MONTHLY", repeatDayOfMonth });
+    }
   };
 
   const handleSubtaskCompletedChange = (id: number, completed: boolean) => {
     const subtasks = detailTodoForm.changeSubtaskCompleted(id, completed);
-    const updateData = detailTodoForm.buildUpdateRequest({ subtasks });
-    if (!updateData.title?.trim()) return;
-    onUpdate(updateData);
+    updateTodo({ subtasks: buildDetailTodoSubtasksUpdateRequest(subtasks) });
   };
 
   return (
@@ -206,7 +227,7 @@ export const DetailTodoModalContent = ({
             </p>
           </div>
 
-          <div className={canUpdateTodo ? undefined : "pointer-events-none"}>
+          <div>
             <TodoIconField
               icon={detailTodoForm.icon}
               isIconPanelOpen={isIconPanelOpen}
@@ -225,7 +246,6 @@ export const DetailTodoModalContent = ({
             <DetailTodoTaskFields
               titleValue={detailTodoForm.title}
               isCompleted={todo.completed}
-              disabled={!canUpdateTodo}
               timerStatus={todo.timerStatus}
               subtaskInputs={detailTodoForm.subtaskInputs}
               onTitleChange={detailTodoForm.changeTitle}
@@ -239,13 +259,7 @@ export const DetailTodoModalContent = ({
           </div>
 
           <div className="flex flex-col gap-3">
-            <div
-              className={
-                canUpdateTodo
-                  ? "flex items-center gap-2 py-3"
-                  : "pointer-events-none flex items-center gap-2 py-3"
-              }
-            >
+            <div className="flex items-center gap-2 py-3">
               <TodoToolbar
                 dateLabel={formatShortDateLabel(detailTodoForm.date)}
                 date={detailTodoForm.date}
@@ -312,7 +326,6 @@ export const DetailTodoModalContent = ({
               placeholder={tCreateModal("notePlaceholder")}
               onChange={detailTodoForm.setMemo}
               maxLength={DETAIL_TODO_MEMO_MAX_LENGTH}
-              disabled={!canUpdateTodo}
             />
           </div>
         </div>
