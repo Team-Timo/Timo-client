@@ -9,8 +9,8 @@ import type { ReactNode } from "react";
 
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
-import { useDeleteTodoSubmit } from "@/hooks/todo-modal/use-delete-todo-submit";
-import { useUpdateTodoSubmit } from "@/hooks/todo-modal/use-update-todo-submit";
+import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
+import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 import { useDetailTodo } from "@/queries/todo/use-detail-todo";
 
 export interface DetailTodoModalContainerProps extends UseDetailTodoParams {

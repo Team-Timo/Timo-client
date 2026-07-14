@@ -4,7 +4,6 @@ import { useController, useForm } from "react-hook-form";
 import type {
   TodoDetailResponse,
   TodoUpdateRequest,
-  TodoUpdateRequestRepeatWeekdaysItem,
 } from "@/api/generated/models";
 import type {
   PriorityLevel,
@@ -14,17 +13,15 @@ import type {
   TodoIconValue,
 } from "@repo/timo-design-system/ui";
 
-import { useDetailSubtaskField } from "@/hooks/todo-modal/use-detail-subtask-field";
-import { useTagField } from "@/hooks/todo-modal/use-tag-field";
-import { formatDateKey, parseDateKey } from "@/utils/date/date";
+import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
+import { useDetailSubtaskField } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
+import { parseDateKey } from "@/utils/date/date";
+import { buildDetailTodoUpdateRequest } from "@/utils/todo/detail-todo-update-request";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
 } from "@/utils/todo/text-length";
-import {
-  convertDurationToTimeText,
-  convertTimeTextToDurationSeconds,
-} from "@/utils/todo/todo-time";
+import { convertDurationToTimeText } from "@/utils/todo/todo-time";
 
 interface DetailTodoFormValues {
   date: Date;
@@ -56,11 +53,6 @@ const isRepeatFrequency = (
   repeatType: string | undefined,
 ): repeatType is RepeatFrequency =>
   repeatType === "DAILY" || repeatType === "WEEKLY" || repeatType === "MONTHLY";
-
-const isUpdateRepeatWeekday = (
-  weekdayId: string,
-): weekdayId is TodoUpdateRequestRepeatWeekdaysItem =>
-  (DETAIL_TODO_WEEKDAY_IDS as readonly string[]).includes(weekdayId);
 
 export const DETAIL_TODO_TIME_OPTIONS: TimeOption[] = [
   { minute: 15, value: "15", unit: "min" },
@@ -177,48 +169,20 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   };
 
   const buildUpdateRequest = (): TodoUpdateRequest => {
-    const durationSeconds = convertTimeTextToDurationSeconds(timeField.value);
-    const repeatType = isRepeatActiveField.value
-      ? repeatFrequencyField.value
-      : "NONE";
-    const repeatDayOfMonth = Number(repeatDayField.value);
-    const selectedTagId =
-      typeof tagField.selectedTagId === "number"
-        ? tagField.selectedTagId
-        : undefined;
-    const repeatWeekdays = selectedWeekdayIdsField.value.filter(
-      isUpdateRepeatWeekday,
-    );
-    const subtasks = subtaskField.subtaskInputs
-      .map((subtask) => ({
-        subtaskId: subtask.subtaskId ?? undefined,
-        content: subtask.value.trim(),
-        completed: subtask.completed,
-      }))
-      .filter((subtask) => subtask.content.length > 0);
-
-    return {
-      icon: iconField.value ?? undefined,
-      title: titleField.value.trim(),
-      date: formatDateKey(dateField.value),
-      durationSeconds: durationSeconds > 0 ? durationSeconds : undefined,
+    return buildDetailTodoUpdateRequest({
+      icon: iconField.value,
+      title: titleField.value,
+      date: dateField.value,
+      time: timeField.value,
       priority: priorityField.value,
-      tagId: selectedTagId,
-      repeatType,
-      repeatWeekdays:
-        repeatType === "WEEKLY" && repeatWeekdays.length > 0
-          ? repeatWeekdays
-          : undefined,
-      repeatDayOfMonth:
-        repeatType === "MONTHLY" &&
-        Number.isInteger(repeatDayOfMonth) &&
-        repeatDayOfMonth >= 1 &&
-        repeatDayOfMonth <= 31
-          ? repeatDayOfMonth
-          : undefined,
-      memo: memoField.value.trim(),
-      subtasks,
-    };
+      tagId: tagField.selectedTagId,
+      isRepeatActive: isRepeatActiveField.value,
+      repeatFrequency: repeatFrequencyField.value,
+      selectedWeekdayIds: selectedWeekdayIdsField.value,
+      repeatDay: repeatDayField.value,
+      memo: memoField.value,
+      subtasks: subtaskField.subtaskInputs,
+    });
   };
 
   return {

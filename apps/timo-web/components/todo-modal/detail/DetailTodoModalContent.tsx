@@ -17,7 +17,7 @@ import {
   DETAIL_TODO_TIME_OPTIONS,
   DETAIL_TODO_WEEKDAY_IDS,
   useDetailTodoForm,
-} from "@/hooks/todo-modal/use-detail-todo-form";
+} from "@/hooks/todo-modal/detail/use-detail-todo-form";
 import { formatShortDateLabel } from "@/utils/date/date";
 
 const DETAIL_TODO_MEMO_MAX_LENGTH = 300;
