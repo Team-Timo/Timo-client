@@ -3,8 +3,10 @@
 import { DeleteIcon, TrashOnIcon } from "@repo/timo-design-system/icons";
 import { TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { TimeSelection } from "@repo/timo-design-system/ui";
 
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
@@ -40,6 +42,8 @@ export const DetailTodoModalContent = ({
   const tCreateModal = useTranslations("Home.createModal");
   const tCommon = useTranslations("Common");
   const detailTodoForm = useDetailTodoForm({ todo });
+  const [selectedTime, setSelectedTime] = useState<TimeSelection>();
+  const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
   const weekdays = DETAIL_TODO_WEEKDAY_IDS.map((weekdayId) => ({
     id: weekdayId,
     label: tCommon(`weekday.${weekdayId}`),
@@ -53,6 +57,11 @@ export const DetailTodoModalContent = ({
   const handleDelete = () => {
     onDelete();
     onClose();
+  };
+
+  const handleSelectTime = (nextTime: TimeSelection) => {
+    setSelectedTime(nextTime);
+    detailTodoForm.selectTime(nextTime);
   };
 
   return (
@@ -80,10 +89,10 @@ export const DetailTodoModalContent = ({
 
           <TodoIconField
             icon={detailTodoForm.icon}
-            isIconPanelOpen={detailTodoForm.isIconPanelOpen}
+            isIconPanelOpen={isIconPanelOpen}
             addIconLabel={tCreateModal("addIcon")}
-            onOpenPanel={detailTodoForm.openIconPanel}
-            onTogglePanel={detailTodoForm.toggleIconPanel}
+            onOpenPanel={() => setIsIconPanelOpen(true)}
+            onTogglePanel={() => setIsIconPanelOpen((prev) => !prev)}
             onSelectIcon={detailTodoForm.selectIcon}
             onRemoveIcon={detailTodoForm.removeIcon}
           />
@@ -116,8 +125,8 @@ export const DetailTodoModalContent = ({
               timeOptions={DETAIL_TODO_TIME_OPTIONS}
               time={detailTodoForm.time}
               onTimeChange={detailTodoForm.setTime}
-              selectedTime={detailTodoForm.selectedTime}
-              onSelectTime={detailTodoForm.selectTime}
+              selectedTime={selectedTime}
+              onSelectTime={handleSelectTime}
               priority={detailTodoForm.priority}
               priorityLabels={{
                 VERY_HIGH: tCommon("priority.urgent"),

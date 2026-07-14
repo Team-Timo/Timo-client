@@ -1,6 +1,5 @@
 import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { useController, useForm } from "react-hook-form";
 
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
@@ -121,12 +120,8 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const { field: memoField } = useController({ name: "memo", control });
   const { field: iconField } = useController({ name: "icon", control });
 
-  const [selectedTime, setSelectedTime] = useState<TimeSelection>();
   const subtaskField = useDetailSubtaskField({ subtasks: todo.subtasks });
-  const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
 
-  const openIconPanel = () => setIsIconPanelOpen(true);
-  const toggleIconPanel = () => setIsIconPanelOpen((prev) => !prev);
   const selectIcon = (nextIcon: TodoIconValue) => iconField.onChange(nextIcon);
   const removeIcon = () => iconField.onChange(null);
 
@@ -137,8 +132,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   };
 
   const selectTime = (nextTime: TimeSelection) => {
-    setSelectedTime(nextTime);
-
     if (nextTime === "ai") return;
 
     const option = DETAIL_TODO_TIME_OPTIONS.find(
@@ -168,7 +161,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     setDate: dateField.onChange,
     time: timeField.value,
     setTime: timeField.onChange,
-    selectedTime,
     priority: priorityField.value,
     setPriority: priorityField.onChange,
     tagLabel,
@@ -191,9 +183,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     memo: memoField.value,
     setMemo: memoField.onChange,
     icon: iconField.value,
-    isIconPanelOpen,
-    openIconPanel,
-    toggleIconPanel,
     selectIcon,
     removeIcon,
     selectTime,
