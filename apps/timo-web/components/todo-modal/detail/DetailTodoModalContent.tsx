@@ -18,6 +18,12 @@ import {
 import { formatShortDateLabel } from "@/utils/date/date";
 
 const DETAIL_TODO_MEMO_MAX_LENGTH = 300;
+type DetailTodoWeekdayId = (typeof DETAIL_TODO_WEEKDAY_IDS)[number];
+
+const isDetailTodoWeekdayId = (
+  dayOfWeek: string,
+): dayOfWeek is DetailTodoWeekdayId =>
+  (DETAIL_TODO_WEEKDAY_IDS as readonly string[]).includes(dayOfWeek);
 
 export interface DetailTodoModalContentProps {
   isOpen: boolean;
@@ -42,6 +48,10 @@ export const DetailTodoModalContent = ({
   const detailTodoForm = useDetailTodoForm({ todo });
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
   const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
+  const dateNumber = detailTodoForm.date.getDate();
+  const dayOfWeek = isDetailTodoWeekdayId(todo.dayOfWeek)
+    ? todo.dayOfWeek
+    : "MON";
   const weekdays = DETAIL_TODO_WEEKDAY_IDS.map((weekdayId) => ({
     id: weekdayId,
     label: tCommon(`weekday.${weekdayId}`),
@@ -79,9 +89,9 @@ export const DetailTodoModalContent = ({
       <div className="flex w-full flex-col gap-3">
         <div className="flex w-full flex-col gap-2">
           <div className="flex flex-col">
-            <p className="typo-headline-b-30 text-timo-black">22</p>
+            <p className="typo-headline-b-30 text-timo-black">{dateNumber}</p>
             <p className="typo-body-m-12 text-timo-gray-700">
-              {tCommon("weekday.MON")}
+              {tCommon(`weekday.${dayOfWeek}`)}
             </p>
           </div>
 
