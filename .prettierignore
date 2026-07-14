@@ -1,0 +1,19 @@
+# dependencies
+node_modules
+
+# build output
+.next
+dist
+build
+
+# configs
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# misc
+public
+.github
+.turbo
+
+turbo/generators/templates/**

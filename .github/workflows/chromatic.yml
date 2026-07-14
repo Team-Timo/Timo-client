@@ -1,0 +1,93 @@
+name: Chromatic
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - "packages/timo-design-system/**"
+      - ".github/workflows/chromatic.yml"
+      - "packages/tailwind-config/**"
+      - "pnpm-lock.yaml"
+jobs:
+  chromatic:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Publish to Chromatic
+        id: chromatic
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: packages/timo-design-system
+          buildScriptName: build:storybook
+          onlyChanged: true
+          exitZeroOnChanges: true
+          autoAcceptChanges: true
+
+      - name: Comment Storybook preview link on PR
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const storybookUrl = '${{ steps.chromatic.outputs.storybookUrl }}';
+            const buildUrl = '${{ steps.chromatic.outputs.buildUrl }}';
+
+            const body = [
+              '## Storybook Preview',
+              '',
+              '| 항목 | 링크 |',
+              '|---|---|',
+              `| Storybook | [열기](${storybookUrl}) |`,
+              `| Chromatic 빌드 | [확인](${buildUrl}) |`,
+              '',
+              `_마지막 업데이트: ${new Date().toISOString().replace('T', ' ').slice(0, 16)} UTC_`,
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find((comment) =>
+              comment.user.type === 'Bot' && comment.body.includes('## Storybook Preview')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

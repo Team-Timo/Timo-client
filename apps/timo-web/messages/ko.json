@@ -1,0 +1,261 @@
+{
+  "Navigation": {
+    "home": "홈",
+    "today": "오늘",
+    "focus": "집중 모드",
+    "statistics": "통계",
+    "settings": "설정"
+  },
+  "Common": {
+    "weekday": {
+      "SUN": "일요일",
+      "MON": "월요일",
+      "TUE": "화요일",
+      "WED": "수요일",
+      "THU": "목요일",
+      "FRI": "금요일",
+      "SAT": "토요일"
+    },
+    "tag": {
+      "dailyLife": "일상",
+      "work": "업무",
+      "exercise": "운동",
+      "assignment": "과제",
+      "additional": "기타"
+    },
+    "priority": {
+      "urgent": "매우중요",
+      "high": "중요",
+      "medium": "보통",
+      "low": "낮음"
+    },
+    "close": "닫기",
+    "delete": "삭제"
+  },
+  "Home": {
+    "today": "오늘",
+    "viewBasic": "기본",
+    "viewWeek": "7일",
+    "addTask": "할 일을 추가하세요",
+    "createModal": {
+      "title": "할 일 추가하기",
+      "addIcon": "아이콘 추가하기",
+      "titlePlaceholder": "새로운 작업을 계획하세요",
+      "subtaskPlaceholder": "작은 단위로 할 일을 나눠보세요",
+      "notePlaceholder": "메모를 입력해주세요...",
+      "dateLabel": "날짜",
+      "timeLabel": "시간",
+      "tagLabel": "태그",
+      "addTag": "추가",
+      "create": "생성하기",
+      "repeatDaily": "매일",
+      "repeatWeekly": "매주",
+      "repeatMonthly": "매달",
+      "repeatDetailHeading": "세부 설정",
+      "repeatDayUnit": "일 마다"
+    },
+    "detailModal": {
+      "ariaLabel": "투두 상세",
+      "delete": "투두 삭제",
+      "repeatFrequencyHeading": "반복 일정",
+      "repeatDayLabel": "일"
+    },
+    "createTagModal": {
+      "title": "태그 생성하기",
+      "nameLabel": "태그 이름",
+      "maxLengthHint": "태그 이름은 최대 10자까지 입력할 수 있어요",
+      "duplicateHint": "이미 사용 중인 이름은 등록할 수 없어요",
+      "create": "생성하기"
+    }
+  },
+  "Settings": {
+    "nav": {
+      "account": "개인 정보",
+      "policy": "약관",
+      "privacy": "개인 정보 처리 방침",
+      "withdrawal": "회원 탈퇴"
+    },
+    "profile": {
+      "title": "개인 정보",
+      "profileSection": "프로필",
+      "calendarSection": "구글 캘린더 연동",
+      "connect": "연동하기",
+      "disconnect": "연동 해제",
+      "languageSection": "언어",
+      "languageKorean": "한국어",
+      "languageEnglish": "English",
+      "tagsSection": "태그",
+      "addTag": "태그 추가",
+      "removeTag": "{tag} 태그 삭제",
+      "logout": "로그아웃",
+      "languageConfirmTitle": "언어를 변경할까요?",
+      "languageConfirmDescription": "변경한 언어로 Timo의 모든 텍스트가 표시돼요.",
+      "languageConfirmCancel": "돌아가기",
+      "languageConfirmConfirm": "변경하기",
+      "tagDeleteConfirmTitle": "일정 태그를 삭제할까요?",
+      "tagDeleteConfirmDescription": "해당 태그가 적용된 모든 투두에서 태그가 삭제됩니다.",
+      "tagDeleteConfirmCancel": "돌아가기",
+      "tagDeleteConfirmConfirm": "삭제하기",
+      "logoutConfirmTitle": "로그아웃할까요?",
+      "logoutConfirmDescription": "로그아웃 후에도 데이터는 그대로 유지돼요.\n다시 로그인하면 이어서 사용할 수 있어요.",
+      "logoutConfirmCancel": "취소",
+      "logoutConfirmConfirm": "로그아웃"
+    },
+    "withdrawal": {
+      "title": "탈퇴",
+      "guideTitle": "더이상 Timo를 이용하지 않으시나요?",
+      "guideDescription": "탈퇴 후에는 계정 정보와 저장된 모든 데이터가 삭제되며 복구할 수 없어요.",
+      "warningTitle": "탈퇴 전 꼭 확인해주세요.",
+      "warningSchedule": "저장된 일정 및 할 일이 삭제됩니다.",
+      "warningCalendar": "연동된 캘린더 연결이 해제됩니다.",
+      "warningIrreversible": "삭제된 계정은 복구할 수 없습니다.",
+      "withdraw": "탈퇴하기",
+      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요.",
+      "withdrawError": "탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+    }
+  },
+  "Statistics": {
+    "sidePanel": {
+      "monthTotalRecordTime": "이번 달의 총 기록 시간",
+      "activeDays": "활동일",
+      "activeDayCount": "{count}일",
+      "dailyAverage": "일평균",
+      "accumulatedTasks": "누적 태스크",
+      "dayTotalRecordTime": "오늘의 총 기록 시간",
+      "plan": "계획",
+      "overtime": "+초과",
+      "shortened": "-단축"
+    }
+  },
+  "Toast": {
+    "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
+    "todoLimitLine1": "완료되지 않은 투두는 <blue>최대 20개</blue>까지 추가할 수 있어요.",
+    "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 완료해주세요.",
+    "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요.",
+    "todoCreateFailed": "투두 생성에 실패했어요. 다시 시도해 주세요.",
+    "aiDurationRecommendFailed": "AI 추천 소요 시간을 가져오지 못했어요. 다시 시도해 주세요.",
+    "tagCreateFailed": "태그 생성에 실패했어요. 다시 시도해 주세요.",
+    "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요.",
+    "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요.",
+    "languageChangeFailed": "언어 변경에 실패했어요. 다시 시도해 주세요.",
+    "timerAlreadyRunning": "다른 투두의 타이머가 이미 실행 중이에요. 먼저 종료해 주세요."
+  },
+  "Login": {
+    "animationLabel": "로그인 애니메이션",
+    "headline": "흩어진 시간을, 실행 가능한 흐름으로.",
+    "description": "timo 계정에 로그인하세요.",
+    "connectLabel": "Google 로그인",
+    "termsNotice": "계속하면 timo <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하게 됩니다."
+  },
+  "Error": {
+    "title": "잠시 문제가 발생했어요.",
+    "description": "더 나은 경험을 위해 잠시 점검 중입니다. 잠시후 다시 이용해 주세요.",
+    "homeButton": "홈으로 돌아가기"
+  },
+  "NotFound": {
+    "title": "페이지를 찾을 수 없어요.",
+    "description": "존재하지 않는 주소를 입력하셨거나, 잘못된 경로를 이용하셨어요",
+    "homeButton": "홈으로 돌아가기"
+  },
+  "GlobalError": {
+    "title": "문제가 발생했어요.",
+    "description": "잠시 후 다시 시도하거나 홈으로 이동해주세요.",
+    "homeButton": "홈으로 돌아가기"
+  },
+  "Onboarding": {
+    "button": {
+      "next": "다음",
+      "prev": "이전",
+      "start": "시작하기"
+    },
+    "onboardingGoogleButton": {
+      "login": "Google 계정으로 계속하기",
+      "connectCalendar": "Google 캘린더 연결하기"
+    },
+    "language": {
+      "title": "사용할 언어를 선택해 주세요.",
+      "description": "선택한 언어로 timo의 모든 텍스트가 표시돼요.\n나중에 설정에서 변경할 수 있어요."
+    },
+    "timePrediction": {
+      "title": "평소 작업 시간을\n잘 예측하는 편인가요?",
+      "description": "timo가 맞춤 추천을 해드려요.",
+      "options": {
+        "4": {
+          "label": "매우 정확해요.",
+          "sublabel": "예상 시간과 실제 시간이 일치해요."
+        },
+        "3": {
+          "label": "대체로 맞는 편이에요.",
+          "sublabel": "가끔 틀리지만 대체로 맞는 편이에요."
+        },
+        "2": {
+          "label": "자주 틀리는 편이에요.",
+          "sublabel": "예상과 항상 다르게 흘러가요."
+        },
+        "1": { "label": "잘 모르겠어요.", "sublabel": "생각해본 적이 없어요." }
+      }
+    },
+    "lifePattern": {
+      "title": "평소 생활 패턴을 알려주세요.",
+      "description": "입력한 정보는 시간 패턴 분석에만 사용돼요.",
+      "wakeUpTime": "기상 시간",
+      "bedTime": "취침 시간",
+      "bedTimeError": "취침 시간과 기상 시간은 다르게 설정해 주세요."
+    },
+    "calendarConnect": {
+      "title": "Google 캘린더를 연결하면\n일정을 함께 관리할 수 있어요.",
+      "description": "기존 일정을 timo에 불러와 한 곳에서 관리할 수 있어요.",
+      "connectLabel": "Google 캘린더 연동",
+      "consentNotice": "클릭 시 Google 인증 및 캘린더 접근 권한 동의 화면이 표시됩니다.",
+      "permissionNotice": "timo는 일정 조회 권한만 요청합니다."
+    }
+  },
+  "Focus": {
+    "controls": {
+      "end": "종료",
+      "pause": "일시정지",
+      "play": "재생",
+      "extend": "시간 추가"
+    },
+    "endModal": {
+      "title": "타이머 종료!",
+      "description": "다음 단계를 선택하세요.",
+      "continueButton": "계속하기",
+      "completeButton": "완료하기"
+    },
+    "stopModal": {
+      "title": "지금 멈출까요?",
+      "description": "지금까지 수행한 <blue>{minutes}</blue>이 타임박스에 기록됩니다.",
+      "continueButton": "계속 진행",
+      "switchButton": "완료하기"
+    },
+
+    "completeModal": {
+      "title": "태스크가 완료되었어요!",
+      "defaultFeedback": "이번 작업을 완료했어요. 수고하셨어요!",
+      "plannedLabel": "계획",
+      "actualLabel": "실제",
+      "completeButton": "완료하기"
+    },
+    "extendModal": {
+      "title": "시간을 얼마나 추가할까요?",
+      "presetTenMin": "+10분",
+      "presetThirtyMin": "+30분",
+      "presetOneHour": "+1시간",
+      "customPreset": "직접 입력",
+      "customInputLabel": "직접 입력 시간(분)",
+      "customUnitSuffix": "분",
+      "closeButton": "닫기",
+      "submitButton": "시간 추가하기"
+    },
+    "duration": {
+      "hourUnit": "시간",
+      "minuteUnit": "분"
+    },
+    "empty": "지금은 집중할 투두가 없어요",
+    "emptyPlayDisabled": "재생 불가"
+  },
+  "Policy": {
+    "empty": "약관 내용을 아직 준비 중입니다."
+  }
+}

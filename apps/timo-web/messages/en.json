@@ -1,0 +1,263 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "today": "Today",
+    "focus": "Focus Mode",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  },
+  "Common": {
+    "weekday": {
+      "SUN": "Sunday",
+      "MON": "Monday",
+      "TUE": "Tuesday",
+      "WED": "Wednesday",
+      "THU": "Thursday",
+      "FRI": "Friday",
+      "SAT": "Saturday"
+    },
+    "tag": {
+      "dailyLife": "Daily life",
+      "work": "Work",
+      "exercise": "Exercise",
+      "assignment": "Assignment",
+      "additional": "Additional"
+    },
+    "priority": {
+      "urgent": "Very Important",
+      "high": "Important",
+      "medium": "Average",
+      "low": "Low"
+    },
+    "close": "Close",
+    "delete": "Delete"
+  },
+  "Home": {
+    "today": "Today",
+    "viewBasic": "Basic",
+    "viewWeek": "7 days",
+    "addTask": "Add a task",
+    "createModal": {
+      "title": "Add a task",
+      "addIcon": "Add an icon",
+      "titlePlaceholder": "Plan a new task",
+      "subtaskPlaceholder": "Add tasks in small units",
+      "notePlaceholder": "Please enter a note...",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "tagLabel": "Tag",
+      "addTag": "Add",
+      "create": "Create",
+      "repeatDaily": "Daily",
+      "repeatWeekly": "Weekly",
+      "repeatMonthly": "Monthly",
+      "repeatDetailHeading": "Details",
+      "repeatDayUnit": "day(s)"
+    },
+    "detailModal": {
+      "ariaLabel": "To-do details",
+      "delete": "Delete to-do",
+      "repeatFrequencyHeading": "Repeat",
+      "repeatDayLabel": "day(s)"
+    },
+    "createTagModal": {
+      "title": "Create a tag",
+      "nameLabel": "Tag name",
+      "maxLengthHint": "The tag name can be up to 10 characters long",
+      "duplicateHint": "Names that are already in use cannot be registered",
+      "create": "Create"
+    }
+  },
+  "Settings": {
+    "nav": {
+      "account": "Account",
+      "policy": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "withdrawal": "Delete account"
+    },
+    "profile": {
+      "title": "Personal information",
+      "profileSection": "Profile",
+      "calendarSection": "Google Calendar integration",
+      "connect": "Integrate",
+      "disconnect": "Disconnect",
+      "languageSection": "Language",
+      "languageKorean": "Korean",
+      "languageEnglish": "English",
+      "tagsSection": "Tags",
+      "addTag": "Add tag",
+      "removeTag": "Delete {tag} tag",
+      "logout": "Log out",
+      "languageConfirmTitle": "Change language?",
+      "languageConfirmDescription": "Changing the language will immediately update the display language.",
+      "languageConfirmCancel": "Cancel",
+      "languageConfirmConfirm": "Change",
+      "tagDeleteConfirmTitle": "Delete this tag?",
+      "tagDeleteConfirmDescription": "The tag will be removed from every todo it's applied to.",
+      "tagDeleteConfirmCancel": "Cancel",
+      "tagDeleteConfirmConfirm": "Delete",
+      "logoutConfirmTitle": "Log out?",
+      "logoutConfirmDescription": "Your data stays saved after logging out.\nSign back in anytime to pick up where you left off.",
+      "logoutConfirmCancel": "Cancel",
+      "logoutConfirmConfirm": "Log out"
+    },
+    "withdrawal": {
+      "title": "Withdraw",
+      "guideTitle": "Are you no longer using Timo?",
+      "guideDescription": "After withdrawal, your account information and all saved data will be deleted and cannot be recovered.",
+      "warningTitle": "Please check before withdrawing.",
+      "warningSchedule": "Saved schedules and tasks will be deleted.",
+      "warningCalendar": "The linked calendar connection will be disconnected.",
+      "warningIrreversible": "Deleted accounts cannot be recovered.",
+      "withdraw": "Withdraw",
+      "confirmMessage": "Are you sure you want to withdraw? All your data will be deleted and cannot be undone.",
+      "withdrawError": "An error occurred during withdrawal. Please try again later."
+    }
+  },
+  "Statistics": {
+    "sidePanel": {
+      "monthTotalRecordTime": "Total record time this month",
+      "activeDays": "Active days",
+      "activeDayCount": "{count} days",
+      "dailyAverage": "Daily average",
+      "accumulatedTasks": "Accumulated tasks",
+      "dayTotalRecordTime": "Total record time today",
+      "plan": "Plan",
+      "overtime": "+Overdue",
+      "shortened": "-Shortened"
+    }
+  },
+  "Toast": {
+    "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
+    "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
+    "todoLimitLine2": "To add a new to-do, please complete an existing one.",
+    "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
+    "todoCreateFailed": "Failed to create the to-do. Please try again.",
+    "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again.",
+    "tagCreateFailed": "Failed to create the tag. Please try again.",
+    "tagActionFailed": "Failed to update the tag. Please try again.",
+    "focusActionFailed": "Failed to process the request. Please try again.",
+    "languageChangeFailed": "Failed to change the language. Please try again.",
+    "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first."
+  },
+  "Login": {
+    "animationLabel": "Login animation",
+    "headline": "Manage your day with clear timeboxes.",
+    "description": "Please log in to your timo account.",
+    "connectLabel": "Log in with Google",
+    "termsNotice": "By continuing, you agree to the timo <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+  },
+  "Error": {
+    "title": "A problem has occurred.",
+    "description": "We are currently undergoing maintenance for a better experience. Please try again later.",
+    "homeButton": "Return to home"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "You may have entered an invalid address or used an incorrect path.",
+    "homeButton": "Return to home"
+  },
+  "GlobalError": {
+    "title": "An issue has occurred.",
+    "description": "Please try again later or go back to home.",
+    "homeButton": "Return to home"
+  },
+  "Onboarding": {
+    "button": {
+      "next": "Next",
+      "prev": "Previous",
+      "start": "Get Started"
+    },
+    "onboardingGoogleButton": {
+      "login": "Continue with your Google account",
+      "connectCalendar": "Connect Google Calendar"
+    },
+    "language": {
+      "title": "Please select a language to use.",
+      "description": "timo will be displayed in your selected language.\nYou can change it later in settings."
+    },
+    "timePrediction": {
+      "title": "Do you estimate your time well?",
+      "description": "timo provides personalized recommendations.",
+      "options": {
+        "4": {
+          "label": "Very accurate.",
+          "sublabel": "The estimated time matches the actual time."
+        },
+        "3": {
+          "label": "Generally accurate.",
+          "sublabel": "Sometimes incorrect but generally accurate."
+        },
+        "2": {
+          "label": "Often incorrect.",
+          "sublabel": "Always goes differently than expected."
+        },
+        "1": {
+          "label": "I'm not sure.",
+          "sublabel": "I've never thought about it."
+        }
+      }
+    },
+    "lifePattern": {
+      "title": "Set your wake-up and bedtime.",
+      "description": "The information you provide will only be used for time pattern analysis.",
+      "wakeUpTime": "Wake-up time",
+      "bedTime": "Bedtime",
+      "bedTimeError": "Please set different times for bedtime and wake-up."
+    },
+    "calendarConnect": {
+      "title": "Connect your Google Calendar.",
+      "description": "You can import your existing schedules into timo and manage them in one place.",
+      "connectLabel": "Google Calendar integration",
+      "consentNotice": "Clicking will display the Google authentication and calendar access permission screen.",
+      "permissionNotice": "timo only requests permission to view your schedules."
+    }
+  },
+  "Focus": {
+    "controls": {
+      "end": "End",
+      "pause": "Pause",
+      "play": "Play",
+      "extend": "Add Time"
+    },
+    "endModal": {
+      "title": "Timer Finished!",
+      "description": "Please select the next step.",
+      "continueButton": "Continue",
+      "completeButton": "Exit"
+    },
+    "stopModal": {
+      "title": "Shall we stop now?",
+      "description": "The <blue>{minutes}</blue> completed so far will be recorded in the timebox.",
+      "continueButton": "Continue",
+      "switchButton": "Switch"
+    },
+    "completeModal": {
+      "title": "The task has been completed!",
+      "defaultFeedback": "You've completed this task. Great work!",
+      "plannedLabel": "Plan",
+      "actualLabel": "Actual",
+      "completeButton": "Complete"
+    },
+    "extendModal": {
+      "title": "How much time would you like to add?",
+      "presetTenMin": "+10M",
+      "presetThirtyMin": "+30M",
+      "presetOneHour": "+1H",
+      "customPreset": "Enter",
+      "customInputLabel": "Custom minutes input",
+      "customUnitSuffix": "M",
+      "closeButton": "Close",
+      "submitButton": "Add Time"
+    },
+    "duration": {
+      "hourUnit": "h",
+      "minuteUnit": "m"
+    },
+    "empty": "No to-dos to focus on right now",
+    "emptyPlayDisabled": "Play unavailable"
+  },
+  "Policy": {
+    "empty": "This policy content isn't available yet."
+  }
+}

@@ -1,0 +1,63 @@
+import "./globals.css";
+import localFont from "next/font/local";
+import { notFound } from "next/navigation";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+
+import type { Metadata } from "next";
+
+import { routing } from "@/i18n/routing";
+import { AuthProvider } from "@/providers/auth/AuthProvider";
+import { LanguageSyncProvider } from "@/providers/locale/LanguageSyncProvider";
+import { OverlayProvider } from "@/providers/OverlayProvider";
+import { QueryProvider } from "@/providers/query/QueryProvider";
+
+const pretendard = localFont({
+  src: "../../fonts/PretendardVariable.woff2",
+  variable: "--font-family-pretendard",
+  weight: "45 920",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "Timo",
+  description: "Timo web",
+};
+
+interface RootLayoutProps {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({
+  children,
+  params,
+}: Readonly<RootLayoutProps>) {
+  const { locale } = await params;
+
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
+  setRequestLocale(locale);
+
+  return (
+    <html lang={locale} className={pretendard.variable}>
+      <body>
+        <NextIntlClientProvider>
+          <QueryProvider>
+            <AuthProvider>
+              <LanguageSyncProvider>
+                <OverlayProvider>{children}</OverlayProvider>
+              </LanguageSyncProvider>
+            </AuthProvider>
+          </QueryProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}

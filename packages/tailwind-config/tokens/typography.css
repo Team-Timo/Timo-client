@@ -1,0 +1,114 @@
+@theme {
+  --font-pretendard: var(--font-family-pretendard), sans-serif;
+
+  /* Headline */
+
+  --typo-size-headline-b-50: 50px;
+  --typo-line-height-headline-b-50: 1.5;
+  --typo-letter-spacing-headline-b-50: -0.03em;
+  --typo-font-weight-headline-b-50: 700;
+
+  --typo-size-headline-b-40: 40px;
+  --typo-line-height-headline-b-40: 1.5;
+  --typo-letter-spacing-headline-b-40: -0.03em;
+  --typo-font-weight-headline-b-40: 700;
+
+  --typo-size-headline-b-30: 30px;
+  --typo-line-height-headline-b-30: 1.5;
+  --typo-letter-spacing-headline-b-30: -0.03em;
+  --typo-font-weight-headline-b-30: 700;
+
+  --typo-size-headline-m-26: 26px;
+  --typo-line-height-headline-m-26: 1.5;
+  --typo-letter-spacing-headline-m-26: -0.03em;
+  --typo-font-weight-headline-m-26: 500;
+
+  --typo-size-headline-b-24: 24px;
+  --typo-line-height-headline-b-24: 1.5;
+  --typo-letter-spacing-headline-b-24: -0.03em;
+  --typo-font-weight-headline-b-24: 700;
+
+  --typo-size-headline-b-22: 22px;
+  --typo-line-height-headline-b-22: 1.5;
+  --typo-letter-spacing-headline-b-22: -0.03em;
+  --typo-font-weight-headline-b-22: 700;
+
+  --typo-size-headline-b-20: 20px;
+  --typo-line-height-headline-b-20: 1.5;
+  --typo-letter-spacing-headline-b-20: -0.03em;
+  --typo-font-weight-headline-b-20: 700;
+
+  --typo-size-headline-m-20: 20px;
+  --typo-line-height-headline-m-20: 1.5;
+  --typo-letter-spacing-headline-m-20: -0.03em;
+  --typo-font-weight-headline-m-20: 500;
+
+  --typo-size-headline-b-18: 18px;
+  --typo-line-height-headline-b-18: 1.5;
+  --typo-letter-spacing-headline-b-18: -0.03em;
+  --typo-font-weight-headline-b-18: 700;
+
+  --typo-size-headline-b-16: 16px;
+  --typo-line-height-headline-b-16: 1.5;
+  --typo-letter-spacing-headline-b-16: -0.03em;
+  --typo-font-weight-headline-b-16: 700;
+
+  --typo-size-headline-m-16: 16px;
+  --typo-line-height-headline-m-16: 1.5;
+  --typo-letter-spacing-headline-m-16: -0.03em;
+  --typo-font-weight-headline-m-16: 500;
+
+  --typo-size-headline-b-14: 14px;
+  --typo-line-height-headline-b-14: 1.5;
+  --typo-letter-spacing-headline-b-14: -0.03em;
+  --typo-font-weight-headline-b-14: 700;
+
+  --typo-size-headline-m-14: 14px;
+  --typo-line-height-headline-m-14: 1.5;
+  --typo-letter-spacing-headline-m-14: -0.03em;
+  --typo-font-weight-headline-m-14: 500;
+
+  --typo-size-headline-r-14: 14px;
+  --typo-line-height-headline-r-14: 1.5;
+  --typo-letter-spacing-headline-r-14: -0.03em;
+  --typo-font-weight-headline-r-14: 400;
+
+  /* Body */
+  --typo-size-body-b-12: 12px;
+  --typo-line-height-body-b-12: 1.5;
+  --typo-letter-spacing-body-b-12: -0.03em;
+  --typo-font-weight-body-b-12: 700;
+
+  --typo-size-body-sb-12: 12px;
+  --typo-line-height-body-sb-12: 1.5;
+  --typo-letter-spacing-body-sb-12: -0.03em;
+  --typo-font-weight-body-sb-12: 600;
+
+  --typo-size-body-m-12: 12px;
+  --typo-line-height-body-m-12: 1.5;
+  --typo-letter-spacing-body-m-12: -0.03em;
+  --typo-font-weight-body-m-12: 500;
+
+  --typo-size-body-r-12: 12px;
+  --typo-line-height-body-r-12: 1.5;
+  --typo-letter-spacing-body-r-12: -0.03em;
+  --typo-font-weight-body-r-12: 400;
+
+  --typo-size-body-sb-11: 11px;
+  --typo-line-height-body-sb-11: 1.5;
+  --typo-letter-spacing-body-sb-11: -0.03em;
+  --typo-font-weight-body-sb-11: 600;
+
+  /* Caption */
+  --typo-size-caption-r-10: 10px;
+  --typo-line-height-caption-r-10: 1.5;
+  --typo-letter-spacing-caption-r-10: -0.03em;
+  --typo-font-weight-caption-r-10: 400;
+}
+
+@utility typo-* {
+  font-size: --value(--typo-size-*);
+  line-height: --value(--typo-line-height-*);
+  letter-spacing: --value(--typo-letter-spacing-*);
+  font-weight: --value(--typo-font-weight-*);
+}

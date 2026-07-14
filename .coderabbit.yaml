@@ -1,0 +1,113 @@
+
+language: "ko-KR"
+early_access: false
+
+tone_instructions: |
+  1. 피드백은 명확하고 구체적으로 작성하고, 문제 원인과 개선 방법을 함께 제시하세요.
+  2. 리뷰는 교육적인 방향을 지향하며, 관련 공식 문서 링크를 함께 추천하세요.
+  3. 비판보다는 개선 제안을 우선하세요.
+  4. 칭찬은 짧고 위트 있게 작성하세요.
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: false
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - develop
+      - main
+
+  path_filters:
+    - "!**/*.lock"
+    - "!**/node_modules/**"
+    - "!**/.next/**"
+    - "!**/dist/**"
+    - "!**/.turbo/**"
+    - "!**/coverage/**"
+    - "!**/*.snap"
+
+  path_instructions:
+    - path: "**/*.{ts,tsx}"
+      instructions: |
+        ## TypeScript / React 컨벤션 (docs/conventions/code-style.md 기준)
+
+        ### 타입 안전성
+        - `any` 타입 사용 절대 금지 → `unknown` 사용 후 타입 narrowing 필수
+        - Props 타입은 `interface`로 선언하고 접미사 `Props` 사용 (예: `ButtonProps`)
+        - `type` alias는 유니언·튜플·리터럴에만 사용, 접미사 `Types`
+
+        ### 컴포넌트 패턴
+        - 컴포넌트는 반드시 Arrow function + Named export: `export const Component = () => {}`
+        - `default export`는 `page.tsx`, `layout.tsx` 등 Next.js 필수 파일에만 허용
+        - 자식 없으면 self-closing: `<Component />`
+        - 불필요한 div 래핑 금지 — 컴포넌트 자체가 시각적 컨테이너(배경색·크기·border-radius 등 스타일을 정의)인 경우는 div 허용, 그 외 단순 그룹핑 목적이면 Fragment `<>…</>` 사용
+
+        ### Import
+        - 절대 경로 import 사용 (상대 경로 `../../` 지양)
+
+        ### 변수·함수 네이밍
+        - Boolean 변수명: `is`, `has`, `should`, `can` 접두사
+        - 복수 데이터: 끝에 `s` (예: `userLists`)
+        - `handle` 접두사는 이벤트 핸들러에만 사용
+        - 함수 접두사: `get`(반환) / `create`(생성) / `check`(확인) / `convert`(변환) / `filter`(필터링)
+        - 줄임말 지양, 의미 있는 명칭 사용
+
+        ### React 리스트 렌더링
+        - 동적 리스트의 `key` prop: 반드시 고유 `id` 사용 (index 금지)
+        - 정적 리스트: index 허용
+
+        ### 접근성 (A11y)
+        - `div` 남발 금지 → `main`, `article`, `section`, `nav`, `header`, `footer` 등 시맨틱 태그 사용
+        - 헤딩 레벨 점프 금지, 페이지당 `<h1>` 하나
+        - 텍스트 없는 버튼에 `aria-label` 필수
+        - `outline: none`으로 포커스 테두리 제거 금지
+        - `<input>`에 `id` 부여 후 `<label htmlFor>` 연결
+
+    - path: "apps/timo-web/app/**"
+      instructions: |
+        ## Next.js App Router 계층 규칙 (docs/architecture/components.md 기준)
+
+        - `page.tsx`: 라우팅·레이아웃 조합만 담당 (Server Component), 비즈니스 로직 포함 금지
+        - `_components/`: props만 받는 순수 UI — `'use client'` 없이 동작 가능해야 함
+        - `_containers/`: `'use client'` 필수, useQuery·zustand 등 외부 상태와 결합하는 클라이언트 컨테이너
+        - `_queries/`: 해당 도메인 전용 React Query hooks (useQuery · useMutation · queryKey 정의)
+        - 도메인 간 직접 import 금지 — 공유 로직은 반드시 `lib/` 또는 `packages/`로 추출
+        - 서버 상태(API 데이터)를 Zustand에 저장 금지 — React Query가 단일 출처
+
+    - path: "apps/timo-web/stores/**"
+      instructions: |
+        ## Zustand 스토어 규칙
+
+        - API 서버 데이터를 store에 저장 금지 (React Query가 담당)
+        - 파생 값은 store에 저장하지 않고 selector로 계산
+        - URL로 공유 가능한 상태(필터, 탭)는 searchParams 우선 고려
+
+    - path: "packages/timo-design-system/**"
+      instructions: |
+        ## 디자인 시스템 패키지 규칙
+
+        - `apps/*` 참조 절대 금지 (단방향 의존성)
+        - 범용 UI 컴포넌트만 포함 (Button, Card 등)
+        - 도메인 특화 로직·비즈니스 로직 포함 금지
+
+    - path: ".github/workflows/**"
+      instructions: |
+        ## GitHub Actions 워크플로우 리뷰
+
+        - 시크릿 하드코딩 여부 확인
+        - 워크플로우 트리거 조건 적절성 확인
+        - 불필요한 권한 부여 여부 확인 (principle of least privilege)
+        - 외부 액션 버전 핀닝(SHA 또는 태그) 여부 확인
+
+  finishing_touches:
+    docstrings:
+      enabled: false
+
+chat:
+  auto_reply: true

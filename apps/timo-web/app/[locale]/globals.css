@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "@repo/tailwind-config/theme.css";
+@import "@repo/timo-design-system/styles";
+
+@layer base {
+  * {
+    font-family: var(--font-family-pretendard), sans-serif;
+  }
+}
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}

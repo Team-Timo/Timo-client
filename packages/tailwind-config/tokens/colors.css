@@ -1,0 +1,25 @@
+@theme {
+  --color-timo-blue-50: #f1f6fe;
+  --color-timo-blue-65: #dee9ff;
+  --color-timo-blue-75: #c6d8fc;
+  --color-timo-blue-100: #aec8fb;
+  --color-timo-blue-200: #8cb0f9;
+  --color-timo-blue-300: #74a0f8;
+
+  --color-timo-gray-200: #fbfbfb;
+  --color-timo-gray-300: #f5f5f5;
+  --color-timo-gray-500: #e6e8e8;
+  --color-timo-gray-600: #d8d8d8;
+  --color-timo-gray-700: #9f9f9f;
+  --color-timo-gray-800: #757575;
+  --color-timo-gray-900: #3f3f3f;
+
+  --color-timo-yellow-300: #f2fc9f;
+
+  --color-timo-black: #121212;
+  --color-timo-red: #ff6650;
+  --color-timo-orange: #ffb157;
+  --color-timo-gray: #bebebe;
+
+  --color-timo-overlay: rgb(0 0 0 / 10%);
+}

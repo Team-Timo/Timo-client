@@ -1,0 +1,224 @@
+"use client";
+
+import { Fragment, useId, useState } from "react";
+
+import { ChevronDownIcon } from "../../../icons";
+import { cn } from "../../../lib";
+import { Checkbox } from "../../checkbox/Checkbox";
+import { Dropdown } from "../../layout/dropdown/Dropdown";
+
+import type { ReactNode } from "react";
+
+export type RepeatFrequency = "DAILY" | "WEEKLY" | "MONTHLY";
+
+export interface RepeatOption {
+  frequency: RepeatFrequency;
+  label: string;
+}
+
+export interface WeekdayOption {
+  id: string;
+  label: string;
+}
+
+export interface RepeatWeeklyDetail {
+  weekdays: WeekdayOption[];
+  selectedWeekdayIds: string[];
+  onWeekdayToggle?: (id: string) => void;
+}
+
+export interface RepeatMonthlyDetail {
+  repeatDayLabel: string;
+  repeatDay: string;
+  onRepeatDayChange?: (value: string) => void;
+}
+
+const DETAIL_ALIGN: Record<RepeatFrequency, string> = {
+  DAILY: "items-start",
+  WEEKLY: "items-start",
+  MONTHLY: "items-end",
+};
+
+export interface RepeatSelectorProps {
+  trigger: ReactNode | ((isOpen: boolean) => ReactNode);
+  frequencyHeading?: string;
+  detailHeading: string;
+  options: RepeatOption[];
+  frequency: RepeatFrequency;
+  onFrequencyChange?: (frequency: RepeatFrequency) => void;
+  weekly: RepeatWeeklyDetail;
+  monthly: RepeatMonthlyDetail;
+}
+
+interface RepeatFrequencyListProps {
+  options: RepeatOption[];
+  selectedFrequency: RepeatFrequency;
+  onSelect: (frequency: RepeatFrequency) => void;
+}
+
+const RepeatFrequencyList = ({
+  options,
+  selectedFrequency,
+  onSelect,
+}: RepeatFrequencyListProps) => {
+  return (
+    <div className="border-timo-gray-500 flex w-full flex-col items-start gap-2 border-t px-3.5 py-2.5">
+      {options.map(({ frequency: value, label }, index) => (
+        <Fragment key={value}>
+          {index > 0 && (
+            <div className="border-timo-gray-500 h-px w-full border-t" />
+          )}
+          <Dropdown.Item
+            onClick={() => onSelect(value)}
+            closeOnSelect={value === "DAILY"}
+            aria-pressed={value === selectedFrequency}
+          >
+            <span className="typo-headline-r-14 text-timo-black whitespace-nowrap">
+              {label}
+            </span>
+          </Dropdown.Item>
+        </Fragment>
+      ))}
+    </div>
+  );
+};
+
+const RepeatWeeklyDetailSection = ({
+  weekdays,
+  selectedWeekdayIds,
+  onWeekdayToggle,
+}: RepeatWeeklyDetail) => {
+  return (
+    <div className="flex w-full flex-col items-start gap-2.5">
+      {weekdays.map(({ id, label }) => (
+        <div key={id} className="flex w-full items-center justify-between">
+          <span className="typo-headline-r-14 text-timo-black whitespace-nowrap">
+            {label}
+          </span>
+          <Checkbox
+            checked={selectedWeekdayIds.includes(id)}
+            onChange={() => onWeekdayToggle?.(id)}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+type RepeatMonthlyDetailSectionProps = RepeatMonthlyDetail & {
+  ariaLabel: string;
+};
+
+const RepeatMonthlyDetailSection = ({
+  repeatDayLabel,
+  repeatDay,
+  onRepeatDayChange,
+  ariaLabel,
+}: RepeatMonthlyDetailSectionProps) => {
+  const inputId = useId();
+
+  return (
+    <div className="flex items-center gap-0.5">
+      <label htmlFor={inputId} className="sr-only">
+        {ariaLabel}
+      </label>
+      <div className="bg-timo-gray-300 rounded-4 flex h-6.25 w-14.75 items-center justify-end px-1">
+        <input
+          id={inputId}
+          type="text"
+          value={repeatDay}
+          onChange={(event) => onRepeatDayChange?.(event.target.value)}
+          className="typo-headline-m-14 text-timo-black focus-visible:ring-timo-blue-300 w-full bg-transparent text-right outline-none focus-visible:ring-2"
+        />
+      </div>
+      <span className="typo-headline-r-14 text-timo-black whitespace-nowrap">
+        {repeatDayLabel}
+      </span>
+    </div>
+  );
+};
+
+export const RepeatSelector = ({
+  trigger,
+  frequencyHeading = "반복 일정",
+  detailHeading,
+  options,
+  frequency,
+  onFrequencyChange,
+  weekly,
+  monthly,
+}: RepeatSelectorProps) => {
+  const [isPicking, setIsPicking] = useState(true);
+  const [selectedFrequency, setSelectedFrequency] =
+    useState<RepeatFrequency>(frequency);
+
+  const selectedLabel = options.find(
+    (option) => option.frequency === selectedFrequency,
+  )?.label;
+
+  const handleSelectFrequency = (value: RepeatFrequency) => {
+    setSelectedFrequency(value);
+    onFrequencyChange?.(value);
+    if (value !== "DAILY") setIsPicking(false);
+  };
+
+  return (
+    <Dropdown className="flex justify-center">
+      <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
+
+      <Dropdown.Panel className="shadow-timo w-32.5 gap-1 p-0">
+        <div className="flex w-full flex-col gap-1 px-3.5 py-2">
+          <span className="typo-body-r-12 text-timo-gray-700 w-full whitespace-nowrap">
+            {frequencyHeading}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => setIsPicking((prev) => !prev)}
+            aria-expanded={isPicking}
+            className="flex w-full items-center justify-between"
+          >
+            <span className="typo-headline-m-14 text-timo-black whitespace-nowrap">
+              {selectedLabel}
+            </span>
+            <ChevronDownIcon
+              className={cn(
+                "shrink-0 transition-transform duration-200 ease-in-out",
+                isPicking && "rotate-180",
+              )}
+            />
+          </button>
+        </div>
+
+        {isPicking ? (
+          <RepeatFrequencyList
+            options={options}
+            selectedFrequency={selectedFrequency}
+            onSelect={handleSelectFrequency}
+          />
+        ) : (
+          <div
+            className={cn(
+              "border-timo-gray-500 flex w-full flex-col gap-2 border-t px-3.5 py-1.5",
+              DETAIL_ALIGN[selectedFrequency],
+            )}
+          >
+            <span className="typo-body-r-12 text-timo-gray-700 w-full whitespace-nowrap">
+              {detailHeading}
+            </span>
+
+            {selectedFrequency === "WEEKLY" && (
+              <RepeatWeeklyDetailSection {...weekly} />
+            )}
+            {selectedFrequency === "MONTHLY" && (
+              <RepeatMonthlyDetailSection
+                {...monthly}
+                ariaLabel={detailHeading}
+              />
+            )}
+          </div>
+        )}
+      </Dropdown.Panel>
+    </Dropdown>
+  );
+};

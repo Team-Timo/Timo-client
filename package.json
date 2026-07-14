@@ -1,0 +1,40 @@
+{
+  "name": "timo",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=timo-web",
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=timo-web",
+    "storybook": "pnpm --filter @repo/timo-design-system storybook",
+    "build-storybook": "pnpm --filter @repo/timo-design-system build-storybook",
+    "build:storybook": "turbo run build:storybook",
+    "chromatic": "pnpm --filter @repo/timo-design-system chromatic",
+    "lint": "turbo run lint",
+    "lint:web": "turbo run lint --filter=timo-web",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "check-types:web": "turbo run check-types --filter=timo-web",
+    "gen": "turbo gen",
+    "prepare": "husky",
+    "icons:generate": "pnpm --filter @repo/timo-design-system icons:generate"
+  },
+  "devDependencies": {
+    "@turbo/gen": "^2.9.18",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
+    "prettier": "^3.7.4",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "turbo": "^2.9.18",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.25.12"
+    }
+  }
+}
