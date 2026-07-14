@@ -3,6 +3,7 @@
 import { cn } from "@repo/timo-design-system/utils";
 import { useEffect, useState } from "react";
 
+import { useActiveTimer } from "@/hooks/use-active-timer";
 import { useTimeBoxes } from "@/queries/use-time-boxes";
 import { formatDateKey } from "@/utils/date/date";
 import { getHourLabel } from "@/utils/date/get-hour-label";
@@ -39,6 +40,7 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
   const currentTimeOffset = timeToOffset(time);
 
   const { data: timeBoxes } = useTimeBoxes(formatDateKey(time));
+  const { data: activeTimer } = useActiveTimer();
 
   return (
     <div className="relative" style={{ height: HOURS_IN_DAY * ROW_HEIGHT }}>
@@ -58,7 +60,14 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
       </ul>
 
       {timeBoxes?.map((timeBox) => {
-        const isActive = timeBox.endedAt === undefined;
+        // 현재 활성 타이머와 같은 timerId(=같은 투두)면, 이전에 일시정지로 끊긴 구간이라도
+        // "진행 중인 투두"로 보고 진한 파랑으로 표시한다.
+        const isRelatedToActiveTimer =
+          timeBox.timerId === activeTimer?.timerId &&
+          timeBox.todoId === activeTimer?.todoId;
+        // 실시간으로 자라는 중인지는 이 세션 자체가 아직 끝나지 않았는지로만 판단한다.
+        const isGrowing = !timeBox.endedAt;
+
         const start = new Date(timeBox.startedAt);
         const end = timeBox.endedAt ? new Date(timeBox.endedAt) : time;
 
@@ -76,9 +85,8 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
             key={timeBox.sessionId}
             className={cn(
               "absolute right-0 left-10.75 overflow-hidden",
-              isActive
-                ? "bg-timo-blue-300 rounded-t-[4px]"
-                : "bg-timo-blue-65 rounded-[4px]",
+              isRelatedToActiveTimer ? "bg-timo-blue-300" : "bg-timo-blue-65",
+              isGrowing ? "rounded-t-[4px]" : "rounded-[4px]",
             )}
             style={{ top: startOffset, height }}
           >
@@ -87,7 +95,9 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
                 <span
                   className={cn(
                     "typo-body-sb-12 min-w-0 truncate",
-                    isActive ? "text-white" : "text-timo-gray-900",
+                    isRelatedToActiveTimer
+                      ? "text-white"
+                      : "text-timo-gray-900",
                   )}
                 >
                   {timeBox.todoName}
@@ -95,7 +105,9 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
                 <span
                   className={cn(
                     "typo-body-r-12 shrink-0",
-                    isActive ? "text-white" : "text-timo-gray-900",
+                    isRelatedToActiveTimer
+                      ? "text-white"
+                      : "text-timo-gray-900",
                   )}
                 >
                   {convertDurationToTimeText(durationMinutes * 60)}
