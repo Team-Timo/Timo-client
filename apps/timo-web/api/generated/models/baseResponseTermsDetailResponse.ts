@@ -5,10 +5,10 @@
  * Timo 서버 API 명세서
  * OpenAPI spec version: v1
  */
-import type { TermsListResponse } from "./termsListResponse";
+import type { TermsDetailResponse } from "./termsDetailResponse";
 
-export interface BaseResponseTermsListResponse {
+export interface BaseResponseTermsDetailResponse {
   status?: number;
   message?: string;
-  data?: TermsListResponse;
+  data?: TermsDetailResponse;
 }

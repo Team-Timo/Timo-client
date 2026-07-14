@@ -8,29 +8,24 @@
 import * as zod from "zod";
 
 /**
- * 서비스 이용약관 및 개인정보 처리방침을 조회합니다.
- * type을 지정하지 않으면 전체 약관을 조회하고, SERVICE 또는 PRIVACY를 지정하면 해당 약관만 조회합니다.
- * @summary 약관 내용 조회
+ * 약관 타입과 언어 기준으로 최신 약관 1건을 조회합니다.
+ * @summary 약관 조건 조회
  */
-export const GetTermsQueryParams = zod.object({
-  type: zod.string().optional().describe("약관 타입(SERVICE, PRIVACY)"),
+export const GetTermsByConditionQueryParams = zod.object({
+  type: zod.string().describe("약관 타입"),
+  language: zod.string().describe("약관 언어"),
 });
 
-export const GetTermsResponse = zod.object({
+export const GetTermsByConditionResponse = zod.object({
   status: zod.number().optional(),
   message: zod.string().optional(),
   data: zod
     .object({
-      terms: zod
-        .array(
-          zod.object({
-            termsId: zod.number().describe("약관 ID"),
-            type: zod.string().describe("약관 타입"),
-            title: zod.string().describe("약관 제목"),
-            content: zod.string().describe("약관 전문"),
-          }),
-        )
-        .describe("약관 목록"),
+      type: zod.string().optional().describe("약관 타입"),
+      language: zod.string().optional().describe("약관 언어"),
+      version: zod.string().optional().describe("약관 버전"),
+      title: zod.string().optional().describe("약관 제목"),
+      content: zod.string().optional().describe("약관 전문"),
     })
     .optional(),
 });

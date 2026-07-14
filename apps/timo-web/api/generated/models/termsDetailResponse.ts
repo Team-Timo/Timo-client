@@ -6,13 +6,15 @@
  * OpenAPI spec version: v1
  */
 
-export interface TermsResponse {
-  /** 약관 ID */
-  termsId: number;
+export interface TermsDetailResponse {
   /** 약관 타입 */
-  type: string;
+  type?: string;
+  /** 약관 언어 */
+  language?: string;
+  /** 약관 버전 */
+  version?: string;
   /** 약관 제목 */
-  title: string;
+  title?: string;
   /** 약관 전문 */
-  content: string;
+  content?: string;
 }
