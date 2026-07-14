@@ -60,6 +60,7 @@ export const DetailTodoModalContent = ({
   const detailTodoForm = useDetailTodoForm({ todo });
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
   const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
+  const canUpdateTodo = todo.timerStatus === "STOPPED";
   const dateNumber = detailTodoForm.date.getDate();
   const dayOfWeek = isDetailTodoWeekdayId(todo.dayOfWeek)
     ? todo.dayOfWeek
@@ -95,6 +96,7 @@ export const DetailTodoModalContent = ({
 
   useEffect(() => {
     if (!isOpen) return;
+    if (!canUpdateTodo) return;
 
     if (!didStartTextUpdateRef.current) {
       didStartTextUpdateRef.current = true;
@@ -108,9 +110,11 @@ export const DetailTodoModalContent = ({
     }, TEXT_UPDATE_DEBOUNCE_MS);
 
     return () => window.clearTimeout(updateTimer);
-  }, [detailTodoForm.title, isOpen, textUpdateSignature]);
+  }, [canUpdateTodo, detailTodoForm.title, isOpen, textUpdateSignature]);
 
   const updateTodo = (overrides: DetailTodoUpdateRequestOverrides = {}) => {
+    if (!canUpdateTodo) return;
+
     const updateData = detailTodoForm.buildUpdateRequest(overrides);
     if (!updateData.title?.trim()) return;
 
@@ -198,15 +202,17 @@ export const DetailTodoModalContent = ({
             </p>
           </div>
 
-          <TodoIconField
-            icon={detailTodoForm.icon}
-            isIconPanelOpen={isIconPanelOpen}
-            addIconLabel={tCreateModal("addIcon")}
-            onOpenPanel={() => setIsIconPanelOpen(true)}
-            onTogglePanel={() => setIsIconPanelOpen((prev) => !prev)}
-            onSelectIcon={handleSelectIcon}
-            onRemoveIcon={handleRemoveIcon}
-          />
+          <div className={canUpdateTodo ? undefined : "pointer-events-none"}>
+            <TodoIconField
+              icon={detailTodoForm.icon}
+              isIconPanelOpen={isIconPanelOpen}
+              addIconLabel={tCreateModal("addIcon")}
+              onOpenPanel={() => setIsIconPanelOpen(true)}
+              onTogglePanel={() => setIsIconPanelOpen((prev) => !prev)}
+              onSelectIcon={handleSelectIcon}
+              onRemoveIcon={handleRemoveIcon}
+            />
+          </div>
         </div>
 
         <div className="flex w-full flex-col gap-2">
@@ -215,6 +221,7 @@ export const DetailTodoModalContent = ({
             <DetailTodoTaskFields
               titleValue={detailTodoForm.title}
               isCompleted={detailTodoForm.isCompleted}
+              disabled={!canUpdateTodo}
               timerStatus={todo.timerStatus}
               subtaskInputs={detailTodoForm.subtaskInputs}
               onTitleChange={detailTodoForm.changeTitle}
@@ -231,7 +238,13 @@ export const DetailTodoModalContent = ({
           </div>
 
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 py-3">
+            <div
+              className={
+                canUpdateTodo
+                  ? "flex items-center gap-2 py-3"
+                  : "pointer-events-none flex items-center gap-2 py-3"
+              }
+            >
               <TodoToolbar
                 dateLabel={formatShortDateLabel(detailTodoForm.date)}
                 date={detailTodoForm.date}
@@ -298,6 +311,7 @@ export const DetailTodoModalContent = ({
               placeholder={tCreateModal("notePlaceholder")}
               onChange={detailTodoForm.setMemo}
               maxLength={DETAIL_TODO_MEMO_MAX_LENGTH}
+              disabled={!canUpdateTodo}
             />
           </div>
         </div>

@@ -18,6 +18,7 @@ const resizeTextarea = (element: HTMLTextAreaElement | null) => {
 export interface DetailTodoTaskFieldsProps {
   titleValue: string;
   isCompleted: boolean;
+  disabled?: boolean;
   timerStatus: TodoDetailResponseTimerStatus;
   subtaskInputs: DetailTodoSubtaskInput[];
   onTitleChange: (value: string) => void;
@@ -37,6 +38,7 @@ export interface DetailTodoTaskFieldsProps {
 export const DetailTodoTaskFields = ({
   titleValue,
   isCompleted,
+  disabled = false,
   timerStatus,
   subtaskInputs,
   onTitleChange,
@@ -51,7 +53,11 @@ export const DetailTodoTaskFields = ({
     <div className="flex w-full flex-col">
       <div className="flex w-full items-center justify-between">
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <Checkbox checked={isCompleted} onChange={onToggleCompleted} />
+          <Checkbox
+            checked={isCompleted}
+            disabled={disabled}
+            onChange={onToggleCompleted}
+          />
           <textarea
             value={titleValue}
             ref={resizeTextarea}
@@ -60,6 +66,7 @@ export const DetailTodoTaskFields = ({
               resizeTextarea(event.currentTarget);
             }}
             rows={1}
+            disabled={disabled}
             className="typo-headline-b-14 text-timo-black min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
           />
         </div>
@@ -88,6 +95,7 @@ export const DetailTodoTaskFields = ({
             <div key={subtask.id} className="flex items-center gap-2">
               <Checkbox
                 checked={subtask.completed}
+                disabled={disabled}
                 onChange={(completed) =>
                   onToggleSubtaskCompleted(subtask.id, completed)
                 }
@@ -101,6 +109,7 @@ export const DetailTodoTaskFields = ({
                 }}
                 onKeyDown={(event) => onSubtaskInputKeyDown(index, event)}
                 rows={1}
+                disabled={disabled}
                 className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
               />
             </div>

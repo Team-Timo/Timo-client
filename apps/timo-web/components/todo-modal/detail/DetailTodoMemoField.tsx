@@ -5,6 +5,7 @@ export interface DetailTodoMemoFieldProps {
   placeholder: string;
   onChange: (value: string) => void;
   maxLength: number;
+  disabled?: boolean;
 }
 
 export const DetailTodoMemoField = ({
@@ -12,6 +13,7 @@ export const DetailTodoMemoField = ({
   placeholder,
   onChange,
   maxLength,
+  disabled = false,
 }: DetailTodoMemoFieldProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -30,6 +32,7 @@ export const DetailTodoMemoField = ({
       placeholder={placeholder}
       maxLength={maxLength}
       onChange={(event) => onChange(event.target.value)}
+      disabled={disabled}
       className="typo-headline-r-14 text-timo-gray-700 min-h-20 w-full resize-none overflow-hidden p-1 outline-none"
     />
   );
