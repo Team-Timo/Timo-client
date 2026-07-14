@@ -3,8 +3,16 @@ import { TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import type { TodoDetailResponse } from "@/api/generated/models";
-import type { TimeSelection } from "@repo/timo-design-system/ui";
+import type {
+  TodoDetailResponse,
+  TodoUpdateRequest,
+} from "@/api/generated/models";
+import type {
+  PriorityLevel,
+  RepeatFrequency,
+  TimeSelection,
+  TodoIconValue,
+} from "@repo/timo-design-system/ui";
 
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
@@ -13,6 +21,7 @@ import { DetailTodoTaskFields } from "@/components/todo-modal/detail/DetailTodoT
 import {
   DETAIL_TODO_TIME_OPTIONS,
   DETAIL_TODO_WEEKDAY_IDS,
+  type DetailTodoUpdateRequestOverrides,
   useDetailTodoForm,
 } from "@/hooks/todo-modal/detail/use-detail-todo-form";
 import { formatShortDateLabel } from "@/utils/date/date";
@@ -32,6 +41,7 @@ export interface DetailTodoModalContentProps {
   todo: TodoDetailResponse;
   onTogglePlay: () => void;
   onDelete: () => void;
+  onUpdate: (data: TodoUpdateRequest) => void;
 }
 
 export const DetailTodoModalContent = ({
@@ -41,6 +51,7 @@ export const DetailTodoModalContent = ({
   todo,
   onTogglePlay,
   onDelete,
+  onUpdate,
 }: DetailTodoModalContentProps) => {
   const t = useTranslations("Home.detailModal");
   const tCreateModal = useTranslations("Home.createModal");
@@ -57,9 +68,69 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
 
+  const updateTodo = (overrides: DetailTodoUpdateRequestOverrides = {}) => {
+    const updateData = detailTodoForm.buildUpdateRequest(overrides);
+    if (!updateData.title?.trim()) return;
+
+    onUpdate(updateData);
+  };
+
+  const handleSelectIcon = (nextIcon: TodoIconValue) => {
+    detailTodoForm.selectIcon(nextIcon);
+    updateTodo({ icon: nextIcon });
+  };
+
+  const handleRemoveIcon = () => {
+    detailTodoForm.removeIcon();
+    updateTodo({ icon: null });
+  };
+
   const handleSelectTime = (nextTime: TimeSelection) => {
     setSelectedTime(nextTime);
-    detailTodoForm.selectTime(nextTime);
+    const time = detailTodoForm.selectTime(nextTime);
+
+    if (time) updateTodo({ time });
+  };
+
+  const handleDateChange = (nextDate: Date) => {
+    detailTodoForm.setDate(nextDate);
+    updateTodo({ date: nextDate });
+  };
+
+  const handleTimeChange = (time: string) => {
+    detailTodoForm.setTime(time);
+    updateTodo({ time });
+  };
+
+  const handleSelectPriority = (priority: PriorityLevel) => {
+    detailTodoForm.setPriority(priority);
+    updateTodo({ priority });
+  };
+
+  const handleSelectTag = (label: string) => {
+    const tagId = detailTodoForm.handleSelectTag(label);
+
+    if (tagId !== null) updateTodo({ tagId });
+  };
+
+  const handleRepeatFrequencyChange = (repeatFrequency: RepeatFrequency) => {
+    detailTodoForm.changeRepeatFrequency(repeatFrequency);
+    updateTodo({ isRepeatActive: true, repeatFrequency });
+  };
+
+  const handleWeekdayToggle = (weekdayId: string) => {
+    const selectedWeekdayIds = detailTodoForm.toggleWeekday(weekdayId);
+    updateTodo({ selectedWeekdayIds });
+  };
+
+  const handleRepeatDayChange = (repeatDay: string) => {
+    detailTodoForm.setRepeatDay(repeatDay);
+    updateTodo({ repeatDay });
+  };
+
+  const handleSubtaskCompletedChange = (id: number, completed: boolean) => {
+    const subtasks = detailTodoForm.changeSubtaskCompleted(id, completed);
+    updateTodo({ subtasks });
   };
 
   return (
@@ -91,8 +162,8 @@ export const DetailTodoModalContent = ({
             addIconLabel={tCreateModal("addIcon")}
             onOpenPanel={() => setIsIconPanelOpen(true)}
             onTogglePanel={() => setIsIconPanelOpen((prev) => !prev)}
-            onSelectIcon={detailTodoForm.selectIcon}
-            onRemoveIcon={detailTodoForm.removeIcon}
+            onSelectIcon={handleSelectIcon}
+            onRemoveIcon={handleRemoveIcon}
           />
         </div>
 
@@ -111,7 +182,7 @@ export const DetailTodoModalContent = ({
                 onClose();
               }}
               onSubtaskInputChange={detailTodoForm.changeSubtaskInput}
-              onToggleSubtaskCompleted={detailTodoForm.changeSubtaskCompleted}
+              onToggleSubtaskCompleted={handleSubtaskCompletedChange}
               registerSubtaskInputRef={detailTodoForm.registerSubtaskInputRef}
               onSubtaskInputKeyDown={detailTodoForm.handleSubtaskInputKeyDown}
             />
@@ -122,11 +193,11 @@ export const DetailTodoModalContent = ({
               <TodoToolbar
                 dateLabel={formatShortDateLabel(detailTodoForm.date)}
                 date={detailTodoForm.date}
-                onDateChange={detailTodoForm.setDate}
+                onDateChange={handleDateChange}
                 timeLabel={detailTodoForm.time}
                 timeOptions={DETAIL_TODO_TIME_OPTIONS}
                 time={detailTodoForm.time}
-                onTimeChange={detailTodoForm.setTime}
+                onTimeChange={handleTimeChange}
                 selectedTime={selectedTime}
                 onSelectTime={handleSelectTime}
                 priority={detailTodoForm.priority}
@@ -136,14 +207,14 @@ export const DetailTodoModalContent = ({
                   MEDIUM: tCommon("priority.medium"),
                   LOW: tCommon("priority.low"),
                 }}
-                onSelectPriority={detailTodoForm.setPriority}
+                onSelectPriority={handleSelectPriority}
                 tagLabel={
                   detailTodoForm.selectedTagLabel ?? tCreateModal("tagLabel")
                 }
                 tags={detailTodoForm.tagLabels}
                 selectedTag={detailTodoForm.selectedTagLabel}
                 addTagLabel={tCreateModal("addTag")}
-                onSelectTag={detailTodoForm.handleSelectTag}
+                onSelectTag={handleSelectTag}
                 onAddTagClick={() => {}}
                 hasMemo={Boolean(todo.memo?.trim())}
                 isRepeatActive={detailTodoForm.isRepeatActive}
@@ -162,16 +233,16 @@ export const DetailTodoModalContent = ({
                     },
                   ],
                   frequency: detailTodoForm.repeatFrequency,
-                  onFrequencyChange: detailTodoForm.changeRepeatFrequency,
+                  onFrequencyChange: handleRepeatFrequencyChange,
                   weekly: {
                     weekdays,
                     selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
-                    onWeekdayToggle: detailTodoForm.toggleWeekday,
+                    onWeekdayToggle: handleWeekdayToggle,
                   },
                   monthly: {
                     repeatDayLabel: t("repeatDayLabel"),
                     repeatDay: detailTodoForm.repeatDay,
-                    onRepeatDayChange: detailTodoForm.setRepeatDay,
+                    onRepeatDayChange: handleRepeatDayChange,
                   },
                 }}
               />
