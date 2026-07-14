@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { FocusEmptyTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusEmptyTaskItem";
 import { FocusTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusTaskItem";
@@ -20,14 +21,20 @@ export const FocusSessionContainer = () => {
   const tWeekday = useTranslations("Common.weekday");
   const tToast = useTranslations("Toast");
 
-  const { focusSessionState, focusSessionActions } = useFocusSession();
+  const [feedbackText, setFeedbackText] = useState<string | undefined>();
+  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
+
+  const { focusSessionState, focusSessionActions } = useFocusSession({
+    onMutationError: () => setIsErrorToastOpen(true),
+    onFeedback: setFeedbackText,
+  });
 
   if (!focusSessionState.focusView.hasTodo || !focusSessionState.todo) {
     return (
       <div className="flex h-full overflow-x-auto">
         <AnimatedToast
-          isOpen={focusSessionState.isErrorToastOpen}
-          onClose={focusSessionActions.onCloseErrorToast}
+          isOpen={isErrorToastOpen}
+          onClose={() => setIsErrorToastOpen(false)}
           message={tToast("focusActionFailed")}
         />
         <div className="flex flex-1 flex-col gap-18">
@@ -67,8 +74,8 @@ export const FocusSessionContainer = () => {
   return (
     <div className="flex h-full overflow-x-auto">
       <AnimatedToast
-        isOpen={focusSessionState.isErrorToastOpen}
-        onClose={focusSessionActions.onCloseErrorToast}
+        isOpen={isErrorToastOpen}
+        onClose={() => setIsErrorToastOpen(false)}
         message={tToast("focusActionFailed")}
       />
       <div className="flex flex-1 flex-col gap-18">
@@ -116,7 +123,7 @@ export const FocusSessionContainer = () => {
             onTogglePlay={focusSessionActions.onTogglePlay}
             plannedMinutes={focusSessionState.plannedMinutes}
             actualMinutes={focusSessionState.actualMinutes}
-            feedbackText={focusSessionState.feedbackText}
+            feedbackText={feedbackText}
             isTimeUp={focusSessionState.isTimeUp}
             onExtend={focusSessionActions.onExtend}
             onComplete={focusSessionActions.onComplete}

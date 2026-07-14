@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import type { TimerSessionControlsHandle } from "@/components/timer/TimerSessionControls";
 
@@ -25,12 +25,18 @@ import { useTimerOvertime } from "@/hooks/use-timer-overtime";
 import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 
-export const useFocusSession = () => {
+export interface UseFocusSessionOptions {
+  onMutationError: () => void;
+  onFeedback: (feedbackText: string | undefined) => void;
+}
+
+export const useFocusSession = ({
+  onMutationError,
+  onFeedback,
+}: UseFocusSessionOptions) => {
   const queryClient = useQueryClient();
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const wasTimeUpRef = useRef(false);
-  const [feedbackText, setFeedbackText] = useState<string | undefined>();
-  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
 
   const { data: focusView } = useFocusTodo();
   const { data: activeTimer } = useActiveTimer();
@@ -39,7 +45,6 @@ export const useFocusSession = () => {
     useTimerQueryInvalidation();
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
-  const handleMutationError = () => setIsErrorToastOpen(true);
 
   const { mutate: startTimer } = useStartTimer({
     mutation: {
@@ -48,7 +53,7 @@ export const useFocusSession = () => {
         invalidateHomeView();
         invalidateTimeBoxes();
       },
-      onError: handleMutationError,
+      onError: onMutationError,
     },
   });
   const { mutate: changeStatus } = useChangeStatus({
@@ -58,7 +63,7 @@ export const useFocusSession = () => {
         invalidateHomeView();
         invalidateTimeBoxes();
       },
-      onError: handleMutationError,
+      onError: onMutationError,
     },
   });
   const { mutate: extendTimer } = useExtendTimer({
@@ -68,31 +73,31 @@ export const useFocusSession = () => {
         invalidateHomeView();
         invalidateTimeBoxes();
       },
-      onError: handleMutationError,
+      onError: onMutationError,
     },
   });
   const { mutate: completeTimer } = useCompleteTimer({
     mutation: {
       onSuccess: (response) => {
-        setFeedbackText(response.data?.aiFeedback ?? undefined);
+        onFeedback(response.data?.aiFeedback ?? undefined);
         invalidateActiveTimer();
         invalidateFocusTodo();
         invalidateHomeView();
         invalidateTimeBoxes();
       },
-      onError: handleMutationError,
+      onError: onMutationError,
     },
   });
   const { mutate: stopTimer } = useStopTimer({
     mutation: {
       onSuccess: (response) => {
-        setFeedbackText(response.data?.aiFeedback ?? undefined);
+        onFeedback(response.data?.aiFeedback ?? undefined);
         invalidateActiveTimer();
         invalidateFocusTodo();
         invalidateHomeView();
         invalidateTimeBoxes();
       },
-      onError: handleMutationError,
+      onError: onMutationError,
     },
   });
   const { mutate: changeTodoStatus } = useChangeTodoStatus({
@@ -101,7 +106,7 @@ export const useFocusSession = () => {
         invalidateFocusTodo();
         invalidateTimeBoxes();
       },
-      onError: handleMutationError,
+      onError: onMutationError,
     },
   });
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus({
@@ -110,7 +115,7 @@ export const useFocusSession = () => {
         invalidateFocusTodo();
         invalidateTimeBoxes();
       },
-      onError: handleMutationError,
+      onError: onMutationError,
     },
   });
 
@@ -219,8 +224,6 @@ export const useFocusSession = () => {
       timerSessionControlsRef,
       isRunning,
       isTimeUp,
-      feedbackText,
-      isErrorToastOpen,
       today,
       dateText,
       plannedSeconds,
@@ -238,7 +241,6 @@ export const useFocusSession = () => {
       onStop: handleStopTimer,
       onToggleCompleted: handleToggleCompleted,
       onToggleSubtaskCompleted: handleToggleSubtaskCompleted,
-      onCloseErrorToast: () => setIsErrorToastOpen(false),
     },
   };
 };
