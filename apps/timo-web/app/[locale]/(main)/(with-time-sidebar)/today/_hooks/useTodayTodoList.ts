@@ -29,13 +29,16 @@ export const useTodayTodoList = (initialTodos: TodayTodo[]) => {
 
   const handleCheck = (todoId: number) => {
     // TODO: API
-    setTodos((prev) =>
-      prev.map((todo) =>
+    setTodos((prev) => {
+      const updated = prev.map((todo) =>
         todo.todoId === todoId
           ? { ...todo, completed: !todo.completed, timerStatus: "STOPPED" }
           : todo,
-      ),
-    );
+      );
+      return [...updated].sort(
+        (a, b) => Number(a.completed) - Number(b.completed),
+      );
+    });
   };
 
   const handleDelete = (todoId: number) => {
