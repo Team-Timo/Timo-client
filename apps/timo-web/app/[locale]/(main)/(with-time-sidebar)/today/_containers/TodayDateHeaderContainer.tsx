@@ -6,7 +6,8 @@ import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/
 
 import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_components/DateInformation";
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
-import { CreateTodoModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/todo-modal/CreateTodoModalContainer";
+import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/todo-modal/use-create-todo-submit";
+import { CreateTodoModalContainer } from "@/components/todo-modal/create/CreateTodoModalContainer";
 import { getToday } from "@/utils/date/date";
 import { getDayOfWeekKey } from "@/utils/date/get-day-of-week-key";
 
@@ -27,6 +28,7 @@ export const TodayDateHeaderContainer = ({
   const date = convertDateToDateText(today);
   const dayKey = getDayOfWeekKey(today);
   const dayOfWeek = tCommon(`weekday.${dayKey}`);
+  const { handleSubmit } = useCreateTodoSubmit({ onCreate: onCreateTodo });
 
   return (
     <div className="flex flex-col gap-3 pb-2">
@@ -38,7 +40,11 @@ export const TodayDateHeaderContainer = ({
         totalCount={totalCount}
         completedCount={completedCount}
       />
-      <CreateTodoModalContainer defaultDate={today} onCreate={onCreateTodo} />
+      <CreateTodoModalContainer
+        defaultDate={today}
+        buttonVariant="big"
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 };

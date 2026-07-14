@@ -46,12 +46,19 @@
       "dateLabel": "Date",
       "timeLabel": "Time",
       "tagLabel": "Tag",
+      "addTag": "Add",
       "create": "Create",
       "repeatDaily": "Daily",
       "repeatWeekly": "Weekly",
       "repeatMonthly": "Monthly",
       "repeatDetailHeading": "Details",
       "repeatDayUnit": "day(s)"
+    },
+    "detailModal": {
+      "ariaLabel": "To-do details",
+      "delete": "Delete to-do",
+      "repeatFrequencyHeading": "Repeat",
+      "repeatDayLabel": "day(s)"
     },
     "createTagModal": {
       "title": "Create a tag",
@@ -81,7 +88,18 @@
       "addTag": "Add tag",
       "removeTag": "Delete {tag} tag",
       "logout": "Log out",
-      "save": "Save changes"
+      "languageConfirmTitle": "Change language?",
+      "languageConfirmDescription": "Changing the language will immediately update the display language.",
+      "languageConfirmCancel": "Cancel",
+      "languageConfirmConfirm": "Change",
+      "tagDeleteConfirmTitle": "Delete this tag?",
+      "tagDeleteConfirmDescription": "The tag will be removed from every todo it's applied to.",
+      "tagDeleteConfirmCancel": "Cancel",
+      "tagDeleteConfirmConfirm": "Delete",
+      "logoutConfirmTitle": "Log out?",
+      "logoutConfirmDescription": "Your data stays saved after logging out.\nSign back in anytime to pick up where you left off.",
+      "logoutConfirmCancel": "Cancel",
+      "logoutConfirmConfirm": "Log out"
     },
     "withdrawal": {
       "title": "Withdraw",
@@ -116,7 +134,10 @@
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
     "todoCreateFailed": "Failed to create the to-do. Please try again.",
     "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again.",
-    "focusActionFailed": "Failed to process the request. Please try again."
+    "tagCreateFailed": "Failed to create the tag. Please try again.",
+    "tagActionFailed": "Failed to update the tag. Please try again.",
+    "focusActionFailed": "Failed to process the request. Please try again.",
+    "languageChangeFailed": "Failed to change the language. Please try again."
   },
   "Login": {
     "animationLabel": "Login animation",

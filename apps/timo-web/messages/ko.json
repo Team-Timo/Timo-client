@@ -46,12 +46,19 @@
       "dateLabel": "날짜",
       "timeLabel": "시간",
       "tagLabel": "태그",
+      "addTag": "추가",
       "create": "생성하기",
       "repeatDaily": "매일",
       "repeatWeekly": "매주",
       "repeatMonthly": "매달",
       "repeatDetailHeading": "세부 설정",
       "repeatDayUnit": "일 마다"
+    },
+    "detailModal": {
+      "ariaLabel": "투두 상세",
+      "delete": "투두 삭제",
+      "repeatFrequencyHeading": "반복 일정",
+      "repeatDayLabel": "일"
     },
     "createTagModal": {
       "title": "태그 생성하기",
@@ -81,7 +88,18 @@
       "addTag": "태그 추가",
       "removeTag": "{tag} 태그 삭제",
       "logout": "로그아웃",
-      "save": "변경사항 저장"
+      "languageConfirmTitle": "언어를 변경할까요?",
+      "languageConfirmDescription": "변경한 언어로 Timo의 모든 텍스트가 표시돼요.",
+      "languageConfirmCancel": "돌아가기",
+      "languageConfirmConfirm": "변경하기",
+      "tagDeleteConfirmTitle": "일정 태그를 삭제할까요?",
+      "tagDeleteConfirmDescription": "해당 태그가 적용된 모든 투두에서 태그가 삭제됩니다.",
+      "tagDeleteConfirmCancel": "돌아가기",
+      "tagDeleteConfirmConfirm": "삭제하기",
+      "logoutConfirmTitle": "로그아웃할까요?",
+      "logoutConfirmDescription": "로그아웃 후에도 데이터는 그대로 유지돼요.\n다시 로그인하면 이어서 사용할 수 있어요.",
+      "logoutConfirmCancel": "취소",
+      "logoutConfirmConfirm": "로그아웃"
     },
     "withdrawal": {
       "title": "탈퇴",
@@ -116,7 +134,10 @@
     "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요.",
     "todoCreateFailed": "투두 생성에 실패했어요. 다시 시도해 주세요.",
     "aiDurationRecommendFailed": "AI 추천 소요 시간을 가져오지 못했어요. 다시 시도해 주세요.",
-    "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요."
+    "tagCreateFailed": "태그 생성에 실패했어요. 다시 시도해 주세요.",
+    "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요.",
+    "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요.",
+    "languageChangeFailed": "언어 변경에 실패했어요. 다시 시도해 주세요."
   },
   "Login": {
     "animationLabel": "로그인 애니메이션",
