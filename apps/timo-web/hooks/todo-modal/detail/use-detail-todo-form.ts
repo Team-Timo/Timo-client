@@ -5,6 +5,7 @@ import type {
   TodoDetailResponse,
   TodoUpdateRequest,
 } from "@/api/generated/models";
+import type { BuildDetailTodoUpdateRequestParams } from "@/utils/todo/detail-todo-update-request";
 import type {
   PriorityLevel,
   RepeatFrequency,
@@ -80,6 +81,9 @@ export interface UseDetailTodoFormParams {
   todo: TodoDetailResponse;
 }
 
+export type DetailTodoUpdateRequestOverrides =
+  Partial<BuildDetailTodoUpdateRequestParams>;
+
 export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const durationText = convertDurationToTimeText(todo.durationSeconds ?? 0);
   const todoIcon = todo.icon ?? null;
@@ -148,17 +152,20 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   };
 
   const selectTime = (nextTime: TimeSelection) => {
-    if (nextTime === "ai") return;
+    if (nextTime === "ai") return undefined;
 
     const option = DETAIL_TODO_TIME_OPTIONS.find(
       (item) => item.minute === nextTime,
     );
 
-    if (!option) return;
+    if (!option) return undefined;
 
-    timeField.onChange(
-      convertSecondsToApiDuration(option.minute * SECONDS_PER_MINUTE),
+    const time = convertSecondsToApiDuration(
+      option.minute * SECONDS_PER_MINUTE,
     );
+    timeField.onChange(time);
+
+    return time;
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {
@@ -167,15 +174,38 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   };
 
   const toggleWeekday = (weekdayId: string) => {
-    selectedWeekdayIdsField.onChange(
-      selectedWeekdayIdsField.value.includes(weekdayId)
-        ? selectedWeekdayIdsField.value.filter((item) => item !== weekdayId)
-        : [...selectedWeekdayIdsField.value, weekdayId],
-    );
+    const nextWeekdayIds = selectedWeekdayIdsField.value.includes(weekdayId)
+      ? selectedWeekdayIdsField.value.filter((item) => item !== weekdayId)
+      : [...selectedWeekdayIdsField.value, weekdayId];
+
+    selectedWeekdayIdsField.onChange(nextWeekdayIds);
+
+    return nextWeekdayIds;
   };
 
-  const buildUpdateRequest = (): TodoUpdateRequest => {
-    return buildDetailTodoUpdateRequest({
+  const handleSelectTag = (label: string) => {
+    const option = tagField.tagOptions.find((item) => item.label === label);
+    if (!option) return null;
+
+    tagField.handleSelectTag(label);
+
+    return option.id;
+  };
+
+  const changeSubtaskCompleted = (id: number, completed: boolean) => {
+    const nextSubtasks = subtaskField.subtaskInputs.map((subtask) =>
+      subtask.id === id ? { ...subtask, completed } : subtask,
+    );
+
+    subtaskField.handleCompletedChange(id, completed);
+
+    return nextSubtasks;
+  };
+
+  const buildUpdateRequest = (
+    overrides: DetailTodoUpdateRequestOverrides = {},
+  ): TodoUpdateRequest => {
+    const params: BuildDetailTodoUpdateRequestParams = {
       icon: iconField.value,
       title: titleField.value,
       date: dateField.value,
@@ -188,7 +218,10 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
       repeatDay: repeatDayField.value,
       memo: memoField.value,
       subtasks: subtaskField.subtaskInputs,
-    });
+      ...overrides,
+    };
+
+    return buildDetailTodoUpdateRequest(params);
   };
 
   return {
@@ -200,7 +233,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     setPriority: priorityField.onChange,
     tagLabels: tagField.tagLabels,
     selectedTagLabel: tagField.selectedTagLabel,
-    handleSelectTag: tagField.handleSelectTag,
+    handleSelectTag,
     isRepeatActive: isRepeatActiveField.value,
     repeatFrequency: repeatFrequencyField.value,
     selectedWeekdayIds: selectedWeekdayIdsField.value,
@@ -213,7 +246,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     subtaskInputs: subtaskField.subtaskInputs,
     registerSubtaskInputRef: subtaskField.registerInputRef,
     changeSubtaskInput: subtaskField.handleInputChange,
-    changeSubtaskCompleted: subtaskField.handleCompletedChange,
+    changeSubtaskCompleted,
     handleSubtaskInputKeyDown: subtaskField.handleInputKeyDown,
     memo: memoField.value,
     setMemo: memoField.onChange,
