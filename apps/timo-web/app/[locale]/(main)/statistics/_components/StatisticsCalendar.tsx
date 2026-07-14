@@ -17,7 +17,7 @@ import {
   getCalendarDates,
   getFirstDayOffset,
 } from "@/app/[locale]/(main)/statistics/_utils/statistics-calendar";
-import { formatDateKey } from "@/utils/date/date";
+import { formatDateKey, parseDateKey } from "@/utils/date/date";
 
 type CalendarIconStatus = "disabled" | "empty" | "outline" | "light" | "filled";
 
@@ -71,7 +71,7 @@ export const StatisticsCalendar = ({
   calendarData,
 }: StatisticsCalendarProps) => {
   const locale = useLocale();
-  const today = new Date(calendarData.today);
+  const today = parseDateKey(calendarData.today) ?? new Date();
   const calendarDates = getCalendarDates(currentMonth);
   const firstDayOffset = getFirstDayOffset(currentMonth);
   const completionRateByDate = new Map(
