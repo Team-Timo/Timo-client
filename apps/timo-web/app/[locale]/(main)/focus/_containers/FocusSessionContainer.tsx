@@ -14,6 +14,7 @@ import { Timer } from "@/components/timer/Timer";
 import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
+import { formatDurationLabel } from "@/utils/duration/format-duration-label";
 
 export const FocusSessionContainer = () => {
   const tWeekday = useTranslations("Common.weekday");
@@ -98,7 +99,11 @@ export const FocusSessionContainer = () => {
         <div className="flex w-full flex-col items-center gap-11.25">
           <Timer
             time={convertDurationToTimeText(focusSessionState.remainingSeconds)}
-            plannedLabel={`${focusSessionState.plannedMinutes}M`}
+            plannedLabel={formatDurationLabel(
+              focusSessionState.plannedMinutes,
+              "H",
+              "M",
+            )}
             progress={focusSessionState.progress}
             isOvertime={focusSessionState.isOvertime}
             overtimeProgress={focusSessionState.overtimeProgress}

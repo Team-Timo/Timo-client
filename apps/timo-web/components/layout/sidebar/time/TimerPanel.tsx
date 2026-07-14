@@ -21,6 +21,7 @@ import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation"
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
+import { formatDurationLabel } from "@/utils/duration/format-duration-label";
 
 export const TimerPanel = () => {
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
@@ -138,7 +139,7 @@ export const TimerPanel = () => {
       <Timer
         icon={activeTimer?.iconType}
         time={convertDurationToTimeText(remainingSeconds)}
-        plannedLabel={`${plannedMinutes}M`}
+        plannedLabel={formatDurationLabel(plannedMinutes, "H", "M")}
         progress={progress}
         isOvertime={isOvertime}
         overtimeProgress={overtimeProgress}
