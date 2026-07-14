@@ -1,13 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { overlay } from "overlay-kit";
 
 import type { TodoUpdateRequest } from "@/api/generated/models";
 import type { ReactNode } from "react";
 
 import { useGetTodoDetail } from "@/api/generated/endpoints/todo/todo";
-import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
 import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
@@ -21,6 +19,63 @@ export interface DetailTodoModalContainerProps {
   children: (openDetailTodoModal: () => void) => ReactNode;
 }
 
+interface DetailTodoModalQueryProps extends Omit<
+  DetailTodoModalContainerProps,
+  "children"
+> {
+  isOpen: boolean;
+  onClose: () => void;
+  onExited: () => void;
+}
+
+const DetailTodoModalQuery = ({
+  todoId,
+  date,
+  isOpen,
+  onClose,
+  onExited,
+  onTogglePlay,
+  onToggleCompleted,
+  onDelete,
+}: DetailTodoModalQueryProps) => {
+  const { data, isError } = useGetTodoDetail(todoId, { date });
+  const { handleDelete } = useDeleteTodoSubmit();
+  const { handleUpdate } = useUpdateTodoSubmit();
+  const todo = data?.data;
+
+  if (isError || !todo) return null;
+
+  const deleteTodo = () => {
+    handleDelete(todoId, {
+      onSuccess: () => {
+        onDelete();
+        onClose();
+      },
+    });
+  };
+
+  const updateTodo = (updateData: TodoUpdateRequest) => {
+    handleUpdate({
+      todoId,
+      date,
+      data: updateData,
+    });
+  };
+
+  return (
+    <DetailTodoModalContent
+      isOpen={isOpen}
+      onClose={onClose}
+      onExited={onExited}
+      todo={todo}
+      onTogglePlay={onTogglePlay}
+      onToggleCompleted={onToggleCompleted}
+      onDelete={deleteTodo}
+      onUpdate={updateTodo}
+    />
+  );
+};
+
 export const DetailTodoModalContainer = ({
   todoId,
   date,
@@ -29,78 +84,20 @@ export const DetailTodoModalContainer = ({
   onDelete,
   children,
 }: DetailTodoModalContainerProps) => {
-  const tToast = useTranslations("Toast");
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const [updateErrorMessage, setUpdateErrorMessage] = useState<string | null>(
-    null,
-  );
-  const { data, isError } = useGetTodoDetail(
-    todoId,
-    { date },
-    { query: { enabled: isMounted } },
-  );
-  const { handleDelete } = useDeleteTodoSubmit();
-  const { handleUpdate } = useUpdateTodoSubmit();
-  const todo = data?.data;
-
   const openDetailTodoModal = () => {
-    setIsMounted(true);
-    setIsOpen(true);
-  };
-
-  const closeDetailTodoModal = () => {
-    setIsOpen(false);
-  };
-
-  const deleteTodo = () => {
-    handleDelete(todoId, {
-      onSuccess: () => {
-        onDelete();
-        closeDetailTodoModal();
-      },
-    });
-  };
-
-  const updateTodo = (updateData: TodoUpdateRequest) => {
-    handleUpdate(
-      {
-        todoId,
-        date,
-        data: updateData,
-      },
-      {
-        onError: (error) => {
-          setUpdateErrorMessage(
-            error.response?.data.message ?? tToast("todoUpdateFailed"),
-          );
-        },
-      },
-    );
-  };
-
-  return (
-    <>
-      {children(openDetailTodoModal)}
-
-      {isMounted && !isError && todo ? (
-        <DetailTodoModalContent
-          isOpen={isOpen}
-          onClose={closeDetailTodoModal}
-          onExited={() => setIsMounted(false)}
-          todo={todo}
-          onTogglePlay={onTogglePlay}
-          onToggleCompleted={onToggleCompleted}
-          onDelete={deleteTodo}
-          onUpdate={updateTodo}
-        />
-      ) : null}
-
-      <AnimatedToast
-        isOpen={updateErrorMessage !== null}
-        onClose={() => setUpdateErrorMessage(null)}
-        message={updateErrorMessage ?? ""}
+    overlay.open(({ isOpen, close, unmount }) => (
+      <DetailTodoModalQuery
+        todoId={todoId}
+        date={date}
+        isOpen={isOpen}
+        onClose={close}
+        onExited={unmount}
+        onTogglePlay={onTogglePlay}
+        onToggleCompleted={onToggleCompleted}
+        onDelete={onDelete}
       />
-    </>
-  );
+    ));
+  };
+
+  return <>{children(openDetailTodoModal)}</>;
 };
