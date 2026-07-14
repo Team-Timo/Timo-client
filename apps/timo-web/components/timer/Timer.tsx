@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@repo/timo-design-system/utils";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
@@ -65,7 +65,10 @@ export const Timer = ({
   const isJump =
     prevRenderRef.current.isOvertime !== isOvertime ||
     now - prevRenderRef.current.time > JUMP_GAP_MS;
-  prevRenderRef.current = { time: now, isOvertime };
+
+  useEffect(() => {
+    prevRenderRef.current = { time: now, isOvertime };
+  });
 
   return (
     <div
