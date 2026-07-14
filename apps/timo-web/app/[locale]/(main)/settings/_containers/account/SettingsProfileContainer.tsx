@@ -15,6 +15,8 @@ export const SettingsProfileContainer = () => {
     profileActions,
     isTagErrorToastOpen,
     closeTagErrorToast,
+    isLanguageErrorToastOpen,
+    closeLanguageErrorToast,
   } = useSettingsProfile();
 
   const labels = useSettingsProfileLabels();
@@ -39,6 +41,12 @@ export const SettingsProfileContainer = () => {
         isOpen={isTagErrorToastOpen}
         onClose={closeTagErrorToast}
         message={tToast("tagActionFailed")}
+      />
+
+      <AnimatedToast
+        isOpen={isLanguageErrorToastOpen}
+        onClose={closeLanguageErrorToast}
+        message={tToast("languageChangeFailed")}
       />
     </div>
   );

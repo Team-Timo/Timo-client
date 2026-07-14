@@ -35,7 +35,10 @@ export const useSettingsProfile = () => {
   const [isCalendarConnected, setIsCalendarConnected] = useState(
     profile.calendarConnected,
   );
-  const [isTagErrorToastOpen, setIsTagErrorToastOpen] = useState(false);
+  const [isTagErrorToastOpen, setIsTagErrorToastOpen] =
+    useState<boolean>(false);
+  const [isLanguageErrorToastOpen, setIsLanguageErrorToastOpen] =
+    useState<boolean>(false);
 
   const { mutateAsync: updateLanguage } = useUpdateLanguage();
   const queryClient = useQueryClient();
@@ -127,8 +130,7 @@ export const useSettingsProfile = () => {
       });
       commitLanguage(next);
     } catch {
-      // TODO: 실제 토스트 컴포넌트로 교체
-      window.alert("저장에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+      setIsLanguageErrorToastOpen(true);
     }
   };
 
@@ -149,5 +151,7 @@ export const useSettingsProfile = () => {
     },
     isTagErrorToastOpen,
     closeTagErrorToast: () => setIsTagErrorToastOpen(false),
+    isLanguageErrorToastOpen,
+    closeLanguageErrorToast: () => setIsLanguageErrorToastOpen(false),
   };
 };
