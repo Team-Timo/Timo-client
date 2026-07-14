@@ -30,7 +30,7 @@ export const DetailTodoMemoField = ({
       placeholder={placeholder}
       maxLength={maxLength}
       onChange={(event) => onChange(event.target.value)}
-      className="typo-body-r-14 text-timo-black placeholder:text-timo-gray-700 min-h-20 w-full resize-none overflow-hidden p-1 outline-none"
+      className="typo-headline-r-14 text-timo-gray-700 min-h-20 w-full resize-none overflow-hidden p-1 outline-none"
     />
   );
 };
