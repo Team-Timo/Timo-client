@@ -92,7 +92,8 @@ export const HomeTodoContainer = () => {
                   return (
                     <DetailTodoModalContainer
                       key={todo.todoId}
-                      todo={todo}
+                      todoId={todo.todoId}
+                      date={dateKey}
                       onTogglePlay={() =>
                         handleTogglePlay(dateKey, todo.todoId)
                       }

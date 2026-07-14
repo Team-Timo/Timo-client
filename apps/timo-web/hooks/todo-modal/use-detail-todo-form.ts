@@ -2,7 +2,7 @@ import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useController, useForm } from "react-hook-form";
 
-import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { TodoDetailResponse } from "@/api/generated/models";
 import type {
   PriorityLevel,
   RepeatFrequency,
@@ -12,6 +12,7 @@ import type {
 } from "@repo/timo-design-system/ui";
 
 import { useDetailSubtaskField } from "@/hooks/todo-modal/use-detail-subtask-field";
+import { parseDateKey } from "@/utils/date/date";
 import { isTagLabelKey } from "@/utils/todo/tag-label";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
@@ -37,6 +38,19 @@ interface DetailTodoFormValues {
 const isTodoIconValue = (icon: string | null): icon is TodoIconValue =>
   icon !== null && (TODO_ICON_VALUES as readonly string[]).includes(icon);
 
+const isPriorityLevel = (
+  priority: string | undefined,
+): priority is PriorityLevel =>
+  priority === "VERY_HIGH" ||
+  priority === "HIGH" ||
+  priority === "MEDIUM" ||
+  priority === "LOW";
+
+const isRepeatFrequency = (
+  repeatType: string | undefined,
+): repeatType is RepeatFrequency =>
+  repeatType === "DAILY" || repeatType === "WEEKLY" || repeatType === "MONTHLY";
+
 export const DETAIL_TODO_TIME_OPTIONS: TimeOption[] = [
   { minute: 15, value: "15", unit: "min" },
   { minute: 30, value: "30", unit: "min" },
@@ -56,32 +70,36 @@ export const DETAIL_TODO_WEEKDAY_IDS = [
 ] as const;
 
 export interface UseDetailTodoFormParams {
-  todo: Todo;
+  todo: TodoDetailResponse;
 }
 
 export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   const tCommon = useTranslations("Common");
 
-  const durationText = convertDurationToTimeText(todo.durationSeconds);
+  const durationText = convertDurationToTimeText(todo.durationSeconds ?? 0);
   const todoTagName = todo.tag?.name ?? "";
   const todoIcon = todo.icon ?? null;
+  const todoDate = parseDateKey(todo.date) ?? new Date();
+  const repeatType = isRepeatFrequency(todo.repeat.type)
+    ? todo.repeat.type
+    : "DAILY";
   const tagLabel = isTagLabelKey(todoTagName)
     ? tCommon(`tag.${todoTagName}`)
     : todoTagName;
 
   const { control, handleSubmit, formState } = useForm<DetailTodoFormValues>({
     defaultValues: {
-      date: new Date(2026, 6, 1),
+      date: todoDate,
       time: durationText,
-      priority: todo.priority,
+      priority: isPriorityLevel(todo.priority) ? todo.priority : "MEDIUM",
       selectedTag: tagLabel,
-      isRepeatActive: todo.isRepeated,
-      repeatFrequency: "DAILY",
-      selectedWeekdayIds: [],
-      repeatDay: "",
+      isRepeatActive: todo.repeat.type !== "NONE",
+      repeatFrequency: repeatType,
+      selectedWeekdayIds: todo.repeat.weekdays ?? [],
+      repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
       isCompleted: todo.completed,
       title: todo.title,
-      memo: "",
+      memo: todo.memo ?? "",
       icon: isTodoIconValue(todoIcon) ? todoIcon : null,
     },
   });

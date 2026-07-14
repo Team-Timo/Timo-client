@@ -3,7 +3,7 @@ import { TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { TodoDetailResponse } from "@/api/generated/models";
 import type { TimeSelection } from "@repo/timo-design-system/ui";
 
 import { OverlayModal } from "@/components/modal/OverlayModal";
@@ -23,7 +23,7 @@ export interface DetailTodoModalContentProps {
   isOpen: boolean;
   onClose: () => void;
   onExited: () => void;
-  todo: Todo;
+  todo: TodoDetailResponse;
   onTogglePlay: () => void;
   onDelete: () => void;
 }
@@ -139,7 +139,7 @@ export const DetailTodoModalContent = ({
               addTagLabel={tCreateModal("addTag")}
               onSelectTag={detailTodoForm.setSelectedTag}
               onAddTagClick={() => {}}
-              hasMemo={todo.hasMemo}
+              hasMemo={Boolean(todo.memo?.trim())}
               isRepeatActive={detailTodoForm.isRepeatActive}
               repeat={{
                 frequencyHeading: t("repeatFrequencyHeading"),

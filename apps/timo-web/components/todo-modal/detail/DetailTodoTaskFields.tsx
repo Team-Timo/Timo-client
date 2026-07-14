@@ -5,7 +5,7 @@ import {
 } from "@repo/timo-design-system/icons";
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 
-import type { TodoTimerStatusTypes } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { TodoDetailResponseTimerStatus } from "@/api/generated/models";
 import type { DetailTodoSubtaskInput } from "@/hooks/todo-modal/use-detail-subtask-field";
 import type { KeyboardEvent } from "react";
 
@@ -18,7 +18,7 @@ const resizeTextarea = (element: HTMLTextAreaElement | null) => {
 export interface DetailTodoTaskFieldsProps {
   titleValue: string;
   isCompleted: boolean;
-  timerStatus: TodoTimerStatusTypes;
+  timerStatus: TodoDetailResponseTimerStatus;
   subtaskInputs: DetailTodoSubtaskInput[];
   onTitleChange: (value: string) => void;
   onToggleCompleted: (completed: boolean) => void;
