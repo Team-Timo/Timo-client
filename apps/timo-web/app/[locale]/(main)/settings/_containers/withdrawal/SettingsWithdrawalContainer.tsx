@@ -3,10 +3,10 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/withdrawal/_types/withdrawal-type";
+import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/_types/withdrawal/withdrawal-type";
 
-import { SettingsWithdrawalView } from "@/app/[locale]/(main)/settings/withdrawal/_components/SettingsWithdrawalView";
-import { useWithdrawAction } from "@/app/[locale]/(main)/settings/withdrawal/_queries/use-withdraw";
+import { SettingsWithdrawalView } from "@/app/[locale]/(main)/settings/_components/withdrawal/SettingsWithdrawalView";
+import { useWithdrawAction } from "@/app/[locale]/(main)/settings/_queries/withdrawal/use-withdraw";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
 export const SettingsWithdrawalContainer = () => {
