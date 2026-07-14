@@ -57,7 +57,9 @@ export const StatisticsContainer = () => {
       : { variant: "day", detail: dayDetail };
 
   const handleChangeMonth = (updater: (prev: Date) => Date) => {
-    setCurrentMonth(updater);
+    const nextMonth = updater(currentMonth);
+    setCurrentMonth(nextMonth);
+    setSelectedDate(new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 1));
     setSidePanelVariant("month");
   };
 
