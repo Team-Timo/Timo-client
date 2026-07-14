@@ -96,6 +96,10 @@
     }
   },
   "Statistics": {
+    "calendar": {
+      "loading": "통계 캘린더를 불러오고 있어요.",
+      "error": "통계 캘린더를 불러오지 못했어요."
+    },
     "sidePanel": {
       "monthTotalRecordTime": "이번 달의 총 기록 시간",
       "activeDays": "활동일",

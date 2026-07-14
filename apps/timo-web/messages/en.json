@@ -96,6 +96,10 @@
     }
   },
   "Statistics": {
+    "calendar": {
+      "loading": "Loading statistics calendar.",
+      "error": "Failed to load statistics calendar."
+    },
     "sidePanel": {
       "monthTotalRecordTime": "Total record time this month",
       "activeDays": "Active days",
