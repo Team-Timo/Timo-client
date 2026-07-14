@@ -3,6 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+import type { ApiError } from "@/api/error/api-error";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
@@ -27,6 +28,7 @@ export interface UseHomeTodosByDateOptions {
   onNeedStopConfirm: (dateKey: string, todoId: number) => void;
   onTimerAlreadyRunning: () => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
+  onPlayError: (message: string | undefined) => void;
 }
 
 export const useHomeTodosByDate = (
@@ -35,6 +37,7 @@ export const useHomeTodosByDate = (
     onNeedStopConfirm,
     onTimerAlreadyRunning,
     onStopFeedback,
+    onPlayError,
   }: UseHomeTodosByDateOptions,
 ) => {
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
@@ -48,7 +51,7 @@ export const useHomeTodosByDate = (
   const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
 
-  const { mutate: startTimer } = useStartTimer({
+  const { mutate: startTimer } = useStartTimer<ApiError>({
     mutation: { onSuccess: invalidateTimerState },
   });
   const { mutate: changeStatus } = useChangeStatus({
@@ -173,7 +176,12 @@ export const useHomeTodosByDate = (
 
     startTimer(
       { todoId },
-      { onSuccess: () => invalidateTodoDetail(dateKey, todoId) },
+      {
+        onSuccess: () => invalidateTodoDetail(dateKey, todoId),
+        onError: (error: ApiError) => {
+          onPlayError(error.message);
+        },
+      },
     );
   };
 
