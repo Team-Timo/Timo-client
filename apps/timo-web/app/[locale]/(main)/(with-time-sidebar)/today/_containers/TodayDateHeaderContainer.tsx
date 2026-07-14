@@ -7,7 +7,7 @@ import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_
 import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_components/DateInformation";
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/todo-modal/use-create-todo-submit";
-import { CreateTodoModalContainer } from "@/components/todo-modal/create/CreateTodoModalContainer";
+import { CreateTodoModalContainer } from "@/containers/todo-modal/create/CreateTodoModalContainer";
 import { getToday } from "@/utils/date/date";
 import { getDayOfWeekKey } from "@/utils/date/get-day-of-week-key";
 
