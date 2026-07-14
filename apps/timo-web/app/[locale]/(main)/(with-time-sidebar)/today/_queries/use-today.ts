@@ -13,4 +13,5 @@ export const useToday = () =>
     queryKey: getGetTodayQueryKey(),
     queryFn: ({ signal }) => getToday(undefined, signal),
     select: ({ data }) => todayDataSchema.parse(data),
+    staleTime: 0,
   });
