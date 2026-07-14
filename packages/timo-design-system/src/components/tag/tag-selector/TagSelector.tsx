@@ -8,6 +8,7 @@ export interface TagSelectorProps {
   trigger: ReactNode;
   tags: string[];
   selected?: string;
+  addLabel?: string;
   onSelect?: (tag: string) => void;
   onAddClick?: () => void;
 }
@@ -16,6 +17,7 @@ export const TagSelector = ({
   trigger,
   tags,
   selected,
+  addLabel = "추가",
   onSelect,
   onAddClick,
 }: TagSelectorProps) => {
@@ -50,7 +52,7 @@ export const TagSelector = ({
 
         <Dropdown.Item onClick={onAddClick} className="gap-1 px-1.5 py-1">
           <span className="typo-headline-r-14 text-timo-black whitespace-nowrap">
-            추가
+            {addLabel}
           </span>
           <PlusIcon className="shrink-0" />
         </Dropdown.Item>

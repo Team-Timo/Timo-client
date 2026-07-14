@@ -46,12 +46,19 @@
       "dateLabel": "날짜",
       "timeLabel": "시간",
       "tagLabel": "태그",
+      "addTag": "추가",
       "create": "생성하기",
       "repeatDaily": "매일",
       "repeatWeekly": "매주",
       "repeatMonthly": "매달",
       "repeatDetailHeading": "세부 설정",
       "repeatDayUnit": "일 마다"
+    },
+    "detailModal": {
+      "ariaLabel": "투두 상세",
+      "delete": "투두 삭제",
+      "repeatFrequencyHeading": "반복 일정",
+      "repeatDayLabel": "일"
     },
     "createTagModal": {
       "title": "태그 생성하기",
