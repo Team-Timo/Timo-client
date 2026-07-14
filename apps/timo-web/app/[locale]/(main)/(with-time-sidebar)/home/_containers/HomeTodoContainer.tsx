@@ -156,6 +156,9 @@ export const HomeTodoContainer = () => {
                       onTogglePlay={() =>
                         handleTogglePlay(dateKey, todo.todoId)
                       }
+                      onToggleCompleted={(completed) =>
+                        handleToggleCompleted(dateKey, todo.todoId, completed)
+                      }
                       onDelete={() => handleDeleteTodo(dateKey, todo.todoId)}
                     >
                       {(openDetailTodoModal) => (

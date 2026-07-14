@@ -106,6 +106,7 @@ export const useHomeTodosByDate = (
         onSuccess: () => {
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
+          invalidateTodoDetail(dateKey, todoId);
         },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
@@ -130,7 +131,12 @@ export const useHomeTodosByDate = (
           }));
           changeTodoStatus(
             { todoId, data: { isCompleted: true, date: dateKey } },
-            { onSuccess: invalidateHomeAndFocus },
+            {
+              onSuccess: () => {
+                invalidateHomeAndFocus();
+                invalidateTodoDetail(dateKey, todoId);
+              },
+            },
           );
         },
       },
@@ -191,6 +197,7 @@ export const useHomeTodosByDate = (
         onSuccess: () => {
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
+          invalidateTodoDetail(dateKey, todoId);
         },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));

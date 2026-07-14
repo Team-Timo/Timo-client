@@ -53,11 +53,7 @@ export const DetailTodoTaskFields = ({
     <div className="flex w-full flex-col">
       <div className="flex w-full items-center justify-between">
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <Checkbox
-            checked={isCompleted}
-            disabled={disabled}
-            onChange={onToggleCompleted}
-          />
+          <Checkbox checked={isCompleted} onChange={onToggleCompleted} />
           <textarea
             value={titleValue}
             ref={resizeTextarea}
@@ -95,7 +91,6 @@ export const DetailTodoTaskFields = ({
             <div key={subtask.id} className="flex items-center gap-2">
               <Checkbox
                 checked={subtask.completed}
-                disabled={disabled}
                 onChange={(completed) =>
                   onToggleSubtaskCompleted(subtask.id, completed)
                 }

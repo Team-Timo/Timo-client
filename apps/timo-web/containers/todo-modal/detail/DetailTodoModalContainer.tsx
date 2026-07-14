@@ -16,6 +16,7 @@ export interface DetailTodoModalContainerProps {
   todoId: number;
   date: string;
   onTogglePlay: () => void;
+  onToggleCompleted: (completed: boolean) => void;
   onDelete: () => void;
   children: (openDetailTodoModal: () => void) => ReactNode;
 }
@@ -24,6 +25,7 @@ export const DetailTodoModalContainer = ({
   todoId,
   date,
   onTogglePlay,
+  onToggleCompleted,
   onDelete,
   children,
 }: DetailTodoModalContainerProps) => {
@@ -88,6 +90,7 @@ export const DetailTodoModalContainer = ({
           onExited={() => setIsMounted(false)}
           todo={todo}
           onTogglePlay={onTogglePlay}
+          onToggleCompleted={onToggleCompleted}
           onDelete={deleteTodo}
           onUpdate={updateTodo}
         />

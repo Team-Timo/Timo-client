@@ -49,6 +49,7 @@ export const TodayTodoListContainer = () => {
             todoId={todo.todoId}
             date={todo.date.slice(0, 10)}
             onTogglePlay={() => handlePlay(todo.todoId)}
+            onToggleCompleted={() => handleCheck(todo.todoId)}
             onDelete={() => handleDelete(todo.todoId)}
           >
             {(openDetailTodoModal) => (
