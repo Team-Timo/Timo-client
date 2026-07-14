@@ -4,7 +4,7 @@ import { useController } from "react-hook-form";
 import type {
   CreateTodoRequest,
   TodoRepeatWeekday,
-} from "@/api/todo/todo-schema";
+} from "@/api/common/todo-schema";
 import type { RepeatFrequency } from "@repo/timo-design-system/ui";
 import type { Control } from "react-hook-form";
 

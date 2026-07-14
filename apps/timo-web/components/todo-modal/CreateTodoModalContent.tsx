@@ -6,10 +6,10 @@ import { CreateButton, TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useController, useForm } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/todo/todo-schema";
+import type { CreateTodoRequest } from "@/api/common/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
-import { createTodoRequestSchema } from "@/api/todo/todo-schema";
+import { createTodoRequestSchema } from "@/api/common/todo-schema";
 import { useSubtaskField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-subtask-field";
 import { useTitleField } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/todo-modal/use-title-field";
 import { OverlayModal } from "@/components/modal/OverlayModal";

@@ -2,10 +2,10 @@ import { overlay } from "overlay-kit";
 import { useState } from "react";
 import { useController } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/todo/todo-schema";
+import type { CreateTodoRequest } from "@/api/common/todo-schema";
 import type { Control } from "react-hook-form";
 
-import { tagCreateDataSchema } from "@/api/tag/tag-schema";
+import { tagCreateDataSchema } from "@/api/common/tag-schema";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useTags } from "@/queries/tag/use-tags";

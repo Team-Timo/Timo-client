@@ -4,12 +4,12 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
+import { tagCreateDataSchema } from "@/api/common/tag-schema";
 import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
 } from "@/api/generated/endpoints/user/user";
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
-import { tagCreateDataSchema } from "@/api/tag/tag-schema";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
 import { useLogoutAction } from "@/app/[locale]/(main)/settings/_queries/account/use-logout";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
