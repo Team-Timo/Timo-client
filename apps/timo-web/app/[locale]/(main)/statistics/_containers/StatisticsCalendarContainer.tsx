@@ -9,7 +9,8 @@ import { formatDateKey } from "@/utils/date/date";
 
 interface StatisticsCalendarContainerProps {
   currentMonth: Date;
-  selectedDate: Date;
+  displayDate: Date;
+  selectedDate: Date | null;
   onSelectDate: (date: Date) => void;
 }
 
@@ -37,6 +38,7 @@ const StatisticsCalendarStatus = ({
 
 export const StatisticsCalendarContainer = ({
   currentMonth,
+  displayDate,
   selectedDate,
   onSelectDate,
 }: StatisticsCalendarContainerProps) => {
@@ -67,6 +69,7 @@ export const StatisticsCalendarContainer = ({
   return (
     <StatisticsCalendar
       currentMonth={currentMonth}
+      displayDate={displayDate}
       selectedDate={selectedDate}
       onSelectDate={onSelectDate}
       calendarData={calendarData}

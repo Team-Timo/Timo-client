@@ -78,7 +78,8 @@ export const StatisticsContainer = () => {
         <div className="flex min-h-0 flex-1">
           <StatisticsCalendarContainer
             currentMonth={currentMonth}
-            selectedDate={selectedDate}
+            displayDate={selectedDate}
+            selectedDate={sidePanelVariant === "day" ? selectedDate : null}
             onSelectDate={handleSelectDate}
           />
         </div>

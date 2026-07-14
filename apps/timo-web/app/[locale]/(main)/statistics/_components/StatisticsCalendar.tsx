@@ -59,13 +59,15 @@ const WEEKDAYS = [
 
 interface StatisticsCalendarProps {
   currentMonth: Date;
-  selectedDate: Date;
+  displayDate: Date;
+  selectedDate: Date | null;
   onSelectDate: (date: Date) => void;
   calendarData: StatisticsCalendarResponse;
 }
 
 export const StatisticsCalendar = ({
   currentMonth,
+  displayDate,
   selectedDate,
   onSelectDate,
   calendarData,
@@ -77,7 +79,7 @@ export const StatisticsCalendar = ({
   const completionRateByDate = new Map(
     calendarData.days.map(({ date, completionRate }) => [date, completionRate]),
   );
-  const selectedDateLabel = formatStatisticsCalendarDate(selectedDate, locale);
+  const selectedDateLabel = formatStatisticsCalendarDate(displayDate, locale);
   const todayTime = getDateTime(today);
 
   return (
@@ -117,7 +119,8 @@ export const StatisticsCalendar = ({
 
           {calendarDates.map((calendarDate) => {
             const dateKey = formatDateKey(calendarDate.date);
-            const isSelected = dateKey === formatDateKey(selectedDate);
+            const isSelected =
+              selectedDate !== null && dateKey === formatDateKey(selectedDate);
             const isFutureDate = getDateTime(calendarDate.date) > todayTime;
             const completionRate = completionRateByDate.get(dateKey) ?? null;
             const status = getIconStatus(completionRate, isFutureDate);
