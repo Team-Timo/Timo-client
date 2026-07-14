@@ -1,7 +1,7 @@
 import { DeleteIcon, TrashOnIcon } from "@repo/timo-design-system/icons";
 import { TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type {
   TodoDetailResponse,
@@ -27,6 +27,7 @@ import {
 import { formatShortDateLabel } from "@/utils/date/date";
 
 const DETAIL_TODO_MEMO_MAX_LENGTH = 300;
+const TEXT_UPDATE_DEBOUNCE_MS = 3000;
 type DetailTodoWeekdayId = (typeof DETAIL_TODO_WEEKDAY_IDS)[number];
 
 const isDetailTodoWeekdayId = (
@@ -67,6 +68,47 @@ export const DetailTodoModalContent = ({
     id: weekdayId,
     label: tCommon(`weekday.${weekdayId}`),
   }));
+  const latestOnUpdateRef = useRef(onUpdate);
+  const latestBuildUpdateRequestRef = useRef(detailTodoForm.buildUpdateRequest);
+  const didStartTextUpdateRef = useRef(false);
+  const textUpdateSignature = useMemo(
+    () =>
+      JSON.stringify({
+        title: detailTodoForm.title,
+        memo: detailTodoForm.memo,
+        subtasks: detailTodoForm.subtaskInputs.map((subtask) => ({
+          id: subtask.id,
+          subtaskId: subtask.subtaskId,
+          value: subtask.value,
+        })),
+      }),
+    [detailTodoForm.memo, detailTodoForm.subtaskInputs, detailTodoForm.title],
+  );
+
+  useEffect(() => {
+    latestOnUpdateRef.current = onUpdate;
+  }, [onUpdate]);
+
+  useEffect(() => {
+    latestBuildUpdateRequestRef.current = detailTodoForm.buildUpdateRequest;
+  }, [detailTodoForm.buildUpdateRequest]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    if (!didStartTextUpdateRef.current) {
+      didStartTextUpdateRef.current = true;
+      return;
+    }
+
+    if (!detailTodoForm.title.trim()) return;
+
+    const updateTimer = window.setTimeout(() => {
+      latestOnUpdateRef.current(latestBuildUpdateRequestRef.current());
+    }, TEXT_UPDATE_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(updateTimer);
+  }, [detailTodoForm.title, isOpen, textUpdateSignature]);
 
   const updateTodo = (overrides: DetailTodoUpdateRequestOverrides = {}) => {
     const updateData = detailTodoForm.buildUpdateRequest(overrides);
