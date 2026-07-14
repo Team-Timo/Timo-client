@@ -1,18 +1,10 @@
 import { z } from "zod";
 
-import { todoSchema } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import { dayOfWeekSchema, todoSchema } from "@/api/todo/todo-schema";
 
 export const homeViewFilterSchema = z.enum(["DEFAULT", "WEEK"]);
 
-export const apiDayOfWeekSchema = z.enum([
-  "MON",
-  "TUE",
-  "WED",
-  "THU",
-  "FRI",
-  "SAT",
-  "SUN",
-]);
+export const apiDayOfWeekSchema = dayOfWeekSchema;
 
 export const homeViewDaySchema = z.object({
   date: z.string(),
