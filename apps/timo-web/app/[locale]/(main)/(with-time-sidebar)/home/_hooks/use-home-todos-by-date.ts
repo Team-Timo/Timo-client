@@ -3,8 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-import type { ErrorType } from "@/api/client/custom-instance";
-import type { ErrorDto } from "@/api/generated/models";
+import type { ApiError } from "@/api/error/api-error";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
@@ -52,7 +51,7 @@ export const useHomeTodosByDate = (
   const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
 
-  const { mutate: startTimer } = useStartTimer({
+  const { mutate: startTimer } = useStartTimer<ApiError>({
     mutation: { onSuccess: invalidateTimerState },
   });
   const { mutate: changeStatus } = useChangeStatus({
@@ -179,8 +178,8 @@ export const useHomeTodosByDate = (
       { todoId },
       {
         onSuccess: () => invalidateTodoDetail(dateKey, todoId),
-        onError: (error: ErrorType<ErrorDto>) => {
-          onPlayError(error.response?.data.message);
+        onError: (error: ApiError) => {
+          onPlayError(error.message);
         },
       },
     );
