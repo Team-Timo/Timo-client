@@ -41,6 +41,7 @@ export interface DetailTodoModalContentProps {
   onExited: () => void;
   todo: TodoDetailResponse;
   onTogglePlay: () => void;
+  onToggleCompleted: (completed: boolean) => void;
   onDelete: () => void;
   onUpdate: (data: TodoUpdateRequest) => void;
 }
@@ -51,6 +52,7 @@ export const DetailTodoModalContent = ({
   onExited,
   todo,
   onTogglePlay,
+  onToggleCompleted,
   onDelete,
   onUpdate,
 }: DetailTodoModalContentProps) => {
@@ -176,7 +178,9 @@ export const DetailTodoModalContent = ({
 
   const handleSubtaskCompletedChange = (id: number, completed: boolean) => {
     const subtasks = detailTodoForm.changeSubtaskCompleted(id, completed);
-    updateTodo({ subtasks });
+    const updateData = detailTodoForm.buildUpdateRequest({ subtasks });
+    if (!updateData.title?.trim()) return;
+    onUpdate(updateData);
   };
 
   return (
@@ -220,16 +224,13 @@ export const DetailTodoModalContent = ({
             <div className="bg-timo-gray-500 h-px w-full" />
             <DetailTodoTaskFields
               titleValue={detailTodoForm.title}
-              isCompleted={detailTodoForm.isCompleted}
+              isCompleted={todo.completed}
               disabled={!canUpdateTodo}
               timerStatus={todo.timerStatus}
               subtaskInputs={detailTodoForm.subtaskInputs}
               onTitleChange={detailTodoForm.changeTitle}
-              onToggleCompleted={detailTodoForm.setIsCompleted}
-              onTogglePlay={() => {
-                onTogglePlay();
-                onClose();
-              }}
+              onToggleCompleted={onToggleCompleted}
+              onTogglePlay={onTogglePlay}
               onSubtaskInputChange={detailTodoForm.changeSubtaskInput}
               onToggleSubtaskCompleted={handleSubtaskCompletedChange}
               registerSubtaskInputRef={detailTodoForm.registerSubtaskInputRef}

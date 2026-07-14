@@ -37,7 +37,6 @@ interface DetailTodoFormValues {
   repeatFrequency: RepeatFrequency;
   selectedWeekdayIds: string[];
   repeatDay: string;
-  isCompleted: boolean;
   title: string;
   memo: string;
   icon: TodoIconValue | null;
@@ -102,7 +101,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
       repeatFrequency: repeatType,
       selectedWeekdayIds: todo.repeat.weekdays ?? [],
       repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
-      isCompleted: todo.completed,
       title: todo.title,
       memo: todo.memo ?? "",
       icon: isTodoIconValue(todoIcon) ? todoIcon : null,
@@ -129,10 +127,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   });
   const { field: repeatDayField } = useController({
     name: "repeatDay",
-    control,
-  });
-  const { field: isCompletedField } = useController({
-    name: "isCompleted",
     control,
   });
   const { field: titleField } = useController({ name: "title", control });
@@ -239,8 +233,6 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     selectedWeekdayIds: selectedWeekdayIdsField.value,
     repeatDay: repeatDayField.value,
     setRepeatDay: repeatDayField.onChange,
-    isCompleted: isCompletedField.value,
-    setIsCompleted: isCompletedField.onChange,
     title: titleField.value,
     changeTitle,
     subtaskInputs: subtaskField.subtaskInputs,

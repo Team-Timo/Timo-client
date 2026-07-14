@@ -14,8 +14,14 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-import { cn, hasOpenFloatingLayer } from "../../../lib";
+import { acquireModalStackIndex, cn, hasOpenFloatingLayer } from "../../../lib";
 import { ModalButton } from "../../button/modal-button/ModalButton";
+
+// tailwind-config theme.css의 --z-index-modal-overlay/--z-index-modal-panel과 동일한 기준값이다.
+const BASE_OVERLAY_Z_INDEX = 40;
+const BASE_PANEL_Z_INDEX = 50;
+// 중첩된 모달의 오버레이가 그 아래 모달의 패널(z=50)보다 항상 높도록, 한 단계당 overlay/panel 차이(10)보다 큰 폭으로 올린다.
+const MODAL_STACK_Z_INDEX_STEP = 20;
 
 interface ModalContextValue {
   isOpen: boolean;
@@ -23,6 +29,8 @@ interface ModalContextValue {
   close: () => void;
   titleId: string;
   panelRef: RefObject<HTMLDivElement | null>;
+  overlayZIndex: number;
+  panelZIndex: number;
 }
 
 const ModalContext = createContext<ModalContextValue | null>(null);
@@ -46,6 +54,7 @@ export interface ModalProps {
 
 const ModalRoot = ({ children, className }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [stackIndex, setStackIndex] = useState(0);
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -76,11 +85,29 @@ const ModalRoot = ({ children, className }: ModalProps) => {
     };
   }, [isOpen]);
 
-  const open = () => setIsOpen(true);
+  const open = () => {
+    setStackIndex(acquireModalStackIndex());
+    setIsOpen(true);
+  };
   const close = () => setIsOpen(false);
 
+  const overlayZIndex =
+    BASE_OVERLAY_Z_INDEX + stackIndex * MODAL_STACK_Z_INDEX_STEP;
+  const panelZIndex =
+    BASE_PANEL_Z_INDEX + stackIndex * MODAL_STACK_Z_INDEX_STEP;
+
   return (
-    <ModalContext.Provider value={{ isOpen, open, close, titleId, panelRef }}>
+    <ModalContext.Provider
+      value={{
+        isOpen,
+        open,
+        close,
+        titleId,
+        panelRef,
+        overlayZIndex,
+        panelZIndex,
+      }}
+    >
       <div className={className}>{children}</div>
     </ModalContext.Provider>
   );
@@ -111,13 +138,14 @@ export interface ModalOverlayProps {
 }
 
 const ModalOverlay = ({ className }: ModalOverlayProps) => {
-  const { isOpen } = useModalContext();
+  const { isOpen, overlayZIndex } = useModalContext();
 
   if (!isOpen) return null;
 
   return createPortal(
     <div
-      className={cn("bg-timo-overlay z-modal-overlay fixed inset-0", className)}
+      className={cn("bg-timo-overlay fixed inset-0", className)}
+      style={{ zIndex: overlayZIndex }}
       aria-hidden="true"
     />,
     document.body,
@@ -130,7 +158,7 @@ export interface ModalPanelProps {
 }
 
 const ModalPanel = ({ children, className }: ModalPanelProps) => {
-  const { isOpen, titleId, panelRef } = useModalContext();
+  const { isOpen, titleId, panelRef, panelZIndex } = useModalContext();
 
   if (!isOpen) return null;
 
@@ -140,8 +168,9 @@ const ModalPanel = ({ children, className }: ModalPanelProps) => {
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
+      style={{ zIndex: panelZIndex }}
       className={cn(
-        "z-modal-panel fixed top-1/2 left-1/2 flex w-100 -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-5.5",
+        "fixed top-1/2 left-1/2 flex w-100 -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-5.5",
         className,
       )}
     >
