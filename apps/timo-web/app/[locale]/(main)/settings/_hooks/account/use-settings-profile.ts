@@ -144,6 +144,7 @@ export const useSettingsProfile = () => {
     profileState: {
       name: profile.name,
       googleEmail: profile.email,
+      profileImageUrl: profile.profileImageUrl ?? undefined,
       calendarConnected: profile.calendarConnected,
       language: locale,
       tags: tagItems,
