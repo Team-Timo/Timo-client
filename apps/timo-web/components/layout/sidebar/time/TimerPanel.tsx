@@ -128,11 +128,17 @@ export const TimerPanel = () => {
   const handleStopTimer = () => {
     if (!activeTimer) return;
 
-    stopTimer({ timerId: activeTimer.timerId });
-    changeTodoStatus({
-      todoId: activeTimer.todoId,
-      data: { isCompleted: true, date: formatDateKey(new Date()) },
-    });
+    stopTimer(
+      { timerId: activeTimer.timerId },
+      {
+        onSuccess: () => {
+          changeTodoStatus({
+            todoId: activeTimer.todoId,
+            data: { isCompleted: true, date: formatDateKey(new Date()) },
+          });
+        },
+      },
+    );
   };
 
   const plannedSeconds = activeTimer
