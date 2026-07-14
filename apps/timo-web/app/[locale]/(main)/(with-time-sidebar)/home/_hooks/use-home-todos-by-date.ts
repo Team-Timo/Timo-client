@@ -47,7 +47,7 @@ export const useHomeTodosByDate = (
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: reorderTodo } = useReorderTodo();
   const { mutate: stopTimer } = useStopTimer();
-  const { invalidateHomeView, invalidateTimerState } =
+  const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
 
   const { mutate: startTimer } = useStartTimer({
@@ -100,7 +100,10 @@ export const useHomeTodosByDate = (
     changeTodoStatus(
       { todoId, data: { isCompleted: completed, date: dateKey } },
       {
-        onSuccess: invalidateHomeAndFocus,
+        onSuccess: () => {
+          invalidateHomeAndFocus();
+          invalidateTimeBoxes();
+        },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
         },
@@ -174,7 +177,10 @@ export const useHomeTodosByDate = (
     changeSubtaskStatus(
       { todoId, subtaskId, data: { isCompleted: completed } },
       {
-        onSuccess: invalidateHomeAndFocus,
+        onSuccess: () => {
+          invalidateHomeAndFocus();
+          invalidateTimeBoxes();
+        },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
         },

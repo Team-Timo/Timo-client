@@ -35,7 +35,7 @@ export const useFocusSession = () => {
   const { data: focusView } = useFocusTodo();
   const { data: activeTimer } = useActiveTimer();
 
-  const { invalidateActiveTimer, invalidateHomeView } =
+  const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
@@ -46,6 +46,7 @@ export const useFocusSession = () => {
       onSuccess: () => {
         invalidateActiveTimer();
         invalidateHomeView();
+        invalidateTimeBoxes();
       },
       onError: handleMutationError,
     },
@@ -55,6 +56,7 @@ export const useFocusSession = () => {
       onSuccess: () => {
         invalidateActiveTimer();
         invalidateHomeView();
+        invalidateTimeBoxes();
       },
       onError: handleMutationError,
     },
@@ -64,6 +66,7 @@ export const useFocusSession = () => {
       onSuccess: () => {
         invalidateActiveTimer();
         invalidateHomeView();
+        invalidateTimeBoxes();
       },
       onError: handleMutationError,
     },
@@ -75,6 +78,7 @@ export const useFocusSession = () => {
         invalidateActiveTimer();
         invalidateFocusTodo();
         invalidateHomeView();
+        invalidateTimeBoxes();
       },
       onError: handleMutationError,
     },
@@ -86,15 +90,28 @@ export const useFocusSession = () => {
         invalidateActiveTimer();
         invalidateFocusTodo();
         invalidateHomeView();
+        invalidateTimeBoxes();
       },
       onError: handleMutationError,
     },
   });
   const { mutate: changeTodoStatus } = useChangeTodoStatus({
-    mutation: { onSuccess: invalidateFocusTodo, onError: handleMutationError },
+    mutation: {
+      onSuccess: () => {
+        invalidateFocusTodo();
+        invalidateTimeBoxes();
+      },
+      onError: handleMutationError,
+    },
   });
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus({
-    mutation: { onSuccess: invalidateFocusTodo, onError: handleMutationError },
+    mutation: {
+      onSuccess: () => {
+        invalidateFocusTodo();
+        invalidateTimeBoxes();
+      },
+      onError: handleMutationError,
+    },
   });
 
   const todo = focusView.todo;

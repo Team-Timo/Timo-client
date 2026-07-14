@@ -29,7 +29,7 @@ export const TimerPanel = () => {
   const wasTimeUpRef = useRef(false);
 
   const { data: activeTimer } = useActiveTimer();
-  const { invalidateActiveTimer, invalidateHomeView } =
+  const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
 
   const { mutate: changeStatus } = useChangeStatus({
@@ -37,11 +37,17 @@ export const TimerPanel = () => {
       onSuccess: () => {
         invalidateActiveTimer();
         invalidateHomeView();
+        invalidateTimeBoxes();
       },
     },
   });
   const { mutate: extendTimer } = useExtendTimer({
-    mutation: { onSuccess: invalidateActiveTimer },
+    mutation: {
+      onSuccess: () => {
+        invalidateActiveTimer();
+        invalidateTimeBoxes();
+      },
+    },
   });
   const { mutate: completeTimer } = useCompleteTimer({
     mutation: {
@@ -49,6 +55,7 @@ export const TimerPanel = () => {
         setFeedbackText(response.data?.aiFeedback ?? undefined);
         invalidateActiveTimer();
         invalidateHomeView();
+        invalidateTimeBoxes();
       },
     },
   });
@@ -58,11 +65,17 @@ export const TimerPanel = () => {
         setFeedbackText(response.data?.aiFeedback ?? undefined);
         invalidateActiveTimer();
         invalidateHomeView();
+        invalidateTimeBoxes();
       },
     },
   });
   const { mutate: changeTodoStatus } = useChangeTodoStatus({
-    mutation: { onSuccess: invalidateHomeView },
+    mutation: {
+      onSuccess: () => {
+        invalidateHomeView();
+        invalidateTimeBoxes();
+      },
+    },
   });
 
   const isRunning = activeTimer?.status === "RUNNING";
