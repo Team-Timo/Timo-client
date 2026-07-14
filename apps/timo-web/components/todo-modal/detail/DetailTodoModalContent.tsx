@@ -1,12 +1,9 @@
 import { DeleteIcon, TrashOnIcon } from "@repo/timo-design-system/icons";
-import { CreateButton, TodoToolbar } from "@repo/timo-design-system/ui";
+import { TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import type {
-  TodoDetailResponse,
-  TodoUpdateRequest,
-} from "@/api/generated/models";
+import type { TodoDetailResponse } from "@/api/generated/models";
 import type { TimeSelection } from "@repo/timo-design-system/ui";
 
 import { OverlayModal } from "@/components/modal/OverlayModal";
@@ -35,7 +32,6 @@ export interface DetailTodoModalContentProps {
   todo: TodoDetailResponse;
   onTogglePlay: () => void;
   onDelete: () => void;
-  onSubmit: (data: TodoUpdateRequest) => void;
 }
 
 export const DetailTodoModalContent = ({
@@ -45,7 +41,6 @@ export const DetailTodoModalContent = ({
   todo,
   onTogglePlay,
   onDelete,
-  onSubmit,
 }: DetailTodoModalContentProps) => {
   const t = useTranslations("Home.detailModal");
   const tCreateModal = useTranslations("Home.createModal");
@@ -62,22 +57,9 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
 
-  const handleTogglePlay = () => {
-    onTogglePlay();
-    onClose();
-  };
-
-  const handleDelete = () => {
-    onDelete();
-  };
-
   const handleSelectTime = (nextTime: TimeSelection) => {
     setSelectedTime(nextTime);
     detailTodoForm.selectTime(nextTime);
-  };
-
-  const handleSubmit = () => {
-    onSubmit(detailTodoForm.buildUpdateRequest());
   };
 
   return (
@@ -88,12 +70,7 @@ export const DetailTodoModalContent = ({
       ariaLabel={t("ariaLabel")}
       className="w-124 items-start px-7.5 py-5"
     >
-      <div className="flex w-full justify-between">
-        <CreateButton
-          label={t("save")}
-          disabled={!detailTodoForm.title.trim()}
-          onClick={handleSubmit}
-        />
+      <div className="flex w-full justify-end">
         <button type="button" aria-label={tCommon("close")} onClick={onClose}>
           <DeleteIcon />
         </button>
@@ -129,7 +106,10 @@ export const DetailTodoModalContent = ({
               subtaskInputs={detailTodoForm.subtaskInputs}
               onTitleChange={detailTodoForm.changeTitle}
               onToggleCompleted={detailTodoForm.setIsCompleted}
-              onTogglePlay={handleTogglePlay}
+              onTogglePlay={() => {
+                onTogglePlay();
+                onClose();
+              }}
               onSubtaskInputChange={detailTodoForm.changeSubtaskInput}
               onToggleSubtaskCompleted={detailTodoForm.changeSubtaskCompleted}
               registerSubtaskInputRef={detailTodoForm.registerSubtaskInputRef}
@@ -191,11 +171,7 @@ export const DetailTodoModalContent = ({
                 },
               }}
             />
-            <button
-              type="button"
-              aria-label={t("delete")}
-              onClick={handleDelete}
-            >
+            <button type="button" aria-label={t("delete")} onClick={onDelete}>
               <TrashOnIcon />
             </button>
           </div>
