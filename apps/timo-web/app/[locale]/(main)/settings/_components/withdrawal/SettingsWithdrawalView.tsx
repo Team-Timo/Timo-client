@@ -1,6 +1,6 @@
 import { WarningGrayIcon } from "@repo/timo-design-system/icons";
 
-import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/_types/withdrawal-type";
+import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/_types/withdrawal/withdrawal-type";
 
 export interface SettingsWithdrawalViewProps {
   labels: SettingsWithdrawalLabels;

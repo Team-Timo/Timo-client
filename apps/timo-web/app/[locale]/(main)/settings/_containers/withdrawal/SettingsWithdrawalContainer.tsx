@@ -2,9 +2,9 @@
 
 import { useTranslations } from "next-intl";
 
-import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/_types/withdrawal-type";
+import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/_types/withdrawal/withdrawal-type";
 
-import { SettingsWithdrawalView } from "@/app/[locale]/(main)/settings/_components/SettingsWithdrawalView";
+import { SettingsWithdrawalView } from "@/app/[locale]/(main)/settings/_components/withdrawal/SettingsWithdrawalView";
 
 export const SettingsWithdrawalContainer = () => {
   const t = useTranslations("Settings.withdrawal");

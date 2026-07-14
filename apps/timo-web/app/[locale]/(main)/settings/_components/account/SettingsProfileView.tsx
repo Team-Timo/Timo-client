@@ -1,49 +1,43 @@
-import { PlusIcon } from "@repo/timo-design-system/icons";
-import {
-  CreateButton,
-  PillButton,
-  TagChip,
-  TogglePanel,
-} from "@repo/timo-design-system/ui";
+import { PillButton } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 
 import type {
   SettingsLanguage,
   SettingsProfileLabels,
   SettingsTagItem,
-} from "@/app/[locale]/(main)/settings/_types/profile-type";
+} from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
-export interface SettingsProfileFormProps {
+import { SettingsLanguageSectionContainer } from "@/app/[locale]/(main)/settings/_containers/account/SettingsLanguageSectionContainer";
+import { SettingsLogoutModalContainer } from "@/app/[locale]/(main)/settings/_containers/account/SettingsLogoutModalContainer";
+import { SettingsTagsSectionContainer } from "@/app/[locale]/(main)/settings/_containers/account/SettingsTagsSectionContainer";
+
+export interface SettingsProfileViewProps {
   name: string;
   googleEmail: string;
   isCalendarConnected: boolean;
   language: SettingsLanguage;
   tags: SettingsTagItem[];
-  isSaveDisabled: boolean;
   labels: SettingsProfileLabels;
   onConnectCalendar: () => void;
   onChangeLanguage: (language: SettingsLanguage) => void;
   onAddTag: () => void;
   onRemoveTag: (tagId: number) => void;
   onLogout: () => void;
-  onSave: () => void;
 }
 
-export const SettingsProfileForm = ({
+export const SettingsProfileView = ({
   name,
   googleEmail,
   isCalendarConnected,
   language,
   tags,
-  isSaveDisabled,
   labels,
   onConnectCalendar,
   onChangeLanguage,
   onAddTag,
   onRemoveTag,
   onLogout,
-  onSave,
-}: SettingsProfileFormProps) => {
+}: SettingsProfileViewProps) => {
   return (
     <div className="flex flex-col items-end gap-7.5 pb-15">
       <div className="flex w-full flex-col gap-7.5">
@@ -102,59 +96,25 @@ export const SettingsProfileForm = ({
 
         <hr className="border-timo-gray-500" />
 
-        <section className="flex w-67 flex-col gap-3">
-          <h2 className="typo-headline-b-16 text-timo-gray-900">
-            {labels.languageSection}
-          </h2>
-          <TogglePanel
-            id="settings-language"
-            value={language}
-            onChange={(value) => onChangeLanguage(value as SettingsLanguage)}
-            options={[
-              { value: "ko", label: labels.languageKorean },
-              { value: "en", label: labels.languageEnglish },
-            ]}
-          />
-        </section>
+        <SettingsLanguageSectionContainer
+          language={language}
+          labels={labels}
+          onChangeLanguage={onChangeLanguage}
+        />
 
         <hr className="border-timo-gray-500" />
 
-        <section className="flex w-full flex-col gap-3">
-          <h2 className="typo-headline-b-16 text-timo-gray-900">
-            {labels.tagsSection}
-          </h2>
-          <div className="flex flex-wrap items-center gap-3">
-            {tags.map((tag) => (
-              <TagChip
-                key={tag.id}
-                onRemove={tag.isDefault ? undefined : () => onRemoveTag(tag.id)}
-                removeLabel={labels.removeTag(tag.label)}
-              >
-                {tag.label}
-              </TagChip>
-            ))}
-
-            <PillButton
-              icon={<PlusIcon width={20} height={20} />}
-              onClick={onAddTag}
-            >
-              {labels.addTag}
-            </PillButton>
-          </div>
-        </section>
+        <SettingsTagsSectionContainer
+          tags={tags}
+          labels={labels}
+          onAddTag={onAddTag}
+          onRemoveTag={onRemoveTag}
+        />
 
         <hr className="border-timo-gray-500" />
 
-        <PillButton onClick={onLogout} className="w-fit">
-          {labels.logout}
-        </PillButton>
+        <SettingsLogoutModalContainer labels={labels} onLogout={onLogout} />
       </div>
-
-      <CreateButton
-        label={labels.save}
-        disabled={isSaveDisabled}
-        onClick={onSave}
-      />
     </div>
   );
 };

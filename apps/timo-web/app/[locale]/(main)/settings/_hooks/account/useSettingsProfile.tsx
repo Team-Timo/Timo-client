@@ -5,7 +5,7 @@ import { overlay } from "overlay-kit";
 import { useState } from "react";
 
 import type { BaseResponseUserProfileResponse } from "@/api/generated/models";
-import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/profile-type";
+import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
 import {
   getGetMyProfileQueryKey,
@@ -13,7 +13,7 @@ import {
 } from "@/api/generated/endpoints/user/user";
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { tagCreateDataSchema } from "@/api/tag/tag-schema";
-import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/useSettingsLanguageParam";
+import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/useSettingsLanguageParam";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useDeleteTag } from "@/queries/tag/use-delete-tag";
@@ -29,14 +29,12 @@ const LANGUAGE_REQUEST_MAP: Record<
 };
 
 export const useSettingsProfile = () => {
-  const { language, locale, setLanguage, commitLanguage } =
-    useSettingsLanguageParam();
+  const { locale, commitLanguage } = useSettingsLanguageParam();
 
   const { data: profile } = useMyProfile();
   const [isCalendarConnected, setIsCalendarConnected] = useState(
     profile.calendarConnected,
   );
-  const [isSaving, setIsSaving] = useState(false);
   const [isTagErrorToastOpen, setIsTagErrorToastOpen] = useState(false);
 
   const { mutateAsync: updateLanguage } = useUpdateLanguage();
@@ -117,15 +115,12 @@ export const useSettingsProfile = () => {
     console.log("[Login] 페이지로 이동합니다.");
   };
 
-  const isLanguageDirty = language !== locale;
+  const handleConfirmLanguageChange = async (next: SettingsLanguage) => {
+    if (next === locale) return;
 
-  const handleSave = async () => {
-    if (!isLanguageDirty) return;
-
-    setIsSaving(true);
     try {
       const { data } = await updateLanguage({
-        data: { language: LANGUAGE_REQUEST_MAP[language] },
+        data: { language: LANGUAGE_REQUEST_MAP[next] },
       });
 
       if (data) {
@@ -140,12 +135,10 @@ export const useSettingsProfile = () => {
               : cached,
         );
       }
-      commitLanguage();
+      commitLanguage(next);
     } catch {
       // TODO: 실제 토스트 컴포넌트로 교체
       window.alert("저장에 실패했습니다. 잠시 후 다시 시도해 주세요.");
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -154,17 +147,15 @@ export const useSettingsProfile = () => {
       name: profile.name,
       googleEmail: profile.email,
       isCalendarConnected,
-      language,
+      language: locale,
       tags: tagItems,
-      isSaveDisabled: !isLanguageDirty || isSaving,
     },
     profileActions: {
       onConnectCalendar: handleConnectCalendar,
-      onChangeLanguage: setLanguage,
+      onChangeLanguage: handleConfirmLanguageChange,
       onAddTag: handleAddTag,
       onRemoveTag: handleRemoveTag,
       onLogout: handleLogout,
-      onSave: handleSave,
     },
     isTagErrorToastOpen,
     closeTagErrorToast: () => setIsTagErrorToastOpen(false),

@@ -81,7 +81,18 @@
       "addTag": "Add tag",
       "removeTag": "Delete {tag} tag",
       "logout": "Log out",
-      "save": "Save changes"
+      "languageConfirmTitle": "Change language?",
+      "languageConfirmDescription": "Changing the language will immediately update the display language.",
+      "languageConfirmCancel": "Cancel",
+      "languageConfirmConfirm": "Change",
+      "tagDeleteConfirmTitle": "Delete this tag?",
+      "tagDeleteConfirmDescription": "The tag will be removed from every todo it's applied to.",
+      "tagDeleteConfirmCancel": "Cancel",
+      "tagDeleteConfirmConfirm": "Delete",
+      "logoutConfirmTitle": "Log out?",
+      "logoutConfirmDescription": "Your data stays saved after logging out.\nSign back in anytime to pick up where you left off.",
+      "logoutConfirmCancel": "Cancel",
+      "logoutConfirmConfirm": "Log out"
     },
     "withdrawal": {
       "title": "Withdraw",

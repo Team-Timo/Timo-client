@@ -18,6 +18,17 @@ export interface SettingsProfileLabels {
   tagsSection: string;
   addTag: string;
   logout: string;
-  save: string;
+  languageConfirmTitle: string;
+  languageConfirmDescription: string;
+  languageConfirmCancel: string;
+  languageConfirmConfirm: string;
+  tagDeleteConfirmTitle: string;
+  tagDeleteConfirmDescription: string;
+  tagDeleteConfirmCancel: string;
+  tagDeleteConfirmConfirm: string;
+  logoutConfirmTitle: string;
+  logoutConfirmDescription: string;
+  logoutConfirmCancel: string;
+  logoutConfirmConfirm: string;
   removeTag: (tag: string) => string;
 }
