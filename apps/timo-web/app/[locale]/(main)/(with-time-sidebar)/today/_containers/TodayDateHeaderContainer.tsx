@@ -42,6 +42,7 @@ export const TodayDateHeaderContainer = ({
       <CreateTodoModalContainer
         defaultDate={today}
         buttonVariant="big"
+        totalCount={totalCount}
         onSubmit={handleSubmit}
       />
       <AnimatedToast

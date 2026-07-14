@@ -130,8 +130,8 @@
   },
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
-    "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
-    "todoLimitLine2": "To add a new to-do, please complete an existing one.",
+    "todoLimitLine1": "You can add up to <blue>20 to-dos</blue> per day.",
+    "todoLimitLine2": "To add a new to-do, please delete an existing one.",
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
     "todoCreateFailed": "Failed to create the to-do. Please try again.",
     "todoUpdateFailed": "Failed to update the to-do. Please try again.",
