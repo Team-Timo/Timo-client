@@ -93,7 +93,7 @@ export const TimeSelector = ({
               value={minutesText}
               onChange={handleMinutesChange}
               maxLength={TIME_SEGMENT_DIGIT_LIMIT}
-              aria-label="예상 시간(분) 입력"
+              aria-label="예상 시간(시간) 입력"
               className={cn(
                 "typo-headline-r-14 focus-visible:ring-timo-blue-300 w-4.5 shrink-0 rounded-xs bg-transparent text-right outline-none focus-visible:ring-2",
                 isAiSelected ? "text-white" : "text-timo-black",
@@ -113,7 +113,7 @@ export const TimeSelector = ({
               value={secondsText}
               onChange={handleSecondsChange}
               maxLength={TIME_SEGMENT_DIGIT_LIMIT}
-              aria-label="예상 시간(초) 입력"
+              aria-label="예상 시간(분) 입력"
               className={cn(
                 "typo-headline-r-14 focus-visible:ring-timo-blue-300 w-4.5 shrink-0 rounded-xs bg-transparent text-right outline-none focus-visible:ring-2",
                 isAiSelected ? "text-white" : "text-timo-black",
