@@ -91,10 +91,10 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
             style={{ top: startOffset, height }}
           >
             {showLabel && (
-              <div className="flex items-center gap-1 px-1.5 py-1">
+              <div className="flex h-full items-center gap-1">
                 <span
                   className={cn(
-                    "typo-body-sb-12 min-w-0 truncate",
+                    "typo-body-sb-11 min-w-0 truncate",
                     isRelatedToActiveTimer
                       ? "text-white"
                       : "text-timo-gray-900",
