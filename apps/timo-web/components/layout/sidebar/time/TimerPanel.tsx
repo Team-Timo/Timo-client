@@ -16,6 +16,7 @@ import {
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
 import { useActiveTimer } from "@/hooks/use-active-timer";
+import { useTimerActions } from "@/hooks/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/use-timer-overtime";
 import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
 import { formatDateKey } from "@/utils/date/date";
@@ -84,56 +85,23 @@ export const TimerPanel = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTimeUp]);
 
-  const handleTogglePlay = () => {
-    if (!activeTimer) return;
-
-    changeStatus({
-      timerId: activeTimer.timerId,
-      data: { action: isRunning ? "PAUSE" : "RESUME" },
-    });
-  };
-
-  const handleExtendTimer = (minutes: number) => {
-    if (!activeTimer) return;
-
-    if (isTimeUp) {
-      markOvertimeStart(
-        activeTimer.timerId,
-        activeTimer.plannedSeconds + activeTimer.extendedSeconds,
-      );
-      changeStatus({
-        timerId: activeTimer.timerId,
-        data: { action: "RESUME" },
-      });
-    }
-
-    extendTimer({
-      timerId: activeTimer.timerId,
-      data: { extendMinutes: minutes },
-    });
-  };
-
-  const handleCompleteTimer = () => {
-    if (!activeTimer) return;
-
-    completeTimer({ timerId: activeTimer.timerId });
-  };
-
-  const handleStopTimer = () => {
-    if (!activeTimer) return;
-
-    stopTimer(
-      { timerId: activeTimer.timerId },
-      {
-        onSuccess: () => {
-          changeTodoStatus({
-            todoId: activeTimer.todoId,
-            data: { isCompleted: true, date: formatDateKey(new Date()) },
-          });
-        },
-      },
-    );
-  };
+  const {
+    handleTogglePlay,
+    handleExtendTimer,
+    handleCompleteTimer,
+    handleStopTimer,
+  } = useTimerActions({
+    timer: activeTimer,
+    isRunning,
+    isTimeUp,
+    dateKey: formatDateKey(new Date()),
+    markOvertimeStart,
+    changeStatus,
+    extendTimer,
+    completeTimer,
+    stopTimer,
+    changeTodoStatus,
+  });
 
   const plannedSeconds = activeTimer
     ? activeTimer.plannedSeconds + activeTimer.extendedSeconds

@@ -20,6 +20,7 @@ import {
 import { useFocusTodo } from "@/app/[locale]/(main)/focus/_queries/use-focus-todo";
 import { convertDateToBadgeText } from "@/app/[locale]/(main)/focus/_utils/date";
 import { useActiveTimer } from "@/hooks/use-active-timer";
+import { useTimerActions } from "@/hooks/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/use-timer-overtime";
 import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
@@ -117,55 +118,26 @@ export const useFocusSession = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTimeUp]);
 
-  const handleTogglePlay = () => {
-    if (!todo) return;
-
-    if (!timer) {
-      startTimer({ todoId: todo.todoId });
-      return;
-    }
-
-    changeStatus({
-      timerId: timer.timerId,
-      data: { action: isRunning ? "PAUSE" : "RESUME" },
-    });
-  };
-
-  const handleExtendTimer = (minutes: number) => {
-    if (!timer) return;
-
-    if (isTimeUp) {
-      markOvertimeStart(
-        timer.timerId,
-        timer.plannedSeconds + timer.extendedSeconds,
-      );
-      changeStatus({ timerId: timer.timerId, data: { action: "RESUME" } });
-    }
-
-    extendTimer({ timerId: timer.timerId, data: { extendMinutes: minutes } });
-  };
-
-  const handleCompleteTimer = () => {
-    if (!timer) return;
-
-    completeTimer({ timerId: timer.timerId });
-  };
-
-  const handleStopTimer = () => {
-    if (!timer || !todo) return;
-
-    stopTimer(
-      { timerId: timer.timerId },
-      {
-        onSuccess: () => {
-          changeTodoStatus({
-            todoId: todo.todoId,
-            data: { isCompleted: true, date: focusView.date },
-          });
-        },
-      },
-    );
-  };
+  const {
+    handleTogglePlay,
+    handleExtendTimer,
+    handleCompleteTimer,
+    handleStopTimer,
+  } = useTimerActions({
+    timer,
+    isRunning,
+    isTimeUp,
+    dateKey: focusView.date,
+    markOvertimeStart,
+    changeStatus,
+    extendTimer,
+    completeTimer,
+    stopTimer,
+    changeTodoStatus,
+    onNoTimer: () => {
+      if (todo) startTimer({ todoId: todo.todoId });
+    },
+  });
 
   const handleToggleCompleted = (completed: boolean) => {
     if (!todo) return;
