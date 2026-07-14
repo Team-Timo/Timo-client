@@ -8,7 +8,6 @@ import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/h
 
 import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
 import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
-import { HomeStopCompleteModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeStopCompleteModalContainer";
 import {
   scrollContainerToToday,
   useHomeTodayScrollRef,
@@ -17,6 +16,7 @@ import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/ho
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
+import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
@@ -207,7 +207,7 @@ export const HomeTodoContainer = () => {
         );
       })}
 
-      <HomeStopCompleteModalContainer
+      <StopCompleteModalContainer
         pendingToken={pendingCompleteTodo?.token ?? null}
         plannedMinutes={plannedMinutes}
         actualMinutes={actualMinutes}

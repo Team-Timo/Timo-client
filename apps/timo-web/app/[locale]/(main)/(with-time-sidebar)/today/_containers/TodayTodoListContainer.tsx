@@ -6,12 +6,12 @@ import { useState } from "react";
 
 import type { TodoIconValue } from "@repo/timo-design-system/ui";
 
-import { HomeStopCompleteModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeStopCompleteModalContainer";
 import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayDateHeaderContainer";
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
 import { useToday } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
+import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { formatDate } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
@@ -137,7 +137,7 @@ export const TodayTodoListContainer = () => {
         })}
       </div>
 
-      <HomeStopCompleteModalContainer
+      <StopCompleteModalContainer
         pendingToken={pendingCompleteToken}
         plannedMinutes={plannedMinutes}
         actualMinutes={actualMinutes}
