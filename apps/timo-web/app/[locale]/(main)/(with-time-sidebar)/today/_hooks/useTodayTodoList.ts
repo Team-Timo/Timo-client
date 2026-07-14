@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
 export const useTodayTodoList = (initialTodos: TodayTodo[]) => {
   const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
+
+  useEffect(() => {
+    setTodos(initialTodos);
+  }, [initialTodos]);
 
   const runningTodoId =
     todos.find((todo) => todo.timerStatus === "RUNNING")?.todoId ?? null;
@@ -39,10 +43,6 @@ export const useTodayTodoList = (initialTodos: TodayTodo[]) => {
     setTodos((prev) => prev.filter((todo) => todo.todoId !== todoId));
   };
 
-  const handleAddTodo = (todo: TodayTodo) => {
-    setTodos((prev) => [...prev, todo]);
-  };
-
   const handleSubTodoCheck = (todoId: number, subtaskId: number) => {
     // TODO: API
     setTodos((prev) =>
@@ -67,7 +67,6 @@ export const useTodayTodoList = (initialTodos: TodayTodo[]) => {
     handlePlay,
     handleCheck,
     handleDelete,
-    handleAddTodo,
     handleSubTodoCheck,
   };
 };
