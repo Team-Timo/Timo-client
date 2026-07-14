@@ -17,7 +17,7 @@
       "SAT": "Saturday"
     },
     "tag": {
-      "dailyLife": "Daily life",
+      "dailyLife": "Daily",
       "work": "Work",
       "exercise": "Exercise",
       "assignment": "Assignment",
@@ -46,7 +46,7 @@
       "dateLabel": "Date",
       "timeLabel": "Time",
       "tagLabel": "Tag",
-      "addTag": "Add",
+      "addTag": "Add tag",
       "create": "Create",
       "repeatDaily": "Daily",
       "repeatWeekly": "Weekly",
@@ -56,6 +56,7 @@
     },
     "detailModal": {
       "ariaLabel": "To-do details",
+      "save": "Save",
       "delete": "Delete to-do",
       "repeatFrequencyHeading": "Repeat",
       "repeatDayLabel": "day(s)"
@@ -137,6 +138,7 @@
     "todoLimitLine2": "To add a new to-do, please delete an existing one.",
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
     "todoCreateFailed": "Failed to create the to-do. Please try again.",
+    "todoUpdateFailed": "Failed to update the to-do. Please try again.",
     "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again.",
     "tagCreateFailed": "Failed to create the tag. Please try again.",
     "tagActionFailed": "Failed to update the tag. Please try again.",

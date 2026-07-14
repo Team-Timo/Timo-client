@@ -9,7 +9,7 @@ import type { CreateTodoRequest } from "@/api/common/todo-schema";
 
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { CreateTodoModalContent } from "@/components/todo-modal/create/CreateTodoModalContent";
-import { useCreateTodoSubmit } from "@/hooks/todo-modal/use-create-todo-submit";
+import { useCreateTodoSubmit } from "@/hooks/todo-modal/create/use-create-todo-submit";
 
 const MAX_TODO_COUNT = 20;
 

@@ -8,7 +8,7 @@ import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sideb
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
 import { useToday } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today";
-import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
+import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { formatDate } from "@/utils/date/date";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
@@ -46,7 +46,8 @@ export const TodayTodoListContainer = () => {
         {todos.map((todo) => (
           <DetailTodoModalContainer
             key={todo.todoId}
-            todo={todo}
+            todoId={todo.todoId}
+            date={todo.date.slice(0, 10)}
             onTogglePlay={() => handlePlay(todo.todoId)}
             onDelete={() => handleDelete(todo.todoId)}
           >

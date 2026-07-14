@@ -17,7 +17,7 @@ import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/ho
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
+import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
@@ -151,7 +151,8 @@ export const HomeTodoContainer = () => {
                   return (
                     <DetailTodoModalContainer
                       key={todo.todoId}
-                      todo={todo}
+                      todoId={todo.todoId}
+                      date={dateKey}
                       onTogglePlay={() =>
                         handleTogglePlay(dateKey, todo.todoId)
                       }

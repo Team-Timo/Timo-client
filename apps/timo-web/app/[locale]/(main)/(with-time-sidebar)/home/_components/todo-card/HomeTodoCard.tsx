@@ -22,7 +22,7 @@ import type {
   TodoPriorityTypes,
   TodoTimerStatusTypes,
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
-import type { KeyboardEvent, MouseEvent } from "react";
+import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
 import { convertDurationToTimeText } from "@/utils/todo/todo-time";
 
@@ -103,6 +103,17 @@ export const HomeTodoCard = ({
     onClickTodo();
   };
 
+  const stopInteractiveEvent = (
+    event: MouseEvent<HTMLButtonElement> | PointerEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation();
+  };
+
+  const handlePlayClick = (event: MouseEvent<HTMLButtonElement>) => {
+    stopInteractiveEvent(event);
+    onTogglePlay();
+  };
+
   const titleRow = (
     <div className="flex w-full items-center justify-between gap-2">
       <div className="flex min-w-0 flex-1 items-center gap-1">
@@ -120,7 +131,8 @@ export const HomeTodoCard = ({
         variant={isRunning ? "stop" : "play"}
         size="sm"
         disabled={isCompleted}
-        onClick={onTogglePlay}
+        onClick={handlePlayClick}
+        onPointerDown={stopInteractiveEvent}
       >
         {isCompleted ? (
           <PlayDisabledIcon />

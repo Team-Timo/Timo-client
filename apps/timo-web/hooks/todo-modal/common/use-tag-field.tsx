@@ -3,8 +3,7 @@ import { overlay } from "overlay-kit";
 import { useState } from "react";
 import { useController } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
-import type { Control } from "react-hook-form";
+import type { Control, FieldValues, Path } from "react-hook-form";
 
 import { tagCreateDataSchema } from "@/api/common/tag-schema";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
@@ -14,13 +13,31 @@ import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 const MAX_TAG_COUNT = 8;
 
-export interface UseTagFieldParams {
-  control: Control<CreateTodoRequest>;
+export interface UseTagFieldParams<TFieldValues extends FieldValues> {
+  control: Control<TFieldValues>;
+  name?: Path<TFieldValues>;
 }
 
-export const useTagField = ({ control }: UseTagFieldParams) => {
+export interface UseTagFieldResult {
+  tagOptions: Array<{ id: number; label: string }>;
+  tagLabels: string[];
+  selectedTagOption?: { id: number; label: string };
+  selectedTagId: number | null;
+  selectedTagLabel?: string;
+  isTagLimitToastOpen: boolean;
+  closeTagLimitToast: () => void;
+  isCreateTagErrorToastOpen: boolean;
+  closeCreateTagErrorToast: () => void;
+  handleSelectTag: (label: string) => void;
+  handleAddTagClick: () => void;
+}
+
+export const useTagField = <TFieldValues extends FieldValues>({
+  control,
+  name = "tagId" as Path<TFieldValues>,
+}: UseTagFieldParams<TFieldValues>): UseTagFieldResult => {
   const tCommon = useTranslations("Common");
-  const { field } = useController({ name: "tagId", control });
+  const { field } = useController({ name, control });
   const [isTagLimitToastOpen, setIsTagLimitToastOpen] =
     useState<boolean>(false);
   const [isCreateTagErrorToastOpen, setIsCreateTagErrorToastOpen] =
@@ -90,6 +107,7 @@ export const useTagField = ({ control }: UseTagFieldParams) => {
     tagOptions,
     tagLabels,
     selectedTagOption,
+    selectedTagId: typeof field.value === "number" ? field.value : null,
     selectedTagLabel: selectedTagOption?.label,
     isTagLimitToastOpen,
     closeTagLimitToast: () => setIsTagLimitToastOpen(false),
