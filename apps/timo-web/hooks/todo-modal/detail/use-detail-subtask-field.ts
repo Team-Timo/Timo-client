@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import type { TodoSubtask } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { TodoSubtask } from "@/api/common/todo-schema";
 import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type { KeyboardEvent } from "react";
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import type { TodoTimerStatusTypes } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { TodoTimerStatusTypes } from "@/api/common/todo-schema";
 import type { ReactNode } from "react";
 
 import {
