@@ -100,6 +100,18 @@ export const DetailTodoModalContent = ({
       }),
     [detailTodoForm.memo, detailTodoForm.subtaskInputs, detailTodoForm.title],
   );
+  const lastSubmittedTextUpdateSignatureRef = useRef(textUpdateSignature);
+
+  const submitTextUpdate = useCallback(() => {
+    if (!detailTodoForm.title.trim()) return;
+    if (lastSubmittedTextUpdateSignatureRef.current === textUpdateSignature) {
+      return;
+    }
+
+    latestOnUpdateRef.current(latestBuildTextUpdateRequestRef.current());
+    lastSubmittedTextUpdateSignatureRef.current = textUpdateSignature;
+  }, [detailTodoForm.title, textUpdateSignature]);
+
   useEffect(() => {
     latestOnUpdateRef.current = onUpdate;
   }, [onUpdate]);
@@ -116,14 +128,18 @@ export const DetailTodoModalContent = ({
       return;
     }
 
-    if (!detailTodoForm.title.trim()) return;
-
-    const updateTimer = window.setTimeout(() => {
-      latestOnUpdateRef.current(latestBuildTextUpdateRequestRef.current());
-    }, TEXT_UPDATE_DEBOUNCE_MS);
+    const updateTimer = window.setTimeout(
+      submitTextUpdate,
+      TEXT_UPDATE_DEBOUNCE_MS,
+    );
 
     return () => window.clearTimeout(updateTimer);
-  }, [detailTodoForm.title, isOpen, textUpdateSignature]);
+  }, [isOpen, submitTextUpdate]);
+
+  const handleClose = () => {
+    submitTextUpdate();
+    onClose();
+  };
 
   const updateTodo = (updateData: TodoUpdateRequest) => {
     if ("title" in updateData && !updateData.title?.trim()) return;
@@ -207,13 +223,17 @@ export const DetailTodoModalContent = ({
   return (
     <OverlayModal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       onExited={onExited}
       ariaLabel={t("ariaLabel")}
       className="w-124 items-start px-7.5 py-5"
     >
       <div className="flex w-full justify-end">
-        <button type="button" aria-label={tCommon("close")} onClick={onClose}>
+        <button
+          type="button"
+          aria-label={tCommon("close")}
+          onClick={handleClose}
+        >
           <DeleteIcon />
         </button>
       </div>
