@@ -115,7 +115,8 @@
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
     "todoCreateFailed": "Failed to create the to-do. Please try again.",
     "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again.",
-    "focusActionFailed": "Failed to process the request. Please try again."
+    "focusActionFailed": "Failed to process the request. Please try again.",
+    "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first."
   },
   "Login": {
     "animationLabel": "Login animation",

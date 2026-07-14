@@ -16,6 +16,7 @@ import {
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
+import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
@@ -35,6 +36,7 @@ const isTagLabelKey = (value: string): value is TagLabelKey =>
 
 export const HomeTodoContainer = () => {
   const tCommon = useTranslations("Common");
+  const tToast = useTranslations("Toast");
   const { isWeekView, referenceDate } = useHomeViewMode();
 
   const scrollRef = useHomeTodayScrollRef<HTMLDivElement>();
@@ -50,11 +52,13 @@ export const HomeTodoContainer = () => {
     activeTimer,
     pendingCompleteTodo,
     feedbackText,
+    isTimerRunningToastOpen,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleReorderTodo,
     handleConfirmPendingComplete,
+    handleCloseTimerRunningToast,
   } = useHomeTodosByDate(days);
 
   useEffect(() => {
@@ -173,6 +177,12 @@ export const HomeTodoContainer = () => {
         actualMinutes={actualMinutes}
         feedbackText={feedbackText}
         onConfirm={handleConfirmPendingComplete}
+      />
+
+      <AnimatedToast
+        isOpen={isTimerRunningToastOpen}
+        onClose={handleCloseTimerRunningToast}
+        message={tToast("timerAlreadyRunning")}
       />
     </div>
   );

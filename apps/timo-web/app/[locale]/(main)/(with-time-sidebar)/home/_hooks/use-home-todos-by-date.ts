@@ -34,6 +34,7 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
   const [pendingCompleteTodo, setPendingCompleteTodo] =
     useState<PendingCompleteTodo | null>(null);
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
+  const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const queryClient = useQueryClient();
   const { data: activeTimer } = useActiveTimer();
@@ -154,6 +155,12 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
       return;
     }
 
+    // 다른 투두의 타이머가 이미 실행/일시정지 중이면 새 타이머를 시작할 수 없다(409)
+    if (activeTimer) {
+      setIsTimerRunningToastOpen(true);
+      return;
+    }
+
     startTimer({ todoId });
   };
 
@@ -218,10 +225,12 @@ export const useHomeTodosByDate = (apiDays: HomeViewDay[]) => {
     activeTimer,
     pendingCompleteTodo,
     feedbackText,
+    isTimerRunningToastOpen,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,
     handleReorderTodo,
     handleConfirmPendingComplete,
+    handleCloseTimerRunningToast: () => setIsTimerRunningToastOpen(false),
   };
 };

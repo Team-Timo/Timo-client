@@ -115,7 +115,8 @@
     "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요.",
     "todoCreateFailed": "투두 생성에 실패했어요. 다시 시도해 주세요.",
     "aiDurationRecommendFailed": "AI 추천 소요 시간을 가져오지 못했어요. 다시 시도해 주세요.",
-    "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요."
+    "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요.",
+    "timerAlreadyRunning": "다른 투두의 타이머가 이미 실행 중이에요. 먼저 종료해 주세요."
   },
   "Login": {
     "animationLabel": "로그인 애니메이션",
