@@ -65,10 +65,12 @@ export const HomeTodoContainer = () => {
 
   const handleConfirmPendingComplete = () => {
     if (!pendingCompleteTodo) return;
+    
     confirmStopAndComplete(
       pendingCompleteTodo.dateKey,
       pendingCompleteTodo.todoId,
     );
+    
     setPendingCompleteTodo(null);
   };
 
