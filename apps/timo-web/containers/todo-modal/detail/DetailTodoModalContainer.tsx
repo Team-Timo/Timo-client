@@ -30,7 +30,9 @@ export const DetailTodoModalContainer = ({
   const tToast = useTranslations("Toast");
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [isUpdateErrorToastOpen, setIsUpdateErrorToastOpen] = useState(false);
+  const [updateErrorMessage, setUpdateErrorMessage] = useState<string | null>(
+    null,
+  );
   const { data, isError } = useGetTodoDetail(
     todoId,
     { date },
@@ -66,7 +68,11 @@ export const DetailTodoModalContainer = ({
         data: updateData,
       },
       {
-        onError: () => setIsUpdateErrorToastOpen(true),
+        onError: (error) => {
+          setUpdateErrorMessage(
+            error.response?.data.message ?? tToast("todoUpdateFailed"),
+          );
+        },
       },
     );
   };
@@ -88,9 +94,9 @@ export const DetailTodoModalContainer = ({
       ) : null}
 
       <AnimatedToast
-        isOpen={isUpdateErrorToastOpen}
-        onClose={() => setIsUpdateErrorToastOpen(false)}
-        message={tToast("todoUpdateFailed")}
+        isOpen={updateErrorMessage !== null}
+        onClose={() => setUpdateErrorMessage(null)}
+        message={updateErrorMessage ?? ""}
       />
     </>
   );

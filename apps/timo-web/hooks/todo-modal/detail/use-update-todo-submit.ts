@@ -2,7 +2,8 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 
-import type { TodoUpdateRequest } from "@/api/generated/models";
+import type { ErrorType } from "@/api/client/custom-instance";
+import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
 
 import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import {
@@ -18,7 +19,7 @@ export interface UpdateTodoSubmitParams {
 
 export interface UpdateTodoSubmitHandlers {
   onSuccess?: () => void;
-  onError?: () => void;
+  onError?: (error: ErrorType<ErrorDto>) => void;
 }
 
 export const useUpdateTodoSubmit = () => {
