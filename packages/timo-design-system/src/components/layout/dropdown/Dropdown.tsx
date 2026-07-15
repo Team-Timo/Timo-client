@@ -59,6 +59,14 @@ const DropdownRoot = ({
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
+  const setOpenState = (next: boolean) => {
+    setIsOpen(next);
+    onOpenChange?.(next);
+  };
+
+  const toggle = () => setOpenState(!isOpen);
+  const close = () => setOpenState(false);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -66,13 +74,13 @@ const DropdownRoot = ({
 
     const handleOutsideClick = (event: MouseEvent) => {
       if (!rootRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
+        close();
       }
     };
 
     const handleEscapeKeydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsOpen(false);
+        close();
         triggerRef.current?.focus();
       }
     };
@@ -85,14 +93,8 @@ const DropdownRoot = ({
       document.removeEventListener("mousedown", handleOutsideClick);
       document.removeEventListener("keydown", handleEscapeKeydown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
-
-  const toggle = () => {
-    const next = !isOpen;
-    setIsOpen(next);
-    onOpenChange?.(next);
-  };
-  const close = () => setIsOpen(false);
 
   return (
     <DropdownContext.Provider

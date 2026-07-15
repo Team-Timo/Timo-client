@@ -14,8 +14,14 @@ export const useIconField = ({ control }: UseIconFieldParams) => {
 
   const openIconPanel = () => setIsIconPanelOpen(true);
   const toggleIconPanel = () => setIsIconPanelOpen((prev) => !prev);
-  const selectIcon = (value: TodoIcon) => field.onChange(value);
-  const removeIcon = () => field.onChange(null);
+  const selectIcon = (value: TodoIcon) => {
+    field.onChange(value);
+    setIsIconPanelOpen(false);
+  };
+  const removeIcon = () => {
+    field.onChange(null);
+    setIsIconPanelOpen(false);
+  };
 
   return {
     icon: field.value,
