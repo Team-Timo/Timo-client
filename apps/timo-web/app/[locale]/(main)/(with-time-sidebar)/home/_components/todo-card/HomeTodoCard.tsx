@@ -49,6 +49,7 @@ export interface HomeTodoCardProps {
   hasMemo: boolean;
   isRepeated: boolean;
   timerStatus: TodoTimerStatusTypes;
+  isPlayHighlighted: boolean;
   subtaskTitle?: string;
   isSubtaskCompleted?: boolean;
   onClickTodo?: () => void;
@@ -67,6 +68,7 @@ export const HomeTodoCard = ({
   hasMemo,
   isRepeated,
   timerStatus,
+  isPlayHighlighted,
   subtaskTitle,
   isSubtaskCompleted = false,
   onClickTodo,
@@ -137,14 +139,17 @@ export const HomeTodoCard = ({
           variant={isRunning ? "stop" : "play"}
           size="sm"
           disabled={isCompleted}
+          active={isPlayHighlighted}
           onClick={handlePlayClick}
         >
           {isCompleted ? (
             <PlayDisabledIcon />
           ) : isRunning ? (
             <StopIcon />
-          ) : (
+          ) : isPlayHighlighted ? (
             <PlayIcon />
+          ) : (
+            <PlayDisabledIcon />
           )}
         </PlayButton>
       </div>

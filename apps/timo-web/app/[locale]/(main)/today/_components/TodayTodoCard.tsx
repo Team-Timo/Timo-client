@@ -49,6 +49,7 @@ export interface TodayTodoCardProps {
   isDone: boolean;
   isDimmed: boolean;
   isPlaying: boolean;
+  isPlayHighlighted: boolean;
   icon?: ReactNode;
   subTodos: SubTodo[];
   toolbar: TodayTodoCardToolbar;
@@ -74,6 +75,7 @@ export const TodayTodoCard = ({
   isDone,
   isDimmed,
   isPlaying,
+  isPlayHighlighted,
   icon,
   subTodos,
   toolbar,
@@ -129,6 +131,7 @@ export const TodayTodoCard = ({
             variant={isPlaying ? "stop" : "play"}
             size="lg"
             disabled={isDone}
+            active={isPlayHighlighted}
             onClick={(event) => {
               stopPlayEvent(event);
               onPlay();
@@ -139,8 +142,10 @@ export const TodayTodoCard = ({
               <PlayDisabledIcon width={24} height={24} />
             ) : isPlaying ? (
               <StopIcon width={24} height={24} />
-            ) : (
+            ) : isPlayHighlighted ? (
               <PlayIcon width={24} height={24} />
+            ) : (
+              <PlayDisabledIcon width={24} height={24} />
             )}
           </PlayButton>
         </div>
@@ -152,6 +157,7 @@ export const TodayTodoCard = ({
             <li key={sub.id} className="flex items-center gap-2">
               <div
                 role="none"
+                className="inline-flex items-center"
                 onClick={stopPropagation}
                 onKeyDown={stopPropagation}
               >
@@ -160,7 +166,12 @@ export const TodayTodoCard = ({
                   onChange={() => onSubTodoCheck(sub.id)}
                 />
               </div>
-              <span className={cn("typo-body-r-12", style.subText)}>
+              <span
+                className={cn(
+                  "typo-body-r-12",
+                  sub.isDone ? "text-timo-gray-500" : style.subText,
+                )}
+              >
                 {sub.text}
               </span>
             </li>

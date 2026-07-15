@@ -5,7 +5,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto } from "@/api/generated/models";
 
-import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
+import {
+  getGetHomeQueryKey,
+  getGetTodayQueryKey,
+} from "@/api/generated/endpoints/home/home";
 import { useDeleteTodo } from "@/api/generated/endpoints/todo/todo";
 
 export interface DeleteTodoSubmitHandlers {
@@ -26,6 +29,7 @@ export const useDeleteTodoSubmit = () => {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+          queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
           onSuccess();
         },
         onError,

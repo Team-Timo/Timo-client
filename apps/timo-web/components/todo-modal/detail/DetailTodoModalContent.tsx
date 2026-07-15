@@ -36,6 +36,7 @@ export interface DetailTodoModalContentProps {
   onClose: () => void;
   onExited: () => void;
   todo: TodoDetailResponse;
+  isPlayHighlighted: boolean;
   onTogglePlay: () => void;
   onToggleCompleted: (completed: boolean) => void;
   onDelete: () => void;
@@ -48,6 +49,7 @@ export const DetailTodoModalContent = ({
   onClose,
   onExited,
   todo,
+  isPlayHighlighted,
   onTogglePlay,
   onToggleCompleted,
   onDelete,
@@ -67,6 +69,7 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
   const displayTime = convertApiDurationToClockTimeText(detailTodoForm.time);
+  const canUpdateTodo = timerStatus === "STOPPED";
   const patchHandlers = useDetailTodoPatchHandlers({
     form: detailTodoForm,
     onUpdate,
@@ -116,7 +119,7 @@ export const DetailTodoModalContent = ({
             </p>
           </div>
 
-          <div>
+          <div className={canUpdateTodo ? undefined : "pointer-events-none"}>
             <TodoIconField
               icon={iconField.icon}
               isIconPanelOpen={iconField.isIconPanelOpen}
@@ -135,7 +138,9 @@ export const DetailTodoModalContent = ({
             <DetailTodoTaskFields
               titleValue={detailTodoForm.title}
               isCompleted={todo.completed}
+              disabled={!canUpdateTodo}
               timerStatus={timerStatus}
+              isPlayHighlighted={isPlayHighlighted}
               subtaskInputs={detailTodoForm.subtaskInputs}
               onTitleChange={detailTodoForm.changeTitle}
               onToggleCompleted={onToggleCompleted}
@@ -150,7 +155,13 @@ export const DetailTodoModalContent = ({
           </div>
 
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 py-3">
+            <div
+              className={
+                canUpdateTodo
+                  ? "flex items-center gap-2 py-3"
+                  : "pointer-events-none flex items-center gap-2 py-3"
+              }
+            >
               <TodoToolbar
                 dateLabel={formatShortDateLabel(detailTodoForm.date)}
                 date={detailTodoForm.date}
@@ -217,6 +228,7 @@ export const DetailTodoModalContent = ({
               placeholder={tCreateModal("notePlaceholder")}
               onChange={detailTodoForm.setMemo}
               maxLength={DETAIL_TODO_MEMO_MAX_LENGTH}
+              disabled={!canUpdateTodo}
             />
           </div>
         </div>

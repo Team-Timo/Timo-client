@@ -20,6 +20,7 @@ export interface DetailTodoTaskFieldsProps {
   isCompleted: boolean;
   disabled?: boolean;
   timerStatus: TodoDetailResponseTimerStatus;
+  isPlayHighlighted: boolean;
   subtaskInputs: DetailTodoSubtaskInput[];
   onTitleChange: (value: string) => void;
   onToggleCompleted: (completed: boolean) => void;
@@ -40,6 +41,7 @@ export const DetailTodoTaskFields = ({
   isCompleted,
   disabled = false,
   timerStatus,
+  isPlayHighlighted,
   subtaskInputs,
   onTitleChange,
   onToggleCompleted,
@@ -85,6 +87,7 @@ export const DetailTodoTaskFields = ({
             variant={isRunning ? "stop" : "play"}
             size="lg"
             disabled={isCompleted}
+            active={isPlayHighlighted}
             onClick={handlePlayClick}
             onPointerDown={stopInteractiveEvent}
           >
@@ -92,8 +95,10 @@ export const DetailTodoTaskFields = ({
               <PlayDisabledIcon width={24} height={24} />
             ) : isRunning ? (
               <StopIcon width={24} height={24} />
-            ) : (
+            ) : isPlayHighlighted ? (
               <PlayIcon width={24} height={24} />
+            ) : (
+              <PlayDisabledIcon width={24} height={24} />
             )}
           </PlayButton>
         </div>

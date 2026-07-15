@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { TodoTimerStatusTypes } from "@/api/common/todo-schema";
 import type { ReactNode } from "react";
@@ -17,6 +17,7 @@ export interface TodayTodoCardContainerProps {
   subTodos: SubTodo[];
   toolbar: TodayTodoCardToolbar;
   timerStatus: TodoTimerStatusTypes;
+  isPlayHighlighted: boolean;
   icon?: ReactNode;
   onCardClick?: () => void;
   onToggleCompleted?: (completed: boolean) => void;
@@ -31,12 +32,17 @@ export const TodayTodoCardContainer = ({
   subTodos,
   toolbar,
   timerStatus,
+  isPlayHighlighted,
   onCardClick,
   onToggleCompleted,
   onTogglePlay,
   onSubTodoCheck,
 }: TodayTodoCardContainerProps) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    if (isCompleted) setIsHovered(false);
+  }, [isCompleted]);
 
   const isPlaying = timerStatus === "RUNNING";
   const isDimmed = isCompleted && !isHovered;
@@ -47,6 +53,7 @@ export const TodayTodoCardContainer = ({
       isDone={isCompleted}
       isDimmed={isDimmed}
       isPlaying={isPlaying}
+      isPlayHighlighted={isPlayHighlighted}
       icon={icon}
       subTodos={subTodos}
       toolbar={toolbar}
