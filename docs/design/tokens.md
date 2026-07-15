@@ -48,9 +48,10 @@ Tailwind 클래스 사용 예: `bg-timo-blue-50`, `text-timo-gray-900`
 
 ### Base
 
-| 토큰         | CSS 변수             | 값        |
-| ------------ | -------------------- | --------- |
-| `timo-black` | `--color-timo-black` | `#121212` |
+| 토큰           | CSS 변수               | 값                 |
+| -------------- | ---------------------- | ------------------ |
+| `timo-black`   | `--color-timo-black`   | `#121212`          |
+| `timo-overlay` | `--color-timo-overlay` | `rgb(0 0 0 / 10%)` |
 
 ## Typography
 
@@ -94,3 +95,33 @@ Tailwind 클래스 사용 예: `typo-headline-b-24`, `typo-body-r-12`
 | 토큰           | 클래스              | 크기 | 굵기 |
 | -------------- | ------------------- | ---- | ---- |
 | `caption-r-10` | `typo-caption-r-10` | 10px | 400  |
+
+## Radius
+
+소스: `packages/tailwind-config/tokens/radius.css`  
+Tailwind 클래스 사용 예: `rounded-4`, `rounded-8`, `rounded-12`
+
+| 토큰        | CSS 변수      | 값     |
+| ----------- | ------------- | ------ |
+| `radius-4`  | `--radius-4`  | `4px`  |
+| `radius-8`  | `--radius-8`  | `8px`  |
+| `radius-12` | `--radius-12` | `12px` |
+
+## Shadow
+
+소스: `packages/tailwind-config/theme.css`  
+Tailwind 클래스 사용 예: `shadow-timo`
+
+| 토큰          | CSS 변수        | 값                                    |
+| ------------- | --------------- | ------------------------------------- |
+| `shadow-timo` | `--shadow-timo` | `0px 0px 3px 0px rgba(0, 0, 0, 0.12)` |
+
+## Z-Index
+
+소스: `packages/tailwind-config/theme.css`  
+모달 오버레이·패널이 겹칠 때 스택 순서를 고정하기 위한 토큰입니다.
+
+| 토큰                    | CSS 변수                  | 값   |
+| ----------------------- | ------------------------- | ---- |
+| `z-index-modal-overlay` | `--z-index-modal-overlay` | `40` |
+| `z-index-modal-panel`   | `--z-index-modal-panel`   | `50` |
