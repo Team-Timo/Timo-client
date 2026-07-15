@@ -13,6 +13,7 @@ export interface CreateTodoTaskFieldsProps {
   titleValue: string;
   titlePlaceholder: string;
   onTitleChange: (value: string) => void;
+  onTitleEnter: () => void;
   subtaskInputs: SubtaskInputEntry[];
   subtaskPlaceholder: string;
   registerSubtaskInputRef: (
@@ -29,6 +30,7 @@ export const CreateTodoTaskFields = ({
   titleValue,
   titlePlaceholder,
   onTitleChange,
+  onTitleEnter,
   subtaskInputs,
   subtaskPlaceholder,
   registerSubtaskInputRef,
@@ -43,16 +45,19 @@ export const CreateTodoTaskFields = ({
           onChange={() => {}}
           className="cursor-default"
         />
-        <textarea
+        <input
+          type="text"
           value={titleValue}
-          ref={resizeTextarea}
-          onChange={(event) => {
-            onTitleChange(event.target.value);
-            resizeTextarea(event.currentTarget);
+          onChange={(event) => onTitleChange(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter") return;
+            if (event.nativeEvent.isComposing) return;
+
+            event.preventDefault();
+            onTitleEnter();
           }}
           placeholder={titlePlaceholder}
-          rows={1}
-          className="typo-headline-b-14 text-timo-black min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
+          className="typo-headline-b-14 text-timo-black min-w-0 flex-1 outline-none"
         />
       </div>
 
