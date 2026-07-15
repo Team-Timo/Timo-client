@@ -1,11 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { overlay } from "overlay-kit";
 import { useState } from "react";
 
 import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/_types/withdrawal/withdrawal-type";
 
 import { SettingsWithdrawalView } from "@/app/[locale]/(main)/settings/_components/withdrawal/SettingsWithdrawalView";
+import { SettingsWithdrawModalContainer } from "@/app/[locale]/(main)/settings/_containers/withdrawal/SettingsWithdrawModalContainer";
 import { useWithdrawAction } from "@/app/[locale]/(main)/settings/_queries/withdrawal/use-withdraw";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
@@ -29,15 +31,19 @@ export const SettingsWithdrawalContainer = () => {
 
   const handleWithdraw = () => {
     if (isPending) return;
-    // TODO: 실제 확인 모달로 교체
-    const confirmed = window.confirm(t("confirmMessage"));
-    if (!confirmed) return;
 
-    withdrawMutate(undefined, {
-      onError: () => {
-        setIsErrorToastOpen(true);
-      },
-    });
+    overlay.open(({ isOpen, close, unmount }) => (
+      <SettingsWithdrawModalContainer
+        isOpen={isOpen}
+        onClose={close}
+        onExited={unmount}
+        onWithdraw={() =>
+          withdrawMutate(undefined, {
+            onError: () => setIsErrorToastOpen(true),
+          })
+        }
+      />
+    ));
   };
 
   return (
