@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "timo",
+    "description": "Manage your day with clear timeboxes."
+  },
   "Navigation": {
     "home": "Home",
     "today": "Today",

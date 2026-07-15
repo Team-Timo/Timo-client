@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "timo",
+    "description": "흩어진 시간을, 실행 가능한 흐름으로."
+  },
   "Navigation": {
     "home": "홈",
     "today": "오늘",
