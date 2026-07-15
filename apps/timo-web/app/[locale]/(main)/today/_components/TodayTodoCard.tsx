@@ -13,7 +13,7 @@ import {
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 
-import type { KeyboardEvent, ReactNode } from "react";
+import type { KeyboardEvent, MouseEvent, PointerEvent, ReactNode } from "react";
 
 const CARD_STYLE = {
   active: {
@@ -62,6 +62,12 @@ export interface TodayTodoCardProps {
 
 const stopPropagation = (e: { stopPropagation: () => void }) =>
   e.stopPropagation();
+
+const stopPlayEvent = (
+  event: MouseEvent<HTMLButtonElement> | PointerEvent<HTMLButtonElement>,
+) => {
+  event.stopPropagation();
+};
 
 export const TodayTodoCard = ({
   title,
@@ -123,7 +129,11 @@ export const TodayTodoCard = ({
             variant={isPlaying ? "stop" : "play"}
             size="lg"
             disabled={isDone}
-            onClick={onPlay}
+            onClick={(event) => {
+              stopPlayEvent(event);
+              onPlay();
+            }}
+            onPointerDown={stopPlayEvent}
           >
             {isDone ? (
               <PlayDisabledIcon width={24} height={24} />

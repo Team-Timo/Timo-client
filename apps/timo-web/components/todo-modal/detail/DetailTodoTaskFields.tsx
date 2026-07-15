@@ -7,7 +7,7 @@ import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 
 import type { TodoDetailResponseTimerStatus } from "@/api/generated/models";
 import type { DetailTodoSubtaskInput } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
 const resizeTextarea = (element: HTMLTextAreaElement | null) => {
   if (!element) return;
@@ -49,6 +49,19 @@ export const DetailTodoTaskFields = ({
   registerSubtaskInputRef,
   onSubtaskInputKeyDown,
 }: DetailTodoTaskFieldsProps) => {
+  const isRunning = timerStatus === "RUNNING";
+
+  const stopInteractiveEvent = (
+    event: MouseEvent<HTMLButtonElement> | PointerEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation();
+  };
+
+  const handlePlayClick = (event: MouseEvent<HTMLButtonElement>) => {
+    stopInteractiveEvent(event);
+    onTogglePlay();
+  };
+
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-full items-center justify-between">
@@ -69,14 +82,15 @@ export const DetailTodoTaskFields = ({
 
         <div className="shrink-0">
           <PlayButton
-            variant={timerStatus === "RUNNING" ? "stop" : "play"}
+            variant={isRunning ? "stop" : "play"}
             size="lg"
             disabled={isCompleted}
-            onClick={onTogglePlay}
+            onClick={handlePlayClick}
+            onPointerDown={stopInteractiveEvent}
           >
             {isCompleted ? (
               <PlayDisabledIcon width={24} height={24} />
-            ) : timerStatus === "RUNNING" ? (
+            ) : isRunning ? (
               <StopIcon width={24} height={24} />
             ) : (
               <PlayIcon width={24} height={24} />
