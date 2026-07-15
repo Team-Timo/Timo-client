@@ -104,7 +104,7 @@ export const todoSchema = z.object({
   durationSeconds: z.number().default(0),
   priority: todoPrioritySchema.nullish().transform((v) => v ?? undefined),
   tag: todoTagSchema.nullish().transform((v) => v ?? undefined),
-  hasMemo: z.boolean(),
+  hasSubtask: z.boolean(),
   isRepeated: z.boolean(),
   timerStatus: todoTimerStatusSchema,
   sortOrder: z.number().default(0),

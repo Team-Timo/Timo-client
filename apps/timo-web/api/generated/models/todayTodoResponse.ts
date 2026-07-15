@@ -19,7 +19,7 @@ export interface TodayTodoResponse {
   priority?: string;
   tag?: TagResponse;
   isRepeated: boolean;
-  hasMemo: boolean;
+  hasSubtask: boolean;
   timerStatus: TodayTodoResponseTimerStatus;
   sortOrder?: number;
   subtasks: SubtaskResponse[];

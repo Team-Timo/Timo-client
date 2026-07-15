@@ -38,7 +38,7 @@ export interface HomeTodoCardProps {
   durationSeconds: number;
   priority?: TodoPriorityTypes;
   tagName?: string;
-  hasMemo: boolean;
+  hasSubtask: boolean;
   isRepeated: boolean;
   timerStatus: TodoTimerStatusTypes;
   isPlayHighlighted: boolean;
@@ -57,7 +57,7 @@ export const HomeTodoCard = ({
   durationSeconds,
   priority,
   tagName,
-  hasMemo,
+  hasSubtask,
   isRepeated,
   timerStatus,
   isPlayHighlighted,
@@ -199,7 +199,7 @@ export const HomeTodoCard = ({
             </div>
           )}
           {tagName && <TagIcon text={tagName} />}
-          {hasMemo &&
+          {hasSubtask &&
             (isDimmed ? (
               <MemoDisableIcon width={18} height={18} />
             ) : (
