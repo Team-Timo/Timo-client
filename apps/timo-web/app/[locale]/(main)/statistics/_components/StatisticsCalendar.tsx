@@ -85,7 +85,7 @@ export const StatisticsCalendar = ({
   return (
     <section className="min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13">
       <div className="w-199.5">
-        <div className="bg-white pb-5">
+        <div className="pb-5">
           <div className="flex flex-col gap-2 pb-[69px]">
             <h1 className="typo-headline-b-30 text-timo-gray-900">
               {formatStatisticsMonth(currentMonth, locale)}
@@ -112,7 +112,7 @@ export const StatisticsCalendar = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-7 gap-x-14 gap-y-5 bg-white">
+        <div className="grid grid-cols-7 gap-x-14 gap-y-5">
           {Array.from({ length: firstDayOffset }, (_, index) => (
             <div key={`empty-${index}`} />
           ))}
