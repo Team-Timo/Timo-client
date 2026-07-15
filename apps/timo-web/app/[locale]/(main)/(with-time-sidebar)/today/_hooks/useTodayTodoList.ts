@@ -15,6 +15,7 @@ import {
 } from "@/api/generated/endpoints/timer/timer";
 import {
   getGetTodoDetailQueryKey,
+  useChangeSubtaskStatus,
   useChangeTodoStatus,
 } from "@/api/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/use-active-timer";
@@ -42,6 +43,7 @@ export const useTodayTodoList = (
   const queryClient = useQueryClient();
   const { data: activeTimer } = useActiveTimer();
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
+  const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: stopTimer } = useStopTimer();
   const { invalidateTimerState, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
@@ -177,20 +179,39 @@ export const useTodayTodoList = (
   };
 
   const handleSubTodoCheck = (todoId: number, subtaskId: number) => {
-    // TODO: API
+    const todo = todos.find((t) => t.todoId === todoId);
+    const subtask = todo?.subtasks.find((s) => s.subtaskId === subtaskId);
+    if (!subtask) return;
+
+    const completed = !subtask.completed;
+    const dateKey = todo?.date;
+    if (!dateKey) return;
+
+    const previous = todos;
     setTodos((prev) =>
-      prev.map((todo) =>
-        todo.todoId === todoId
+      prev.map((t) =>
+        t.todoId === todoId
           ? {
-              ...todo,
-              subtasks: todo.subtasks.map((s) =>
-                s.subtaskId === subtaskId
-                  ? { ...s, completed: !s.completed }
-                  : s,
+              ...t,
+              subtasks: t.subtasks.map((s) =>
+                s.subtaskId === subtaskId ? { ...s, completed } : s,
               ),
             }
-          : todo,
+          : t,
       ),
+    );
+
+    changeSubtaskStatus(
+      { todoId, subtaskId, data: { isCompleted: completed } },
+      {
+        onSuccess: () => {
+          invalidateTodayView();
+          invalidateTodoDetail(todoId, dateKey);
+        },
+        onError: () => {
+          setTodos(previous);
+        },
+      },
     );
   };
 
