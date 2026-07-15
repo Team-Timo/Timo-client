@@ -58,17 +58,8 @@ export async function generateMetadata({
     icons: {
       icon: "/favicon.png",
     },
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        en: "/en",
-        ko: "/ko",
-        "x-default": `/${routing.defaultLocale}`,
-      },
-    },
     openGraph: {
       type: "website",
-      url: `/${locale}`,
       siteName: title,
       title,
       description,
