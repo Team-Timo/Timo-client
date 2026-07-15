@@ -67,11 +67,20 @@ export async function generateMetadata({
       alternateLocale: routing.locales
         .filter((otherLocale) => otherLocale !== locale)
         .map((otherLocale) => OG_LOCALE[otherLocale]),
+      images: [
+        {
+          url: "/og.png",
+          width: 4800,
+          height: 2520,
+          alt: title,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
+      images: ["/og.png"],
     },
     robots: {
       index: true,
