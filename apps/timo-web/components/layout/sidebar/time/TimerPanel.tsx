@@ -14,10 +14,10 @@ import {
   TimerSessionControls,
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
-import { useActiveTimer } from "@/hooks/use-active-timer";
-import { useTimerActions } from "@/hooks/use-timer-actions";
-import { useTimerOvertime } from "@/hooks/use-timer-overtime";
-import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
+import { useActiveTimer } from "@/hooks/timer/use-active-timer";
+import { useTimerActions } from "@/hooks/timer/use-timer-actions";
+import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";
+import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";

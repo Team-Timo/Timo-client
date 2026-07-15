@@ -8,12 +8,12 @@ import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/_t
 
 import { SettingsWithdrawalView } from "@/app/[locale]/(main)/settings/_components/withdrawal/SettingsWithdrawalView";
 import { SettingsWithdrawModalContainer } from "@/app/[locale]/(main)/settings/_containers/withdrawal/SettingsWithdrawModalContainer";
-import { useWithdrawAction } from "@/app/[locale]/(main)/settings/_queries/withdrawal/use-withdraw";
+import { useWithdrawMutation } from "@/app/[locale]/(main)/settings/_queries/withdrawal/use-withdraw-mutation";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
 export const SettingsWithdrawalContainer = () => {
   const t = useTranslations("Settings.withdrawal");
-  const { mutate: withdrawMutate, isPending } = useWithdrawAction();
+  const { mutate: withdrawMutate, isPending } = useWithdrawMutation();
   const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
 
   const labels: SettingsWithdrawalLabels = {

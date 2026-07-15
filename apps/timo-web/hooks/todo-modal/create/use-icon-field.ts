@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useController } from "react-hook-form";
 
-import type { CreateTodoRequest, TodoIcon } from "@/api/common/todo-schema";
+import type { CreateTodoRequest, TodoIcon } from "@/schemas/todo/todo-schema";
 import type { Control } from "react-hook-form";
 
 export interface UseIconFieldParams {

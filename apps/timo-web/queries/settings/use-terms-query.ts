@@ -7,14 +7,17 @@ import {
   getGetTermsByConditionQueryKey,
   getTermsByCondition,
 } from "@/api/generated/endpoints/terms/terms";
-import { termsDetailSchema, type TermsType } from "@/types/terms-type";
+import {
+  termsDetailSchema,
+  type TermsType,
+} from "@/schemas/settings/terms-schema";
 
 const TERMS_LANGUAGE_MAP: Record<"ko" | "en", string> = {
   ko: "KO",
   en: "EN",
 };
 
-export const useTerms = (type: TermsType) => {
+export const useTermsQuery = (type: TermsType) => {
   const locale = useLocale() as "ko" | "en";
   const params = { type, language: TERMS_LANGUAGE_MAP[locale] };
 

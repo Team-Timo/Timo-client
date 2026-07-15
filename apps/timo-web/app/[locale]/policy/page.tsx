@@ -11,7 +11,7 @@ import { AsyncBoundary } from "@/components/boundary/AsyncBoundary";
 import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { termsTypeSchema } from "@/types/terms-type";
+import { termsTypeSchema } from "@/schemas/settings/terms-schema";
 
 interface PolicyPageProps {
   params: Promise<{ locale: string }>;

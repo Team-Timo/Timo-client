@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 
 import { StatisticsCalendar } from "@/app/[locale]/(main)/statistics/_components/StatisticsCalendar";
-import { useStatisticsCalendarQuery } from "@/app/[locale]/(main)/statistics/_queries/statistics-queries";
+import { useStatisticsCalendarQuery } from "@/app/[locale]/(main)/statistics/_queries/use-statistics-query";
 import { LottiePlayer } from "@/components/lottie/LottiePlayer";
 import { formatDateKey } from "@/utils/date/date";
 

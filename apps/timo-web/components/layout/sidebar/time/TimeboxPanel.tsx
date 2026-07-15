@@ -3,8 +3,8 @@
 import { cn } from "@repo/timo-design-system/utils";
 import { useEffect, useState } from "react";
 
-import { useActiveTimer } from "@/hooks/use-active-timer";
-import { useTimeBoxes } from "@/queries/use-time-boxes";
+import { useActiveTimer } from "@/hooks/timer/use-active-timer";
+import { useTimeBoxesQuery } from "@/queries/time-box/use-time-boxes-query";
 import { formatDateKey } from "@/utils/date/date";
 import { getHourLabel } from "@/utils/date/get-hour-label";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
@@ -38,7 +38,7 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
   const time = currentTime ?? now;
   const currentTimeOffset = timeToOffset(time);
 
-  const { data: timeBoxes } = useTimeBoxes(formatDateKey(time));
+  const { data: timeBoxes } = useTimeBoxesQuery(formatDateKey(time));
   const { data: activeTimer } = useActiveTimer();
 
   return (

@@ -5,10 +5,10 @@ import { useController } from "react-hook-form";
 
 import type { Control, FieldValues, Path } from "react-hook-form";
 
-import { tagCreateDataSchema } from "@/api/common/tag-schema";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
-import { useCreateTag } from "@/queries/tag/use-create-tag";
-import { useTags } from "@/queries/tag/use-tags";
+import { useCreateTagMutation } from "@/queries/tag/use-create-tag-mutation";
+import { useTagsQuery } from "@/queries/tag/use-tags-query";
+import { tagCreateDataSchema } from "@/schemas/tag/tag-schema";
 import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 const MAX_TAG_COUNT = 8;
@@ -43,8 +43,8 @@ export const useTagField = <TFieldValues extends FieldValues>({
   const [isCreateTagErrorToastOpen, setIsCreateTagErrorToastOpen] =
     useState<boolean>(false);
 
-  const tagsQuery = useTags();
-  const { mutate: createTag } = useCreateTag();
+  const tagsQuery = useTagsQuery();
+  const { mutate: createTag } = useCreateTagMutation();
 
   const tagOptions = (tagsQuery.data?.tags ?? []).map((tag) => {
     const defaultLabelKey = getDefaultTagLabelKey(tag.tagId);
