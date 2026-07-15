@@ -1,9 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { overlay } from "overlay-kit";
+import { useCallback, useEffect, useState } from "react";
 
-import type { TodoUpdateRequest } from "@/api/generated/models";
+import type { ErrorType } from "@/api/client/custom-instance";
+import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
+import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 import type { ReactNode } from "react";
 
 import { useGetTodoDetail } from "@/api/generated/endpoints/todo/todo";
@@ -22,6 +25,91 @@ export interface DetailTodoModalContainerProps {
   children: (openDetailTodoModal: () => void) => ReactNode;
 }
 
+interface DetailTodoModalQueryProps extends Omit<
+  DetailTodoModalContainerProps,
+  "children"
+> {
+  isOpen: boolean;
+  onClose: () => void;
+  onExited: () => void;
+  onActionError: (error: ErrorType<ErrorDto>) => void;
+}
+
+const DetailTodoModalQuery = ({
+  todoId,
+  date,
+  isOpen,
+  onClose,
+  onExited,
+  onTogglePlay,
+  onToggleCompleted,
+  onDelete,
+  onActionError,
+}: DetailTodoModalQueryProps) => {
+  const { data, error, isError } = useGetTodoDetail(todoId, { date });
+  const { handleDelete } = useDeleteTodoSubmit();
+  const { handleUpdate } = useUpdateTodoSubmit();
+  const { data: activeTimer } = useActiveTimer();
+  const todo = data?.data;
+  const isPlayHighlighted = !activeTimer || activeTimer.todoId === todoId;
+
+  useEffect(() => {
+    if (isError && error) {
+      onActionError(error);
+    }
+  }, [error, isError, onActionError]);
+
+  if (isError || !todo) return null;
+
+  const timerStatus =
+    activeTimer?.todoId === todoId ? activeTimer.status : todo.timerStatus;
+
+  const deleteTodo = () => {
+    handleDelete(todoId, {
+      onSuccess: () => {
+        onDelete();
+        onClose();
+      },
+      onError: onActionError,
+    });
+  };
+
+  const updateTodo = (
+    updateData: TodoUpdateRequest,
+    handlers: UpdateTodoSubmitHandlers = {},
+  ) => {
+    handleUpdate(
+      {
+        todoId,
+        date,
+        data: updateData,
+      },
+      {
+        onSuccess: handlers.onSuccess,
+        onError: (error) => {
+          handlers.onError?.(error);
+          onActionError(error);
+        },
+      },
+    );
+  };
+
+  return (
+    <DetailTodoModalContent
+      isOpen={isOpen}
+      onClose={onClose}
+      onExited={onExited}
+      todo={todo}
+      isPlayHighlighted={isPlayHighlighted}
+      onTogglePlay={onTogglePlay}
+      onToggleCompleted={onToggleCompleted}
+      onDelete={deleteTodo}
+      onUpdate={updateTodo}
+      timerStatus={timerStatus}
+    />
+  );
+};
+
 export const DetailTodoModalContainer = ({
   todoId,
   date,
@@ -31,79 +119,43 @@ export const DetailTodoModalContainer = ({
   children,
 }: DetailTodoModalContainerProps) => {
   const tToast = useTranslations("Toast");
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const [updateErrorMessage, setUpdateErrorMessage] = useState<string | null>(
-    null,
+  const [actionErrorMessage, setActionErrorMessage] = useState("");
+  const [isActionErrorToastOpen, setIsActionErrorToastOpen] = useState(false);
+
+  const showActionErrorToast = useCallback(
+    (error: ErrorType<ErrorDto>) => {
+      setActionErrorMessage(
+        error.response?.data.message ?? tToast("focusActionFailed"),
+      );
+      setIsActionErrorToastOpen(true);
+    },
+    [tToast],
   );
-  const { data, isError } = useGetTodoDetail(
-    todoId,
-    { date },
-    { query: { enabled: isMounted } },
-  );
-  const { handleDelete } = useDeleteTodoSubmit();
-  const { handleUpdate } = useUpdateTodoSubmit();
-  const { data: activeTimer } = useActiveTimer();
-  const todo = data?.data;
-  const isPlayHighlighted = !activeTimer || activeTimer.todoId === todoId;
 
   const openDetailTodoModal = () => {
-    setIsMounted(true);
-    setIsOpen(true);
-  };
-
-  const closeDetailTodoModal = () => {
-    setIsOpen(false);
-  };
-
-  const deleteTodo = () => {
-    handleDelete(todoId, {
-      onSuccess: () => {
-        onDelete();
-        closeDetailTodoModal();
-      },
-    });
-  };
-
-  const updateTodo = (updateData: TodoUpdateRequest) => {
-    handleUpdate(
-      {
-        todoId,
-        date,
-        data: updateData,
-      },
-      {
-        onError: (error) => {
-          setUpdateErrorMessage(
-            error.response?.data.message ?? tToast("todoUpdateFailed"),
-          );
-        },
-      },
-    );
+    overlay.open(({ isOpen, close, unmount }) => (
+      <DetailTodoModalQuery
+        todoId={todoId}
+        date={date}
+        isOpen={isOpen}
+        onClose={close}
+        onExited={unmount}
+        onTogglePlay={onTogglePlay}
+        onToggleCompleted={onToggleCompleted}
+        onDelete={onDelete}
+        onActionError={showActionErrorToast}
+      />
+    ));
   };
 
   return (
     <>
       {children(openDetailTodoModal)}
 
-      {isMounted && !isError && todo ? (
-        <DetailTodoModalContent
-          isOpen={isOpen}
-          onClose={closeDetailTodoModal}
-          onExited={() => setIsMounted(false)}
-          todo={todo}
-          isPlayHighlighted={isPlayHighlighted}
-          onTogglePlay={onTogglePlay}
-          onToggleCompleted={onToggleCompleted}
-          onDelete={deleteTodo}
-          onUpdate={updateTodo}
-        />
-      ) : null}
-
       <AnimatedToast
-        isOpen={updateErrorMessage !== null}
-        onClose={() => setUpdateErrorMessage(null)}
-        message={updateErrorMessage ?? ""}
+        isOpen={isActionErrorToastOpen}
+        onClose={() => setIsActionErrorToastOpen(false)}
+        message={actionErrorMessage}
       />
     </>
   );

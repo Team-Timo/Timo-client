@@ -1,11 +1,7 @@
 import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useController, useForm } from "react-hook-form";
 
-import type {
-  TodoDetailResponse,
-  TodoUpdateRequest,
-} from "@/api/generated/models";
-import type { BuildDetailTodoUpdateRequestParams } from "@/utils/todo/detail-todo-update-request";
+import type { TodoDetailResponse } from "@/api/generated/models";
 import type {
   PriorityLevel,
   RepeatFrequency,
@@ -18,15 +14,11 @@ import { SECONDS_PER_MINUTE } from "@/constants/time";
 import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
 import { useDetailSubtaskField } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import { parseDateKey } from "@/utils/date/date";
-import { buildDetailTodoUpdateRequest } from "@/utils/todo/detail-todo-update-request";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
 } from "@/utils/todo/text-length";
-import {
-  convertDurationToTimeText,
-  convertSecondsToApiDuration,
-} from "@/utils/todo/todo-time";
+import { convertSecondsToApiDuration } from "@/utils/todo/todo-time";
 
 interface DetailTodoFormValues {
   date: Date;
@@ -80,11 +72,8 @@ export interface UseDetailTodoFormParams {
   todo: TodoDetailResponse;
 }
 
-export type DetailTodoUpdateRequestOverrides =
-  Partial<BuildDetailTodoUpdateRequestParams>;
-
 export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
-  const durationText = convertDurationToTimeText(todo.durationSeconds ?? 0);
+  const durationText = convertSecondsToApiDuration(todo.durationSeconds ?? 0);
   const todoIcon = todo.icon ?? null;
   const todoDate = parseDateKey(todo.date) ?? new Date();
   const repeatType = isRepeatFrequency(todo.repeat.type)
@@ -138,6 +127,11 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
 
   const selectIcon = (nextIcon: TodoIconValue) => iconField.onChange(nextIcon);
   const removeIcon = () => iconField.onChange(null);
+  const setTagId = (tagId: number) => tagField.handleSelectTagById(tagId);
+  const setSelectedWeekdayIds = (weekdayIds: string[]) =>
+    selectedWeekdayIdsField.onChange(weekdayIds);
+  const setSubtaskCompleted = (id: number, completed: boolean) =>
+    subtaskField.handleCompletedChange(id, completed);
 
   const changeTitle = (value: string) => {
     titleField.onChange(
@@ -154,12 +148,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
 
     if (!option) return undefined;
 
-    const time = convertSecondsToApiDuration(
-      option.minute * SECONDS_PER_MINUTE,
-    );
-    timeField.onChange(time);
-
-    return time;
+    return convertSecondsToApiDuration(option.minute * SECONDS_PER_MINUTE);
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {
@@ -168,54 +157,22 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
   };
 
   const toggleWeekday = (weekdayId: string) => {
-    const nextWeekdayIds = selectedWeekdayIdsField.value.includes(weekdayId)
+    return selectedWeekdayIdsField.value.includes(weekdayId)
       ? selectedWeekdayIdsField.value.filter((item) => item !== weekdayId)
       : [...selectedWeekdayIdsField.value, weekdayId];
-
-    selectedWeekdayIdsField.onChange(nextWeekdayIds);
-
-    return nextWeekdayIds;
   };
 
-  const handleSelectTag = (label: string) => {
+  const getTagIdByLabel = (label: string) => {
     const option = tagField.tagOptions.find((item) => item.label === label);
     if (!option) return null;
-
-    tagField.handleSelectTag(label);
 
     return option.id;
   };
 
   const changeSubtaskCompleted = (id: number, completed: boolean) => {
-    const nextSubtasks = subtaskField.subtaskInputs.map((subtask) =>
+    return subtaskField.subtaskInputs.map((subtask) =>
       subtask.id === id ? { ...subtask, completed } : subtask,
     );
-
-    subtaskField.handleCompletedChange(id, completed);
-
-    return nextSubtasks;
-  };
-
-  const buildUpdateRequest = (
-    overrides: DetailTodoUpdateRequestOverrides = {},
-  ): TodoUpdateRequest => {
-    const params: BuildDetailTodoUpdateRequestParams = {
-      icon: iconField.value,
-      title: titleField.value,
-      date: dateField.value,
-      time: timeField.value,
-      priority: priorityField.value,
-      tagId: tagField.selectedTagId,
-      isRepeatActive: isRepeatActiveField.value,
-      repeatFrequency: repeatFrequencyField.value,
-      selectedWeekdayIds: selectedWeekdayIdsField.value,
-      repeatDay: repeatDayField.value,
-      memo: memoField.value,
-      subtasks: subtaskField.subtaskInputs,
-      ...overrides,
-    };
-
-    return buildDetailTodoUpdateRequest(params);
   };
 
   return {
@@ -227,10 +184,12 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     setPriority: priorityField.onChange,
     tagLabels: tagField.tagLabels,
     selectedTagLabel: tagField.selectedTagLabel,
-    handleSelectTag,
+    getTagIdByLabel,
+    setTagId,
     isRepeatActive: isRepeatActiveField.value,
     repeatFrequency: repeatFrequencyField.value,
     selectedWeekdayIds: selectedWeekdayIdsField.value,
+    setSelectedWeekdayIds,
     repeatDay: repeatDayField.value,
     setRepeatDay: repeatDayField.onChange,
     title: titleField.value,
@@ -239,6 +198,7 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     registerSubtaskInputRef: subtaskField.registerInputRef,
     changeSubtaskInput: subtaskField.handleInputChange,
     changeSubtaskCompleted,
+    setSubtaskCompleted,
     handleSubtaskInputKeyDown: subtaskField.handleInputKeyDown,
     memo: memoField.value,
     setMemo: memoField.onChange,
@@ -248,8 +208,9 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     selectTime,
     changeRepeatFrequency,
     toggleWeekday,
-    buildUpdateRequest,
     handleSubmit,
     dirtyFields: formState.dirtyFields,
   };
 };
+
+export type UseDetailTodoFormReturn = ReturnType<typeof useDetailTodoForm>;

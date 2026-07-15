@@ -29,6 +29,7 @@ export interface UseTagFieldResult {
   isCreateTagErrorToastOpen: boolean;
   closeCreateTagErrorToast: () => void;
   handleSelectTag: (label: string) => void;
+  handleSelectTagById: (tagId: number) => void;
   handleAddTagClick: () => void;
 }
 
@@ -64,6 +65,10 @@ export const useTagField = <TFieldValues extends FieldValues>({
     if (!option) return;
 
     field.onChange(option.id);
+  };
+
+  const handleSelectTagById = (tagId: number) => {
+    field.onChange(tagId);
   };
 
   const handleAddTagClick = () => {
@@ -114,6 +119,7 @@ export const useTagField = <TFieldValues extends FieldValues>({
     isCreateTagErrorToastOpen,
     closeCreateTagErrorToast: () => setIsCreateTagErrorToastOpen(false),
     handleSelectTag,
+    handleSelectTagById,
     handleAddTagClick,
   };
 };
