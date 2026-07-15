@@ -14,28 +14,6 @@ interface StatisticsCalendarContainerProps {
   onSelectDate: (date: Date) => void;
 }
 
-interface StatisticsCalendarStatusProps {
-  lottieSrc: string;
-  message: string;
-  role?: "status" | "alert";
-}
-
-const StatisticsCalendarStatus = ({
-  lottieSrc,
-  message,
-  role = "status",
-}: StatisticsCalendarStatusProps) => {
-  return (
-    <section
-      className="flex min-w-0 flex-1 flex-col items-center justify-center gap-6 px-14.75 pt-10 pb-13 text-center"
-      role={role}
-    >
-      <LottiePlayer src={lottieSrc} className="w-[143px]" ariaLabel={message} />
-      <p className="typo-headline-m-14 text-timo-gray-900">{message}</p>
-    </section>
-  );
-};
-
 export const StatisticsCalendarContainer = ({
   currentMonth,
   displayDate,
@@ -48,22 +26,11 @@ export const StatisticsCalendarContainer = ({
   const calendarData = calendarQuery.data?.data;
 
   if (calendarQuery.isPending) {
-    return (
-      <StatisticsCalendarStatus
-        lottieSrc="/lottie/loading.json"
-        message={t("loading")}
-      />
-    );
+    return <LottiePlayer src="/lottie/loading.json" ariaLabel={t("loading")} />;
   }
 
   if (calendarQuery.isError || !calendarData) {
-    return (
-      <StatisticsCalendarStatus
-        lottieSrc="/lottie/error.json"
-        message={t("error")}
-        role="alert"
-      />
-    );
+    return <LottiePlayer src="/lottie/error.json" ariaLabel={t("error")} />;
   }
 
   return (
