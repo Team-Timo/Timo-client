@@ -2,8 +2,8 @@
 
 import timoTimerLogo from "@repo/timo-design-system/assets/images/logo/timo-timer.svg";
 import { ModalButton } from "@repo/timo-design-system/ui";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import { OverlayModal } from "@/components/modal/OverlayModal";
 

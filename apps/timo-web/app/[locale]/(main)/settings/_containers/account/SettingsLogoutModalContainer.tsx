@@ -2,8 +2,8 @@
 
 import timoTimerLogo from "@repo/timo-design-system/assets/images/logo/timo-timer.svg";
 import { Modal, PillButton } from "@repo/timo-design-system/ui";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
 import type { SettingsProfileLabels } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
