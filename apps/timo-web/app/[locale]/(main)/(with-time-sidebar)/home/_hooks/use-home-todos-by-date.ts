@@ -48,8 +48,12 @@ export const useHomeTodosByDate = (
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: reorderTodo } = useReorderTodo();
   const { mutate: stopTimer } = useStopTimer();
-  const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
+  const {
+    invalidateHomeView,
+    invalidateStatistics,
+    invalidateTimerState,
+    invalidateTimeBoxes,
+  } = useTimerQueryInvalidation();
 
   const { mutate: startTimer } = useStartTimer<ApiError>({
     mutation: { onSuccess: invalidateTimerState },
@@ -110,6 +114,7 @@ export const useHomeTodosByDate = (
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
           invalidateTodoDetail(dateKey, todoId);
+          invalidateStatistics();
         },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
@@ -138,6 +143,7 @@ export const useHomeTodosByDate = (
               onSuccess: () => {
                 invalidateHomeAndFocus();
                 invalidateTodoDetail(dateKey, todoId);
+                invalidateStatistics();
               },
             },
           );
@@ -206,6 +212,7 @@ export const useHomeTodosByDate = (
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
           invalidateTodoDetail(dateKey, todoId);
+          invalidateStatistics();
         },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));

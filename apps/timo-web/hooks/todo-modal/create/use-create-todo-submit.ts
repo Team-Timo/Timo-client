@@ -8,6 +8,7 @@ import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 
 import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import { useCreateTodo } from "@/api/generated/endpoints/todo/todo";
+import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 import { todoCreateResponseSchema } from "@/schemas/todo/todo-schema";
 
 const buildCreateTodoRequestBody = (
@@ -30,6 +31,7 @@ export const useCreateTodoSubmit = () => {
   const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
   const { mutate: createTodo } = useCreateTodo();
   const queryClient = useQueryClient();
+  const { invalidateStatistics } = useStatisticsQueryInvalidation();
 
   const handleSubmit = (data: CreateTodoRequest) => {
     createTodo(
@@ -44,6 +46,7 @@ export const useCreateTodoSubmit = () => {
           }
 
           queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+          invalidateStatistics();
         },
         onError: () => {
           setIsErrorToastOpen(true);

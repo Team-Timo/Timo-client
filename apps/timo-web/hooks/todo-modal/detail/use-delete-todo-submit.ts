@@ -10,6 +10,7 @@ import {
   getGetTodayQueryKey,
 } from "@/api/generated/endpoints/home/home";
 import { useDeleteTodo } from "@/api/generated/endpoints/todo/todo";
+import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 
 export interface DeleteTodoSubmitHandlers {
   onSuccess: () => void;
@@ -19,6 +20,7 @@ export interface DeleteTodoSubmitHandlers {
 export const useDeleteTodoSubmit = () => {
   const { mutate: deleteTodo } = useDeleteTodo();
   const queryClient = useQueryClient();
+  const { invalidateStatistics } = useStatisticsQueryInvalidation();
 
   const handleDelete = (
     todoId: number,
@@ -30,6 +32,7 @@ export const useDeleteTodoSubmit = () => {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
           queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
+          invalidateStatistics();
           onSuccess();
         },
         onError,
