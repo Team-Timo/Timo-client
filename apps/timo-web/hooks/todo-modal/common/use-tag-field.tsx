@@ -16,6 +16,7 @@ const MAX_TAG_COUNT = 8;
 export interface UseTagFieldParams<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
   name?: Path<TFieldValues>;
+  onTagCreated?: (tagId: number, syncLocal: () => void) => void;
 }
 
 export interface UseTagFieldResult {
@@ -36,6 +37,7 @@ export interface UseTagFieldResult {
 export const useTagField = <TFieldValues extends FieldValues>({
   control,
   name = "tagId" as Path<TFieldValues>,
+  onTagCreated,
 }: UseTagFieldParams<TFieldValues>): UseTagFieldResult => {
   const tCommon = useTranslations("Common");
   const { field } = useController({ name, control });
@@ -95,7 +97,13 @@ export const useTagField = <TFieldValues extends FieldValues>({
                   return;
                 }
 
-                field.onChange(parsed.data.tagId);
+                const tagId = parsed.data.tagId;
+
+                if (onTagCreated) {
+                  onTagCreated(tagId, () => field.onChange(tagId));
+                } else {
+                  field.onChange(tagId);
+                }
                 close();
               },
               onError: () => {

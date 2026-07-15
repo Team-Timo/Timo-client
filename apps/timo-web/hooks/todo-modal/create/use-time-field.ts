@@ -50,7 +50,7 @@ const formatDurationAsClockLabel = (duration: string): string => {
   const minutes = Math.floor(
     (totalSeconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE,
   );
-  return `${hours}:${minutes.toString().padStart(2, "0")}`;
+  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
 };
 
 export const useTimeField = ({ control }: UseTimeFieldParams) => {
@@ -58,7 +58,7 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
   const title = useWatch({ control, name: "title" });
   const tagId = useWatch({ control, name: "tagId" });
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
-  const [timeDisplay, setTimeDisplay] = useState("0:00");
+  const [timeDisplay, setTimeDisplay] = useState("00:00");
   const [recommendedDuration, setRecommendedDuration] = useState<string>();
   const [isAiDurationErrorToastOpen, setIsAiDurationErrorToastOpen] =
     useState(false);
@@ -145,7 +145,7 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
 
   const resetTime = () => {
     setSelectedTime(undefined);
-    setTimeDisplay("0:00");
+    setTimeDisplay("00:00");
     setRecommendedDuration(undefined);
   };
 

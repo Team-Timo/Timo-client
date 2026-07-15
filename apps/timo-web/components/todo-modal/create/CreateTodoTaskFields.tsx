@@ -1,4 +1,5 @@
 import { Checkbox } from "@repo/timo-design-system/ui";
+import { useId } from "react";
 
 import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type { KeyboardEvent } from "react";
@@ -13,6 +14,7 @@ export interface CreateTodoTaskFieldsProps {
   titleValue: string;
   titlePlaceholder: string;
   onTitleChange: (value: string) => void;
+  onTitleEnter: () => void;
   subtaskInputs: SubtaskInputEntry[];
   subtaskPlaceholder: string;
   registerSubtaskInputRef: (
@@ -29,12 +31,15 @@ export const CreateTodoTaskFields = ({
   titleValue,
   titlePlaceholder,
   onTitleChange,
+  onTitleEnter,
   subtaskInputs,
   subtaskPlaceholder,
   registerSubtaskInputRef,
   onSubtaskInputChange,
   onSubtaskInputKeyDown,
 }: CreateTodoTaskFieldsProps) => {
+  const titleInputId = useId();
+
   return (
     <div className="flex w-full flex-col items-start gap-1.5">
       <div className="flex w-full items-center justify-center gap-2">
@@ -43,16 +48,23 @@ export const CreateTodoTaskFields = ({
           onChange={() => {}}
           className="cursor-default"
         />
-        <textarea
+        <label htmlFor={titleInputId} className="sr-only">
+          {titlePlaceholder}
+        </label>
+        <input
+          id={titleInputId}
+          type="text"
           value={titleValue}
-          ref={resizeTextarea}
-          onChange={(event) => {
-            onTitleChange(event.target.value);
-            resizeTextarea(event.currentTarget);
+          onChange={(event) => onTitleChange(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter") return;
+            if (event.nativeEvent.isComposing) return;
+
+            event.preventDefault();
+            onTitleEnter();
           }}
           placeholder={titlePlaceholder}
-          rows={1}
-          className="typo-headline-b-14 text-timo-black min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
+          className="typo-headline-b-14 text-timo-black min-w-0 flex-1 outline-none"
         />
       </div>
 

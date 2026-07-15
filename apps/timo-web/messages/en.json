@@ -28,10 +28,10 @@
       "additional": "Additional"
     },
     "priority": {
-      "urgent": "Very Important",
-      "high": "Important",
-      "medium": "Average",
-      "low": "Low"
+      "VERY_HIGH": "Very Important",
+      "HIGH": "Important",
+      "MEDIUM": "Average",
+      "LOW": "Low"
     },
     "close": "Close",
     "delete": "Delete"
@@ -62,6 +62,10 @@
       "ariaLabel": "To-do details",
       "save": "Save",
       "delete": "Delete to-do",
+      "deleteConfirmTitle": "Delete this to-do?",
+      "deleteConfirmDescription": "Deleting it will remove all related task information.",
+      "deleteConfirmCancel": "Go back",
+      "deleteConfirmConfirm": "Delete",
       "repeatFrequencyHeading": "Repeat",
       "repeatDayLabel": "day(s)"
     },

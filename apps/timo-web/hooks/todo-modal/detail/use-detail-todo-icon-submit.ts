@@ -7,6 +7,7 @@ import type { TodoIconValue } from "@repo/timo-design-system/ui";
 export interface UseDetailTodoIconSubmitParams {
   icon: TodoIconValue | null;
   selectIcon: (icon: TodoIconValue) => void;
+  removeIcon: () => void;
   onUpdate: (
     data: TodoUpdateRequest,
     handlers?: UpdateTodoSubmitHandlers,
@@ -16,52 +17,45 @@ export interface UseDetailTodoIconSubmitParams {
 export const useDetailTodoIconSubmit = ({
   icon,
   selectIcon,
+  removeIcon,
   onUpdate,
 }: UseDetailTodoIconSubmitParams) => {
   const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
-  const [pendingIcon, setPendingIcon] = useState<TodoIconValue | null>(icon);
+
+  const handleOpenIconPanel = () => setIsIconPanelOpen(true);
+  const handleToggleIconPanel = () => setIsIconPanelOpen((prev) => !prev);
 
   const handleSelectIcon = (nextIcon: TodoIconValue) => {
-    setPendingIcon(nextIcon);
-  };
-
-  const handleOpenIconPanel = () => {
-    setPendingIcon(icon);
-    setIsIconPanelOpen(true);
-  };
-
-  const handleSubmitIcon = () => {
-    if (!pendingIcon || pendingIcon === icon) {
+    if (nextIcon === icon) {
       setIsIconPanelOpen(false);
       return;
     }
 
     onUpdate(
-      { icon: pendingIcon },
+      { icon: nextIcon },
       {
         onSuccess: () => {
-          selectIcon(pendingIcon);
+          selectIcon(nextIcon);
           setIsIconPanelOpen(false);
         },
       },
     );
   };
 
-  const handleToggleIconPanel = () => {
-    if (isIconPanelOpen) {
-      handleSubmitIcon();
-      return;
-    }
-
-    handleOpenIconPanel();
-  };
-
   const handleRemoveIcon = () => {
-    setPendingIcon(null);
+    onUpdate(
+      { icon: "NONE" },
+      {
+        onSuccess: () => {
+          removeIcon();
+          setIsIconPanelOpen(false);
+        },
+      },
+    );
   };
 
   return {
-    icon: isIconPanelOpen ? pendingIcon : icon,
+    icon,
     isIconPanelOpen,
     handleOpenIconPanel,
     handleToggleIconPanel,
