@@ -44,6 +44,7 @@ export interface RepeatSelectorProps {
   frequencyHeading?: string;
   detailHeading: string;
   options: RepeatOption[];
+  isActive?: boolean;
   frequency: RepeatFrequency;
   onFrequencyChange?: (frequency: RepeatFrequency) => void;
   weekly: RepeatWeeklyDetail;
@@ -158,6 +159,7 @@ export const RepeatSelector = ({
   frequencyHeading = "반복 일정",
   detailHeading,
   options,
+  isActive = true,
   frequency,
   onFrequencyChange,
   weekly,
@@ -174,12 +176,18 @@ export const RepeatSelector = ({
   const draftFrequencyRef = useRef(frequency);
   const draftWeekdayIdsRef = useRef(weekly.selectedWeekdayIds);
   const draftRepeatDayRef = useRef(monthly.repeatDay);
+  // 반복이 꺼져 있을 때(isActive=false) frequency는 "DAILY"라는 기본값을 표시할
+  // 뿐 실제로 저장된 값이 아니다. 이 경우 "매일"을 선택해도 draft가 기본값과
+  // 같아서 "변경 없음"으로 오인되므로, 사용자가 실제로 클릭했는지를 별도로
+  // 추적해 그 경우엔 값이 같아도 반드시 커밋한다.
+  const hasSelectedFrequencyRef = useRef(false);
 
   const selectedLabel = options.find(
     (option) => option.frequency === draftFrequency,
   )?.label;
 
   const handleSelectFrequency = (value: RepeatFrequency) => {
+    hasSelectedFrequencyRef.current = true;
     draftFrequencyRef.current = value;
     setDraftFrequency(value);
     if (value !== "DAILY") setIsPicking(false);
@@ -201,6 +209,7 @@ export const RepeatSelector = ({
 
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
+      hasSelectedFrequencyRef.current = false;
       draftFrequencyRef.current = frequency;
       setDraftFrequency(frequency);
       draftWeekdayIdsRef.current = weekly.selectedWeekdayIds;
@@ -210,7 +219,10 @@ export const RepeatSelector = ({
       return;
     }
 
-    if (draftFrequencyRef.current !== frequency) {
+    if (
+      hasSelectedFrequencyRef.current &&
+      (draftFrequencyRef.current !== frequency || !isActive)
+    ) {
       onFrequencyChange?.(draftFrequencyRef.current);
     }
     if (
