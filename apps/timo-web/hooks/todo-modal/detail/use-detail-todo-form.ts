@@ -222,3 +222,5 @@ export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
     dirtyFields: formState.dirtyFields,
   };
 };
+
+export type UseDetailTodoFormReturn = ReturnType<typeof useDetailTodoForm>;
