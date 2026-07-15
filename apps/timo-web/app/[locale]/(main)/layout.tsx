@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
+
 import { MainShellContainer } from "@/app/[locale]/(main)/_containers/MainShellContainer";
 import { AuthGuardProvider } from "@/providers/auth/AuthGuardProvider";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 interface MainLayoutProps {
   children: React.ReactNode;

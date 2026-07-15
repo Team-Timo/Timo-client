@@ -8,7 +8,7 @@ import {
 } from "@/api/generated/endpoints/home/home";
 import { todayDataSchema } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
-export const useToday = () =>
+export const useTodayQuery = () =>
   useSuspenseQuery({
     queryKey: getGetTodayQueryKey(),
     queryFn: ({ signal }) => getToday(undefined, signal),

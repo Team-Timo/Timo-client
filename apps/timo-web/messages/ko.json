@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "timo",
+    "description": "흩어진 시간을, 실행 가능한 흐름으로."
+  },
   "Navigation": {
     "home": "홈",
     "today": "오늘",
@@ -151,6 +155,7 @@
     "timerStartFailed": "예상 소요 시간이 설정되지 않은 투두입니다."
   },
   "Login": {
+    "title": "로그인",
     "animationLabel": "로그인 애니메이션",
     "headline": "흩어진 시간을, 실행 가능한 흐름으로.",
     "description": "timo 계정에 로그인하세요.",

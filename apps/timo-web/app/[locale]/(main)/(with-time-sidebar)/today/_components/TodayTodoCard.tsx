@@ -126,7 +126,11 @@ export const TodayTodoCard = ({
             size="lg"
             disabled={isDone}
             active={isPlayHighlighted}
-            onClick={onPlay}
+            onClick={(event) => {
+              stopPropagation(event);
+              onPlay();
+            }}
+            onPointerDown={stopPropagation}
           >
             {isDone ? (
               <PlayDisabledIcon width={24} height={24} />

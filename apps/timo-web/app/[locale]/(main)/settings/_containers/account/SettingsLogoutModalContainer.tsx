@@ -41,9 +41,7 @@ export const SettingsLogoutModalContainer = ({
         </Modal.Icon>
         <Modal.Title>
           {tSettings.rich("profile.logoutConfirmTitle", {
-            red: (chunks) => (
-              <span className="text-timo-red">{chunks}</span>
-            ),
+            red: (chunks) => <span className="text-timo-red">{chunks}</span>,
           })}
         </Modal.Title>
         <Modal.Description className="whitespace-pre-line">

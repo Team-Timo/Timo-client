@@ -3,12 +3,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
 import type { TodoCreateRequest } from "@/api/generated/models";
+import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 
-import { todoCreateResponseSchema } from "@/api/common/todo-schema";
 import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import { useCreateTodo } from "@/api/generated/endpoints/todo/todo";
+import { todoCreateResponseSchema } from "@/schemas/todo/todo-schema";
 
 const buildCreateTodoRequestBody = (
   data: CreateTodoRequest,

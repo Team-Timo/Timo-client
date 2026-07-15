@@ -5,19 +5,18 @@ import { useTranslations } from "next-intl";
 
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
-import { tagCreateDataSchema } from "@/api/common/tag-schema";
-import { authorize } from "@/api/generated/endpoints/calendar/calendar";
 import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
 } from "@/api/generated/endpoints/user/user";
 import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
-import { useLogoutAction } from "@/app/[locale]/(main)/settings/_queries/account/use-logout";
-import { useCreateTag } from "@/queries/tag/use-create-tag";
-import { useDeleteTag } from "@/queries/tag/use-delete-tag";
-import { useTags } from "@/queries/tag/use-tags";
-import { useMyProfile } from "@/queries/use-my-profile";
+import { useLogoutMutation } from "@/app/[locale]/(main)/settings/_queries/account/use-logout-mutation";
+import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
+import { useCreateTagMutation } from "@/queries/tag/use-create-tag-mutation";
+import { useDeleteTagMutation } from "@/queries/tag/use-delete-tag-mutation";
+import { useTagsQuery } from "@/queries/tag/use-tags-query";
+import { tagCreateDataSchema } from "@/schemas/tag/tag-schema";
 import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 const LANGUAGE_REQUEST_MAP: Record<
@@ -45,15 +44,15 @@ export const useSettingsProfile = () => {
   const { locale, commitLanguage } = useSettingsLanguageParam();
   const tCommon = useTranslations("Common");
 
-  const { data: profile } = useMyProfile();
+  const { data: profile } = useMyProfileQuery();
 
   const { mutateAsync: updateLanguage } = useUpdateLanguage();
   const queryClient = useQueryClient();
 
-  const tagsQuery = useTags();
-  const { mutate: createTag } = useCreateTag();
-  const { mutate: deleteTag } = useDeleteTag();
-  const { mutate: logoutMutate, isPending: isLoggingOut } = useLogoutAction();
+  const tagsQuery = useTagsQuery();
+  const { mutate: createTag } = useCreateTagMutation();
+  const { mutate: deleteTag } = useDeleteTagMutation();
+  const { mutate: logoutMutate, isPending: isLoggingOut } = useLogoutMutation();
 
   const tagItems = (tagsQuery.data?.tags ?? []).map((tag) => {
     const labelKey = tag.isDefault

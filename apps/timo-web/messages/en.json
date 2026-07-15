@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "timo",
+    "description": "Manage your day with clear timeboxes."
+  },
   "Navigation": {
     "home": "Home",
     "today": "Today",
@@ -151,6 +155,7 @@
     "timerStartFailed": "This to-do has no estimated duration set."
   },
   "Login": {
+    "title": "Log in",
     "animationLabel": "Login animation",
     "headline": "Manage your day with clear timeboxes.",
     "description": "Please log in to your timo account.",

@@ -6,9 +6,9 @@ import {
   getGetTimeBoxesQueryKey,
   getTimeBoxes,
 } from "@/api/generated/endpoints/time-box/time-box";
-import { timeBoxListSchema } from "@/types/timebox-type";
+import { timeBoxListSchema } from "@/schemas/timebox/timebox-schema";
 
-export const useTimeBoxes = (date: string) =>
+export const useTimeBoxesQuery = (date: string) =>
   useQuery({
     queryKey: getGetTimeBoxesQueryKey({ date }),
     queryFn: ({ signal }) => getTimeBoxes({ date }, undefined, signal),

@@ -38,10 +38,13 @@
 
 ### Phase 3 — `_queries/` 훅 작성
 
-- 위치: `app/(domain)/_queries/use-xxx.ts`
+- 위치: `app/(domain)/_queries/use-xxx-query.ts` (조회) / `use-xxx-mutation.ts` (변경)
+- 네이밍: 파일명은 `-query.ts`/`-mutation.ts`로, export하는 함수명은 `~Query`/`~Mutation`으로 끝낸다. 파일당 훅 1개가 기본이다. → `docs/conventions/naming.md` 참조
 - `useSuspenseQuery`를 쓸지 `useQuery`를 쓸지는 컴포넌트가 `AsyncBoundary`(Suspense) 안에 있는지로 결정한다. `AsyncBoundary`로 감싸져 있으면 `useSuspenseQuery`를 쓴다.
 - **주의**: 생성된 `getGetXxxQueryOptions()` 팩토리를 그대로 `useSuspenseQuery`에 스프레드하면 `UseQueryOptions`가 허용하는 `skipToken`과 `UseSuspenseQueryOptions`가 타입 충돌을 일으킨다. `queryKey`/`queryFn`은 생성된 `getGetXxxQueryKey` + 원본 fetcher 함수로 직접 조립한다.
 - `select`에서 `BaseResponse.data`를 언랩하고 로컬 zod 스키마로 `.parse()`해서 반환한다.
+
+조회 훅 예시 (`_queries/use-home-view-query.ts`):
 
 ```ts
 "use client";
@@ -54,12 +57,34 @@ import {
 } from "@/api/generated/endpoints/home/home";
 import { homeViewDataSchema } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
-export const useHomeView = ({ filter, baseDate }: GetHomeViewParams) =>
+export const useHomeViewQuery = ({ filter, baseDate }: GetHomeViewParams) =>
   useSuspenseQuery({
     queryKey: getGetHomeQueryKey({ filter, baseDate }),
     queryFn: ({ signal }) => getHome({ filter, baseDate }, undefined, signal),
     select: ({ data }) => homeViewDataSchema.parse(data),
   });
+```
+
+변경 훅 예시 (`_queries/use-withdraw-mutation.ts`):
+
+```ts
+"use client";
+
+import { useMutation } from "@tanstack/react-query";
+
+import { withdraw } from "@/api/generated/endpoints/auth/auth";
+import { useClearSession } from "@/app/[locale]/(main)/settings/_hooks/use-clear-session";
+
+export const useWithdrawMutation = () => {
+  const clearSession = useClearSession();
+
+  return useMutation({
+    mutationFn: () => withdraw(),
+    onSuccess: () => {
+      clearSession();
+    },
+  });
+};
 ```
 
 ### Phase 4 — 컨테이너 연결
@@ -70,6 +95,7 @@ export const useHomeView = ({ filter, baseDate }: GetHomeViewParams) =>
 
 ### Phase 5 — 자가 검토
 
+- [ ] 훅 파일명/함수명이 `-query`/`~Query`, `-mutation`/`~Mutation` 컨벤션을 따르는가
 - [ ] `api/generated/` 내부 파일을 직접 수정하지 않았는가 (재생성 시 사라짐)
 - [ ] 응답을 로컬 zod 스키마로 `.parse()`해서 검증했는가 (gen 응답 스키마를 그대로 UI까지 노출하지 않았는가)
 - [ ] `useSuspenseQuery` 사용 시 `queryKey`/`queryFn`을 직접 조립해 타입 충돌을 피했는가

@@ -7,7 +7,7 @@ import {
   getActiveTimer,
   getGetActiveTimerQueryKey,
 } from "@/api/generated/endpoints/timer/timer";
-import { activeTimerSchema } from "@/types/timer-type";
+import { activeTimerSchema } from "@/schemas/timer/timer-schema";
 
 export const useActiveTimer = () => {
   const query = useQuery({

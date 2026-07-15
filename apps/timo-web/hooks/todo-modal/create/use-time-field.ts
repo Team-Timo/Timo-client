@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useController, useWatch } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
+import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 import type { TimeSelection } from "@repo/timo-design-system/ui";
 import type { Control } from "react-hook-form";
 
-import { recommendDurationResponseSchema } from "@/api/common/todo-schema";
 import { useRecommendDuration } from "@/api/generated/endpoints/ai/ai";
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "@/constants/time";
+import { recommendDurationResponseSchema } from "@/schemas/todo/todo-schema";
 import {
   convertApiDurationToSeconds,
   convertSecondsToApiDuration,
