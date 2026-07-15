@@ -147,6 +147,7 @@ export const TodayTodoCard = ({
             <li key={sub.id} className="flex items-center gap-2">
               <div
                 role="none"
+                className="inline-flex items-center"
                 onClick={stopPropagation}
                 onKeyDown={stopPropagation}
               >
@@ -155,7 +156,12 @@ export const TodayTodoCard = ({
                   onChange={() => onSubTodoCheck(sub.id)}
                 />
               </div>
-              <span className={cn("typo-body-r-12", style.subText)}>
+              <span
+                className={cn(
+                  "typo-body-r-12",
+                  sub.isDone ? "text-timo-gray-500" : style.subText,
+                )}
+              >
                 {sub.text}
               </span>
             </li>
