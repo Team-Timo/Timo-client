@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { TodoTimerStatusTypes } from "@/api/common/todo-schema";
 import type { ReactNode } from "react";
@@ -37,6 +37,10 @@ export const TodayTodoCardContainer = ({
   onSubTodoCheck,
 }: TodayTodoCardContainerProps) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    if (isCompleted) setIsHovered(false);
+  }, [isCompleted]);
 
   const isPlaying = timerStatus === "RUNNING";
   const isDimmed = isCompleted && !isHovered;
