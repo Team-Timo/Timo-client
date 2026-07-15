@@ -1,14 +1,45 @@
 import timoTextLogo from "@repo/timo-design-system/assets/images/logo/timo-text-logo.svg";
 import Image from "next/image";
+import { notFound } from "next/navigation";
+import { hasLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
+
+import type { Metadata } from "next";
 
 import { PolicyContainer } from "@/app/[locale]/policy/_containers/PolicyContainer";
 import { AsyncBoundary } from "@/components/boundary/AsyncBoundary";
 import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { termsTypeSchema } from "@/types/terms-type";
 
 interface PolicyPageProps {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ type?: string }>;
+}
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: PolicyPageProps): Promise<Metadata> {
+  const { locale } = await params;
+
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
+  const { type } = await searchParams;
+  const parsedType = termsTypeSchema.safeParse(type);
+  const isPrivacy = parsedType.success && parsedType.data === "PRIVACY";
+
+  const t = await getTranslations({ locale, namespace: "Settings" });
+
+  return {
+    title: isPrivacy ? t("nav.privacy") : t("nav.policy"),
+    alternates: {
+      canonical: `/${locale}/policy`,
+    },
+  };
 }
 
 export default async function PolicyPage({ searchParams }: PolicyPageProps) {
