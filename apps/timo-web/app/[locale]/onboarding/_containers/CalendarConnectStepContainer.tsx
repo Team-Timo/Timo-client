@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
 import { authorize } from "@/api/generated/endpoints/calendar/calendar";
 import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingButtonContainer";
@@ -19,7 +18,7 @@ export const CalendarConnectStepContainer = ({
   onStart,
 }: CalendarConnectStepContainerProps) => {
   const t = useTranslations("Onboarding");
-  const [isCalendarConnected] = useState(false);
+  const isCalendarConnected = false;
 
   const handleGoogleConnect = async () => {
     try {

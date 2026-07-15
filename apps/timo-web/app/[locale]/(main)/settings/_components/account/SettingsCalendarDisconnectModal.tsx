@@ -8,7 +8,7 @@ import type { SettingsProfileLabels } from "@/app/[locale]/(main)/settings/_type
 
 import { OverlayModal } from "@/components/modal/OverlayModal";
 
-export interface SettingsCalendarDisconnectModalContainerProps {
+export interface SettingsCalendarDisconnectModalProps {
   isOpen: boolean;
   onClose: () => void;
   onExited: () => void;
@@ -16,13 +16,13 @@ export interface SettingsCalendarDisconnectModalContainerProps {
   onDisconnect: () => void;
 }
 
-export const SettingsCalendarDisconnectModalContainer = ({
+export const SettingsCalendarDisconnectModal = ({
   isOpen,
   onClose,
   onExited,
   labels,
   onDisconnect,
-}: SettingsCalendarDisconnectModalContainerProps) => {
+}: SettingsCalendarDisconnectModalProps) => {
   return (
     <OverlayModal
       isOpen={isOpen}

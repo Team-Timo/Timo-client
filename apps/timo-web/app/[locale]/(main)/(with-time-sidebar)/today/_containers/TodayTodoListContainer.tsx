@@ -41,15 +41,15 @@ export const TodayTodoListContainer = () => {
     enabled: profile.calendarConnected,
   });
   const calendarEvents = calendarEventsData?.days[0]?.events ?? [];
-  const [checkedCalendarIndices, setCheckedCalendarIndices] = useState<
-    Set<number>
+  const [checkedCalendarTitles, setCheckedCalendarTitles] = useState<
+    Set<string>
   >(new Set());
 
-  const toggleCalendarEvent = (index: number) => {
-    setCheckedCalendarIndices((prev) => {
+  const toggleCalendarEvent = (title: string) => {
+    setCheckedCalendarTitles((prev) => {
       const next = new Set(prev);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
+      if (next.has(title)) next.delete(title);
+      else next.add(title);
       return next;
     });
   };
@@ -91,7 +91,7 @@ export const TodayTodoListContainer = () => {
   };
 
   const completedCount =
-    todos.filter((todo) => todo.completed).length + checkedCalendarIndices.size;
+    todos.filter((todo) => todo.completed).length + checkedCalendarTitles.size;
 
   const plannedMinutes = activeTimer
     ? convertDurationToMinutes(
@@ -109,12 +109,12 @@ export const TodayTodoListContainer = () => {
         totalCount={todos.length + calendarEvents.length}
       />
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 pb-4">
-        {calendarEvents.map((event, index) => (
+        {calendarEvents.map((event) => (
           <TodayCalendarEventCard
-            key={index}
+            key={event.title}
             title={event.title}
-            checked={checkedCalendarIndices.has(index)}
-            onToggle={() => toggleCalendarEvent(index)}
+            checked={checkedCalendarTitles.has(event.title)}
+            onToggle={() => toggleCalendarEvent(event.title)}
           />
         ))}
         {todos.map((todo) => {

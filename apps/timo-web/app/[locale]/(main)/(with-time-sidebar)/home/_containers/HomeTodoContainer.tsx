@@ -57,15 +57,15 @@ export const HomeTodoContainer = () => {
   const days = homeViewData.days;
 
   const [checkedCalendarByDate, setCheckedCalendarByDate] = useState<
-    Map<string, Set<number>>
+    Map<string, Set<string>>
   >(new Map());
 
-  const toggleCalendarEvent = (dateKey: string, index: number) => {
+  const toggleCalendarEvent = (dateKey: string, title: string) => {
     setCheckedCalendarByDate((prev) => {
       const next = new Map(prev);
       const set = new Set(next.get(dateKey) ?? []);
-      if (set.has(index)) set.delete(index);
-      else set.add(index);
+      if (set.has(title)) set.delete(title);
+      else set.add(title);
       next.set(dateKey, set);
       return next;
     });
@@ -131,11 +131,11 @@ export const HomeTodoContainer = () => {
         const dateKey = day.date;
         const todos = todosByDate[dateKey] ?? day.todos;
         const calendarEvents = calendarEventsByDate.get(dateKey) ?? [];
-        const checkedCalendarIndices =
-          checkedCalendarByDate.get(dateKey) ?? new Set<number>();
+        const checkedCalendarTitles =
+          checkedCalendarByDate.get(dateKey) ?? new Set<string>();
         const completedCount =
           todos.filter((todo) => todo.completed).length +
-          checkedCalendarIndices.size;
+          checkedCalendarTitles.size;
 
         return (
           <div
@@ -165,12 +165,12 @@ export const HomeTodoContainer = () => {
               }
             >
               <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
-                {calendarEvents.map((event, index) => (
+                {calendarEvents.map((event) => (
                   <HomeCalendarEventCard
-                    key={index}
+                    key={event.title}
                     title={event.title}
-                    checked={checkedCalendarIndices.has(index)}
-                    onToggle={() => toggleCalendarEvent(dateKey, index)}
+                    checked={checkedCalendarTitles.has(event.title)}
+                    onToggle={() => toggleCalendarEvent(dateKey, event.title)}
                   />
                 ))}
                 {todos.map((todo) => {
