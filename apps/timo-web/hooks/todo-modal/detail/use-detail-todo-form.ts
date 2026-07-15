@@ -18,10 +18,7 @@ import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
 } from "@/utils/todo/text-length";
-import {
-  convertDurationToTimeText,
-  convertSecondsToApiDuration,
-} from "@/utils/todo/todo-time";
+import { convertSecondsToApiDuration } from "@/utils/todo/todo-time";
 
 interface DetailTodoFormValues {
   date: Date;
@@ -76,7 +73,7 @@ export interface UseDetailTodoFormParams {
 }
 
 export const useDetailTodoForm = ({ todo }: UseDetailTodoFormParams) => {
-  const durationText = convertDurationToTimeText(todo.durationSeconds ?? 0);
+  const durationText = convertSecondsToApiDuration(todo.durationSeconds ?? 0);
   const todoIcon = todo.icon ?? null;
   const todoDate = parseDateKey(todo.date) ?? new Date();
   const repeatType = isRepeatFrequency(todo.repeat.type)

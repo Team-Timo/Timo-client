@@ -21,6 +21,7 @@ import { useDetailTodoIconSubmit } from "@/hooks/todo-modal/detail/use-detail-to
 import { useDetailTodoPatchHandlers } from "@/hooks/todo-modal/detail/use-detail-todo-patch-handlers";
 import { useDetailTodoTextAutoSave } from "@/hooks/todo-modal/detail/use-detail-todo-text-auto-save";
 import { formatShortDateLabel } from "@/utils/date/date";
+import { convertApiDurationToClockTimeText } from "@/utils/todo/todo-time";
 
 const DETAIL_TODO_MEMO_MAX_LENGTH = 300;
 type DetailTodoWeekdayId = (typeof DETAIL_TODO_WEEKDAY_IDS)[number];
@@ -65,6 +66,7 @@ export const DetailTodoModalContent = ({
     id: weekdayId,
     label: tCommon(`weekday.${weekdayId}`),
   }));
+  const displayTime = convertApiDurationToClockTimeText(detailTodoForm.time);
   const patchHandlers = useDetailTodoPatchHandlers({
     form: detailTodoForm,
     onUpdate,
@@ -153,9 +155,9 @@ export const DetailTodoModalContent = ({
                 dateLabel={formatShortDateLabel(detailTodoForm.date)}
                 date={detailTodoForm.date}
                 onDateChange={patchHandlers.handleDateChange}
-                timeLabel={detailTodoForm.time}
+                timeLabel={displayTime}
                 timeOptions={DETAIL_TODO_TIME_OPTIONS}
-                time={detailTodoForm.time}
+                time={displayTime}
                 onTimeChange={patchHandlers.handleTimeChange}
                 selectedTime={patchHandlers.selectedTime}
                 onSelectTime={patchHandlers.handleSelectTime}

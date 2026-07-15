@@ -13,7 +13,10 @@ import {
   buildDetailTodoSubtasksUpdateRequest,
   isTodoUpdateRepeatWeekday,
 } from "@/utils/todo/detail-todo-update-request";
-import { convertTimeTextToDurationSeconds } from "@/utils/todo/todo-time";
+import {
+  convertApiDurationToSeconds,
+  convertClockTimeTextToApiDuration,
+} from "@/utils/todo/todo-time";
 
 export interface UseDetailTodoPatchHandlersParams {
   form: UseDetailTodoFormReturn;
@@ -35,9 +38,7 @@ export const useDetailTodoPatchHandlers = ({
     setSelectedTime(nextTime);
     const time = form.selectTime(nextTime);
 
-    const durationSeconds = time
-      ? convertTimeTextToDurationSeconds(time)
-      : undefined;
+    const durationSeconds = time ? convertApiDurationToSeconds(time) : 0;
 
     if (durationSeconds) updateTodo({ durationSeconds });
   };
@@ -48,8 +49,9 @@ export const useDetailTodoPatchHandlers = ({
   };
 
   const handleTimeChange = (time: string) => {
-    form.setTime(time);
-    const durationSeconds = convertTimeTextToDurationSeconds(time);
+    const apiDuration = convertClockTimeTextToApiDuration(time);
+    form.setTime(apiDuration);
+    const durationSeconds = convertApiDurationToSeconds(apiDuration);
 
     if (durationSeconds) updateTodo({ durationSeconds });
   };
