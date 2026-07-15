@@ -7,6 +7,7 @@ import type {
   TodoDetailResponseTimerStatus,
   TodoUpdateRequest,
 } from "@/api/generated/models";
+import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
@@ -40,7 +41,10 @@ export interface DetailTodoModalContentProps {
   onTogglePlay: () => void;
   onToggleCompleted: (completed: boolean) => void;
   onDelete: () => void;
-  onUpdate: (data: TodoUpdateRequest) => void;
+  onUpdate: (
+    data: TodoUpdateRequest,
+    handlers?: UpdateTodoSubmitHandlers,
+  ) => void;
   timerStatus: TodoDetailResponseTimerStatus;
 }
 

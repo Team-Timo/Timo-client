@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import type { TodoUpdateRequest } from "@/api/generated/models";
 import type { DetailTodoSubtaskInput } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
+import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 import { buildDetailTodoTextUpdateRequest } from "@/utils/todo/detail-todo-update-request";
 
@@ -12,7 +13,10 @@ export interface UseDetailTodoTextAutoSaveParams {
   title: string;
   memo: string;
   subtasks: DetailTodoSubtaskInput[];
-  onUpdate: (data: TodoUpdateRequest) => void;
+  onUpdate: (
+    data: TodoUpdateRequest,
+    handlers?: UpdateTodoSubmitHandlers,
+  ) => void;
 }
 
 export const useDetailTodoTextAutoSave = ({
@@ -56,8 +60,11 @@ export const useDetailTodoTextAutoSave = ({
       return;
     }
 
-    latestOnUpdateRef.current(latestBuildTextUpdateRequestRef.current());
-    lastSubmittedTextUpdateSignatureRef.current = textUpdateSignature;
+    latestOnUpdateRef.current(latestBuildTextUpdateRequestRef.current(), {
+      onSuccess: () => {
+        lastSubmittedTextUpdateSignatureRef.current = textUpdateSignature;
+      },
+    });
   }, [textUpdateSignature, title]);
 
   useEffect(() => {

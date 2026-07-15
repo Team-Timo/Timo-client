@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
+import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 import type { ReactNode } from "react";
 
 import { useGetTodoDetail } from "@/api/generated/endpoints/todo/todo";
@@ -73,7 +74,10 @@ const DetailTodoModalQuery = ({
     });
   };
 
-  const updateTodo = (updateData: TodoUpdateRequest) => {
+  const updateTodo = (
+    updateData: TodoUpdateRequest,
+    handlers: UpdateTodoSubmitHandlers = {},
+  ) => {
     handleUpdate(
       {
         todoId,
@@ -81,7 +85,11 @@ const DetailTodoModalQuery = ({
         data: updateData,
       },
       {
-        onError: onActionError,
+        onSuccess: handlers.onSuccess,
+        onError: (error) => {
+          handlers.onError?.(error);
+          onActionError(error);
+        },
       },
     );
   };
