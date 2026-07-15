@@ -176,7 +176,7 @@ export const HomeTodoContainer = () => {
                           durationSeconds={durationSeconds}
                           priority={todo.priority}
                           tagName={todoTagName}
-                          hasMemo={todo.hasMemo}
+                          hasSubtask={todo.hasSubtask}
                           isRepeated={todo.isRepeated}
                           timerStatus={timerStatus}
                           isPlayHighlighted={isPlayHighlighted}

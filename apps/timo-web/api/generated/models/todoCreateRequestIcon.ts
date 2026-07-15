@@ -10,6 +10,7 @@ export type TodoCreateRequestIcon =
   (typeof TodoCreateRequestIcon)[keyof typeof TodoCreateRequestIcon];
 
 export const TodoCreateRequestIcon = {
+  NONE: "NONE",
   ICON_1: "ICON_1",
   ICON_2: "ICON_2",
   ICON_3: "ICON_3",

@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 import { AiDefaultIcon, AiWhiteIcon } from "../../../icons";
 import { cn } from "../../../lib";
 import { Dropdown } from "../../layout/dropdown/Dropdown";
@@ -47,26 +49,66 @@ export const TimeSelector = ({
   onSelect,
   onOpen,
 }: TimeSelectorProps) => {
-  const isAiSelected = selected === "ai";
-  const [minutesText = "00", secondsText = "00"] = time.split(":");
+  const [draftTime, setDraftTime] = useState(time);
+  const [draftSelected, setDraftSelected] = useState(selected);
+  const draftTimeRef = useRef(time);
+  const draftSelectedRef = useRef(selected);
+
+  const isAiSelected = draftSelected === "ai";
+  const [minutesText = "00", secondsText = "00"] = draftTime.split(":");
+
+  const selectDraftTime = (value: string) => {
+    draftTimeRef.current = value;
+    setDraftTime(value);
+  };
+
+  const selectDraft = (value: TimeSelection) => {
+    draftSelectedRef.current = value;
+    setDraftSelected(value);
+  };
+
+  useEffect(() => {
+    draftSelectedRef.current = selected;
+    setDraftSelected(selected);
+  }, [selected]);
+
+  useEffect(() => {
+    draftTimeRef.current = time;
+    setDraftTime(time);
+  }, [time]);
 
   const handleMinutesChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onTimeChange?.(`${sanitizeTimeSegment(event.target.value)}:${secondsText}`);
+    selectDraftTime(
+      `${sanitizeTimeSegment(event.target.value)}:${secondsText}`,
+    );
   };
 
   const handleSecondsChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onTimeChange?.(
+    selectDraftTime(
       `${minutesText}:${sanitizeSecondsSegment(event.target.value)}`,
     );
   };
 
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      draftTimeRef.current = time;
+      setDraftTime(time);
+      draftSelectedRef.current = selected;
+      setDraftSelected(selected);
+      onOpen?.();
+      return;
+    }
+
+    if (draftSelectedRef.current && draftSelectedRef.current !== selected) {
+      onSelect?.(draftSelectedRef.current);
+    }
+    if (draftTimeRef.current !== time) {
+      onTimeChange?.(draftTimeRef.current);
+    }
+  };
+
   return (
-    <Dropdown
-      className="flex justify-center"
-      onOpenChange={(isOpen) => {
-        if (isOpen) onOpen?.();
-      }}
-    >
+    <Dropdown className="flex justify-center" onOpenChange={handleOpenChange}>
       <Dropdown.Trigger>{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel className="shadow-timo w-23.75">
@@ -78,7 +120,7 @@ export const TimeSelector = ({
         >
           <button
             type="button"
-            onClick={() => onSelect?.("ai")}
+            onClick={() => selectDraft("ai")}
             aria-pressed={isAiSelected}
             aria-label="AI 추천 시간 선택"
             className="shrink-0"
@@ -124,12 +166,13 @@ export const TimeSelector = ({
 
         <div className="flex w-full flex-col items-start gap-1.5">
           {times.map(({ minute, value, unit }) => {
-            const isSelected = minute === selected;
+            const isSelected = minute === draftSelected;
 
             return (
               <Dropdown.Item
                 key={minute}
-                onClick={() => onSelect?.(minute)}
+                onClick={() => selectDraft(minute)}
+                closeOnSelect={false}
                 aria-pressed={isSelected}
                 className={cn(
                   "justify-between px-[3.5px] py-[2.5px]",

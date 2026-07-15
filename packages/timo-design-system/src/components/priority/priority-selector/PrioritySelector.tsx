@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+
 import { cn } from "../../../lib";
 import { Dropdown } from "../../layout/dropdown/Dropdown";
 import { PriorityIcon } from "../priority-icon/PriorityIcon";
@@ -35,20 +37,41 @@ export const PrioritySelector = ({
   labels = PRIORITY_LABEL,
   onSelect,
 }: PrioritySelectorProps) => {
+  const [draftPriority, setDraftPriority] = useState(selected);
+  const draftPriorityRef = useRef(selected);
+
+  const selectDraft = (priority: PriorityLevel) => {
+    draftPriorityRef.current = priority;
+    setDraftPriority(priority);
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      draftPriorityRef.current = selected;
+      setDraftPriority(selected);
+      return;
+    }
+
+    if (draftPriorityRef.current && draftPriorityRef.current !== selected) {
+      onSelect?.(draftPriorityRef.current);
+    }
+  };
+
   return (
-    <Dropdown className="flex justify-center">
+    <Dropdown className="flex justify-center" onOpenChange={handleOpenChange}>
       <Dropdown.Trigger aria-haspopup="menu" className="py-2">
         {trigger}
       </Dropdown.Trigger>
 
       <Dropdown.Panel className="shadow-timo gap-1">
         {PRIORITY_LEVELS.map((priority) => {
-          const isSelected = priority === selected;
+          const isSelected = priority === draftPriority;
 
           return (
             <Dropdown.Item
               key={priority}
-              onClick={() => onSelect?.(priority)}
+              onClick={() => selectDraft(priority)}
+              closeOnSelect={false}
               aria-pressed={isSelected}
               className={cn(
                 "gap-2.25 py-0.5 pr-1 pl-2.75",
