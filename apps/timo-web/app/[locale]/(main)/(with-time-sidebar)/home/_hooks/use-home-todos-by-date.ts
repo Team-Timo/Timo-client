@@ -43,7 +43,8 @@ export const useHomeTodosByDate = (
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const queryClient = useQueryClient();
-  const { data: activeTimer } = useActiveTimer();
+  const { data: activeTimer, isFetching: isActiveTimerFetching } =
+    useActiveTimer();
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: reorderTodo } = useReorderTodo();
@@ -51,12 +52,19 @@ export const useHomeTodosByDate = (
   const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
 
-  const { mutate: startTimer } = useStartTimer<ApiError>({
-    mutation: { onSuccess: invalidateTimerState },
-  });
-  const { mutate: changeStatus } = useChangeStatus({
-    mutation: { onSuccess: invalidateTimerState },
-  });
+  const { mutate: startTimer, isPending: isStartTimerPending } =
+    useStartTimer<ApiError>({
+      mutation: { onSuccess: invalidateTimerState },
+    });
+  const { mutate: changeStatus, isPending: isChangeStatusPending } =
+    useChangeStatus({
+      mutation: { onSuccess: invalidateTimerState },
+    });
+
+  // startTimer/changeStatus 응답 후 activeTimer가 최신화되기 전에 재클릭하면
+  // 낡은(stale) activeTimer 값으로 잘못된 분기(중복 시작 등)를 타므로, 진행 중에는 재생 버튼 입력을 무시한다
+  const isTimerActionPending =
+    isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
 
   useEffect(() => {
     setTodosByDate(
@@ -147,6 +155,8 @@ export const useHomeTodosByDate = (
   };
 
   const handleTogglePlay = (dateKey: string, todoId: number) => {
+    if (isTimerActionPending) return;
+
     const willRun =
       todosByDate[dateKey]?.find((todo) => todo.todoId === todoId)
         ?.timerStatus !== "RUNNING";
@@ -250,6 +260,7 @@ export const useHomeTodosByDate = (
   return {
     todosByDate,
     activeTimer,
+    isTimerActionPending,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,

@@ -3,7 +3,7 @@
 import { keepPreviousData } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
@@ -153,6 +153,13 @@ export const DetailTodoModalContainer = ({
   const [actionErrorMessage, setActionErrorMessage] = useState("");
   const [isActionErrorToastOpen, setIsActionErrorToastOpen] = useState(false);
 
+  // overlay.open()에 넘긴 콜백은 모달을 여는 순간에 한 번만 호출되고 이후 다시 호출되지
+  // 않으므로, onTogglePlay를 그대로 캡처하면 모달이 열려있는 동안 activeTimer가 바뀌어도
+  // 그 시점의 낡은 activeTimer를 참조하는 콜백이 계속 쓰인다. ref로 감싸 클릭 시점에
+  // 항상 최신 콜백을 참조하도록 한다.
+  const onTogglePlayRef = useRef(onTogglePlay);
+  onTogglePlayRef.current = onTogglePlay;
+
   const showActionErrorToast = useCallback(
     (error: ErrorType<ErrorDto>) => {
       setActionErrorMessage(
@@ -171,7 +178,7 @@ export const DetailTodoModalContainer = ({
         isOpen={isOpen}
         onClose={close}
         onExited={unmount}
-        onTogglePlay={onTogglePlay}
+        onTogglePlay={() => onTogglePlayRef.current()}
         onToggleCompleted={onToggleCompleted}
         onDelete={onDelete}
         onActionError={showActionErrorToast}
