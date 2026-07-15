@@ -81,12 +81,7 @@ const WeeklyDemo = (args: RepeatSelectorProps) => {
         ...args.weekly,
         weekdays: WEEKDAYS_KO,
         selectedWeekdayIds,
-        onWeekdayToggle: (id) =>
-          setSelectedWeekdayIds((prev) =>
-            prev.includes(id)
-              ? prev.filter((item) => item !== id)
-              : [...prev, id],
-          ),
+        onWeekdaysChange: setSelectedWeekdayIds,
       }}
     />
   );

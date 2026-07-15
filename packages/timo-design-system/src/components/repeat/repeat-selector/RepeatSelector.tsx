@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useId, useState } from "react";
+import { Fragment, useId, useRef, useState } from "react";
 
 import { ChevronDownIcon } from "../../../icons";
 import { cn } from "../../../lib";
@@ -24,7 +24,7 @@ export interface WeekdayOption {
 export interface RepeatWeeklyDetail {
   weekdays: WeekdayOption[];
   selectedWeekdayIds: string[];
-  onWeekdayToggle?: (id: string) => void;
+  onWeekdaysChange?: (weekdayIds: string[]) => void;
 }
 
 export interface RepeatMonthlyDetail {
@@ -83,11 +83,17 @@ const RepeatFrequencyList = ({
   );
 };
 
+interface RepeatWeeklyDetailSectionProps {
+  weekdays: WeekdayOption[];
+  selectedWeekdayIds: string[];
+  onWeekdayToggle: (id: string) => void;
+}
+
 const RepeatWeeklyDetailSection = ({
   weekdays,
   selectedWeekdayIds,
   onWeekdayToggle,
-}: RepeatWeeklyDetail) => {
+}: RepeatWeeklyDetailSectionProps) => {
   return (
     <div className="flex w-full flex-col items-start gap-2.5">
       {weekdays.map(({ id, label }) => (
@@ -138,6 +144,15 @@ const RepeatMonthlyDetailSection = ({
   );
 };
 
+const isSameWeekdaySelection = (a: string[], b: string[]) => {
+  if (a.length !== b.length) return false;
+
+  const sortedA = [...a].sort();
+  const sortedB = [...b].sort();
+
+  return sortedA.every((item, index) => item === sortedB[index]);
+};
+
 export const RepeatSelector = ({
   trigger,
   frequencyHeading = "반복 일정",
@@ -149,21 +164,70 @@ export const RepeatSelector = ({
   monthly,
 }: RepeatSelectorProps) => {
   const [isPicking, setIsPicking] = useState(true);
-  const [selectedFrequency, setSelectedFrequency] =
+  const [draftFrequency, setDraftFrequency] =
     useState<RepeatFrequency>(frequency);
+  const [draftWeekdayIds, setDraftWeekdayIds] = useState<string[]>(
+    weekly.selectedWeekdayIds,
+  );
+  const [draftRepeatDay, setDraftRepeatDay] = useState(monthly.repeatDay);
+
+  const draftFrequencyRef = useRef(frequency);
+  const draftWeekdayIdsRef = useRef(weekly.selectedWeekdayIds);
+  const draftRepeatDayRef = useRef(monthly.repeatDay);
 
   const selectedLabel = options.find(
-    (option) => option.frequency === selectedFrequency,
+    (option) => option.frequency === draftFrequency,
   )?.label;
 
   const handleSelectFrequency = (value: RepeatFrequency) => {
-    setSelectedFrequency(value);
-    onFrequencyChange?.(value);
+    draftFrequencyRef.current = value;
+    setDraftFrequency(value);
     if (value !== "DAILY") setIsPicking(false);
   };
 
+  const handleWeekdayToggle = (id: string) => {
+    const next = draftWeekdayIdsRef.current.includes(id)
+      ? draftWeekdayIdsRef.current.filter((item) => item !== id)
+      : [...draftWeekdayIdsRef.current, id];
+
+    draftWeekdayIdsRef.current = next;
+    setDraftWeekdayIds(next);
+  };
+
+  const handleRepeatDayChange = (value: string) => {
+    draftRepeatDayRef.current = value;
+    setDraftRepeatDay(value);
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      draftFrequencyRef.current = frequency;
+      setDraftFrequency(frequency);
+      draftWeekdayIdsRef.current = weekly.selectedWeekdayIds;
+      setDraftWeekdayIds(weekly.selectedWeekdayIds);
+      draftRepeatDayRef.current = monthly.repeatDay;
+      setDraftRepeatDay(monthly.repeatDay);
+      return;
+    }
+
+    if (draftFrequencyRef.current !== frequency) {
+      onFrequencyChange?.(draftFrequencyRef.current);
+    }
+    if (
+      !isSameWeekdaySelection(
+        draftWeekdayIdsRef.current,
+        weekly.selectedWeekdayIds,
+      )
+    ) {
+      weekly.onWeekdaysChange?.(draftWeekdayIdsRef.current);
+    }
+    if (draftRepeatDayRef.current !== monthly.repeatDay) {
+      monthly.onRepeatDayChange?.(draftRepeatDayRef.current);
+    }
+  };
+
   return (
-    <Dropdown className="flex justify-center">
+    <Dropdown className="flex justify-center" onOpenChange={handleOpenChange}>
       <Dropdown.Trigger aria-haspopup="menu">{trigger}</Dropdown.Trigger>
 
       <Dropdown.Panel className="shadow-timo w-32.5 gap-1 p-0">
@@ -184,7 +248,7 @@ export const RepeatSelector = ({
             <ChevronDownIcon
               className={cn(
                 "shrink-0 transition-transform duration-200 ease-in-out",
-                isPicking && "rotate-180",
+                !isPicking && "rotate-180",
               )}
             />
           </button>
@@ -193,26 +257,32 @@ export const RepeatSelector = ({
         {isPicking ? (
           <RepeatFrequencyList
             options={options}
-            selectedFrequency={selectedFrequency}
+            selectedFrequency={draftFrequency}
             onSelect={handleSelectFrequency}
           />
         ) : (
           <div
             className={cn(
               "border-timo-gray-500 flex w-full flex-col gap-2 border-t px-3.5 py-1.5",
-              DETAIL_ALIGN[selectedFrequency],
+              DETAIL_ALIGN[draftFrequency],
             )}
           >
             <span className="typo-body-r-12 text-timo-gray-700 w-full whitespace-nowrap">
               {detailHeading}
             </span>
 
-            {selectedFrequency === "WEEKLY" && (
-              <RepeatWeeklyDetailSection {...weekly} />
+            {draftFrequency === "WEEKLY" && (
+              <RepeatWeeklyDetailSection
+                weekdays={weekly.weekdays}
+                selectedWeekdayIds={draftWeekdayIds}
+                onWeekdayToggle={handleWeekdayToggle}
+              />
             )}
-            {selectedFrequency === "MONTHLY" && (
+            {draftFrequency === "MONTHLY" && (
               <RepeatMonthlyDetailSection
-                {...monthly}
+                repeatDayLabel={monthly.repeatDayLabel}
+                repeatDay={draftRepeatDay}
+                onRepeatDayChange={handleRepeatDayChange}
                 ariaLabel={detailHeading}
               />
             )}
