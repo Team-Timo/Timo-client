@@ -29,7 +29,6 @@ export const useSettingsProfileLabels = (): SettingsProfileLabels => {
     ),
     tagDeleteConfirmCancel: tSettings("profile.tagDeleteConfirmCancel"),
     tagDeleteConfirmConfirm: tSettings("profile.tagDeleteConfirmConfirm"),
-    logoutConfirmTitle: tSettings("profile.logoutConfirmTitle"),
     logoutConfirmDescription: tSettings("profile.logoutConfirmDescription"),
     logoutConfirmCancel: tSettings("profile.logoutConfirmCancel"),
     logoutConfirmConfirm: tSettings("profile.logoutConfirmConfirm"),

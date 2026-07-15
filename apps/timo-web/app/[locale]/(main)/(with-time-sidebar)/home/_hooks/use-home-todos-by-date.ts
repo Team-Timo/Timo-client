@@ -3,6 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+import type { ApiError } from "@/api/error/api-error";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
@@ -13,19 +14,21 @@ import {
   useStopTimer,
 } from "@/api/generated/endpoints/timer/timer";
 import {
+  getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
   useReorderTodo,
 } from "@/api/generated/endpoints/todo/todo";
 import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
-import { useActiveTimer } from "@/hooks/use-active-timer";
-import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
+import { useActiveTimer } from "@/hooks/timer/use-active-timer";
+import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export interface UseHomeTodosByDateOptions {
   onNeedStopConfirm: (dateKey: string, todoId: number) => void;
   onTimerAlreadyRunning: () => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
+  onPlayError: (message: string | undefined) => void;
 }
 
 export const useHomeTodosByDate = (
@@ -34,6 +37,7 @@ export const useHomeTodosByDate = (
     onNeedStopConfirm,
     onTimerAlreadyRunning,
     onStopFeedback,
+    onPlayError,
   }: UseHomeTodosByDateOptions,
 ) => {
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
@@ -47,7 +51,7 @@ export const useHomeTodosByDate = (
   const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
 
-  const { mutate: startTimer } = useStartTimer({
+  const { mutate: startTimer } = useStartTimer<ApiError>({
     mutation: { onSuccess: invalidateTimerState },
   });
   const { mutate: changeStatus } = useChangeStatus({
@@ -80,6 +84,11 @@ export const useHomeTodosByDate = (
     invalidateHomeView();
     invalidateFocusTodo();
   };
+  const invalidateTodoDetail = (dateKey: string, todoId: number) => {
+    queryClient.invalidateQueries({
+      queryKey: getGetTodoDetailQueryKey(todoId, { date: dateKey }),
+    });
+  };
 
   const handleToggleCompleted = (
     dateKey: string,
@@ -100,6 +109,7 @@ export const useHomeTodosByDate = (
         onSuccess: () => {
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
+          invalidateTodoDetail(dateKey, todoId);
         },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
@@ -124,7 +134,12 @@ export const useHomeTodosByDate = (
           }));
           changeTodoStatus(
             { todoId, data: { isCompleted: true, date: dateKey } },
-            { onSuccess: invalidateHomeAndFocus },
+            {
+              onSuccess: () => {
+                invalidateHomeAndFocus();
+                invalidateTodoDetail(dateKey, todoId);
+              },
+            },
           );
         },
       },
@@ -141,10 +156,15 @@ export const useHomeTodosByDate = (
     }
 
     if (activeTimer && activeTimer.todoId === todoId) {
-      changeStatus({
-        timerId: activeTimer.timerId,
-        data: { action: activeTimer.status === "RUNNING" ? "PAUSE" : "RESUME" },
-      });
+      changeStatus(
+        {
+          timerId: activeTimer.timerId,
+          data: {
+            action: activeTimer.status === "RUNNING" ? "PAUSE" : "RESUME",
+          },
+        },
+        { onSuccess: () => invalidateTodoDetail(dateKey, todoId) },
+      );
       return;
     }
 
@@ -154,7 +174,15 @@ export const useHomeTodosByDate = (
       return;
     }
 
-    startTimer({ todoId });
+    startTimer(
+      { todoId },
+      {
+        onSuccess: () => invalidateTodoDetail(dateKey, todoId),
+        onError: (error: ApiError) => {
+          onPlayError(error.message);
+        },
+      },
+    );
   };
 
   const handleToggleSubtaskCompleted = (
@@ -177,6 +205,7 @@ export const useHomeTodosByDate = (
         onSuccess: () => {
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
+          invalidateTodoDetail(dateKey, todoId);
         },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));

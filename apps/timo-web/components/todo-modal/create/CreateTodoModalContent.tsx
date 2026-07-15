@@ -6,21 +6,21 @@ import { CreateButton, TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useController, useForm } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
+import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
-import { createTodoRequestSchema } from "@/api/common/todo-schema";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
 import { CreateTodoMemoField } from "@/components/todo-modal/create/CreateTodoMemoField";
 import { CreateTodoTaskFields } from "@/components/todo-modal/create/CreateTodoTaskFields";
-import { useIconField } from "@/hooks/todo-modal/use-icon-field";
-import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
-import { useSubtaskField } from "@/hooks/todo-modal/use-subtask-field";
-import { useTagField } from "@/hooks/todo-modal/use-tag-field";
-import { useTimeField } from "@/hooks/todo-modal/use-time-field";
-import { useTitleField } from "@/hooks/todo-modal/use-title-field";
+import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
+import { useIconField } from "@/hooks/todo-modal/create/use-icon-field";
+import { useRepeatField } from "@/hooks/todo-modal/create/use-repeat-field";
+import { useSubtaskField } from "@/hooks/todo-modal/create/use-subtask-field";
+import { useTimeField } from "@/hooks/todo-modal/create/use-time-field";
+import { useTitleField } from "@/hooks/todo-modal/create/use-title-field";
+import { createTodoRequestSchema } from "@/schemas/todo/todo-schema";
 import { formatDateKey, formatShortDateLabel } from "@/utils/date/date";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({

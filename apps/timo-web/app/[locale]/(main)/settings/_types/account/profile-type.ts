@@ -26,7 +26,6 @@ export interface SettingsProfileLabels {
   tagDeleteConfirmDescription: string;
   tagDeleteConfirmCancel: string;
   tagDeleteConfirmConfirm: string;
-  logoutConfirmTitle: string;
   logoutConfirmDescription: string;
   logoutConfirmCancel: string;
   logoutConfirmConfirm: string;

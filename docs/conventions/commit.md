@@ -19,12 +19,12 @@
 
 변경된 파일 위치에 따라 스코프를 결정한다.
 
-| 스코프   | 기준                                                                         |
-| -------- | ---------------------------------------------------------------------------- |
-| `web`    | `apps/timo-web/**` 변경                                                      |
-| `ui`     | `packages/timo-design-system/**` 변경                                        |
-| `root`   | 루트 설정 파일 (`turbo.json`, `pnpm-workspace.yaml`, 루트 `package.json` 등) |
-| `config` | `packages/eslint-config/**`, `packages/typescript-config/**` 변경            |
+| 스코프   | 기준                                                                                             |
+| -------- | ------------------------------------------------------------------------------------------------ |
+| `web`    | `apps/timo-web/**` 변경                                                                          |
+| `ui`     | `packages/timo-design-system/**` 변경                                                            |
+| `root`   | 루트 설정 파일 (`turbo.json`, `pnpm-workspace.yaml`, 루트 `package.json` 등)                     |
+| `config` | `packages/eslint-config/**`, `packages/typescript-config/**`, `packages/tailwind-config/**` 변경 |
 
 ## 커밋 형식
 

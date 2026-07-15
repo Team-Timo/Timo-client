@@ -88,7 +88,7 @@ export const Calendar = ({
   return (
     <div
       className={cn(
-        "shadow-timo h-66 w-67 rounded-[4px] bg-white px-6 py-4",
+        "shadow-timo w-67 rounded-[4px] bg-white px-6 py-4",
         className,
       )}
     >
@@ -115,7 +115,7 @@ export const Calendar = ({
         />
       </div>
 
-      <div className={cn("grid grid-cols-7 grid-rows-6 gap-x-1 gap-y-1.5")}>
+      <div className="grid grid-cols-7 gap-x-1 gap-y-1.5">
         {WEEKDAYS.map((weekday, index) => (
           <div
             key={`${weekday}-${index}`}

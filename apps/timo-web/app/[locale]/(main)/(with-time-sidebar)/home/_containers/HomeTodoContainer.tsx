@@ -8,16 +8,16 @@ import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/h
 
 import { HomeTodoCard } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_components/todo-card/HomeTodoCard";
 import { HomeDayHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeDayHeaderContainer";
-import { HomeStopCompleteModalContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/todo-card/HomeStopCompleteModalContainer";
 import {
   scrollContainerToToday,
   useHomeTodayScrollRef,
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
-import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
+import { useHomeViewQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view-query";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-import { DetailTodoModalContainer } from "@/components/todo-modal/detail/DetailTodoModalContainer";
+import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
+import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
@@ -39,13 +39,14 @@ export const HomeTodoContainer = () => {
   const filter: HomeViewFilter = isWeekView ? "WEEK" : "DEFAULT";
   const baseDate = formatDateKey(referenceDate);
 
-  const { data: homeViewData } = useHomeView({ filter, baseDate });
+  const { data: homeViewData } = useHomeViewQuery({ filter, baseDate });
   const days = homeViewData.days;
 
   const [pendingCompleteTodo, setPendingCompleteTodo] =
     useState<PendingCompleteTodo | null>(null);
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
   const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
+  const [playErrorMessage, setPlayErrorMessage] = useState<string | null>(null);
 
   const {
     todosByDate,
@@ -61,6 +62,8 @@ export const HomeTodoContainer = () => {
       setPendingCompleteTodo({ token: Date.now(), dateKey, todoId }),
     onTimerAlreadyRunning: () => setIsTimerRunningToastOpen(true),
     onStopFeedback: setFeedbackText,
+    onPlayError: (message) =>
+      setPlayErrorMessage(message ?? tToast("timerStartFailed")),
   });
 
   const handleConfirmPendingComplete = () => {
@@ -138,6 +141,8 @@ export const HomeTodoContainer = () => {
                   const timerStatus = isActiveTodo
                     ? activeTimer.status
                     : todo.timerStatus;
+                  const isPlayHighlighted =
+                    !activeTimer || Boolean(isActiveTodo);
 
                   const todoTagLabelKey = todo.tag
                     ? getDefaultTagLabelKey(todo.tag.tagId)
@@ -151,9 +156,13 @@ export const HomeTodoContainer = () => {
                   return (
                     <DetailTodoModalContainer
                       key={todo.todoId}
-                      todo={todo}
+                      todoId={todo.todoId}
+                      date={dateKey}
                       onTogglePlay={() =>
                         handleTogglePlay(dateKey, todo.todoId)
+                      }
+                      onToggleCompleted={(completed) =>
+                        handleToggleCompleted(dateKey, todo.todoId, completed)
                       }
                       onDelete={() => handleDeleteTodo(dateKey, todo.todoId)}
                     >
@@ -168,6 +177,7 @@ export const HomeTodoContainer = () => {
                           hasMemo={todo.hasMemo}
                           isRepeated={todo.isRepeated}
                           timerStatus={timerStatus}
+                          isPlayHighlighted={isPlayHighlighted}
                           subtaskTitle={firstSubtask?.content}
                           isSubtaskCompleted={firstSubtask?.completed}
                           onClickTodo={openDetailTodoModal}
@@ -203,7 +213,7 @@ export const HomeTodoContainer = () => {
         );
       })}
 
-      <HomeStopCompleteModalContainer
+      <StopCompleteModalContainer
         pendingToken={pendingCompleteTodo?.token ?? null}
         plannedMinutes={plannedMinutes}
         actualMinutes={actualMinutes}
@@ -215,6 +225,12 @@ export const HomeTodoContainer = () => {
         isOpen={isTimerRunningToastOpen}
         onClose={() => setIsTimerRunningToastOpen(false)}
         message={tToast("timerAlreadyRunning")}
+      />
+
+      <AnimatedToast
+        isOpen={playErrorMessage !== null}
+        onClose={() => setPlayErrorMessage(null)}
+        message={playErrorMessage ?? ""}
       />
     </div>
   );

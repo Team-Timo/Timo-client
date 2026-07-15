@@ -5,6 +5,14 @@ import createNextIntlPlugin from "next-intl/plugin";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["@repo/timo-design-system"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+    ],
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

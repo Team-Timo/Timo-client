@@ -38,7 +38,11 @@ export const CreateTodoTaskFields = ({
   return (
     <div className="flex w-full flex-col items-start gap-1.5">
       <div className="flex w-full items-center justify-center gap-2">
-        <Checkbox checked={false} onChange={() => {}} />
+        <Checkbox
+          checked={false}
+          onChange={() => {}}
+          className="cursor-default"
+        />
         <textarea
           value={titleValue}
           ref={resizeTextarea}
@@ -57,7 +61,11 @@ export const CreateTodoTaskFields = ({
           key={entry.id}
           className="flex w-full items-center justify-center gap-2"
         >
-          <Checkbox checked={false} onChange={() => {}} />
+          <Checkbox
+            checked={false}
+            onChange={() => {}}
+            className="cursor-default"
+          />
           <textarea
             value={entry.value}
             ref={registerSubtaskInputRef(index)}

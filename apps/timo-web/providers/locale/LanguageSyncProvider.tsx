@@ -5,14 +5,14 @@ import { useEffect } from "react";
 
 import { AsyncBoundary } from "@/components/boundary/AsyncBoundary";
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { useMyProfile } from "@/queries/use-my-profile";
+import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 const isSupportedLocale = (value: string): value is "ko" | "en" =>
   value === "ko" || value === "en";
 
 const LanguageSync = () => {
-  const { data: profile } = useMyProfile();
+  const { data: profile } = useMyProfileQuery();
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();

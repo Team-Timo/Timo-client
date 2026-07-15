@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "timo",
+    "description": "Manage your day with clear timeboxes."
+  },
   "Navigation": {
     "home": "Home",
     "today": "Today",
@@ -17,7 +21,7 @@
       "SAT": "Saturday"
     },
     "tag": {
-      "dailyLife": "Daily life",
+      "dailyLife": "Daily",
       "work": "Work",
       "exercise": "Exercise",
       "assignment": "Assignment",
@@ -46,7 +50,7 @@
       "dateLabel": "Date",
       "timeLabel": "Time",
       "tagLabel": "Tag",
-      "addTag": "Add",
+      "addTag": "Add tag",
       "create": "Create",
       "repeatDaily": "Daily",
       "repeatWeekly": "Weekly",
@@ -56,6 +60,7 @@
     },
     "detailModal": {
       "ariaLabel": "To-do details",
+      "save": "Save",
       "delete": "Delete to-do",
       "repeatFrequencyHeading": "Repeat",
       "repeatDayLabel": "day(s)"
@@ -96,7 +101,7 @@
       "tagDeleteConfirmDescription": "The tag will be removed from every todo it's applied to.",
       "tagDeleteConfirmCancel": "Cancel",
       "tagDeleteConfirmConfirm": "Delete",
-      "logoutConfirmTitle": "Log out?",
+      "logoutConfirmTitle": "Do you want to <red>log out</red>?",
       "logoutConfirmDescription": "Your data stays saved after logging out.\nSign back in anytime to pick up where you left off.",
       "logoutConfirmCancel": "Cancel",
       "logoutConfirmConfirm": "Log out"
@@ -110,11 +115,18 @@
       "warningCalendar": "The linked calendar connection will be disconnected.",
       "warningIrreversible": "Deleted accounts cannot be recovered.",
       "withdraw": "Withdraw",
-      "confirmMessage": "Are you sure you want to withdraw? All your data will be deleted and cannot be undone.",
+      "withdrawConfirmTitle": "Are you sure you want to <red>withdraw</red>?",
+      "withdrawConfirmDescription": "After withdrawal, all data will be deleted and cannot be undone.",
+      "withdrawConfirmCancel": "Go back",
+      "withdrawConfirmConfirm": "Withdraw",
       "withdrawError": "An error occurred during withdrawal. Please try again later."
     }
   },
   "Statistics": {
+    "calendar": {
+      "loading": "Loading statistics calendar.",
+      "error": "Failed to load statistics calendar."
+    },
     "sidePanel": {
       "monthTotalRecordTime": "Total record time this month",
       "activeDays": "Active days",
@@ -129,18 +141,21 @@
   },
   "Toast": {
     "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
-    "todoLimitLine1": "You can add up to <blue>20 incomplete to-dos</blue>.",
-    "todoLimitLine2": "To add a new to-do, please complete an existing one.",
+    "todoLimitLine1": "You can add up to <blue>20 to-dos</blue> per day.",
+    "todoLimitLine2": "To add a new to-do, please delete an existing one.",
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
     "todoCreateFailed": "Failed to create the to-do. Please try again.",
+    "todoUpdateFailed": "Failed to update the to-do. Please try again.",
     "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again.",
     "tagCreateFailed": "Failed to create the tag. Please try again.",
     "tagActionFailed": "Failed to update the tag. Please try again.",
     "focusActionFailed": "Failed to process the request. Please try again.",
     "languageChangeFailed": "Failed to change the language. Please try again.",
-    "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first."
+    "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first.",
+    "timerStartFailed": "This to-do has no estimated duration set."
   },
   "Login": {
+    "title": "Log in",
     "animationLabel": "Login animation",
     "headline": "Manage your day with clear timeboxes.",
     "description": "Please log in to your timo account.",

@@ -6,7 +6,7 @@ import { DateInformation } from "@/app/[locale]/(main)/(with-time-sidebar)/_comp
 import { convertDateToDateText } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/date";
 import { useCreateTodoSubmit } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/todo-modal/use-create-todo-submit";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-import { CreateTodoModalContainer } from "@/components/todo-modal/create/CreateTodoModalContainer";
+import { CreateTodoModalContainer } from "@/containers/todo-modal/create/CreateTodoModalContainer";
 import { getToday } from "@/utils/date/date";
 import { getDayOfWeekKey } from "@/utils/date/get-day-of-week-key";
 
@@ -42,6 +42,7 @@ export const TodayDateHeaderContainer = ({
       <CreateTodoModalContainer
         defaultDate={today}
         buttonVariant="big"
+        totalCount={totalCount}
         onSubmit={handleSubmit}
       />
       <AnimatedToast
