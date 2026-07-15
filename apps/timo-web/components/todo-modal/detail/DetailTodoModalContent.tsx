@@ -82,6 +82,7 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
   const latestOnUpdateRef = useRef(onUpdate);
+
   const buildTextUpdateRequest = useCallback(
     (): TodoUpdateRequest =>
       buildDetailTodoTextUpdateRequest({
@@ -91,6 +92,7 @@ export const DetailTodoModalContent = ({
       }),
     [detailTodoForm.memo, detailTodoForm.subtaskInputs, detailTodoForm.title],
   );
+
   const latestBuildTextUpdateRequestRef = useRef(buildTextUpdateRequest);
   const didStartTextUpdateRef = useRef(false);
   const textUpdateSignature = useMemo(

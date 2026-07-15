@@ -2,12 +2,15 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 
+import type { ErrorType } from "@/api/client/custom-instance";
+import type { ErrorDto } from "@/api/generated/models";
+
 import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
 import { useDeleteTodo } from "@/api/generated/endpoints/todo/todo";
 
 export interface DeleteTodoSubmitHandlers {
   onSuccess: () => void;
-  onError?: () => void;
+  onError?: (error: ErrorType<ErrorDto>) => void;
 }
 
 export const useDeleteTodoSubmit = () => {
