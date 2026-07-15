@@ -67,6 +67,9 @@ export const DetailTodoModalContent = ({
   const detailTodoForm = useDetailTodoForm({ todo });
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
   const [isIconPanelOpen, setIsIconPanelOpen] = useState(false);
+  const [pendingIcon, setPendingIcon] = useState<TodoIconValue | null>(
+    detailTodoForm.icon,
+  );
   const dateNumber = detailTodoForm.date.getDate();
   const dayOfWeek = isDetailTodoWeekdayId(todo.dayOfWeek)
     ? todo.dayOfWeek
@@ -147,12 +150,37 @@ export const DetailTodoModalContent = ({
   };
 
   const handleSelectIcon = (nextIcon: TodoIconValue) => {
-    detailTodoForm.selectIcon(nextIcon);
-    updateTodo({ icon: nextIcon });
+    setPendingIcon(nextIcon);
+  };
+
+  const handleOpenIconPanel = () => {
+    setPendingIcon(detailTodoForm.icon);
+    setIsIconPanelOpen(true);
+  };
+
+  const handleSubmitIcon = () => {
+    if (!pendingIcon || pendingIcon === detailTodoForm.icon) {
+      setIsIconPanelOpen(false);
+      return;
+    }
+
+    detailTodoForm.selectIcon(pendingIcon);
+    updateTodo({ icon: pendingIcon });
+    setIsIconPanelOpen(false);
+  };
+
+  const handleToggleIconPanel = () => {
+    if (isIconPanelOpen) {
+      handleSubmitIcon();
+      return;
+    }
+
+    setPendingIcon(detailTodoForm.icon);
+    setIsIconPanelOpen(true);
   };
 
   const handleRemoveIcon = () => {
-    detailTodoForm.removeIcon();
+    setPendingIcon(null);
   };
 
   const handleSelectTime = (nextTime: TimeSelection) => {
@@ -249,11 +277,11 @@ export const DetailTodoModalContent = ({
 
           <div>
             <TodoIconField
-              icon={detailTodoForm.icon}
+              icon={isIconPanelOpen ? pendingIcon : detailTodoForm.icon}
               isIconPanelOpen={isIconPanelOpen}
               addIconLabel={tCreateModal("addIcon")}
-              onOpenPanel={() => setIsIconPanelOpen(true)}
-              onTogglePanel={() => setIsIconPanelOpen((prev) => !prev)}
+              onOpenPanel={handleOpenIconPanel}
+              onTogglePanel={handleToggleIconPanel}
               onSelectIcon={handleSelectIcon}
               onRemoveIcon={handleRemoveIcon}
             />
