@@ -5,7 +5,7 @@ export {
   todoSubtaskSchema,
   todoSchema,
   todoCreateResponseSchema,
-} from "@/api/common/todo-schema";
+} from "@/schemas/todo/todo-schema";
 
 export type {
   TodoPriorityTypes,
@@ -14,4 +14,4 @@ export type {
   TodoSubtask,
   Todo,
   TodoCreateResponseData,
-} from "@/api/common/todo-schema";
+} from "@/schemas/todo/todo-schema";

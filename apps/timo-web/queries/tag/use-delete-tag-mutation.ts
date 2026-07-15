@@ -7,7 +7,7 @@ import {
   getGetTagsQueryKey,
 } from "@/api/generated/endpoints/tag/tag";
 
-export const useDeleteTag = () => {
+export const useDeleteTagMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

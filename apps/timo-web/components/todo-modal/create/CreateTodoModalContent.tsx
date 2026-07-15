@@ -6,10 +6,9 @@ import { CreateButton, TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useController, useForm } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
+import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
-import { createTodoRequestSchema } from "@/api/common/todo-schema";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
@@ -21,6 +20,7 @@ import { useRepeatField } from "@/hooks/todo-modal/create/use-repeat-field";
 import { useSubtaskField } from "@/hooks/todo-modal/create/use-subtask-field";
 import { useTimeField } from "@/hooks/todo-modal/create/use-time-field";
 import { useTitleField } from "@/hooks/todo-modal/create/use-title-field";
+import { createTodoRequestSchema } from "@/schemas/todo/todo-schema";
 import { formatDateKey, formatShortDateLabel } from "@/utils/date/date";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({

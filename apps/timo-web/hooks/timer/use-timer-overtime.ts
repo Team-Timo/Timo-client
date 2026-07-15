@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import type { ActiveTimer } from "@/types/timer-type";
+import type { ActiveTimer } from "@/schemas/timer/timer-schema";
 
 const STORAGE_KEY_PREFIX = "timo:overtime-base:";
 

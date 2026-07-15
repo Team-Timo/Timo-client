@@ -18,8 +18,8 @@ import {
   useChangeSubtaskStatus,
   useChangeTodoStatus,
 } from "@/api/generated/endpoints/todo/todo";
-import { useActiveTimer } from "@/hooks/use-active-timer";
-import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
+import { useActiveTimer } from "@/hooks/timer/use-active-timer";
+import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export interface UseTodayTodoListOptions {

@@ -17,12 +17,12 @@ import {
   useChangeSubtaskStatus,
   useChangeTodoStatus,
 } from "@/api/generated/endpoints/todo/todo";
-import { useFocusTodo } from "@/app/[locale]/(main)/focus/_queries/use-focus-todo";
+import { useFocusTodoQuery } from "@/app/[locale]/(main)/focus/_queries/use-focus-todo-query";
 import { convertDateToBadgeText } from "@/app/[locale]/(main)/focus/_utils/date";
-import { useActiveTimer } from "@/hooks/use-active-timer";
-import { useTimerActions } from "@/hooks/use-timer-actions";
-import { useTimerOvertime } from "@/hooks/use-timer-overtime";
-import { useTimerQueryInvalidation } from "@/hooks/use-timer-query-invalidation";
+import { useActiveTimer } from "@/hooks/timer/use-active-timer";
+import { useTimerActions } from "@/hooks/timer/use-timer-actions";
+import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";
+import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 
 export interface UseFocusSessionOptions {
@@ -38,7 +38,7 @@ export const useFocusSession = ({
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const wasTimeUpRef = useRef(false);
 
-  const { data: focusView } = useFocusTodo();
+  const { data: focusView } = useFocusTodoQuery();
   const { data: activeTimer } = useActiveTimer();
 
   const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =

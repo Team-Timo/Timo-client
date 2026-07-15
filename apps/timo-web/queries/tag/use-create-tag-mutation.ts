@@ -10,7 +10,7 @@ import {
   getGetTagsQueryKey,
 } from "@/api/generated/endpoints/tag/tag";
 
-export const useCreateTag = () => {
+export const useCreateTagMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

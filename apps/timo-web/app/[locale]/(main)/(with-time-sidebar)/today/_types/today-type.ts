@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { dayOfWeekSchema, todoSchema } from "@/api/common/todo-schema";
+import { dayOfWeekSchema, todoSchema } from "@/schemas/todo/todo-schema";
 
 export const todayTodoSchema = todoSchema.extend({
   date: z.string(),

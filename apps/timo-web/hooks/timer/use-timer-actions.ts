@@ -7,7 +7,7 @@ import type {
   useStopTimer,
 } from "@/api/generated/endpoints/timer/timer";
 import type { useChangeTodoStatus } from "@/api/generated/endpoints/todo/todo";
-import type { ActiveTimer } from "@/types/timer-type";
+import type { ActiveTimer } from "@/schemas/timer/timer-schema";
 
 type ChangeStatusMutate = ReturnType<typeof useChangeStatus>["mutate"];
 type ExtendTimerMutate = ReturnType<typeof useExtendTimer>["mutate"];

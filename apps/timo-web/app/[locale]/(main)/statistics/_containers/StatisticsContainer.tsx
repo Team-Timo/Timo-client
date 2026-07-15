@@ -12,7 +12,7 @@ import { StatisticsHeaderContainer } from "@/app/[locale]/(main)/statistics/_con
 import {
   useStatisticsDailyQuery,
   useStatisticsSummaryQuery,
-} from "@/app/[locale]/(main)/statistics/_queries/statistics-queries";
+} from "@/app/[locale]/(main)/statistics/_queries/use-statistics-query";
 import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/_utils/format-statistics-date";
 import { formatDateKey } from "@/utils/date/date";
 
