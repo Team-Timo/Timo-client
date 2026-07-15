@@ -88,7 +88,9 @@ export const TodayTodoListContainer = () => {
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 pb-4">
         {todos.map((todo) => {
           const isActiveTodo =
-            activeTimer && activeTimer.todoId === todo.todoId;
+            activeTimer &&
+            activeTimer.todoId === todo.todoId &&
+            activeTimer.date === todo.date;
           const durationSeconds = isActiveTodo
             ? activeTimer.plannedSeconds + activeTimer.extendedSeconds
             : todo.durationSeconds;

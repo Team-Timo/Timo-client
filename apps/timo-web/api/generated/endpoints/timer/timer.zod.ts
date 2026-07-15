@@ -10,6 +10,9 @@ import * as zod from "zod";
 /**
  * 투두의 타이머를 시작합니다.
  * 한 번에 한 개의 타이머만 실행 가능하며, 이미 실행/일시정지 중인 타이머가 있으면 409를 반환합니다.
+ *
+ * 응답의 date는 타이머가 귀속되는 날짜(사용자 시간대 기준 시작일)입니다.
+ * 반복 투두는 여러 날짜에 같은 todoId로 노출되므로, 실행중 표시는 todoId가 아닌 (todoId, date) 조합으로 구분해야 합니다.
  * @summary 타이머 시작
  */
 export const StartTimerParams = zod.object({
@@ -23,6 +26,7 @@ export const StartTimerResponse = zod.object({
     .object({
       timerId: zod.number(),
       todoId: zod.number(),
+      date: zod.string(),
       status: zod.string(),
       plannedSeconds: zod.number(),
       startedAt: zod.string(),
@@ -153,6 +157,9 @@ export const CompleteTimerResponse = zod.object({
  * 로그인한 사용자의 현재 실행 중(RUNNING/PAUSED)인 타이머를 단건 조회합니다.
  * 한 사용자당 시작 이후 완료/종료되지 않은 타이머는 최대 1개만 존재할 수 있습니다.
  * 실행 중인 타이머가 없으면 data: null을 반환합니다.
+ *
+ * 응답의 date는 타이머가 귀속되는 날짜(사용자 시간대 기준 시작일)입니다.
+ * 반복 투두는 여러 날짜에 같은 todoId로 노출되므로, 실행중 표시는 todoId가 아닌 (todoId, date) 조합으로 구분해야 합니다.
  * @summary 현재 실행 중인 타이머 조회
  */
 export const GetActiveTimerResponse = zod.object({
@@ -162,6 +169,7 @@ export const GetActiveTimerResponse = zod.object({
     .object({
       timerId: zod.number(),
       todoId: zod.number(),
+      date: zod.string(),
       todoTitle: zod.string(),
       iconType: zod.string().optional(),
       status: zod.string(),

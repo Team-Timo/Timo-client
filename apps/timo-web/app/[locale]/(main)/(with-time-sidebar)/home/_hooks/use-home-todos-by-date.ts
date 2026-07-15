@@ -95,7 +95,11 @@ export const useHomeTodosByDate = (
     todoId: number,
     completed: boolean,
   ) => {
-    if (completed && activeTimer?.todoId === todoId) {
+    if (
+      completed &&
+      activeTimer?.todoId === todoId &&
+      activeTimer.date === dateKey
+    ) {
       onNeedStopConfirm(dateKey, todoId);
       return;
     }
@@ -155,7 +159,11 @@ export const useHomeTodosByDate = (
       openTimerPanel();
     }
 
-    if (activeTimer && activeTimer.todoId === todoId) {
+    if (
+      activeTimer &&
+      activeTimer.todoId === todoId &&
+      activeTimer.date === dateKey
+    ) {
       changeStatus(
         {
           timerId: activeTimer.timerId,
