@@ -57,8 +57,6 @@ export const useTodayTodoList = (
       mutation: { onSuccess: invalidateTimerState },
     });
 
-  // startTimer/changeStatus 응답 후 activeTimer가 최신화되기 전에 재클릭하면
-  // 낡은(stale) activeTimer 값으로 잘못된 분기(중복 시작 등)를 타므로, 진행 중에는 재생 버튼 입력을 무시한다
   const isTimerActionPending =
     isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
 

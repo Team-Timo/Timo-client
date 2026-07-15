@@ -153,10 +153,6 @@ export const DetailTodoModalContainer = ({
   const [actionErrorMessage, setActionErrorMessage] = useState("");
   const [isActionErrorToastOpen, setIsActionErrorToastOpen] = useState(false);
 
-  // overlay.open()에 넘긴 콜백은 모달을 여는 순간에 한 번만 호출되고 이후 다시 호출되지
-  // 않으므로, onTogglePlay를 그대로 캡처하면 모달이 열려있는 동안 activeTimer가 바뀌어도
-  // 그 시점의 낡은 activeTimer를 참조하는 콜백이 계속 쓰인다. ref로 감싸 클릭 시점에
-  // 항상 최신 콜백을 참조하도록 한다.
   const onTogglePlayRef = useRef(onTogglePlay);
   onTogglePlayRef.current = onTogglePlay;
 
