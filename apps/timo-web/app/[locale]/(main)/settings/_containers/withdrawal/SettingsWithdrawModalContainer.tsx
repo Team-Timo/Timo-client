@@ -27,7 +27,9 @@ export const SettingsWithdrawModalContainer = ({
       isOpen={isOpen}
       onClose={onClose}
       onExited={onExited}
-      ariaLabel={t("withdrawConfirmTitle")}
+      ariaLabel={t.markup("withdrawConfirmTitle", {
+        red: (chunks) => chunks,
+      })}
       className="w-100 p-5.5"
     >
       <div className="mb-4 size-10 shrink-0">
@@ -35,20 +37,14 @@ export const SettingsWithdrawModalContainer = ({
       </div>
       <p className="typo-headline-b-18 text-timo-black">
         {t.rich("withdrawConfirmTitle", {
-          red: (chunks) => (
-            <span className="text-timo-red">{chunks}</span>
-          ),
+          red: (chunks) => <span className="text-timo-red">{chunks}</span>,
         })}
       </p>
       <p className="typo-headline-r-14 text-timo-gray-900 mt-1">
         {t("withdrawConfirmDescription")}
       </p>
       <div className="mt-6 flex w-full gap-3">
-        <ModalButton
-          variant="border"
-          className="flex-1 px-0"
-          onClick={onClose}
-        >
+        <ModalButton variant="border" className="flex-1 px-0" onClick={onClose}>
           {t("withdrawConfirmCancel")}
         </ModalButton>
         <ModalButton
