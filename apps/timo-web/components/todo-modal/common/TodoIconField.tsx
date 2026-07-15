@@ -81,8 +81,8 @@ export const TodoIconField = ({
           className={cn(
             "origin-top",
             isPanelVisible
-              ? "translate-y-0 scale-100 opacity-100 transition-all duration-[220ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-              : "-translate-y-1.5 scale-95 opacity-0 transition-all duration-[160ms] ease-in",
+              ? "translate-y-0 scale-100 opacity-100 transition-all duration-220 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              : "-translate-y-1.5 scale-95 opacity-0 transition-all duration-160 ease-in",
           )}
         >
           <IconSelector
