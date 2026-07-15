@@ -131,7 +131,6 @@ export const HomeTodoCard = ({
       </div>
       <div
         role="none"
-        onPointerDownCapture={stopInteractiveEvent}
         onPointerDown={stopInteractiveEvent}
         onClick={stopInteractiveEvent}
       >
