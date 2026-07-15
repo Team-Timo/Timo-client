@@ -64,6 +64,8 @@ export const HomeTodoContainer = () => {
     onStopFeedback: setFeedbackText,
     onPlayError: (message) =>
       setPlayErrorMessage(message ?? tToast("timerStartFailed")),
+    onUpdateError: (message) =>
+      setPlayErrorMessage(message ?? tToast("todoUpdateFailed")),
   });
 
   const handleConfirmPendingComplete = () => {

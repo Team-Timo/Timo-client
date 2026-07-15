@@ -27,6 +27,7 @@ export interface UseTodayTodoListOptions {
   onTimerAlreadyRunning: () => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
   onPlayError: (message: string | undefined) => void;
+  onUpdateError: (message: string | undefined) => void;
 }
 
 export const useTodayTodoList = (
@@ -36,6 +37,7 @@ export const useTodayTodoList = (
     onTimerAlreadyRunning,
     onStopFeedback,
     onPlayError,
+    onUpdateError,
   }: UseTodayTodoListOptions,
 ) => {
   const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
@@ -97,8 +99,9 @@ export const useTodayTodoList = (
           invalidateTimeBoxes();
           invalidateTodoDetail(todoId, dateKey);
         },
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodos(previous);
+          onUpdateError(error.response?.data.message);
         },
       },
     );
@@ -208,8 +211,9 @@ export const useTodayTodoList = (
           invalidateTodayView();
           invalidateTodoDetail(todoId, dateKey);
         },
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodos(previous);
+          onUpdateError(error.response?.data.message);
         },
       },
     );
