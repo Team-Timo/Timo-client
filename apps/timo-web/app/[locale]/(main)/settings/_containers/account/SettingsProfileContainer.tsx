@@ -10,6 +10,8 @@ import { useSettingsProfileLabels } from "@/app/[locale]/(main)/settings/_hooks/
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
+const MAX_SETTING_CUSTOM_TAG_COUNT = 4;
+
 export const SettingsProfileContainer = () => {
   const tToast = useTranslations("Toast");
 
@@ -20,6 +22,7 @@ export const SettingsProfileContainer = () => {
     profileState.calendarConnected,
   );
   const [isTagErrorToastOpen, setIsTagErrorToastOpen] = useState(false);
+  const [isTagLimitToastOpen, setIsTagLimitToastOpen] = useState(false);
   const [isLanguageErrorToastOpen, setIsLanguageErrorToastOpen] =
     useState(false);
 
@@ -37,6 +40,15 @@ export const SettingsProfileContainer = () => {
   };
 
   const handleAddTag = () => {
+    const customTagCount = profileState.tags.filter(
+      (tag) => !tag.isDefault,
+    ).length;
+
+    if (customTagCount >= MAX_SETTING_CUSTOM_TAG_COUNT) {
+      setIsTagLimitToastOpen(true);
+      return;
+    }
+
     const existingLabels = profileState.tags.map((tag) => tag.label);
 
     overlay.open(({ isOpen, close, unmount }) => (
@@ -76,6 +88,12 @@ export const SettingsProfileContainer = () => {
         onAddTag={handleAddTag}
         onRemoveTag={handleRemoveTag}
         onLogout={profileActions.onLogout}
+      />
+
+      <AnimatedToast
+        isOpen={isTagLimitToastOpen}
+        onClose={() => setIsTagLimitToastOpen(false)}
+        message={tToast("settingTagLimit")}
       />
 
       <AnimatedToast

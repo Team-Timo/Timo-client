@@ -27,6 +27,8 @@ const LANGUAGE_REQUEST_MAP: Record<
   en: UpdateLanguageRequestLanguage.EN,
 };
 
+const MAX_SETTING_CUSTOM_TAG_COUNT = 4;
+
 export interface ActionErrorHandlers {
   onError: () => void;
 }
@@ -87,6 +89,13 @@ export const useSettingsProfile = () => {
   };
 
   const handleCreateTag = (label: string, handlers: CreateTagHandlers) => {
+    const customTagCount = tagItems.filter((tag) => !tag.isDefault).length;
+
+    if (customTagCount >= MAX_SETTING_CUSTOM_TAG_COUNT) {
+      handlers.onError();
+      return;
+    }
+
     createTag(
       { name: label },
       {
