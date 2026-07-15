@@ -141,6 +141,8 @@ export const HomeTodoContainer = () => {
                   const timerStatus = isActiveTodo
                     ? activeTimer.status
                     : todo.timerStatus;
+                  const isPlayHighlighted =
+                    !activeTimer || Boolean(isActiveTodo);
 
                   const todoTagLabelKey = todo.tag
                     ? getDefaultTagLabelKey(todo.tag.tagId)
@@ -175,6 +177,7 @@ export const HomeTodoContainer = () => {
                           hasMemo={todo.hasMemo}
                           isRepeated={todo.isRepeated}
                           timerStatus={timerStatus}
+                          isPlayHighlighted={isPlayHighlighted}
                           subtaskTitle={firstSubtask?.content}
                           isSubtaskCompleted={firstSubtask?.completed}
                           onClickTodo={openDetailTodoModal}

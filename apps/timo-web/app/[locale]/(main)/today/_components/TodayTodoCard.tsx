@@ -49,6 +49,7 @@ export interface TodayTodoCardProps {
   isDone: boolean;
   isDimmed: boolean;
   isPlaying: boolean;
+  isPlayHighlighted: boolean;
   icon?: ReactNode;
   subTodos: SubTodo[];
   toolbar: TodayTodoCardToolbar;
@@ -68,6 +69,7 @@ export const TodayTodoCard = ({
   isDone,
   isDimmed,
   isPlaying,
+  isPlayHighlighted,
   icon,
   subTodos,
   toolbar,
@@ -123,14 +125,17 @@ export const TodayTodoCard = ({
             variant={isPlaying ? "stop" : "play"}
             size="lg"
             disabled={isDone}
+            active={isPlayHighlighted}
             onClick={onPlay}
           >
             {isDone ? (
               <PlayDisabledIcon width={24} height={24} />
             ) : isPlaying ? (
               <StopIcon width={24} height={24} />
-            ) : (
+            ) : isPlayHighlighted ? (
               <PlayIcon width={24} height={24} />
+            ) : (
+              <PlayDisabledIcon width={24} height={24} />
             )}
           </PlayButton>
         </div>
