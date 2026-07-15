@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "timo",
+    "description": "흩어진 시간을, 실행 가능한 흐름으로."
+  },
   "Navigation": {
     "home": "홈",
     "today": "오늘",
@@ -111,7 +115,10 @@
       "warningCalendar": "연동된 캘린더 연결이 해제됩니다.",
       "warningIrreversible": "삭제된 계정은 복구할 수 없습니다.",
       "withdraw": "탈퇴하기",
-      "confirmMessage": "정말 탈퇴하시겠어요? 탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요.",
+      "withdrawConfirmTitle": "정말 <red>탈퇴</red>하시겠어요?",
+      "withdrawConfirmDescription": "탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요.",
+      "withdrawConfirmCancel": "돌아가기",
+      "withdrawConfirmConfirm": "탈퇴하기",
       "withdrawError": "탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
     }
   },
@@ -148,6 +155,7 @@
     "timerStartFailed": "예상 소요 시간이 설정되지 않은 투두입니다."
   },
   "Login": {
+    "title": "로그인",
     "animationLabel": "로그인 애니메이션",
     "headline": "흩어진 시간을, 실행 가능한 흐름으로.",
     "description": "timo 계정에 로그인하세요.",

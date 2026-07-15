@@ -12,9 +12,9 @@ import type { ReactNode } from "react";
 import { useGetTodoDetail } from "@/api/generated/endpoints/todo/todo";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
+import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
 import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
-import { useActiveTimer } from "@/hooks/use-active-timer";
 
 export interface DetailTodoModalContainerProps {
   todoId: number;

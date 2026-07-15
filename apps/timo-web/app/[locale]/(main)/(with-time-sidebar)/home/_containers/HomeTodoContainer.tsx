@@ -14,7 +14,7 @@ import {
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
-import { useHomeView } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view";
+import { useHomeViewQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view-query";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
@@ -39,7 +39,7 @@ export const HomeTodoContainer = () => {
   const filter: HomeViewFilter = isWeekView ? "WEEK" : "DEFAULT";
   const baseDate = formatDateKey(referenceDate);
 
-  const { data: homeViewData } = useHomeView({ filter, baseDate });
+  const { data: homeViewData } = useHomeViewQuery({ filter, baseDate });
   const days = homeViewData.days;
 
   const [pendingCompleteTodo, setPendingCompleteTodo] =

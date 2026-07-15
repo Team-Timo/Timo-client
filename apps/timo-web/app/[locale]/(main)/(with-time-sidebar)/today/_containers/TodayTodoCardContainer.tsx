@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-import type { TodoTimerStatusTypes } from "@/api/common/todo-schema";
+import type { TodoTimerStatusTypes } from "@/schemas/todo/todo-schema";
 import type { ReactNode } from "react";
 
 import {
   TodayTodoCard,
   type SubTodo,
   type TodayTodoCardToolbar,
-} from "@/app/[locale]/(main)/today/_components/TodayTodoCard";
+} from "@/app/[locale]/(main)/(with-time-sidebar)/today/_components/TodayTodoCard";
 
 export interface TodayTodoCardContainerProps {
   title: string;

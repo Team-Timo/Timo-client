@@ -3,6 +3,7 @@
 import timoTimerLogo from "@repo/timo-design-system/assets/images/logo/timo-timer.svg";
 import { Modal, PillButton } from "@repo/timo-design-system/ui";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
 import type { SettingsProfileLabels } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
@@ -16,6 +17,7 @@ export const SettingsLogoutModalContainer = ({
   labels,
   onLogout,
 }: SettingsLogoutModalContainerProps) => {
+  const tSettings = useTranslations("Settings");
   const modalTriggerRef = useRef<HTMLButtonElement>(null);
 
   return (
@@ -37,7 +39,11 @@ export const SettingsLogoutModalContainer = ({
         <Modal.Icon>
           <Image src={timoTimerLogo} alt="" width={40} height={40} />
         </Modal.Icon>
-        <Modal.Title>{labels.logoutConfirmTitle}</Modal.Title>
+        <Modal.Title>
+          {tSettings.rich("profile.logoutConfirmTitle", {
+            red: (chunks) => <span className="text-timo-red">{chunks}</span>,
+          })}
+        </Modal.Title>
         <Modal.Description className="whitespace-pre-line">
           {labels.logoutConfirmDescription}
         </Modal.Description>

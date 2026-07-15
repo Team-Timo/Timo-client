@@ -1,4 +1,8 @@
 {
+  "Metadata": {
+    "title": "timo",
+    "description": "Manage your day with clear timeboxes."
+  },
   "Navigation": {
     "home": "Home",
     "today": "Today",
@@ -97,7 +101,7 @@
       "tagDeleteConfirmDescription": "The tag will be removed from every todo it's applied to.",
       "tagDeleteConfirmCancel": "Cancel",
       "tagDeleteConfirmConfirm": "Delete",
-      "logoutConfirmTitle": "Log out?",
+      "logoutConfirmTitle": "Do you want to <red>log out</red>?",
       "logoutConfirmDescription": "Your data stays saved after logging out.\nSign back in anytime to pick up where you left off.",
       "logoutConfirmCancel": "Cancel",
       "logoutConfirmConfirm": "Log out"
@@ -111,7 +115,10 @@
       "warningCalendar": "The linked calendar connection will be disconnected.",
       "warningIrreversible": "Deleted accounts cannot be recovered.",
       "withdraw": "Withdraw",
-      "confirmMessage": "Are you sure you want to withdraw? All your data will be deleted and cannot be undone.",
+      "withdrawConfirmTitle": "Are you sure you want to <red>withdraw</red>?",
+      "withdrawConfirmDescription": "After withdrawal, all data will be deleted and cannot be undone.",
+      "withdrawConfirmCancel": "Go back",
+      "withdrawConfirmConfirm": "Withdraw",
       "withdrawError": "An error occurred during withdrawal. Please try again later."
     }
   },
@@ -148,6 +155,7 @@
     "timerStartFailed": "This to-do has no estimated duration set."
   },
   "Login": {
+    "title": "Log in",
     "animationLabel": "Login animation",
     "headline": "Manage your day with clear timeboxes.",
     "description": "Please log in to your timo account.",

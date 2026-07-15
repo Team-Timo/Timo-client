@@ -1,6 +1,6 @@
 import { useController } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
+import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 import type { Control } from "react-hook-form";
 
 import {

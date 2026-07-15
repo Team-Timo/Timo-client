@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
+import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { CreateTodoModalContent } from "@/components/todo-modal/create/CreateTodoModalContent";

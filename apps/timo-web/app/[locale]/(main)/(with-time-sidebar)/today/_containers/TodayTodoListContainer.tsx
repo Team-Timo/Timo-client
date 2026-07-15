@@ -9,7 +9,7 @@ import type { TodoIconValue } from "@repo/timo-design-system/ui";
 import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayDateHeaderContainer";
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
-import { useToday } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today";
+import { useTodayQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today-query";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
@@ -30,7 +30,7 @@ const renderTodoIcon = (icon: string | undefined) => {
 
 export const TodayTodoListContainer = () => {
   const tToast = useTranslations("Toast");
-  const { data } = useToday();
+  const { data } = useTodayQuery();
 
   const [pendingCompleteTodoId, setPendingCompleteTodoId] = useState<
     number | null

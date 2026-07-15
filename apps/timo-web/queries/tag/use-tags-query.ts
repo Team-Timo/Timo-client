@@ -1,9 +1,9 @@
 "use client";
 
-import { tagListDataSchema } from "@/api/common/tag-schema";
 import { useGetTags } from "@/api/generated/endpoints/tag/tag";
+import { tagListDataSchema } from "@/schemas/tag/tag-schema";
 
-export const useTags = () =>
+export const useTagsQuery = () =>
   useGetTags({
     query: {
       select: ({ data }) => tagListDataSchema.parse(data),
