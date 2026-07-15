@@ -1,4 +1,5 @@
 import { Checkbox } from "@repo/timo-design-system/ui";
+import { useId } from "react";
 
 import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type { KeyboardEvent } from "react";
@@ -37,6 +38,8 @@ export const CreateTodoTaskFields = ({
   onSubtaskInputChange,
   onSubtaskInputKeyDown,
 }: CreateTodoTaskFieldsProps) => {
+  const titleInputId = useId();
+
   return (
     <div className="flex w-full flex-col items-start gap-1.5">
       <div className="flex w-full items-center justify-center gap-2">
@@ -45,7 +48,11 @@ export const CreateTodoTaskFields = ({
           onChange={() => {}}
           className="cursor-default"
         />
+        <label htmlFor={titleInputId} className="sr-only">
+          {titlePlaceholder}
+        </label>
         <input
+          id={titleInputId}
           type="text"
           value={titleValue}
           onChange={(event) => onTitleChange(event.target.value)}
