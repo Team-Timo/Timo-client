@@ -3,6 +3,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+import type { ErrorType } from "@/api/client/custom-instance";
+import type { ErrorDto } from "@/api/generated/models";
 import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
 import { getGetTodayQueryKey } from "@/api/generated/endpoints/home/home";
@@ -23,6 +25,7 @@ export interface UseTodayTodoListOptions {
   onNeedStopConfirm: (todoId: number) => void;
   onTimerAlreadyRunning: () => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
+  onPlayError: (message: string | undefined) => void;
 }
 
 export const useTodayTodoList = (
@@ -31,6 +34,7 @@ export const useTodayTodoList = (
     onNeedStopConfirm,
     onTimerAlreadyRunning,
     onStopFeedback,
+    onPlayError,
   }: UseTodayTodoListOptions,
 ) => {
   const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
@@ -158,7 +162,12 @@ export const useTodayTodoList = (
 
     startTimer(
       { todoId },
-      { onSuccess: () => invalidateTodoDetail(todoId, dateKey) },
+      {
+        onSuccess: () => invalidateTodoDetail(todoId, dateKey),
+        onError: (error: ErrorType<ErrorDto>) => {
+          onPlayError(error.response?.data.message);
+        },
+      },
     );
   };
 
