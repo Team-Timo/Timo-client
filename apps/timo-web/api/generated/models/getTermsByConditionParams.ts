@@ -6,9 +6,13 @@
  * OpenAPI spec version: v1
  */
 
-export interface GetTermsParams {
+export interface GetTermsByConditionParams {
   /**
-   * 약관 타입(SERVICE, PRIVACY)
+   * 약관 타입
    */
-  type?: string;
+  type: string;
+  /**
+   * 약관 언어
+   */
+  language: string;
 }

@@ -1,7 +1,7 @@
 import { SECONDS_PER_MINUTE } from "@/constants/time";
 
 /**
- * API duration 필드(mm:ss)를 초 단위로 변환한다.
+ * duration 필드(mm:ss, 분 단위가 60을 넘을 수 있음)를 초 단위로 변환한다.
  * @param duration - "mm:ss" 형식의 시간 문자열
  * @returns 변환된 초
  */

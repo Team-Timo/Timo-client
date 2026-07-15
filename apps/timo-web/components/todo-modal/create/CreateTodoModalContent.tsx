@@ -15,13 +15,13 @@ import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
 import { CreateTodoMemoField } from "@/components/todo-modal/create/CreateTodoMemoField";
 import { CreateTodoTaskFields } from "@/components/todo-modal/create/CreateTodoTaskFields";
-import { useIconField } from "@/hooks/todo-modal/use-icon-field";
-import { useRepeatField } from "@/hooks/todo-modal/use-repeat-field";
-import { useSubtaskField } from "@/hooks/todo-modal/use-subtask-field";
-import { useTagField } from "@/hooks/todo-modal/use-tag-field";
-import { useTimeField } from "@/hooks/todo-modal/use-time-field";
-import { useTitleField } from "@/hooks/todo-modal/use-title-field";
-import { formatDateKey } from "@/utils/date/date";
+import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
+import { useIconField } from "@/hooks/todo-modal/create/use-icon-field";
+import { useRepeatField } from "@/hooks/todo-modal/create/use-repeat-field";
+import { useSubtaskField } from "@/hooks/todo-modal/create/use-subtask-field";
+import { useTimeField } from "@/hooks/todo-modal/create/use-time-field";
+import { useTitleField } from "@/hooks/todo-modal/create/use-title-field";
+import { formatDateKey, formatShortDateLabel } from "@/utils/date/date";
 
 const createDefaultValues = (defaultDate?: Date): CreateTodoRequest => ({
   icon: null,
@@ -56,10 +56,11 @@ export const CreateTodoModalContent = ({
   const tCommon = useTranslations("Common");
   const tToast = useTranslations("Toast");
 
-  const { control, handleSubmit, reset } = useForm<CreateTodoRequest>({
-    resolver: zodResolver(createTodoRequestSchema),
-    defaultValues: createDefaultValues(defaultDate),
-  });
+  const { control, handleSubmit, reset, formState } =
+    useForm<CreateTodoRequest>({
+      resolver: zodResolver(createTodoRequestSchema),
+      defaultValues: createDefaultValues(defaultDate),
+    });
 
   const { field: dateField } = useController({ name: "date", control });
   const { field: memoField } = useController({ name: "memo", control });
@@ -146,7 +147,7 @@ export const CreateTodoModalContent = ({
           <TodoToolbar
             dateLabel={
               dateValue
-                ? `${dateValue.getMonth() + 1}.${dateValue.getDate()}`
+                ? formatShortDateLabel(dateValue)
                 : t("createModal.dateLabel")
             }
             date={dateValue}
@@ -154,6 +155,7 @@ export const CreateTodoModalContent = ({
             timeLabel={timeField.timeDisplay}
             timeOptions={timeField.timeOptions}
             time={timeField.duration}
+            isTimeActive={Boolean(formState.dirtyFields.duration)}
             onTimeChange={timeField.handleDurationInputChange}
             selectedTime={timeField.selectedTime}
             onSelectTime={timeField.handleSelectTime}

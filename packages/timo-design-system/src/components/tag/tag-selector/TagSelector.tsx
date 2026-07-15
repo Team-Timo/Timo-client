@@ -5,7 +5,7 @@ import { Dropdown } from "../../layout/dropdown/Dropdown";
 import type { ReactNode } from "react";
 
 export interface TagSelectorProps {
-  trigger: ReactNode;
+  trigger: ReactNode | ((isOpen: boolean) => ReactNode);
   tags: string[];
   selected?: string;
   addLabel?: string;

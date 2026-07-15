@@ -66,6 +66,7 @@ export const SettingsProfileContainer = () => {
       <SettingsProfileView
         name={profileState.name}
         googleEmail={profileState.googleEmail}
+        profileImageUrl={profileState.profileImageUrl}
         isCalendarConnected={isCalendarConnected}
         language={profileState.language}
         tags={profileState.tags}

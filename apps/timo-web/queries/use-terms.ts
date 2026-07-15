@@ -1,19 +1,26 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useLocale } from "next-intl";
 
 import {
-  getGetTermsQueryKey,
-  getTerms,
+  getGetTermsByConditionQueryKey,
+  getTermsByCondition,
 } from "@/api/generated/endpoints/terms/terms";
-import { termsListSchema, type TermsType } from "@/types/terms-type";
+import { termsDetailSchema, type TermsType } from "@/types/terms-type";
 
-export const useTerms = (type?: TermsType) => {
-  const params = type ? { type } : undefined;
+const TERMS_LANGUAGE_MAP: Record<"ko" | "en", string> = {
+  ko: "KO",
+  en: "EN",
+};
+
+export const useTerms = (type: TermsType) => {
+  const locale = useLocale() as "ko" | "en";
+  const params = { type, language: TERMS_LANGUAGE_MAP[locale] };
 
   return useSuspenseQuery({
-    queryKey: getGetTermsQueryKey(params),
-    queryFn: ({ signal }) => getTerms(params, undefined, signal),
-    select: ({ data }) => termsListSchema.parse(data).terms,
+    queryKey: getGetTermsByConditionQueryKey(params),
+    queryFn: ({ signal }) => getTermsByCondition(params, undefined, signal),
+    select: ({ data }) => termsDetailSchema.nullable().parse(data),
   });
 };

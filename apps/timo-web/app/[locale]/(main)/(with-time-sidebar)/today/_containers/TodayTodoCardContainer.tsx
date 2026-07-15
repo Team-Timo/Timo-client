@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import type { TodoTimerStatusTypes } from "@/api/common/todo-schema";
 import type { ReactNode } from "react";
 
 import {
@@ -12,74 +13,54 @@ import {
 
 export interface TodayTodoCardContainerProps {
   title: string;
-  isDone: boolean;
+  isCompleted: boolean;
   subTodos: SubTodo[];
   toolbar: TodayTodoCardToolbar;
-  timerStatus: "RUNNING" | "PAUSED" | "STOPPED";
+  timerStatus: TodoTimerStatusTypes;
+  isPlayHighlighted: boolean;
   icon?: ReactNode;
   onCardClick?: () => void;
-  onCheck?: () => void;
-  onPlay?: () => void;
+  onToggleCompleted?: (completed: boolean) => void;
+  onTogglePlay?: () => void;
   onSubTodoCheck?: (id: number) => void;
 }
 
 export const TodayTodoCardContainer = ({
   title,
-  isDone: initialIsDone,
+  isCompleted,
   icon,
-  subTodos: initialSubTodos,
+  subTodos,
   toolbar,
   timerStatus,
+  isPlayHighlighted,
   onCardClick,
-  onCheck,
-  onPlay,
+  onToggleCompleted,
+  onTogglePlay,
   onSubTodoCheck,
 }: TodayTodoCardContainerProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isDone, setIsDone] = useState(initialIsDone);
-  const [subTodos, setSubTodos] = useState(initialSubTodos);
+
+  useEffect(() => {
+    if (isCompleted) setIsHovered(false);
+  }, [isCompleted]);
 
   const isPlaying = timerStatus === "RUNNING";
-  const isDimmed = isDone && !isHovered;
-
-  const handleCheck = () => {
-    const next = !isDone;
-    setIsDone(next);
-    if (next) {
-      setSubTodos((prev) => prev.map((s) => ({ ...s, isDone: true })));
-      if (isPlaying) {
-        onPlay?.();
-      }
-    }
-    onCheck?.();
-  };
-
-  const handlePlay = () => {
-    if (!isDone) {
-      onPlay?.();
-    }
-  };
-
-  const handleSubTodoCheck = (id: number) => {
-    setSubTodos((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, isDone: !s.isDone } : s)),
-    );
-    onSubTodoCheck?.(id);
-  };
+  const isDimmed = isCompleted && !isHovered;
 
   return (
     <TodayTodoCard
       title={title}
-      isDone={isDone}
+      isDone={isCompleted}
       isDimmed={isDimmed}
       isPlaying={isPlaying}
+      isPlayHighlighted={isPlayHighlighted}
       icon={icon}
       subTodos={subTodos}
       toolbar={toolbar}
       onCardClick={onCardClick}
-      onCheck={handleCheck}
-      onPlay={handlePlay}
-      onSubTodoCheck={handleSubTodoCheck}
+      onCheck={() => onToggleCompleted?.(!isCompleted)}
+      onPlay={() => onTogglePlay?.()}
+      onSubTodoCheck={(id) => onSubTodoCheck?.(id)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     />

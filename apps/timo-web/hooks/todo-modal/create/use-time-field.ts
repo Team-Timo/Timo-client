@@ -7,25 +7,25 @@ import type { Control } from "react-hook-form";
 
 import { recommendDurationResponseSchema } from "@/api/common/todo-schema";
 import { useRecommendDuration } from "@/api/generated/endpoints/ai/ai";
+import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "@/constants/time";
+import {
+  convertApiDurationToSeconds,
+  convertSecondsToApiDuration,
+} from "@/utils/todo/todo-time";
 
 const TIME_OPTIONS = [
   { minute: 15, value: "15", unit: "min" },
   { minute: 30, value: "30", unit: "min" },
   { minute: 45, value: "45", unit: "min" },
-  { minute: 60, value: "1", unit: "h" },
-  { minute: 90, value: "1.5", unit: "h" },
+  { minute: 60, value: "60", unit: "min" },
+  { minute: 90, value: "90", unit: "min" },
 ];
-
-const MINUTES_PER_HOUR = 60;
 
 export interface UseTimeFieldParams {
   control: Control<CreateTodoRequest>;
 }
 
-/**
- * 숫자와 콜론만 허용한다. 콜론은 첫 번째 것만 유지하고(그 뒤 콜론은 제거),
- * 시(hour) 자릿수는 제한하지 않는다. 분(minute)만 2자리로 자른다.
- */
+// 숫자와 첫 번째 콜론만 남기고, 분(minute) 부분만 2자리로 자른다.
 const formatDurationInput = (raw: string): string => {
   const sanitized = raw.replace(/[^\d:]/g, "");
   const colonIndex = sanitized.indexOf(":");
@@ -43,10 +43,14 @@ const formatDurationInput = (raw: string): string => {
   return `${hours}:${minutes}`;
 };
 
-const formatMinutesToDuration = (totalMinutes: number): string => {
-  const hours = Math.floor(totalMinutes / MINUTES_PER_HOUR);
-  const minutes = totalMinutes % MINUTES_PER_HOUR;
-  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+// "mm:ss" duration을 트리거용 "h:mm" 시계 표기로 변환한다. (예: "90:00" → "1:30")
+const formatDurationAsClockLabel = (duration: string): string => {
+  const totalSeconds = convertApiDurationToSeconds(duration);
+  const hours = Math.floor(totalSeconds / SECONDS_PER_HOUR);
+  const minutes = Math.floor(
+    (totalSeconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE,
+  );
+  return `${hours}:${minutes.toString().padStart(2, "0")}`;
 };
 
 export const useTimeField = ({ control }: UseTimeFieldParams) => {
@@ -54,7 +58,7 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
   const title = useWatch({ control, name: "title" });
   const tagId = useWatch({ control, name: "tagId" });
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
-  const [timeDisplay, setTimeDisplay] = useState("00:00");
+  const [timeDisplay, setTimeDisplay] = useState("0:00");
   const [recommendedDuration, setRecommendedDuration] = useState<string>();
   const [isAiDurationErrorToastOpen, setIsAiDurationErrorToastOpen] =
     useState(false);
@@ -64,7 +68,7 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
   const applyRecommendedDuration = (duration: string) => {
     setRecommendedDuration(duration);
     setSelectedTime("ai");
-    setTimeDisplay(duration);
+    setTimeDisplay(formatDurationAsClockLabel(duration));
     field.onChange(duration);
   };
 
@@ -86,7 +90,9 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
           }
 
           applyRecommendedDuration(
-            formatMinutesToDuration(parsed.data.recommendedMinutes),
+            convertSecondsToApiDuration(
+              parsed.data.recommendedMinutes * SECONDS_PER_MINUTE,
+            ),
           );
         },
         onError: () => {
@@ -100,7 +106,7 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
     if (value === "ai") {
       setSelectedTime(value);
       if (recommendedDuration) {
-        setTimeDisplay(recommendedDuration);
+        setTimeDisplay(formatDurationAsClockLabel(recommendedDuration));
         field.onChange(recommendedDuration);
       }
       return;
@@ -111,25 +117,40 @@ export const useTimeField = ({ control }: UseTimeFieldParams) => {
     const option = TIME_OPTIONS.find((item) => item.minute === value);
     if (!option) return;
 
-    setTimeDisplay(`${option.value} ${option.unit}`);
-    field.onChange(`${option.minute}:00`);
+    const formatted = convertSecondsToApiDuration(
+      option.minute * SECONDS_PER_MINUTE,
+    );
+    setTimeDisplay(formatDurationAsClockLabel(formatted));
+    field.onChange(formatted);
   };
 
   const handleDurationInputChange = (value: string) => {
     setSelectedTime(undefined);
+
+    // TimeSelector 입력창은 h:mm을 그대로 편집하므로 타이핑한 값을 트리거 라벨에 즉시 반영한다.
     const formatted = formatDurationInput(value);
     setTimeDisplay(formatted);
-    field.onChange(formatted);
+
+    const [hoursText, minutesText = "0"] = formatted.split(":");
+    const hours = Number(hoursText) || 0;
+    const minutes = Number(minutesText) || 0;
+    const totalSeconds =
+      hours * SECONDS_PER_HOUR + minutes * SECONDS_PER_MINUTE;
+
+    // 서버로 전송하는 duration 필드는 "총분:초" 형식이므로 변환해서 저장한다.
+    const apiDuration = convertSecondsToApiDuration(totalSeconds);
+    setRecommendedDuration(apiDuration);
+    field.onChange(apiDuration);
   };
 
   const resetTime = () => {
     setSelectedTime(undefined);
-    setTimeDisplay("00:00");
+    setTimeDisplay("0:00");
     setRecommendedDuration(undefined);
   };
 
   return {
-    duration: field.value,
+    duration: timeDisplay,
     timeOptions: TIME_OPTIONS,
     selectedTime,
     timeDisplay,

@@ -1,46 +1,52 @@
-import type { CreateTodoRequest, TodoPriority } from "@/api/common/todo-schema";
-import type { TodoMock } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_mocks/today-todo-mock";
+"use client";
 
-import { convertApiDurationToSeconds } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_utils/todo-time";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
-const PRIORITY_TO_MOCK: Record<TodoPriority, TodoMock["priority"]> = {
-  VERY_HIGH: "URGENT",
-  HIGH: "HIGH",
-  MEDIUM: "MEDIUM",
-  LOW: "LOW",
-};
+import type { CreateTodoRequest } from "@/api/common/todo-schema";
+import type { TodoCreateRequest } from "@/api/generated/models";
 
-// 목데이터: 실제 API 호출 없이 로컬 상태에만 즉시 반영한다.
-const buildTodoFromRequest = (data: CreateTodoRequest): TodoMock => ({
-  todoId: Date.now(),
-  icon: data.icon ?? "",
+import { getGetTodayQueryKey } from "@/api/generated/endpoints/home/home";
+import { useCreateTodo } from "@/api/generated/endpoints/todo/todo";
+
+const buildCreateTodoRequestBody = (
+  data: CreateTodoRequest,
+): TodoCreateRequest => ({
+  icon: data.icon ?? undefined,
   title: data.title,
-  completed: false,
+  subtasks: data.subtasks?.length ? data.subtasks : undefined,
   date: data.date,
-  durationSeconds: convertApiDurationToSeconds(data.duration),
-  priority: PRIORITY_TO_MOCK[data.priority ?? "MEDIUM"],
-  tag: { tagId: data.tagId ?? 0, name: "" },
-  hasMemo: Boolean(data.memo?.trim()),
-  isRepeated: data.repeatType !== "NONE",
-  timerStatus: "STOPPED",
-  sortOrder: 0,
-  subtasks: (data.subtasks ?? []).map((content, index) => ({
-    subtaskId: Date.now() + index,
-    content,
-    completed: false,
-  })),
+  duration: data.duration,
+  priority: data.priority ?? undefined,
+  tagId: data.tagId ?? undefined,
+  repeatType: data.repeatType,
+  repeatWeekdays: data.repeatWeekdays?.length ? data.repeatWeekdays : undefined,
+  repeatDayOfMonth: data.repeatDayOfMonth ?? undefined,
+  memo: data.memo?.trim() ? data.memo : undefined,
 });
 
-export interface UseCreateTodoSubmitParams {
-  onCreate: (todo: TodoMock) => void;
-}
+export const useCreateTodoSubmit = () => {
+  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
+  const { mutate: createTodo } = useCreateTodo();
+  const queryClient = useQueryClient();
 
-export const useCreateTodoSubmit = ({
-  onCreate,
-}: UseCreateTodoSubmitParams) => {
   const handleSubmit = (data: CreateTodoRequest) => {
-    onCreate(buildTodoFromRequest(data));
+    createTodo(
+      { data: buildCreateTodoRequestBody(data) },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
+        },
+        onError: () => {
+          setIsErrorToastOpen(true);
+        },
+      },
+    );
   };
 
-  return { handleSubmit };
+  return {
+    handleSubmit,
+    isErrorToastOpen,
+    closeErrorToast: () => setIsErrorToastOpen(false),
+  };
 };

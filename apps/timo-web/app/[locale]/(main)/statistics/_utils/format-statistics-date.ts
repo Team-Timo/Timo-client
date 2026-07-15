@@ -14,6 +14,19 @@ export const formatStatisticsMonth = (date: Date, locale = "ko") => {
   }).format(date);
 };
 
+const getOrdinalDay = (day: number) => {
+  const lastTwoDigits = day % 100;
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 13) return `${day}th`;
+
+  const lastDigit = day % 10;
+  if (lastDigit === 1) return `${day}st`;
+  if (lastDigit === 2) return `${day}nd`;
+  if (lastDigit === 3) return `${day}rd`;
+  return `${day}th`;
+};
+
+const isEnglishLocale = (locale: string) => locale.startsWith("en");
+
 /**
  * 통계 캘린더 설명 영역에 표시할 날짜 문구를 반환합니다.
  *
@@ -25,6 +38,15 @@ export const formatStatisticsMonth = (date: Date, locale = "ko") => {
  * formatStatisticsCalendarDate(new Date(2026, 5, 28)); // "2026년 6월 28일 일요일"
  */
 export const formatStatisticsCalendarDate = (date: Date, locale = "ko") => {
+  if (isEnglishLocale(locale)) {
+    const weekday = new Intl.DateTimeFormat(locale, {
+      weekday: "long",
+    }).format(date);
+    const month = formatStatisticsMonth(date, locale);
+
+    return `${weekday}, ${getOrdinalDay(date.getDate())} ${month}\n${date.getFullYear()}`;
+  }
+
   return new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "long",
@@ -44,6 +66,12 @@ export const formatStatisticsCalendarDate = (date: Date, locale = "ko") => {
  * formatStatisticsSidePanelDate(new Date(2026, 5, 28)); // "6월 28일"
  */
 export const formatStatisticsSidePanelDate = (date: Date, locale = "ko") => {
+  if (isEnglishLocale(locale)) {
+    const month = formatStatisticsMonth(date, locale);
+
+    return `${getOrdinalDay(date.getDate())} ${month}`;
+  }
+
   return new Intl.DateTimeFormat(locale, {
     month: "long",
     day: "numeric",

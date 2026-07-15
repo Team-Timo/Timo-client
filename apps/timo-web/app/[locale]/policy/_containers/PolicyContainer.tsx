@@ -13,8 +13,7 @@ export interface PolicyContainerProps {
 
 export const PolicyContainer = ({ type }: PolicyContainerProps) => {
   const t = useTranslations("Policy");
-  const { data: terms } = useTerms(type);
-  const term = terms.find((item) => item.type === type);
+  const { data: term } = useTerms(type);
 
   if (!term) {
     return <p className="typo-body-m-12 text-timo-gray-700">{t("empty")}</p>;

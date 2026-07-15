@@ -1,32 +1,46 @@
 import { useEffect, useRef, useState } from "react";
-import { useController } from "react-hook-form";
 
-import type { CreateTodoRequest } from "@/api/common/todo-schema";
+import type { TodoSubtask } from "@/api/common/todo-schema";
 import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type { KeyboardEvent } from "react";
-import type { Control } from "react-hook-form";
 
 import {
   addSubtaskInputOnEnter,
   removeSubtaskInputOnBackspace,
 } from "@/utils/todo/subtask-input-list";
 
-const MAX_SUBTASK_COUNT = 10;
+const MAX_DETAIL_SUBTASK_COUNT = 10;
 
-export interface UseSubtaskFieldParams {
-  control: Control<CreateTodoRequest>;
+export interface DetailTodoSubtaskInput extends SubtaskInputEntry {
+  subtaskId: number | null;
+  completed: boolean;
 }
 
-export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
-  const { field } = useController({ name: "subtasks", control });
-  const nextEntryId = useRef(0);
-  const createEntry = (value = ""): SubtaskInputEntry => ({
-    id: nextEntryId.current++,
+export interface UseDetailSubtaskFieldParams {
+  subtasks: TodoSubtask[];
+}
+
+export const useDetailSubtaskField = ({
+  subtasks,
+}: UseDetailSubtaskFieldParams) => {
+  const nextInputId = useRef(0);
+  const createInput = (value = ""): DetailTodoSubtaskInput => ({
+    id: nextInputId.current++,
+    subtaskId: null,
+    completed: false,
     value,
   });
 
-  const [subtaskInputs, setSubtaskInputs] = useState<SubtaskInputEntry[]>(
-    () => [createEntry()],
+  const [subtaskInputs, setSubtaskInputs] = useState<DetailTodoSubtaskInput[]>(
+    () =>
+      subtasks.length > 0
+        ? subtasks.map((subtask) => ({
+            id: nextInputId.current++,
+            subtaskId: subtask.subtaskId,
+            completed: subtask.completed,
+            value: subtask.content,
+          }))
+        : [createInput()],
   );
   const inputRefs = useRef<Array<HTMLTextAreaElement | null>>([]);
   const pendingFocusIndex = useRef<number | null>(null);
@@ -45,23 +59,25 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
     element.setSelectionRange(caretPosition, caretPosition);
   }, [subtaskInputs.length]);
 
-  const syncFormValue = (entries: SubtaskInputEntry[]) => {
-    field.onChange(entries.map((entry) => entry.value.trim()).filter(Boolean));
-  };
-
   const registerInputRef =
     (index: number) => (element: HTMLTextAreaElement | null) => {
       inputRefs.current[index] = element;
     };
 
-  const handleInputChange = (index: number, value: string) => {
-    setSubtaskInputs((prev) => {
-      const next = prev.map((entry, i) =>
-        i === index ? { ...entry, value } : entry,
-      );
-      syncFormValue(next);
-      return next;
-    });
+  const handleInputChange = (id: number, value: string) => {
+    setSubtaskInputs((prev) =>
+      prev.map((subtask) =>
+        subtask.id === id ? { ...subtask, value } : subtask,
+      ),
+    );
+  };
+
+  const handleCompletedChange = (id: number, completed: boolean) => {
+    setSubtaskInputs((prev) =>
+      prev.map((subtask) =>
+        subtask.id === id ? { ...subtask, completed } : subtask,
+      ),
+    );
   };
 
   const handleInputKeyDown = (
@@ -69,18 +85,20 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
     event: KeyboardEvent<HTMLTextAreaElement>,
   ) => {
     if (event.key === "Enter" && !event.shiftKey) {
+      if (event.nativeEvent.isComposing) return;
+
       event.preventDefault();
 
       setSubtaskInputs((prev) => {
         const { entries, focusIndex } = addSubtaskInputOnEnter(
           prev,
           index,
-          createEntry,
-          MAX_SUBTASK_COUNT,
+          createInput,
+          MAX_DETAIL_SUBTASK_COUNT,
         );
 
         if (focusIndex !== null) pendingFocusIndex.current = focusIndex;
-        return entries;
+        return entries as DetailTodoSubtaskInput[];
       });
       return;
     }
@@ -94,21 +112,16 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
       if (focusIndex !== null) {
         event.preventDefault();
         pendingFocusIndex.current = focusIndex;
-        setSubtaskInputs(entries);
+        setSubtaskInputs(entries as DetailTodoSubtaskInput[]);
       }
     }
-  };
-
-  const reset = () => {
-    setSubtaskInputs([createEntry()]);
-    inputRefs.current = [];
   };
 
   return {
     subtaskInputs,
     registerInputRef,
     handleInputChange,
+    handleCompletedChange,
     handleInputKeyDown,
-    reset,
   };
 };

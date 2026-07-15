@@ -16,6 +16,7 @@ type TimerModalStep = "end" | "stop" | "extend" | "complete";
 
 export interface TimerSessionControlsHandle {
   openStopModal: () => void;
+  openEndModal: () => void;
 }
 
 export interface TimerSessionControlsProps {
@@ -24,8 +25,10 @@ export interface TimerSessionControlsProps {
   plannedMinutes: number;
   actualMinutes: number;
   feedbackText?: string;
+  isTimeUp: boolean;
   onExtend: (minutes: number) => void;
   onComplete: () => void;
+  onStop: () => void;
   disabled?: boolean;
 }
 
@@ -39,19 +42,25 @@ export const TimerSessionControls = forwardRef<
     plannedMinutes,
     actualMinutes,
     feedbackText,
+    isTimeUp,
     onExtend,
     onComplete,
+    onStop,
     disabled = false,
   },
   ref,
 ) {
   const [step, setStep] = useState<TimerModalStep>("end");
-  const stopModalTriggerRef = useRef<HTMLButtonElement>(null);
+  const hiddenModalTriggerRef = useRef<HTMLButtonElement>(null);
 
   useImperativeHandle(ref, () => ({
     openStopModal: () => {
       setStep("stop");
-      stopModalTriggerRef.current?.click();
+      hiddenModalTriggerRef.current?.click();
+    },
+    openEndModal: () => {
+      setStep("end");
+      hiddenModalTriggerRef.current?.click();
     },
   }));
   const [selectedPreset, setSelectedPreset] = useState<ExtendTimePreset | null>(
@@ -86,7 +95,7 @@ export const TimerSessionControls = forwardRef<
       <TimerControls
         isRunning={isRunning}
         onTogglePlay={onTogglePlay}
-        onOpenEndModal={() => setStep(isRunning ? "stop" : "end")}
+        onOpenEndModal={() => setStep(isTimeUp ? "end" : "stop")}
         onOpenExtendModal={() => {
           resetExtendSelection();
           setIsFromEndModal(false);
@@ -95,7 +104,7 @@ export const TimerSessionControls = forwardRef<
         disabled={disabled}
       />
       <Modal.Trigger
-        ref={stopModalTriggerRef}
+        ref={hiddenModalTriggerRef}
         className="hidden"
         aria-hidden="true"
         tabIndex={-1}
@@ -144,7 +153,10 @@ export const TimerSessionControls = forwardRef<
             plannedMinutes={plannedMinutes}
             actualMinutes={actualMinutes}
             feedbackText={feedbackText}
-            onComplete={onComplete}
+            onComplete={() => {
+              if (isTimeUp) onComplete();
+              onStop();
+            }}
           />
         )}
       </Modal.Panel>

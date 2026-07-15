@@ -5,8 +5,8 @@ import {
 } from "@repo/timo-design-system/icons";
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 
-import type { TodoTimerStatusTypes } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
-import type { DetailTodoSubtaskInput } from "@/hooks/todo-modal/use-detail-subtask-field";
+import type { TodoDetailResponseTimerStatus } from "@/api/generated/models";
+import type { DetailTodoSubtaskInput } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import type { KeyboardEvent } from "react";
 
 const resizeTextarea = (element: HTMLTextAreaElement | null) => {
@@ -18,7 +18,9 @@ const resizeTextarea = (element: HTMLTextAreaElement | null) => {
 export interface DetailTodoTaskFieldsProps {
   titleValue: string;
   isCompleted: boolean;
-  timerStatus: TodoTimerStatusTypes;
+  disabled?: boolean;
+  timerStatus: TodoDetailResponseTimerStatus;
+  isPlayHighlighted: boolean;
   subtaskInputs: DetailTodoSubtaskInput[];
   onTitleChange: (value: string) => void;
   onToggleCompleted: (completed: boolean) => void;
@@ -37,7 +39,9 @@ export interface DetailTodoTaskFieldsProps {
 export const DetailTodoTaskFields = ({
   titleValue,
   isCompleted,
+  disabled = false,
   timerStatus,
+  isPlayHighlighted,
   subtaskInputs,
   onTitleChange,
   onToggleCompleted,
@@ -60,28 +64,34 @@ export const DetailTodoTaskFields = ({
               resizeTextarea(event.currentTarget);
             }}
             rows={1}
+            disabled={disabled}
             className="typo-headline-b-14 text-timo-black min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
           />
         </div>
 
-        <PlayButton
-          variant={timerStatus === "RUNNING" ? "stop" : "play"}
-          size="lg"
-          disabled={isCompleted}
-          onClick={onTogglePlay}
-        >
-          {isCompleted ? (
-            <PlayDisabledIcon width={24} height={24} />
-          ) : timerStatus === "RUNNING" ? (
-            <StopIcon width={24} height={24} />
-          ) : (
-            <PlayIcon width={24} height={24} />
-          )}
-        </PlayButton>
+        <div className="shrink-0">
+          <PlayButton
+            variant={timerStatus === "RUNNING" ? "stop" : "play"}
+            size="lg"
+            disabled={isCompleted}
+            active={isPlayHighlighted}
+            onClick={onTogglePlay}
+          >
+            {isCompleted ? (
+              <PlayDisabledIcon width={24} height={24} />
+            ) : timerStatus === "RUNNING" ? (
+              <StopIcon width={24} height={24} />
+            ) : isPlayHighlighted ? (
+              <PlayIcon width={24} height={24} />
+            ) : (
+              <PlayDisabledIcon width={24} height={24} />
+            )}
+          </PlayButton>
+        </div>
       </div>
 
       {subtaskInputs.length > 0 && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           {subtaskInputs.map((subtask, index) => (
             <div key={subtask.id} className="flex items-center gap-2">
               <Checkbox
@@ -99,6 +109,7 @@ export const DetailTodoTaskFields = ({
                 }}
                 onKeyDown={(event) => onSubtaskInputKeyDown(index, event)}
                 rows={1}
+                disabled={disabled}
                 className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
               />
             </div>

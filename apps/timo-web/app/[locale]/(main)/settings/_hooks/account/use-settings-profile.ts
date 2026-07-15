@@ -1,6 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
@@ -17,6 +18,7 @@ import { useCreateTag } from "@/queries/tag/use-create-tag";
 import { useDeleteTag } from "@/queries/tag/use-delete-tag";
 import { useTags } from "@/queries/tag/use-tags";
 import { useMyProfile } from "@/queries/use-my-profile";
+import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 const LANGUAGE_REQUEST_MAP: Record<
   SettingsLanguage,
@@ -41,6 +43,7 @@ export interface ConnectCalendarHandlers {
 
 export const useSettingsProfile = () => {
   const { locale, commitLanguage } = useSettingsLanguageParam();
+  const tCommon = useTranslations("Common");
 
   const { data: profile } = useMyProfile();
 
@@ -52,11 +55,17 @@ export const useSettingsProfile = () => {
   const { mutate: deleteTag } = useDeleteTag();
   const { mutate: logoutMutate, isPending: isLoggingOut } = useLogoutAction();
 
-  const tagItems = (tagsQuery.data?.tags ?? []).map((tag) => ({
-    id: tag.tagId,
-    label: tag.name,
-    isDefault: tag.isDefault,
-  }));
+  const tagItems = (tagsQuery.data?.tags ?? []).map((tag) => {
+    const labelKey = tag.isDefault
+      ? getDefaultTagLabelKey(tag.tagId)
+      : undefined;
+
+    return {
+      id: tag.tagId,
+      label: labelKey ? tCommon(`tag.${labelKey}`) : tag.name,
+      isDefault: tag.isDefault,
+    };
+  });
 
   const handleConnectCalendar = async (
     isCalendarConnected: boolean,
@@ -141,6 +150,7 @@ export const useSettingsProfile = () => {
     profileState: {
       name: profile.name,
       googleEmail: profile.email,
+      profileImageUrl: profile.profileImageUrl ?? undefined,
       calendarConnected: profile.calendarConnected,
       language: locale,
       tags: tagItems,

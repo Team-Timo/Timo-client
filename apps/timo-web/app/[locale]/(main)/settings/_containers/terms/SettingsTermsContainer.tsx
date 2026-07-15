@@ -15,8 +15,7 @@ export const SettingsTermsContainer = ({
   type,
 }: SettingsTermsContainerProps) => {
   const t = useTranslations("Policy");
-  const { data: terms } = useTerms(type);
-  const term = terms[0];
+  const { data: term } = useTerms(type);
 
   return (
     <div className="px-15 pt-7.5">
