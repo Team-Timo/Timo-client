@@ -44,18 +44,17 @@ export const createTodoRequestSchema = z
     repeatDayOfMonth: z.number().int().min(1).max(31).nullable(),
     memo: z.string().max(300).nullable(),
   })
-  .superRefine((value, ctx) => {
+  .transform((value) => {
     if (
       value.repeatType === "WEEKLY" &&
       (!value.repeatWeekdays || value.repeatWeekdays.length === 0)
     ) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["repeatWeekdays"],
-        message: "반복할 요일을 선택해주세요.",
-      });
+      return { ...value, repeatType: "NONE" as const, repeatWeekdays: null };
     }
 
+    return value;
+  })
+  .superRefine((value, ctx) => {
     if (value.repeatType === "MONTHLY" && !value.repeatDayOfMonth) {
       ctx.addIssue({
         code: "custom",
@@ -103,7 +102,7 @@ export const todoSchema = z.object({
   title: z.string(),
   completed: z.boolean(),
   durationSeconds: z.number().default(0),
-  priority: todoPrioritySchema.nullish().transform((v) => v ?? "MEDIUM"),
+  priority: todoPrioritySchema.nullish().transform((v) => v ?? undefined),
   tag: todoTagSchema.nullish().transform((v) => v ?? undefined),
   hasMemo: z.boolean(),
   isRepeated: z.boolean(),

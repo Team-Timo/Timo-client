@@ -17,6 +17,7 @@ import {
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
 import type {
   TodoPriorityTypes,
@@ -25,15 +26,6 @@ import type {
 import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
 import { convertDurationToTimeText } from "@/utils/todo/todo-time";
-
-type PriorityLabelKeyTypes = "urgent" | "high" | "medium" | "low";
-
-const PRIORITY_LABEL_KEY: Record<TodoPriorityTypes, PriorityLabelKeyTypes> = {
-  VERY_HIGH: "urgent",
-  HIGH: "high",
-  MEDIUM: "medium",
-  LOW: "low",
-};
 
 const isInteractiveElement = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
@@ -44,7 +36,7 @@ export interface HomeTodoCardProps {
   title: string;
   isCompleted: boolean;
   durationSeconds: number;
-  priority: TodoPriorityTypes;
+  priority?: TodoPriorityTypes;
   tagName?: string;
   hasMemo: boolean;
   isRepeated: boolean;
@@ -86,9 +78,16 @@ export const HomeTodoCard = ({
     transition,
   };
 
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    if (isCompleted) setIsHovered(false);
+  }, [isCompleted]);
+
+  const isDimmed = isCompleted && !isHovered;
   const isRunning = timerStatus === "RUNNING";
 
-  const priorityLabel = tCommon(`priority.${PRIORITY_LABEL_KEY[priority]}`);
+  const priorityLabel = priority ? tCommon(`priority.${priority}`) : undefined;
 
   const handleCardClick = (event: MouseEvent<HTMLDivElement>) => {
     if (isInteractiveElement(event.target)) return;
@@ -123,7 +122,7 @@ export const HomeTodoCard = ({
         <p
           className={cn(
             "typo-body-sb-12 min-w-0 flex-1 truncate",
-            isCompleted ? "text-timo-gray-700" : "text-timo-black",
+            isDimmed ? "text-timo-gray-700" : "text-timo-black",
           )}
         >
           {title}
@@ -165,9 +164,11 @@ export const HomeTodoCard = ({
       tabIndex={onClickTodo ? 0 : attributes.tabIndex}
       onClick={onClickTodo ? handleCardClick : undefined}
       onKeyDown={onClickTodo ? handleCardKeyDown : undefined}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={cn(
         "border-timo-gray-500 flex w-full shrink-0 flex-col items-start gap-2 overflow-hidden rounded-[4px] border border-solid px-3.5 py-3",
-        isCompleted ? "bg-timo-gray-200" : "bg-white",
+        isDimmed ? "bg-timo-gray-200" : "bg-white",
         onClickTodo && "cursor-pointer",
       )}
     >
@@ -189,19 +190,23 @@ export const HomeTodoCard = ({
       )}
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-1">
-          <PriorityIcon
-            priority={isCompleted ? "Disable" : priority}
-            label={priorityLabel}
-          />
+          {priority && (
+            <div className="pl-2">
+              <PriorityIcon
+                priority={isDimmed ? "Disable" : priority}
+                label={priorityLabel}
+              />
+            </div>
+          )}
           {tagName && <TagIcon text={tagName} />}
           {hasMemo &&
-            (isCompleted ? (
+            (isDimmed ? (
               <MemoDisableIcon width={18} height={18} />
             ) : (
               <MemoOnIcon width={18} height={18} />
             ))}
           {isRepeated &&
-            (isCompleted ? (
+            (isDimmed ? (
               <RepeatTodoDisableIcon width={18} height={18} />
             ) : (
               <RepeatTodoOnIcon width={18} height={18} />
@@ -210,7 +215,7 @@ export const HomeTodoCard = ({
         <span
           className={cn(
             "typo-body-sb-12 shrink-0 whitespace-nowrap",
-            isCompleted ? "text-timo-gray-700" : "text-timo-gray-900",
+            isDimmed ? "text-timo-gray-700" : "text-timo-gray-900",
           )}
         >
           {convertDurationToTimeText(durationSeconds)}
