@@ -5,8 +5,6 @@ import { useEffect, useRef } from "react";
 
 import type { TimerSessionControlsHandle } from "@/components/timer/TimerSessionControls";
 
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
-import { getGetTodayQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useCompleteTimer,
@@ -43,12 +41,13 @@ export const useFocusSession = ({
   const { data: focusView } = useFocusTodoQuery();
   const { data: activeTimer } = useActiveTimer();
 
-  const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
-  const invalidateFocusTodo = () =>
-    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
-  const invalidateTodayView = () =>
-    queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
+  const {
+    invalidateActiveTimer,
+    invalidateHomeView,
+    invalidateTimeBoxes,
+    invalidateTodayView,
+    invalidateFocusTodo,
+  } = useTimerQueryInvalidation();
   const invalidateTodoDetail = () => {
     const todo = focusView.todo;
     if (!todo) return;
