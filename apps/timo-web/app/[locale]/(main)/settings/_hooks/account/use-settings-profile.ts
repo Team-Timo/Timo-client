@@ -8,6 +8,7 @@ import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/acc
 import {
   authorize,
   useDisconnectCalendar,
+  getGetCalendarEventsQueryKey,
 } from "@/api/generated/endpoints/calendar/calendar";
 import {
   getGetMyProfileQueryKey,
@@ -82,6 +83,9 @@ export const useSettingsProfile = () => {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: getGetMyProfileQueryKey(),
+          });
+          queryClient.removeQueries({
+            queryKey: getGetCalendarEventsQueryKey(),
           });
           handlers.onDisconnect();
         },

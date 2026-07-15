@@ -10,7 +10,7 @@ import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sideb
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
 import { useTodayQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today-query";
-import { CalendarEventItem } from "@/components/calendar/CalendarEventItem";
+import { TodayCalendarEventCard } from "@/components/calendar/TodayCalendarEventCard";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
@@ -41,6 +41,18 @@ export const TodayTodoListContainer = () => {
     enabled: profile.calendarConnected,
   });
   const calendarEvents = calendarEventsData?.days[0]?.events ?? [];
+  const [checkedCalendarIndices, setCheckedCalendarIndices] = useState<
+    Set<number>
+  >(new Set());
+
+  const toggleCalendarEvent = (index: number) => {
+    setCheckedCalendarIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  };
 
   const [pendingCompleteTodoId, setPendingCompleteTodoId] = useState<
     number | null
@@ -78,7 +90,8 @@ export const TodayTodoListContainer = () => {
     setPendingCompleteTodoId(null);
   };
 
-  const completedCount = todos.filter((todo) => todo.completed).length;
+  const completedCount =
+    todos.filter((todo) => todo.completed).length + checkedCalendarIndices.size;
 
   const plannedMinutes = activeTimer
     ? convertDurationToMinutes(
@@ -93,11 +106,16 @@ export const TodayTodoListContainer = () => {
     <div className="flex h-full flex-col gap-2">
       <TodayDateHeaderContainer
         completedCount={completedCount}
-        totalCount={todos.length}
+        totalCount={todos.length + calendarEvents.length}
       />
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 pb-4">
         {calendarEvents.map((event, index) => (
-          <CalendarEventItem key={index} event={event} />
+          <TodayCalendarEventCard
+            key={index}
+            title={event.title}
+            checked={checkedCalendarIndices.has(index)}
+            onToggle={() => toggleCalendarEvent(index)}
+          />
         ))}
         {todos.map((todo) => {
           const isActiveTodo =

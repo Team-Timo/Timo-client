@@ -15,7 +15,7 @@ import {
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeViewQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view-query";
-import { CalendarEventItem } from "@/components/calendar/CalendarEventItem";
+import { HomeCalendarEventCard } from "@/components/calendar/HomeCalendarEventCard";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
@@ -55,6 +55,21 @@ export const HomeTodoContainer = () => {
     (calendarEventsData?.days ?? []).map((day) => [day.date, day.events]),
   );
   const days = homeViewData.days;
+
+  const [checkedCalendarByDate, setCheckedCalendarByDate] = useState<
+    Map<string, Set<number>>
+  >(new Map());
+
+  const toggleCalendarEvent = (dateKey: string, index: number) => {
+    setCheckedCalendarByDate((prev) => {
+      const next = new Map(prev);
+      const set = new Set(next.get(dateKey) ?? []);
+      if (set.has(index)) set.delete(index);
+      else set.add(index);
+      next.set(dateKey, set);
+      return next;
+    });
+  };
 
   const [pendingCompleteTodo, setPendingCompleteTodo] =
     useState<PendingCompleteTodo | null>(null);
@@ -115,8 +130,12 @@ export const HomeTodoContainer = () => {
       {days.map((day) => {
         const dateKey = day.date;
         const todos = todosByDate[dateKey] ?? day.todos;
-        const completedCount = todos.filter((todo) => todo.completed).length;
         const calendarEvents = calendarEventsByDate.get(dateKey) ?? [];
+        const checkedCalendarIndices =
+          checkedCalendarByDate.get(dateKey) ?? new Set<number>();
+        const completedCount =
+          todos.filter((todo) => todo.completed).length +
+          checkedCalendarIndices.size;
 
         return (
           <div
@@ -134,7 +153,7 @@ export const HomeTodoContainer = () => {
               dayOfWeek={day.dayOfWeek}
               isHoliday={day.isHoliday}
               isToday={day.isToday}
-              totalCount={todos.length}
+              totalCount={todos.length + calendarEvents.length}
               completedCount={completedCount}
             />
 
@@ -147,7 +166,12 @@ export const HomeTodoContainer = () => {
             >
               <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
                 {calendarEvents.map((event, index) => (
-                  <CalendarEventItem key={index} event={event} />
+                  <HomeCalendarEventCard
+                    key={index}
+                    title={event.title}
+                    checked={checkedCalendarIndices.has(index)}
+                    onToggle={() => toggleCalendarEvent(dateKey, index)}
+                  />
                 ))}
                 {todos.map((todo) => {
                   const [firstSubtask] = todo.subtasks;
