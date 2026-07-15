@@ -7,6 +7,7 @@ import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto } from "@/api/generated/models";
 import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
+import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import { getGetTodayQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
@@ -48,11 +49,25 @@ export const useTodayTodoList = (
   const { invalidateTimerState, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
 
+  const invalidateFocusTodo = () => {
+    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+  };
+
   const { mutate: startTimer } = useStartTimer({
-    mutation: { onSuccess: invalidateTimerState },
+    mutation: {
+      onSuccess: () => {
+        invalidateTimerState();
+        invalidateFocusTodo();
+      },
+    },
   });
   const { mutate: changeStatus } = useChangeStatus({
-    mutation: { onSuccess: invalidateTimerState },
+    mutation: {
+      onSuccess: () => {
+        invalidateTimerState();
+        invalidateFocusTodo();
+      },
+    },
   });
 
   useEffect(() => {
@@ -96,6 +111,7 @@ export const useTodayTodoList = (
           invalidateTodayView();
           invalidateTimeBoxes();
           invalidateTodoDetail(todoId, dateKey);
+          invalidateFocusTodo();
         },
         onError: () => {
           setTodos(previous);
@@ -124,6 +140,7 @@ export const useTodayTodoList = (
               onSuccess: () => {
                 invalidateTodayView();
                 invalidateTodoDetail(todoId, dateKey);
+                invalidateFocusTodo();
               },
             },
           );
@@ -207,6 +224,7 @@ export const useTodayTodoList = (
         onSuccess: () => {
           invalidateTodayView();
           invalidateTodoDetail(todoId, dateKey);
+          invalidateFocusTodo();
         },
         onError: () => {
           setTodos(previous);

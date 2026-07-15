@@ -1,7 +1,10 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 
+import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
+import { getGetTodayQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useCompleteTimer,
@@ -28,9 +31,14 @@ export const TimerPanel = () => {
   const timerSessionControlsRef = useRef<TimerSessionControlsHandle>(null);
   const wasTimeUpRef = useRef(false);
 
+  const queryClient = useQueryClient();
   const { data: activeTimer } = useActiveTimer();
   const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
+  const invalidateTodayView = () =>
+    queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
+  const invalidateFocusTodo = () =>
+    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
 
   const { mutate: changeStatus } = useChangeStatus({
     mutation: {
@@ -56,6 +64,8 @@ export const TimerPanel = () => {
         invalidateActiveTimer();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
       },
     },
   });
@@ -66,6 +76,8 @@ export const TimerPanel = () => {
         invalidateActiveTimer();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
       },
     },
   });
@@ -74,6 +86,8 @@ export const TimerPanel = () => {
       onSuccess: () => {
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
       },
     },
   });

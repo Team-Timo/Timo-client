@@ -51,11 +51,25 @@ export const useHomeTodosByDate = (
   const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
     useTimerQueryInvalidation();
 
+  const invalidateFocusTodo = () => {
+    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+  };
+
   const { mutate: startTimer } = useStartTimer<ApiError>({
-    mutation: { onSuccess: invalidateTimerState },
+    mutation: {
+      onSuccess: () => {
+        invalidateTimerState();
+        invalidateFocusTodo();
+      },
+    },
   });
   const { mutate: changeStatus } = useChangeStatus({
-    mutation: { onSuccess: invalidateTimerState },
+    mutation: {
+      onSuccess: () => {
+        invalidateTimerState();
+        invalidateFocusTodo();
+      },
+    },
   });
 
   useEffect(() => {
@@ -77,9 +91,6 @@ export const useHomeTodosByDate = (
     }));
   };
 
-  const invalidateFocusTodo = () => {
-    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
-  };
   const invalidateHomeAndFocus = () => {
     invalidateHomeView();
     invalidateFocusTodo();

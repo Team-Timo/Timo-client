@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import type { TimerSessionControlsHandle } from "@/components/timer/TimerSessionControls";
 
 import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
+import { getGetTodayQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useCompleteTimer,
@@ -14,6 +15,7 @@ import {
   useStopTimer,
 } from "@/api/generated/endpoints/timer/timer";
 import {
+  getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
 } from "@/api/generated/endpoints/todo/todo";
@@ -45,6 +47,15 @@ export const useFocusSession = ({
     useTimerQueryInvalidation();
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+  const invalidateTodayView = () =>
+    queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
+  const invalidateTodoDetail = () => {
+    const todo = focusView.todo;
+    if (!todo) return;
+    queryClient.invalidateQueries({
+      queryKey: getGetTodoDetailQueryKey(todo.todoId, { date: focusView.date }),
+    });
+  };
 
   const { mutate: startTimer } = useStartTimer({
     mutation: {
@@ -84,6 +95,7 @@ export const useFocusSession = ({
         invalidateFocusTodo();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
       },
       onError: onMutationError,
     },
@@ -96,6 +108,7 @@ export const useFocusSession = ({
         invalidateFocusTodo();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
       },
       onError: onMutationError,
     },
@@ -105,6 +118,8 @@ export const useFocusSession = ({
       onSuccess: () => {
         invalidateFocusTodo();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
@@ -114,6 +129,8 @@ export const useFocusSession = ({
       onSuccess: () => {
         invalidateFocusTodo();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
