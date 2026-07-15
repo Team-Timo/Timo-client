@@ -9,6 +9,7 @@ import { useGetTodoDetail } from "@/api/generated/endpoints/todo/todo";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
 import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
+import { useActiveTimer } from "@/hooks/use-active-timer";
 
 export interface DetailTodoModalContainerProps {
   todoId: number;
@@ -43,7 +44,12 @@ const DetailTodoModalQuery = ({
   const { handleUpdate } = useUpdateTodoSubmit();
   const todo = data?.data;
 
+  const { data: activeTimer } = useActiveTimer();
+
   if (isError || !todo) return null;
+
+  const timerStatus =
+    activeTimer?.todoId === todoId ? activeTimer.status : todo.timerStatus;
 
   const deleteTodo = () => {
     handleDelete(todoId, {
@@ -72,6 +78,7 @@ const DetailTodoModalQuery = ({
       onToggleCompleted={onToggleCompleted}
       onDelete={deleteTodo}
       onUpdate={updateTodo}
+      timerStatus={timerStatus}
     />
   );
 };

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type {
   TodoDetailResponse,
+  TodoDetailResponseTimerStatus,
   TodoUpdateRequest,
 } from "@/api/generated/models";
 import type {
@@ -49,6 +50,7 @@ export interface DetailTodoModalContentProps {
   onToggleCompleted: (completed: boolean) => void;
   onDelete: () => void;
   onUpdate: (data: TodoUpdateRequest) => void;
+  timerStatus: TodoDetailResponseTimerStatus;
 }
 
 export const DetailTodoModalContent = ({
@@ -60,6 +62,7 @@ export const DetailTodoModalContent = ({
   onToggleCompleted,
   onDelete,
   onUpdate,
+  timerStatus,
 }: DetailTodoModalContentProps) => {
   const t = useTranslations("Home.detailModal");
   const tCreateModal = useTranslations("Home.createModal");
@@ -294,7 +297,7 @@ export const DetailTodoModalContent = ({
             <DetailTodoTaskFields
               titleValue={detailTodoForm.title}
               isCompleted={todo.completed}
-              timerStatus={todo.timerStatus}
+              timerStatus={timerStatus}
               subtaskInputs={detailTodoForm.subtaskInputs}
               onTitleChange={detailTodoForm.changeTitle}
               onToggleCompleted={onToggleCompleted}
