@@ -15,10 +15,13 @@ import {
 import { useHomeTodosByDate } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-todos-by-date";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { useHomeViewQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_queries/use-home-view-query";
+import { CalendarEventItem } from "@/components/calendar/CalendarEventItem";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
+import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
+import { useCalendarEventsQuery } from "@/queries/calendar/use-calendar-events-query";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
@@ -37,9 +40,20 @@ export const HomeTodoContainer = () => {
   const scrollRef = useHomeTodayScrollRef<HTMLDivElement>();
 
   const filter: HomeViewFilter = isWeekView ? "WEEK" : "DEFAULT";
+  const calendarFilter = isWeekView ? "WEEK" : "TWO_WEEK";
   const baseDate = formatDateKey(referenceDate);
 
   const { data: homeViewData } = useHomeViewQuery({ filter, baseDate });
+  const { data: profile } = useMyProfileQuery();
+  const { data: calendarEventsData } = useCalendarEventsQuery({
+    filter: calendarFilter,
+    baseDate,
+    enabled: profile.calendarConnected,
+  });
+
+  const calendarEventsByDate = new Map(
+    (calendarEventsData?.days ?? []).map((day) => [day.date, day.events]),
+  );
   const days = homeViewData.days;
 
   const [pendingCompleteTodo, setPendingCompleteTodo] =
@@ -102,6 +116,7 @@ export const HomeTodoContainer = () => {
         const dateKey = day.date;
         const todos = todosByDate[dateKey] ?? day.todos;
         const completedCount = todos.filter((todo) => todo.completed).length;
+        const calendarEvents = calendarEventsByDate.get(dateKey) ?? [];
 
         return (
           <div
@@ -131,6 +146,9 @@ export const HomeTodoContainer = () => {
               }
             >
               <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
+                {calendarEvents.map((event, index) => (
+                  <CalendarEventItem key={index} event={event} />
+                ))}
                 {todos.map((todo) => {
                   const [firstSubtask] = todo.subtasks;
                   const isActiveTodo =

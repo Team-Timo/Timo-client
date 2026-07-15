@@ -6,6 +6,10 @@ import { useTranslations } from "next-intl";
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
 import {
+  authorize,
+  useDisconnectCalendar,
+} from "@/api/generated/endpoints/calendar/calendar";
+import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
 } from "@/api/generated/endpoints/user/user";
@@ -38,6 +42,8 @@ export interface CreateTagHandlers extends ActionErrorHandlers {
 export interface ConnectCalendarHandlers {
   onConnect: () => void;
   onDisconnect: () => void;
+  onConnectError?: () => void;
+  onDisconnectError?: () => void;
 }
 
 export const useSettingsProfile = () => {
@@ -46,6 +52,7 @@ export const useSettingsProfile = () => {
 
   const { data: profile } = useMyProfileQuery();
 
+  const { mutate: disconnectCalendar } = useDisconnectCalendar();
   const { mutateAsync: updateLanguage } = useUpdateLanguage();
   const queryClient = useQueryClient();
 
@@ -71,23 +78,31 @@ export const useSettingsProfile = () => {
     handlers: ConnectCalendarHandlers,
   ) => {
     if (isCalendarConnected) {
-      // TODO: 실제 확인 모달로 교체
-      const confirmed = window.confirm("구글 캘린더 연동을 해제하시겠습니까?");
-      if (!confirmed) return;
-
-      // TODO: API - 연동 토큰 파기 (다른 담당자 작업)
-      handlers.onDisconnect();
+      disconnectCalendar(undefined, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: getGetMyProfileQueryKey(),
+          });
+          handlers.onDisconnect();
+        },
+        onError: () => {
+          handlers.onDisconnectError?.();
+        },
+      });
       return;
     }
 
     try {
       const response = await authorize();
       const url = response.data?.authorizationUrl;
-      if (!url) return;
+      if (!url) {
+        handlers.onConnectError?.();
+        return;
+      }
       localStorage.setItem("calendarConnectOrigin", "settings");
       window.location.assign(url);
     } catch {
-      // authorize 실패 시 아무 동작 없음 — 사용자가 재시도 가능
+      handlers.onConnectError?.();
     }
   };
 

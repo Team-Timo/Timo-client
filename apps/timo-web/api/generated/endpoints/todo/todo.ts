@@ -405,6 +405,7 @@ export const useDeleteTodo = <TError = ErrorType<ErrorDto>, TContext = unknown>(
  * 기존 TODO의 제목, 메모, 날짜, 태그, 우선순위, 예상 소요 시간, 아이콘, 반복 규칙, 하위 태스크를 부분 수정합니다.
  *
  * 요청 body에 포함된(null이 아닌) 필드만 수정됩니다.
+ * 단, icon은 예외로, "NONE"을 전달하면 아이콘을 제거(빈 상태로 저장)하고, null이면 기존 아이콘을 유지합니다.
  * 예상 소요 시간은 durationSeconds 필드에 초 단위 정수로 전달합니다.
  * subtasks를 전달하면 하위 태스크 목록 전체가 교체됩니다.
  * subtaskId가 있으면 기존 태스크를 수정하고, null이면 신규 태스크로 추가하며, 전달되지 않은 기존 태스크는 삭제됩니다.

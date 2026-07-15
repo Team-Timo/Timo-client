@@ -54,6 +54,52 @@ export const DisconnectCalendarResponse = zod.object({
 });
 
 /**
+ * filter(DAY/WEEK/TWO_WEEK)와 baseDate에 따라 연동된 구글 캘린더 일정을 일자별로 조회합니다.
+ *
+ * DAY: baseDate 하루
+ *
+ * WEEK: baseDate ~ baseDate+6일 (총 7일)
+ *
+ * TWO_WEEK: baseDate-7일 ~ baseDate+7일 (총 15일)
+ *
+ * baseDate 미입력 시 오늘 날짜가 기본값으로 사용됩니다.
+ * 별도 저장 없이 매 요청마다 구글 API를 직접 호출하여 최신 상태를 반환합니다.
+ * @summary 캘린더 일정 조회
+ */
+export const GetCalendarEventsQueryParams = zod.object({
+  filter: zod.string().describe("조회 필터"),
+  baseDate: zod
+    .string()
+    .optional()
+    .describe("기준 날짜 (YYYY-MM-DD), 미입력 시 오늘"),
+});
+
+export const GetCalendarEventsResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      filter: zod.string().optional(),
+      baseDate: zod.iso.date().optional(),
+      days: zod
+        .array(
+          zod.object({
+            date: zod.iso.date().optional(),
+            events: zod
+              .array(
+                zod.object({
+                  title: zod.string().optional(),
+                }),
+              )
+              .optional(),
+          }),
+        )
+        .optional(),
+    })
+    .optional(),
+});
+
+/**
  * 구글 캘린더 연동을 시작하는 구글 인증 URL을 발급합니다.
  *
  * 프론트는 이 응답의 authorizationUrl로 window.location.assign 등을 통해 직접 이동해야 합니다.

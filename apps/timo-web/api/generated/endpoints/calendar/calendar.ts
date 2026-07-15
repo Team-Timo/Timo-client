@@ -14,8 +14,10 @@ import type {
   BaseResponseCalendarAuthorizeResponse,
   BaseResponseCalendarConnectResponse,
   BaseResponseCalendarDisconnectResponse,
+  BaseResponseCalendarEventsResponse,
   CalendarConnectRequest,
   ErrorDto,
+  GetCalendarEventsParams,
 } from "../../models";
 import type {
   DataTag,
@@ -230,6 +232,182 @@ export const useDisconnectCalendar = <
     queryClient,
   );
 };
+/**
+ * filter(DAY/WEEK/TWO_WEEK)와 baseDate에 따라 연동된 구글 캘린더 일정을 일자별로 조회합니다.
+ *
+ * DAY: baseDate 하루
+ *
+ * WEEK: baseDate ~ baseDate+6일 (총 7일)
+ *
+ * TWO_WEEK: baseDate-7일 ~ baseDate+7일 (총 15일)
+ *
+ * baseDate 미입력 시 오늘 날짜가 기본값으로 사용됩니다.
+ * 별도 저장 없이 매 요청마다 구글 API를 직접 호출하여 최신 상태를 반환합니다.
+ * @summary 캘린더 일정 조회
+ */
+export const getCalendarEvents = (
+  params: GetCalendarEventsParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<BaseResponseCalendarEventsResponse>(
+    { url: `/api/v1/users/calendar/events`, method: "GET", params, signal },
+    options,
+  );
+};
+
+export const getGetCalendarEventsQueryKey = (
+  params?: GetCalendarEventsParams,
+) => {
+  return [
+    `/api/v1/users/calendar/events`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetCalendarEventsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCalendarEvents>>,
+  TError = ErrorType<ErrorDto>,
+>(
+  params: GetCalendarEventsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCalendarEvents>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCalendarEventsQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getCalendarEvents>>
+  > = ({ signal }) => getCalendarEvents(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCalendarEvents>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCalendarEventsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCalendarEvents>>
+>;
+export type GetCalendarEventsQueryError = ErrorType<ErrorDto>;
+
+export function useGetCalendarEvents<
+  TData = Awaited<ReturnType<typeof getCalendarEvents>>,
+  TError = ErrorType<ErrorDto>,
+>(
+  params: GetCalendarEventsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCalendarEvents>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCalendarEvents>>,
+          TError,
+          Awaited<ReturnType<typeof getCalendarEvents>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCalendarEvents<
+  TData = Awaited<ReturnType<typeof getCalendarEvents>>,
+  TError = ErrorType<ErrorDto>,
+>(
+  params: GetCalendarEventsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCalendarEvents>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCalendarEvents>>,
+          TError,
+          Awaited<ReturnType<typeof getCalendarEvents>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCalendarEvents<
+  TData = Awaited<ReturnType<typeof getCalendarEvents>>,
+  TError = ErrorType<ErrorDto>,
+>(
+  params: GetCalendarEventsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCalendarEvents>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 캘린더 일정 조회
+ */
+
+export function useGetCalendarEvents<
+  TData = Awaited<ReturnType<typeof getCalendarEvents>>,
+  TError = ErrorType<ErrorDto>,
+>(
+  params: GetCalendarEventsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCalendarEvents>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetCalendarEventsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
 /**
  * 구글 캘린더 연동을 시작하는 구글 인증 URL을 발급합니다.
  *
