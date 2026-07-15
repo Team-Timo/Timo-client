@@ -10,6 +10,7 @@ export type TodoUpdateRequestIcon =
   (typeof TodoUpdateRequestIcon)[keyof typeof TodoUpdateRequestIcon];
 
 export const TodoUpdateRequestIcon = {
+  NONE: "NONE",
   ICON_1: "ICON_1",
   ICON_2: "ICON_2",
   ICON_3: "ICON_3",

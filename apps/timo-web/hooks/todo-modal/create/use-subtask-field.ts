@@ -54,6 +54,15 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
       inputRefs.current[index] = element;
     };
 
+  const focusFirstInput = () => {
+    const element = inputRefs.current[0];
+    if (!element) return;
+
+    element.focus();
+    const caretPosition = element.value.length;
+    element.setSelectionRange(caretPosition, caretPosition);
+  };
+
   const handleInputChange = (index: number, value: string) => {
     setSubtaskInputs((prev) => {
       const next = prev.map((entry, i) =>
@@ -111,6 +120,7 @@ export const useSubtaskField = ({ control }: UseSubtaskFieldParams) => {
     registerInputRef,
     handleInputChange,
     handleInputKeyDown,
+    focusFirstInput,
     reset,
   };
 };

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
+import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/DetailTodoTaskFields";
 import type { TodoSubtask } from "@/schemas/todo/todo-schema";
-import type { SubtaskInputEntry } from "@/utils/todo/subtask-input-list";
 import type { KeyboardEvent } from "react";
 
 import {
@@ -10,11 +10,6 @@ import {
 } from "@/utils/todo/subtask-input-list";
 
 const MAX_DETAIL_SUBTASK_COUNT = 10;
-
-export interface DetailTodoSubtaskInput extends SubtaskInputEntry {
-  subtaskId: number | null;
-  completed: boolean;
-}
 
 export interface UseDetailSubtaskFieldParams {
   subtasks: TodoSubtask[];
@@ -63,6 +58,15 @@ export const useDetailSubtaskField = ({
     (index: number) => (element: HTMLTextAreaElement | null) => {
       inputRefs.current[index] = element;
     };
+
+  const focusFirstInput = () => {
+    const element = inputRefs.current[0];
+    if (!element) return;
+
+    element.focus();
+    const caretPosition = element.value.length;
+    element.setSelectionRange(caretPosition, caretPosition);
+  };
 
   const handleInputChange = (id: number, value: string) => {
     setSubtaskInputs((prev) =>
@@ -123,5 +127,6 @@ export const useDetailSubtaskField = ({
     handleInputChange,
     handleCompletedChange,
     handleInputKeyDown,
+    focusFirstInput,
   };
 };

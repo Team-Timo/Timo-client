@@ -1,5 +1,6 @@
 "use client";
 
+import { keepPreviousData } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useCallback, useEffect, useState } from "react";
@@ -14,6 +15,7 @@ import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
+import { useToggleSubtaskSubmit } from "@/hooks/todo-modal/detail/use-toggle-subtask-submit";
 import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 export interface DetailTodoModalContainerProps {
@@ -46,9 +48,15 @@ const DetailTodoModalQuery = ({
   onDelete,
   onActionError,
 }: DetailTodoModalQueryProps) => {
-  const { data, error, isError } = useGetTodoDetail(todoId, { date });
+  const [currentDate, setCurrentDate] = useState(date);
+  const { data, error, isError } = useGetTodoDetail(
+    todoId,
+    { date: currentDate },
+    { query: { placeholderData: keepPreviousData } },
+  );
   const { handleDelete } = useDeleteTodoSubmit();
   const { handleUpdate } = useUpdateTodoSubmit();
+  const { handleToggle } = useToggleSubtaskSubmit();
   const { data: activeTimer } = useActiveTimer();
   const todo = data?.data;
   const isPlayHighlighted = !activeTimer || activeTimer.todoId === todoId;
@@ -78,12 +86,34 @@ const DetailTodoModalQuery = ({
     updateData: TodoUpdateRequest,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
+    const nextDate = updateData.date ?? currentDate;
+
     handleUpdate(
       {
         todoId,
-        date,
+        date: nextDate,
         data: updateData,
       },
+      {
+        onSuccess: () => {
+          if (updateData.date) setCurrentDate(updateData.date);
+          handlers.onSuccess?.();
+        },
+        onError: (error) => {
+          handlers.onError?.(error);
+          onActionError(error);
+        },
+      },
+    );
+  };
+
+  const toggleSubtask = (
+    subtaskId: number,
+    completed: boolean,
+    handlers: UpdateTodoSubmitHandlers = {},
+  ) => {
+    handleToggle(
+      { todoId, subtaskId, date: currentDate, completed },
       {
         onSuccess: handlers.onSuccess,
         onError: (error) => {
@@ -105,6 +135,7 @@ const DetailTodoModalQuery = ({
       onToggleCompleted={onToggleCompleted}
       onDelete={deleteTodo}
       onUpdate={updateTodo}
+      onToggleSubtask={toggleSubtask}
       timerStatus={timerStatus}
     />
   );

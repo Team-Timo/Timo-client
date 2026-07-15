@@ -89,7 +89,7 @@ export const TimeboxPanel = ({ currentTime }: TimeboxPanelProps) => {
             style={{ top: startOffset, height }}
           >
             {showLabel && (
-              <div className="flex items-start gap-1 pt-[2px] pl-[6px]">
+              <div className="flex items-start gap-1 pt-0.5 pl-1.5">
                 <span
                   className={cn(
                     "typo-body-sb-12 min-w-0 truncate",
