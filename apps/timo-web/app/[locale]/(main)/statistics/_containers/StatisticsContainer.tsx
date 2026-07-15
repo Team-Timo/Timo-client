@@ -69,13 +69,13 @@ export const StatisticsContainer = () => {
   };
 
   return (
-    <div className="flex h-full">
-      <div className="flex min-w-0 flex-1 flex-col">
+    <div className="flex h-full overflow-hidden">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <StatisticsHeaderContainer
           currentMonth={currentMonth}
           onChangeMonth={handleChangeMonth}
         />
-        <div className="flex min-h-0 flex-1">
+        <div className="min-h-0 flex-1 overflow-auto">
           <StatisticsCalendarContainer
             currentMonth={currentMonth}
             displayDate={selectedDate}
