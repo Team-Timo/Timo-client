@@ -104,7 +104,7 @@ export const HomeTodoCard = ({
   };
 
   const stopInteractiveEvent = (
-    event: MouseEvent<HTMLButtonElement> | PointerEvent<HTMLButtonElement>,
+    event: MouseEvent<HTMLElement> | PointerEvent<HTMLElement>,
   ) => {
     event.stopPropagation();
   };
@@ -127,21 +127,27 @@ export const HomeTodoCard = ({
           {title}
         </p>
       </div>
-      <PlayButton
-        variant={isRunning ? "stop" : "play"}
-        size="sm"
-        disabled={isCompleted}
-        onClick={handlePlayClick}
+      <div
+        role="none"
+        onPointerDownCapture={stopInteractiveEvent}
         onPointerDown={stopInteractiveEvent}
+        onClick={stopInteractiveEvent}
       >
-        {isCompleted ? (
-          <PlayDisabledIcon />
-        ) : isRunning ? (
-          <StopIcon />
-        ) : (
-          <PlayIcon />
-        )}
-      </PlayButton>
+        <PlayButton
+          variant={isRunning ? "stop" : "play"}
+          size="sm"
+          disabled={isCompleted}
+          onClick={handlePlayClick}
+        >
+          {isCompleted ? (
+            <PlayDisabledIcon />
+          ) : isRunning ? (
+            <StopIcon />
+          ) : (
+            <PlayIcon />
+          )}
+        </PlayButton>
+      </div>
     </div>
   );
 
