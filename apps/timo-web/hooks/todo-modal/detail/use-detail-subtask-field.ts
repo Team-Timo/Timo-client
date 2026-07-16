@@ -41,6 +41,20 @@ export const useDetailSubtaskField = ({
   const pendingFocusIndex = useRef<number | null>(null);
 
   useEffect(() => {
+    setSubtaskInputs((prev) =>
+      prev.map((input) => {
+        const serverSubtask = subtasks.find(
+          (subtask) => subtask.subtaskId === input.subtaskId,
+        );
+        if (!serverSubtask || serverSubtask.completed === input.completed) {
+          return input;
+        }
+        return { ...input, completed: serverSubtask.completed };
+      }),
+    );
+  }, [subtasks]);
+
+  useEffect(() => {
     if (pendingFocusIndex.current === null) return;
 
     const index = pendingFocusIndex.current;
