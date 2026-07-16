@@ -10,10 +10,7 @@ import type {
 } from "@repo/timo-design-system/ui";
 
 import { formatDateKey } from "@/utils/date/date";
-import {
-  buildDetailTodoSubtasksUpdateRequest,
-  isTodoUpdateRepeatWeekday,
-} from "@/utils/todo/detail-todo-update-request";
+import { isTodoUpdateRepeatWeekday } from "@/utils/todo/detail-todo-update-request";
 import {
   convertApiDurationToSeconds,
   convertClockTimeTextToApiDuration,
@@ -25,11 +22,17 @@ export interface UseDetailTodoPatchHandlersParams {
     data: TodoUpdateRequest,
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
+  onToggleSubtask: (
+    subtaskId: number,
+    completed: boolean,
+    handlers?: UpdateTodoSubmitHandlers,
+  ) => void;
 }
 
 export const useDetailTodoPatchHandlers = ({
   form,
   onUpdate,
+  onToggleSubtask,
 }: UseDetailTodoPatchHandlersParams) => {
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
 
@@ -97,15 +100,14 @@ export const useDetailTodoPatchHandlers = ({
     );
   };
 
-  const handleWeekdayToggle = (weekdayId: string) => {
-    const selectedWeekdayIds = form.toggleWeekday(weekdayId);
+  const handleWeekdaysChange = (weekdayIds: string[]) => {
     updateTodo(
       {
         repeatType: "WEEKLY",
-        repeatWeekdays: selectedWeekdayIds.filter(isTodoUpdateRepeatWeekday),
+        repeatWeekdays: weekdayIds.filter(isTodoUpdateRepeatWeekday),
       },
       {
-        onSuccess: () => form.setSelectedWeekdayIds(selectedWeekdayIds),
+        onSuccess: () => form.setSelectedWeekdayIds(weekdayIds),
       },
     );
   };
@@ -126,11 +128,12 @@ export const useDetailTodoPatchHandlers = ({
   };
 
   const handleSubtaskCompletedChange = (id: number, completed: boolean) => {
-    const subtasks = form.changeSubtaskCompleted(id, completed);
-    updateTodo(
-      { subtasks: buildDetailTodoSubtasksUpdateRequest(subtasks) },
-      { onSuccess: () => form.setSubtaskCompleted(id, completed) },
-    );
+    const subtask = form.subtaskInputs.find((item) => item.id === id);
+    if (!subtask || subtask.subtaskId === null) return;
+
+    onToggleSubtask(subtask.subtaskId, completed, {
+      onSuccess: () => form.setSubtaskCompleted(id, completed),
+    });
   };
 
   return {
@@ -142,7 +145,7 @@ export const useDetailTodoPatchHandlers = ({
     handleSelectPriority,
     handleSelectTag,
     handleRepeatFrequencyChange,
-    handleWeekdayToggle,
+    handleWeekdaysChange,
     handleRepeatDayChange,
     handleSubtaskCompletedChange,
   };
