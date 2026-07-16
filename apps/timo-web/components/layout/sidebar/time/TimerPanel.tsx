@@ -157,6 +157,10 @@ export const TimerPanel = () => {
         )
       : 0;
   const plannedMinutes = convertDurationToMinutes(plannedSeconds);
+  // 완료 모달의 "계획"은 연장 시간을 제외한 순수 계획 시간만 보여줘야 한다
+  const basePlannedMinutes = convertDurationToMinutes(
+    activeTimer?.plannedSeconds ?? 0,
+  );
   const actualMinutes = convertDurationToMinutes(
     activeTimer?.elapsedSeconds ?? 0,
   );
@@ -177,7 +181,7 @@ export const TimerPanel = () => {
         ref={timerSessionControlsRef}
         isRunning={isRunning}
         onTogglePlay={handleTogglePlay}
-        plannedMinutes={plannedMinutes}
+        plannedMinutes={basePlannedMinutes}
         actualMinutes={actualMinutes}
         feedbackText={feedbackText}
         isTimeUp={isTimeUp}

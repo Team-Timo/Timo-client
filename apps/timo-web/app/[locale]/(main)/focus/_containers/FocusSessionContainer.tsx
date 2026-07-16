@@ -121,7 +121,7 @@ export const FocusSessionContainer = () => {
             ref={focusSessionState.timerSessionControlsRef}
             isRunning={focusSessionState.isRunning}
             onTogglePlay={focusSessionActions.onTogglePlay}
-            plannedMinutes={focusSessionState.plannedMinutes}
+            plannedMinutes={focusSessionState.basePlannedMinutes}
             actualMinutes={focusSessionState.actualMinutes}
             feedbackText={feedbackText}
             isTimeUp={focusSessionState.isTimeUp}
