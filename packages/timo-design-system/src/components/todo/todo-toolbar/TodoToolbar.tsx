@@ -175,6 +175,7 @@ export const TodoToolbar = ({
 
       <RepeatSelector
         {...repeat}
+        isActive={isRepeatActive}
         trigger={(isOpen) =>
           isOpen ? (
             <RepeatBlueIcon />

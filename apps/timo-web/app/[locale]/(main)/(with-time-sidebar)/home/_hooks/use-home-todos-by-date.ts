@@ -3,7 +3,9 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+import type { ErrorType } from "@/api/client/custom-instance";
 import type { ApiError } from "@/api/error/api-error";
+import type { ErrorDto } from "@/api/generated/models";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
@@ -28,6 +30,7 @@ export interface UseHomeTodosByDateOptions {
   onTimerAlreadyRunning: () => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
   onPlayError: (message: string | undefined) => void;
+  onUpdateError: (message: string | undefined) => void;
 }
 
 export const useHomeTodosByDate = (
@@ -37,6 +40,7 @@ export const useHomeTodosByDate = (
     onTimerAlreadyRunning,
     onStopFeedback,
     onPlayError,
+    onUpdateError,
   }: UseHomeTodosByDateOptions,
 ) => {
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
@@ -133,8 +137,9 @@ export const useHomeTodosByDate = (
           invalidateTodoDetail(dateKey, todoId);
           invalidateStatistics();
         },
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
+          onUpdateError(error.response?.data.message);
         },
       },
     );
@@ -237,8 +242,9 @@ export const useHomeTodosByDate = (
           invalidateTodoDetail(dateKey, todoId);
           invalidateStatistics();
         },
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
+          onUpdateError(error.response?.data.message);
         },
       },
     );
@@ -270,8 +276,9 @@ export const useHomeTodosByDate = (
       { todoId: movedTodo.todoId, data: { newIndex: toIndex, date: dateKey } },
       {
         onSuccess: invalidateHomeAndFocus,
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
+          onUpdateError(error.response?.data.message);
         },
       },
     );

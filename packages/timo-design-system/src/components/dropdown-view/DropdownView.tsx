@@ -49,7 +49,7 @@ export const DropdownView = ({
                 role="option"
                 aria-selected={isSelected}
                 onClick={() => onChange(item)}
-                className="typo-body-m-12 text-timo-gray-900 px-1.5 py-1"
+                className="typo-body-m-12 text-timo-gray-900 py-1"
               >
                 {item}
               </Dropdown.Item>

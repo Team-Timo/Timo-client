@@ -95,6 +95,7 @@ export const useFocusSession = ({
         invalidateHomeView();
         invalidateTimeBoxes();
         invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
@@ -108,6 +109,7 @@ export const useFocusSession = ({
         invalidateHomeView();
         invalidateTimeBoxes();
         invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
