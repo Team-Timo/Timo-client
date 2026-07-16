@@ -59,7 +59,9 @@ const DetailTodoModalQuery = ({
   const { handleToggle } = useToggleSubtaskSubmit();
   const { data: activeTimer } = useActiveTimer();
   const todo = data?.data;
-  const isPlayHighlighted = !activeTimer || activeTimer.todoId === todoId;
+  const isPlayHighlighted =
+    !activeTimer ||
+    (activeTimer.todoId === todoId && activeTimer.date === date);
 
   useEffect(() => {
     if (isError && error) {
@@ -70,7 +72,9 @@ const DetailTodoModalQuery = ({
   if (isError || !todo) return null;
 
   const timerStatus =
-    activeTimer?.todoId === todoId ? activeTimer.status : todo.timerStatus;
+    activeTimer?.todoId === todoId && activeTimer.date === date
+      ? activeTimer.status
+      : todo.timerStatus;
 
   const deleteTodo = () => {
     handleDelete(todoId, {

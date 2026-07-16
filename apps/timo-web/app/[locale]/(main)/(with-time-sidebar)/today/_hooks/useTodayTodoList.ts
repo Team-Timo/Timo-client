@@ -96,13 +96,17 @@ export const useTodayTodoList = (
   };
 
   const handleToggleCompleted = (todoId: number, completed: boolean) => {
-    if (completed && activeTimer?.todoId === todoId) {
+    const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
+    if (!dateKey) return;
+
+    if (
+      completed &&
+      activeTimer?.todoId === todoId &&
+      activeTimer.date === dateKey
+    ) {
       onNeedStopConfirm(todoId);
       return;
     }
-
-    const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
-    if (!dateKey) return;
 
     const previous = todos;
     updateTodo(todoId, (todo) => ({ ...todo, completed }));
@@ -166,7 +170,11 @@ export const useTodayTodoList = (
       openTimerPanel();
     }
 
-    if (activeTimer && activeTimer.todoId === todoId) {
+    if (
+      activeTimer &&
+      activeTimer.todoId === todoId &&
+      activeTimer.date === dateKey
+    ) {
       changeStatus(
         {
           timerId: activeTimer.timerId,

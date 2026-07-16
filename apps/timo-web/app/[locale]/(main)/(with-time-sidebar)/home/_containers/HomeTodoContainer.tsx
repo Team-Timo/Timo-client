@@ -136,7 +136,9 @@ export const HomeTodoContainer = () => {
                 {todos.map((todo) => {
                   const [firstSubtask] = todo.subtasks;
                   const isActiveTodo =
-                    activeTimer && activeTimer.todoId === todo.todoId;
+                    activeTimer &&
+                    activeTimer.todoId === todo.todoId &&
+                    activeTimer.date === dateKey;
                   const durationSeconds = isActiveTodo
                     ? activeTimer.plannedSeconds + activeTimer.extendedSeconds
                     : todo.durationSeconds;

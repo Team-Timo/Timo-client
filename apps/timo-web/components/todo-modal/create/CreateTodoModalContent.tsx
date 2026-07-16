@@ -9,6 +9,7 @@ import { useController, useForm } from "react-hook-form";
 import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
+import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
@@ -214,19 +215,9 @@ export const CreateTodoModalContent = ({
         </div>
       </OverlayModal>
 
-      <AnimatedToast
-        isOpen={tagField.isTagLimitToastOpen}
-        onClose={tagField.closeTagLimitToast}
-        message={
-          <p className="mb-0">
-            {tToast.rich("tagLimit", {
-              blue: (chunks) => (
-                <span className="text-timo-blue-300">{chunks}</span>
-              ),
-            })}
-          </p>
-        }
-      />
+      {tagField.isTagLimitToastOpen && (
+        <TagLimitToastContainer onClose={tagField.closeTagLimitToast} />
+      )}
 
       <AnimatedToast
         isOpen={timeField.isAiDurationErrorToastOpen}

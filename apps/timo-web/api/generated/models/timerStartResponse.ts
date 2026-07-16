@@ -9,6 +9,7 @@
 export interface TimerStartResponse {
   timerId: number;
   todoId: number;
+  date: string;
   status: string;
   plannedSeconds: number;
   startedAt: string;
