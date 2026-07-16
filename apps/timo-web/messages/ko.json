@@ -144,7 +144,7 @@
     }
   },
   "Toast": {
-    "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
+    "tagLimit": "태그는 <blue>최대 {count}개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
     "todoLimitLine1": "투두는 하루에 <blue>최대 20개</blue>까지 추가할 수 있어요.",
     "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 삭제해주세요.",
     "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요.",
@@ -153,7 +153,6 @@
     "aiDurationRecommendFailed": "AI 추천 소요 시간을 가져오지 못했어요. 다시 시도해 주세요.",
     "tagCreateFailed": "태그 생성에 실패했어요. 다시 시도해 주세요.",
     "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요.",
-    "settingTagLimit": "설정 태그는 최대 4개까지 생성할 수 있어요.",
     "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요.",
     "languageChangeFailed": "언어 변경에 실패했어요. 다시 시도해 주세요.",
     "timerAlreadyRunning": "다른 투두의 타이머가 이미 실행 중이에요. 먼저 종료해 주세요.",

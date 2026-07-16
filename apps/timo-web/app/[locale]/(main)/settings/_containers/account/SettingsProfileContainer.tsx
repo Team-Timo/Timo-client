@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
+import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
 import { SettingsProfileView } from "@/app/[locale]/(main)/settings/_components/account/SettingsProfileView";
 import { useSettingsProfile } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile";
 import { useSettingsProfileLabels } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile-labels";
@@ -90,11 +91,12 @@ export const SettingsProfileContainer = () => {
         onLogout={profileActions.onLogout}
       />
 
-      <AnimatedToast
-        isOpen={isTagLimitToastOpen}
-        onClose={() => setIsTagLimitToastOpen(false)}
-        message={tToast("settingTagLimit")}
-      />
+      {isTagLimitToastOpen && (
+        <TagLimitToastContainer
+          count={MAX_SETTING_CUSTOM_TAG_COUNT}
+          onClose={() => setIsTagLimitToastOpen(false)}
+        />
+      )}
 
       <AnimatedToast
         isOpen={isTagErrorToastOpen}

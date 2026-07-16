@@ -144,7 +144,7 @@
     }
   },
   "Toast": {
-    "tagLimit": "You can create up to <blue>8 tags</blue>, and to add more, please delete existing tags.",
+    "tagLimit": "You can create up to <blue>{count} tags</blue>, and to add more, please delete existing tags.",
     "todoLimitLine1": "You can add up to <blue>20 to-dos</blue> per day.",
     "todoLimitLine2": "To add a new to-do, please delete an existing one.",
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
@@ -153,7 +153,6 @@
     "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again.",
     "tagCreateFailed": "Failed to create the tag. Please try again.",
     "tagActionFailed": "Failed to update the tag. Please try again.",
-    "settingTagLimit": "You can create up to 4 setting tags.",
     "focusActionFailed": "Failed to process the request. Please try again.",
     "languageChangeFailed": "Failed to change the language. Please try again.",
     "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first.",

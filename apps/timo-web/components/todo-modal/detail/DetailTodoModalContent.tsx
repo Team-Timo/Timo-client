@@ -298,6 +298,7 @@ export const DetailTodoModalContent = ({
         message={
           <p className="mb-0">
             {tToast.rich("tagLimit", {
+              count: 8,
               blue: (chunks) => (
                 <span className="text-timo-blue-300">{chunks}</span>
               ),

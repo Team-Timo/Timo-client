@@ -11,8 +11,6 @@ import type {
   SettingsTagItem,
 } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
-const MAX_SETTING_CUSTOM_TAG_COUNT = 4;
-
 export interface SettingsTagsSectionContainerProps {
   tags: SettingsTagItem[];
   labels: SettingsProfileLabels;
@@ -28,8 +26,6 @@ export const SettingsTagsSectionContainer = ({
 }: SettingsTagsSectionContainerProps) => {
   const [pendingTagId, setPendingTagId] = useState<number | null>(null);
   const modalTriggerRef = useRef<HTMLButtonElement>(null);
-  const canAddTag =
-    tags.filter((tag) => !tag.isDefault).length < MAX_SETTING_CUSTOM_TAG_COUNT;
 
   const handleRequestRemoveTag = (tagId: number) => {
     setPendingTagId(tagId);
@@ -59,14 +55,12 @@ export const SettingsTagsSectionContainer = ({
             </TagChip>
           ))}
 
-          {canAddTag && (
-            <PillButton
-              icon={<PlusIcon width={20} height={20} />}
-              onClick={onAddTag}
-            >
-              {labels.addTag}
-            </PillButton>
-          )}
+          <PillButton
+            icon={<PlusIcon width={20} height={20} />}
+            onClick={onAddTag}
+          >
+            {labels.addTag}
+          </PillButton>
         </div>
         <Modal.Trigger
           ref={modalTriggerRef}
