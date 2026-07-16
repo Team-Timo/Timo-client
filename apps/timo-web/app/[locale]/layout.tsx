@@ -12,6 +12,7 @@ import { AuthProvider } from "@/providers/auth/AuthProvider";
 import { LanguageSyncProvider } from "@/providers/locale/LanguageSyncProvider";
 import { OverlayProvider } from "@/providers/overlay/OverlayProvider";
 import { QueryProvider } from "@/providers/query/QueryProvider";
+import { ServiceWorkerCleanup } from "@/providers/service-worker/ServiceWorkerCleanup";
 
 const pretendard = localFont({
   src: "../../fonts/PretendardVariable.woff2",
@@ -106,6 +107,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} className={pretendard.variable}>
       <body>
+        <ServiceWorkerCleanup />
         <NextIntlClientProvider>
           <QueryProvider>
             <AuthProvider>
