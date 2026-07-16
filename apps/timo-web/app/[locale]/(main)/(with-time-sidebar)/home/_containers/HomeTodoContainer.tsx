@@ -56,21 +56,6 @@ export const HomeTodoContainer = () => {
   );
   const days = homeViewData.days;
 
-  const [checkedCalendarByDate, setCheckedCalendarByDate] = useState<
-    Map<string, Set<string>>
-  >(new Map());
-
-  const toggleCalendarEvent = (dateKey: string, eventKey: string) => {
-    setCheckedCalendarByDate((prev) => {
-      const next = new Map(prev);
-      const set = new Set(next.get(dateKey) ?? []);
-      if (set.has(eventKey)) set.delete(eventKey);
-      else set.add(eventKey);
-      next.set(dateKey, set);
-      return next;
-    });
-  };
-
   const [pendingCompleteTodo, setPendingCompleteTodo] =
     useState<PendingCompleteTodo | null>(null);
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
@@ -131,11 +116,7 @@ export const HomeTodoContainer = () => {
         const dateKey = day.date;
         const todos = todosByDate[dateKey] ?? day.todos;
         const calendarEvents = calendarEventsByDate.get(dateKey) ?? [];
-        const checkedCalendarKeys =
-          checkedCalendarByDate.get(dateKey) ?? new Set<string>();
-        const completedCount =
-          todos.filter((todo) => todo.completed).length +
-          checkedCalendarKeys.size;
+        const completedCount = todos.filter((todo) => todo.completed).length;
 
         return (
           <div
@@ -165,17 +146,12 @@ export const HomeTodoContainer = () => {
               }
             >
               <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1">
-                {calendarEvents.map((event, index) => {
-                  const eventKey = `${event.title}-${index}`;
-                  return (
-                    <HomeCalendarEventCard
-                      key={eventKey}
-                      title={event.title}
-                      checked={checkedCalendarKeys.has(eventKey)}
-                      onToggle={() => toggleCalendarEvent(dateKey, eventKey)}
-                    />
-                  );
-                })}
+                {calendarEvents.map((event, index) => (
+                  <HomeCalendarEventCard
+                    key={`${event.title}-${index}`}
+                    title={event.title}
+                  />
+                ))}
                 {todos.map((todo) => {
                   const [firstSubtask] = todo.subtasks;
                   const isActiveTodo =

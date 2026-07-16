@@ -114,12 +114,29 @@ export const OnboardingFunnelContainer = () => {
                     !answers.bedTime
                   )
                     return;
-                  history.push("CalendarConnect", {
-                    language: answers.language,
-                    predictionAccuracy: answers.predictionAccuracy,
-                    wakeUpTime: answers.wakeUpTime,
-                    bedTime: answers.bedTime,
-                  });
+                  // TODO: 구글 캘린더 연동 단계 재활성화 시 아래 completeOnboarding 블록을 제거하고
+                  // history.push("CalendarConnect", { language: answers.language, predictionAccuracy: answers.predictionAccuracy, wakeUpTime: answers.wakeUpTime, bedTime: answers.bedTime }) 로 복구
+                  completeOnboarding(
+                    {
+                      data: {
+                        language: ONBOARDING_LANGUAGE_MAP[answers.language],
+                        predictionAccuracy: answers.predictionAccuracy,
+                        wakeUpTime: answers.wakeUpTime,
+                        bedTime: answers.bedTime,
+                      },
+                    },
+                    {
+                      onSuccess: () => {
+                        setOnboardingCompleted(true);
+                        router.replace(ROUTES.HOME, {
+                          locale: answers.language,
+                        });
+                      },
+                      onError: () => {
+                        setIsErrorToastOpen(true);
+                      },
+                    },
+                  );
                 }}
               />
             )}

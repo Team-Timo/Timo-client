@@ -41,18 +41,6 @@ export const TodayTodoListContainer = () => {
     enabled: profile.calendarConnected,
   });
   const calendarEvents = calendarEventsData?.days[0]?.events ?? [];
-  const [checkedCalendarKeys, setCheckedCalendarKeys] = useState<Set<string>>(
-    new Set(),
-  );
-
-  const toggleCalendarEvent = (eventKey: string) => {
-    setCheckedCalendarKeys((prev) => {
-      const next = new Set(prev);
-      if (next.has(eventKey)) next.delete(eventKey);
-      else next.add(eventKey);
-      return next;
-    });
-  };
 
   const [pendingCompleteTodoId, setPendingCompleteTodoId] = useState<
     number | null
@@ -90,8 +78,7 @@ export const TodayTodoListContainer = () => {
     setPendingCompleteTodoId(null);
   };
 
-  const completedCount =
-    todos.filter((todo) => todo.completed).length + checkedCalendarKeys.size;
+  const completedCount = todos.filter((todo) => todo.completed).length;
 
   const plannedMinutes = activeTimer
     ? convertDurationToMinutes(
@@ -109,17 +96,12 @@ export const TodayTodoListContainer = () => {
         totalCount={todos.length + calendarEvents.length}
       />
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 pb-4">
-        {calendarEvents.map((event, index) => {
-          const eventKey = `${event.title}-${index}`;
-          return (
-            <TodayCalendarEventCard
-              key={eventKey}
-              title={event.title}
-              checked={checkedCalendarKeys.has(eventKey)}
-              onToggle={() => toggleCalendarEvent(eventKey)}
-            />
-          );
-        })}
+        {calendarEvents.map((event, index) => (
+          <TodayCalendarEventCard
+            key={`${event.title}-${index}`}
+            title={event.title}
+          />
+        ))}
         {todos.map((todo) => {
           const isActiveTodo =
             activeTimer && activeTimer.todoId === todo.todoId;
