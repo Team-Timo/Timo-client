@@ -137,7 +137,10 @@ export const useFocusSession = ({
 
   const todo = focusView.todo;
   const timer =
-    activeTimer && todo && activeTimer.todoId === todo.todoId
+    activeTimer &&
+    todo &&
+    activeTimer.todoId === todo.todoId &&
+    activeTimer.date === focusView.date
       ? activeTimer
       : undefined;
   const isRunning = timer?.status === "RUNNING";

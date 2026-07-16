@@ -249,7 +249,7 @@
       "title": "Shall we stop now?",
       "description": "The <blue>{minutes}</blue> completed so far will be recorded in the timebox.",
       "continueButton": "Continue",
-      "switchButton": "Switch"
+      "switchButton": "Finish"
     },
     "completeModal": {
       "title": "The task has been completed!",
