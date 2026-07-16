@@ -114,7 +114,7 @@ export const useToken = <TError = ErrorType<ErrorDto>, TContext = unknown>(
   return useMutation(getTokenMutationOptions(options), queryClient);
 };
 /**
- * 쿠키로 전달된 RefreshToken과 sessionId를 검증하여 AccessToken 재발급합니다.<br>
+ * 쿠키로 전달된 RefreshToken과 sessionId를 검증하여 AccessToken을 재발급합니다.
  * 재발급 성공 시 RefreshToken과 sessionId 쿠키를 갱신합니다.
  * @summary AccessToken 재발급
  */

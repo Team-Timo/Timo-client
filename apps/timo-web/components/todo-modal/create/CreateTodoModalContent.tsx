@@ -9,6 +9,7 @@ import { useController, useForm } from "react-hook-form";
 import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
 
+import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
@@ -128,6 +129,7 @@ export const CreateTodoModalContent = ({
               titleValue={titleField.title}
               titlePlaceholder={t("createModal.titlePlaceholder")}
               onTitleChange={titleField.handleTitleChange}
+              onTitleEnter={subtaskField.focusFirstInput}
               subtaskInputs={subtaskField.subtaskInputs}
               subtaskPlaceholder={t("createModal.subtaskPlaceholder")}
               registerSubtaskInputRef={subtaskField.registerInputRef}
@@ -162,10 +164,10 @@ export const CreateTodoModalContent = ({
             onTimeOpen={timeField.handleTimeSelectorOpen}
             priority={priorityField.value ?? undefined}
             priorityLabels={{
-              VERY_HIGH: tCommon("priority.urgent"),
-              HIGH: tCommon("priority.high"),
-              MEDIUM: tCommon("priority.medium"),
-              LOW: tCommon("priority.low"),
+              VERY_HIGH: tCommon("priority.VERY_HIGH"),
+              HIGH: tCommon("priority.HIGH"),
+              MEDIUM: tCommon("priority.MEDIUM"),
+              LOW: tCommon("priority.LOW"),
             }}
             onSelectPriority={(level: PriorityLevel) =>
               priorityField.onChange(level)
@@ -193,7 +195,7 @@ export const CreateTodoModalContent = ({
               weekly: {
                 weekdays: repeatField.weekdays,
                 selectedWeekdayIds: repeatField.repeatWeekdays,
-                onWeekdayToggle: repeatField.handleWeekdayToggle,
+                onWeekdaysChange: repeatField.handleWeekdaysChange,
               },
               monthly: {
                 repeatDayLabel: t("createModal.repeatDayUnit"),
@@ -213,19 +215,9 @@ export const CreateTodoModalContent = ({
         </div>
       </OverlayModal>
 
-      <AnimatedToast
-        isOpen={tagField.isTagLimitToastOpen}
-        onClose={tagField.closeTagLimitToast}
-        message={
-          <p className="mb-0">
-            {tToast.rich("tagLimit", {
-              blue: (chunks) => (
-                <span className="text-timo-blue-300">{chunks}</span>
-              ),
-            })}
-          </p>
-        }
-      />
+      {tagField.isTagLimitToastOpen && (
+        <TagLimitToastContainer onClose={tagField.closeTagLimitToast} />
+      )}
 
       <AnimatedToast
         isOpen={timeField.isAiDurationErrorToastOpen}

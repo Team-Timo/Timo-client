@@ -4,7 +4,8 @@ interface OnboardingStepButtonProps {
   step: 1 | 2 | 3 | 4;
 }
 
-const STEPS = [1, 2, 3, 4] as const;
+// TODO: 구글 캘린더 연동 단계 재활성화 시 4 추가
+const STEPS = [1, 2, 3] as const;
 
 export const OnboardingStepButton = ({ step }: OnboardingStepButtonProps) => {
   return (

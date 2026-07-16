@@ -29,8 +29,14 @@ export const TimerPanel = () => {
   const wasTimeUpRef = useRef(false);
 
   const { data: activeTimer } = useActiveTimer();
-  const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
+  const {
+    invalidateActiveTimer,
+    invalidateHomeView,
+    invalidateTimeBoxes,
+    invalidateTodayView,
+    invalidateFocusTodo,
+    invalidateTodoDetail,
+  } = useTimerQueryInvalidation();
 
   const { mutate: changeStatus } = useChangeStatus({
     mutation: {
@@ -56,6 +62,9 @@ export const TimerPanel = () => {
         invalidateActiveTimer();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
+        if (response.data?.todoId) invalidateTodoDetail(response.data.todoId);
       },
     },
   });
@@ -66,6 +75,9 @@ export const TimerPanel = () => {
         invalidateActiveTimer();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
+        if (response.data?.todoId) invalidateTodoDetail(response.data.todoId);
       },
     },
   });
@@ -74,6 +86,8 @@ export const TimerPanel = () => {
       onSuccess: () => {
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
       },
     },
   });
@@ -143,6 +157,10 @@ export const TimerPanel = () => {
         )
       : 0;
   const plannedMinutes = convertDurationToMinutes(plannedSeconds);
+  // 완료 모달의 "계획"은 연장 시간을 제외한 순수 계획 시간만 보여줘야 한다
+  const basePlannedMinutes = convertDurationToMinutes(
+    activeTimer?.plannedSeconds ?? 0,
+  );
   const actualMinutes = convertDurationToMinutes(
     activeTimer?.elapsedSeconds ?? 0,
   );
@@ -163,7 +181,7 @@ export const TimerPanel = () => {
         ref={timerSessionControlsRef}
         isRunning={isRunning}
         onTogglePlay={handleTogglePlay}
-        plannedMinutes={plannedMinutes}
+        plannedMinutes={basePlannedMinutes}
         actualMinutes={actualMinutes}
         feedbackText={feedbackText}
         isTimeUp={isTimeUp}

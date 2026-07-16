@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import type { Metadata } from "next";
 
+import { SITE_URL } from "@/constants/site";
 import { routing } from "@/i18n/routing";
 import { AuthProvider } from "@/providers/auth/AuthProvider";
 import { LanguageSyncProvider } from "@/providers/locale/LanguageSyncProvider";
@@ -18,8 +19,6 @@ const pretendard = localFont({
   weight: "45 920",
   display: "swap",
 });
-
-const SITE_URL = "https://timo.kr";
 
 const OG_LOCALE: Record<(typeof routing.locales)[number], string> = {
   en: "en_US",
@@ -67,11 +66,20 @@ export async function generateMetadata({
       alternateLocale: routing.locales
         .filter((otherLocale) => otherLocale !== locale)
         .map((otherLocale) => OG_LOCALE[otherLocale]),
+      images: [
+        {
+          url: "/og.png",
+          width: 4800,
+          height: 2520,
+          alt: title,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
+      images: ["/og.png"],
     },
     robots: {
       index: true,

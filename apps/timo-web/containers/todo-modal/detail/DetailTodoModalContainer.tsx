@@ -1,8 +1,9 @@
 "use client";
 
+import { keepPreviousData } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
@@ -14,6 +15,7 @@ import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
+import { useToggleSubtaskSubmit } from "@/hooks/todo-modal/detail/use-toggle-subtask-submit";
 import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 export interface DetailTodoModalContainerProps {
@@ -46,12 +48,20 @@ const DetailTodoModalQuery = ({
   onDelete,
   onActionError,
 }: DetailTodoModalQueryProps) => {
-  const { data, error, isError } = useGetTodoDetail(todoId, { date });
+  const [currentDate, setCurrentDate] = useState(date);
+  const { data, error, isError } = useGetTodoDetail(
+    todoId,
+    { date: currentDate },
+    { query: { placeholderData: keepPreviousData } },
+  );
   const { handleDelete } = useDeleteTodoSubmit();
   const { handleUpdate } = useUpdateTodoSubmit();
+  const { handleToggle } = useToggleSubtaskSubmit();
   const { data: activeTimer } = useActiveTimer();
   const todo = data?.data;
-  const isPlayHighlighted = !activeTimer || activeTimer.todoId === todoId;
+  const isPlayHighlighted =
+    !activeTimer ||
+    (activeTimer.todoId === todoId && activeTimer.date === date);
 
   useEffect(() => {
     if (isError && error) {
@@ -62,7 +72,9 @@ const DetailTodoModalQuery = ({
   if (isError || !todo) return null;
 
   const timerStatus =
-    activeTimer?.todoId === todoId ? activeTimer.status : todo.timerStatus;
+    activeTimer?.todoId === todoId && activeTimer.date === date
+      ? activeTimer.status
+      : todo.timerStatus;
 
   const deleteTodo = () => {
     handleDelete(todoId, {
@@ -78,12 +90,34 @@ const DetailTodoModalQuery = ({
     updateData: TodoUpdateRequest,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
+    const nextDate = updateData.date ?? currentDate;
+
     handleUpdate(
       {
         todoId,
-        date,
+        date: nextDate,
         data: updateData,
       },
+      {
+        onSuccess: () => {
+          if (updateData.date) setCurrentDate(updateData.date);
+          handlers.onSuccess?.();
+        },
+        onError: (error) => {
+          handlers.onError?.(error);
+          onActionError(error);
+        },
+      },
+    );
+  };
+
+  const toggleSubtask = (
+    subtaskId: number,
+    completed: boolean,
+    handlers: UpdateTodoSubmitHandlers = {},
+  ) => {
+    handleToggle(
+      { todoId, subtaskId, date: currentDate, completed },
       {
         onSuccess: handlers.onSuccess,
         onError: (error) => {
@@ -105,6 +139,7 @@ const DetailTodoModalQuery = ({
       onToggleCompleted={onToggleCompleted}
       onDelete={deleteTodo}
       onUpdate={updateTodo}
+      onToggleSubtask={toggleSubtask}
       timerStatus={timerStatus}
     />
   );
@@ -121,6 +156,9 @@ export const DetailTodoModalContainer = ({
   const tToast = useTranslations("Toast");
   const [actionErrorMessage, setActionErrorMessage] = useState("");
   const [isActionErrorToastOpen, setIsActionErrorToastOpen] = useState(false);
+
+  const onTogglePlayRef = useRef(onTogglePlay);
+  onTogglePlayRef.current = onTogglePlay;
 
   const showActionErrorToast = useCallback(
     (error: ErrorType<ErrorDto>) => {
@@ -140,7 +178,7 @@ export const DetailTodoModalContainer = ({
         isOpen={isOpen}
         onClose={close}
         onExited={unmount}
-        onTogglePlay={onTogglePlay}
+        onTogglePlay={() => onTogglePlayRef.current()}
         onToggleCompleted={onToggleCompleted}
         onDelete={onDelete}
         onActionError={showActionErrorToast}

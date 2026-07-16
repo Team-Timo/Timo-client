@@ -8,14 +8,16 @@ import type { Control, FieldValues, Path } from "react-hook-form";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { useCreateTagMutation } from "@/queries/tag/use-create-tag-mutation";
 import { useTagsQuery } from "@/queries/tag/use-tags-query";
-import { tagCreateDataSchema } from "@/schemas/tag/tag-schema";
-import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
-
-const MAX_TAG_COUNT = 8;
+import {
+  MAX_CUSTOM_TAG_COUNT,
+  tagCreateDataSchema,
+} from "@/schemas/tag/tag-schema";
+import { getDefaultTagLabelKey, isDefaultTagId } from "@/utils/todo/tag-label";
 
 export interface UseTagFieldParams<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
   name?: Path<TFieldValues>;
+  onTagCreated?: (tagId: number, syncLocal: () => void) => void;
 }
 
 export interface UseTagFieldResult {
@@ -36,6 +38,7 @@ export interface UseTagFieldResult {
 export const useTagField = <TFieldValues extends FieldValues>({
   control,
   name = "tagId" as Path<TFieldValues>,
+  onTagCreated,
 }: UseTagFieldParams<TFieldValues>): UseTagFieldResult => {
   const tCommon = useTranslations("Common");
   const { field } = useController({ name, control });
@@ -59,6 +62,9 @@ export const useTagField = <TFieldValues extends FieldValues>({
   const selectedTagOption = tagOptions.find(
     (option) => option.id === field.value,
   );
+  const customTagCount = (tagsQuery.data?.tags ?? []).filter(
+    (tag) => !isDefaultTagId(tag.tagId),
+  ).length;
 
   const handleSelectTag = (label: string) => {
     const option = tagOptions.find((item) => item.label === label);
@@ -72,7 +78,7 @@ export const useTagField = <TFieldValues extends FieldValues>({
   };
 
   const handleAddTagClick = () => {
-    if (tagOptions.length >= MAX_TAG_COUNT) {
+    if (customTagCount >= MAX_CUSTOM_TAG_COUNT) {
       setIsTagLimitToastOpen(true);
       return;
     }
@@ -95,7 +101,13 @@ export const useTagField = <TFieldValues extends FieldValues>({
                   return;
                 }
 
-                field.onChange(parsed.data.tagId);
+                const tagId = parsed.data.tagId;
+
+                if (onTagCreated) {
+                  onTagCreated(tagId, () => field.onChange(tagId));
+                } else {
+                  field.onChange(tagId);
+                }
                 close();
               },
               onError: () => {

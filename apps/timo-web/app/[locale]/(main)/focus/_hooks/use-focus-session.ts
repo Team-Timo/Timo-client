@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 
 import type { TimerSessionControlsHandle } from "@/components/timer/TimerSessionControls";
 
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
   useChangeStatus,
   useCompleteTimer,
@@ -14,6 +13,7 @@ import {
   useStopTimer,
 } from "@/api/generated/endpoints/timer/timer";
 import {
+  getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
 } from "@/api/generated/endpoints/todo/todo";
@@ -41,10 +41,20 @@ export const useFocusSession = ({
   const { data: focusView } = useFocusTodoQuery();
   const { data: activeTimer } = useActiveTimer();
 
-  const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
-  const invalidateFocusTodo = () =>
-    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+  const {
+    invalidateActiveTimer,
+    invalidateHomeView,
+    invalidateTimeBoxes,
+    invalidateTodayView,
+    invalidateFocusTodo,
+  } = useTimerQueryInvalidation();
+  const invalidateTodoDetail = () => {
+    const todo = focusView.todo;
+    if (!todo) return;
+    queryClient.invalidateQueries({
+      queryKey: getGetTodoDetailQueryKey(todo.todoId, { date: focusView.date }),
+    });
+  };
 
   const { mutate: startTimer } = useStartTimer({
     mutation: {
@@ -84,6 +94,8 @@ export const useFocusSession = ({
         invalidateFocusTodo();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
@@ -96,6 +108,8 @@ export const useFocusSession = ({
         invalidateFocusTodo();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
@@ -105,6 +119,8 @@ export const useFocusSession = ({
       onSuccess: () => {
         invalidateFocusTodo();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
@@ -114,6 +130,8 @@ export const useFocusSession = ({
       onSuccess: () => {
         invalidateFocusTodo();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
@@ -121,7 +139,10 @@ export const useFocusSession = ({
 
   const todo = focusView.todo;
   const timer =
-    activeTimer && todo && activeTimer.todoId === todo.todoId
+    activeTimer &&
+    todo &&
+    activeTimer.todoId === todo.todoId &&
+    activeTimer.date === focusView.date
       ? activeTimer
       : undefined;
   const isRunning = timer?.status === "RUNNING";
@@ -157,7 +178,9 @@ export const useFocusSession = ({
     stopTimer,
     changeTodoStatus,
     onNoTimer: () => {
-      if (todo) startTimer({ todoId: todo.todoId });
+      if (todo) {
+        startTimer({ todoId: todo.todoId, params: { date: focusView.date } });
+      }
     },
   });
 
@@ -215,6 +238,10 @@ export const useFocusSession = ({
         )
       : 0;
   const plannedMinutes = convertDurationToMinutes(plannedSeconds);
+  // 완료 모달의 "계획"은 연장 시간을 제외한 순수 계획 시간만 보여줘야 한다
+  const basePlannedMinutes = convertDurationToMinutes(
+    timer ? timer.plannedSeconds : (todo?.durationSeconds ?? 0),
+  );
   const actualMinutes = convertDurationToMinutes(timer?.elapsedSeconds ?? 0);
 
   return {
@@ -232,6 +259,7 @@ export const useFocusSession = ({
       isOvertime,
       overtimeProgress,
       plannedMinutes,
+      basePlannedMinutes,
       actualMinutes,
     },
     focusSessionActions: {

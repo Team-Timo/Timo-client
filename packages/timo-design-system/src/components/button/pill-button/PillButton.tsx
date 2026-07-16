@@ -2,10 +2,11 @@ import { cn } from "../../../lib";
 
 import type { ReactNode } from "react";
 
-export type PillButtonVariant = "gray" | "blue";
+export type PillButtonVariant = "gray" | "gray-dark" | "blue";
 
 const PILL_BUTTON_VARIANT: Record<PillButtonVariant, string> = {
   gray: "bg-timo-gray-300 text-timo-gray-900",
+  "gray-dark": "bg-timo-gray-700 text-white",
   blue: "bg-timo-blue-300 text-white",
 };
 

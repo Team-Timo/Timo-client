@@ -12,4 +12,5 @@ export interface ErrorDto {
   errorCode?: string;
   message?: string;
   path?: string;
+  traceId?: string;
 }

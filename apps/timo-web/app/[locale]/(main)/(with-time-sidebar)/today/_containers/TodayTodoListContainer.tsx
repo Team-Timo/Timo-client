@@ -10,10 +10,13 @@ import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sideb
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
 import { useTodayQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today-query";
+import { TodayCalendarEventCard } from "@/components/calendar/TodayCalendarEventCard";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
-import { formatDate } from "@/utils/date/date";
+import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
+import { useCalendarEventsQuery } from "@/queries/calendar/use-calendar-events-query";
+import { formatShortDateLabel, parseDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
@@ -31,6 +34,13 @@ const renderTodoIcon = (icon: string | undefined) => {
 export const TodayTodoListContainer = () => {
   const tToast = useTranslations("Toast");
   const { data } = useTodayQuery();
+  const { data: profile } = useMyProfileQuery();
+  const { data: calendarEventsData } = useCalendarEventsQuery({
+    filter: "DAY",
+    baseDate: data.date.slice(0, 10),
+    enabled: profile.calendarConnected,
+  });
+  const calendarEvents = calendarEventsData?.days[0]?.events ?? [];
 
   const [pendingCompleteTodoId, setPendingCompleteTodoId] = useState<
     number | null
@@ -59,6 +69,8 @@ export const TodayTodoListContainer = () => {
     onStopFeedback: setFeedbackText,
     onPlayError: (message) =>
       setPlayErrorMessage(message ?? tToast("timerStartFailed")),
+    onUpdateError: (message) =>
+      setPlayErrorMessage(message ?? tToast("todoUpdateFailed")),
   });
 
   const handleConfirmPendingComplete = () => {
@@ -71,9 +83,7 @@ export const TodayTodoListContainer = () => {
   const completedCount = todos.filter((todo) => todo.completed).length;
 
   const plannedMinutes = activeTimer
-    ? convertDurationToMinutes(
-        activeTimer.plannedSeconds + activeTimer.extendedSeconds,
-      )
+    ? convertDurationToMinutes(activeTimer.plannedSeconds)
     : 0;
   const actualMinutes = activeTimer
     ? convertDurationToMinutes(activeTimer.elapsedSeconds)
@@ -83,12 +93,20 @@ export const TodayTodoListContainer = () => {
     <div className="flex h-full flex-col gap-2">
       <TodayDateHeaderContainer
         completedCount={completedCount}
-        totalCount={todos.length}
+        totalCount={todos.length + calendarEvents.length}
       />
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 pb-4">
+        {calendarEvents.map((event, index) => (
+          <TodayCalendarEventCard
+            key={`${event.title}-${index}`}
+            title={event.title}
+          />
+        ))}
         {todos.map((todo) => {
           const isActiveTodo =
-            activeTimer && activeTimer.todoId === todo.todoId;
+            activeTimer &&
+            activeTimer.todoId === todo.todoId &&
+            activeTimer.date === todo.date;
           const durationSeconds = isActiveTodo
             ? activeTimer.plannedSeconds + activeTimer.extendedSeconds
             : todo.durationSeconds;
@@ -116,12 +134,14 @@ export const TodayTodoListContainer = () => {
                   timerStatus={timerStatus}
                   isPlayHighlighted={isPlayHighlighted}
                   toolbar={{
-                    date: formatDate(todo.date),
-                    dateValue: new Date(todo.date),
+                    date: formatShortDateLabel(
+                      parseDateKey(todo.date) ?? new Date(),
+                    ),
+                    dateValue: parseDateKey(todo.date) ?? new Date(),
                     time: convertDurationToTimeText(durationSeconds),
                     priority: todo.priority,
                     tag: todo.tag?.name,
-                    hasMemo: todo.hasMemo,
+                    hasSubtask: todo.hasSubtask,
                     hasRepeat: todo.isRepeated,
                   }}
                   subTodos={todo.subtasks.map((s) => ({

@@ -20,3 +20,6 @@ const DEFAULT_TAG_ID_TO_LABEL_KEY: Record<number, TagLabelKey> = {
 
 export const getDefaultTagLabelKey = (tagId: number): TagLabelKey | undefined =>
   DEFAULT_TAG_ID_TO_LABEL_KEY[tagId];
+
+export const isDefaultTagId = (tagId: number): boolean =>
+  getDefaultTagLabelKey(tagId) !== undefined;

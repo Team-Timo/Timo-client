@@ -101,7 +101,10 @@ export const SettingsProfileView = ({
               </span>
             </div>
 
-            <PillButton variant="blue" onClick={onConnectCalendar}>
+            <PillButton
+              variant={isCalendarConnected ? "gray-dark" : "blue"}
+              onClick={onConnectCalendar}
+            >
               {isCalendarConnected ? labels.disconnect : labels.connect}
             </PillButton>
           </div>

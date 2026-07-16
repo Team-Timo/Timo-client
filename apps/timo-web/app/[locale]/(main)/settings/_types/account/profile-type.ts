@@ -29,5 +29,9 @@ export interface SettingsProfileLabels {
   logoutConfirmDescription: string;
   logoutConfirmCancel: string;
   logoutConfirmConfirm: string;
+  calendarDisconnectConfirmTitle: string;
+  calendarDisconnectConfirmDescription: string;
+  calendarDisconnectConfirmCancel: string;
+  calendarDisconnectConfirmConfirm: string;
   removeTag: (tag: string) => string;
 }

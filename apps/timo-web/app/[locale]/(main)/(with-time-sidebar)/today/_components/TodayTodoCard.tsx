@@ -2,8 +2,6 @@ import {
   PlayDisabledIcon,
   PlayIcon,
   StopIcon,
-  TrashDisableIcon,
-  TrashOnIcon,
 } from "@repo/timo-design-system/icons";
 import {
   Checkbox,
@@ -40,7 +38,7 @@ export interface TodayTodoCardToolbar {
   time: string;
   priority?: PriorityLevel;
   tag?: string;
-  hasMemo: boolean;
+  hasSubtask: boolean;
   hasRepeat: boolean;
 }
 
@@ -185,7 +183,7 @@ export const TodayTodoCard = ({
             tagLabel={toolbar.tag ?? "태그"}
             tags={[]}
             selectedTag={toolbar.tag}
-            hasMemo={toolbar.hasMemo}
+            hasMemo={toolbar.hasSubtask}
             isRepeatActive={toolbar.hasRepeat}
             repeat={{
               detailHeading: "상세 설정",
@@ -200,7 +198,6 @@ export const TodayTodoCard = ({
             }}
           />
         </div>
-        <span>{isDimmed ? <TrashDisableIcon /> : <TrashOnIcon />}</span>
       </div>
     </div>
   );

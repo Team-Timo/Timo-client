@@ -7,7 +7,6 @@ import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto } from "@/api/generated/models";
 import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
-import { getGetTodayQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useStartTimer,
@@ -27,6 +26,7 @@ export interface UseTodayTodoListOptions {
   onTimerAlreadyRunning: () => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
   onPlayError: (message: string | undefined) => void;
+  onUpdateError: (message: string | undefined) => void;
 }
 
 export const useTodayTodoList = (
@@ -36,24 +36,45 @@ export const useTodayTodoList = (
     onTimerAlreadyRunning,
     onStopFeedback,
     onPlayError,
+    onUpdateError,
   }: UseTodayTodoListOptions,
 ) => {
   const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const queryClient = useQueryClient();
-  const { data: activeTimer } = useActiveTimer();
+  const { data: activeTimer, isFetching: isActiveTimerFetching } =
+    useActiveTimer();
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: stopTimer } = useStopTimer();
-  const { invalidateTimerState, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
+  const {
+    invalidateTimerState,
+    invalidateTimeBoxes,
+    invalidateTodayView,
+    invalidateFocusTodo,
+  } = useTimerQueryInvalidation();
 
-  const { mutate: startTimer } = useStartTimer({
-    mutation: { onSuccess: invalidateTimerState },
+  const { mutate: startTimer, isPending: isStartTimerPending } = useStartTimer({
+    mutation: {
+      onSuccess: () => {
+        invalidateTimerState();
+        invalidateFocusTodo();
+      },
+    },
   });
-  const { mutate: changeStatus } = useChangeStatus({
-    mutation: { onSuccess: invalidateTimerState },
-  });
+
+  const { mutate: changeStatus, isPending: isChangeStatusPending } =
+    useChangeStatus({
+      mutation: {
+        onSuccess: () => {
+          invalidateTimerState();
+          invalidateFocusTodo();
+        },
+      },
+    });
+
+  const isTimerActionPending =
+    isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
 
   useEffect(() => {
     setTodos(initialTodos);
@@ -68,9 +89,6 @@ export const useTodayTodoList = (
     );
   };
 
-  const invalidateTodayView = () => {
-    queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
-  };
   const invalidateTodoDetail = (todoId: number, dateKey: string) => {
     queryClient.invalidateQueries({
       queryKey: getGetTodoDetailQueryKey(todoId, { date: dateKey }),
@@ -78,13 +96,17 @@ export const useTodayTodoList = (
   };
 
   const handleToggleCompleted = (todoId: number, completed: boolean) => {
-    if (completed && activeTimer?.todoId === todoId) {
+    const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
+    if (!dateKey) return;
+
+    if (
+      completed &&
+      activeTimer?.todoId === todoId &&
+      activeTimer.date === dateKey
+    ) {
       onNeedStopConfirm(todoId);
       return;
     }
-
-    const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
-    if (!dateKey) return;
 
     const previous = todos;
     updateTodo(todoId, (todo) => ({ ...todo, completed }));
@@ -96,9 +118,11 @@ export const useTodayTodoList = (
           invalidateTodayView();
           invalidateTimeBoxes();
           invalidateTodoDetail(todoId, dateKey);
+          invalidateFocusTodo();
         },
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodos(previous);
+          onUpdateError(error.response?.data.message);
         },
       },
     );
@@ -124,6 +148,7 @@ export const useTodayTodoList = (
               onSuccess: () => {
                 invalidateTodayView();
                 invalidateTodoDetail(todoId, dateKey);
+                invalidateFocusTodo();
               },
             },
           );
@@ -133,6 +158,8 @@ export const useTodayTodoList = (
   };
 
   const handlePlay = (todoId: number) => {
+    if (isTimerActionPending) return;
+
     const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
     if (!dateKey) return;
 
@@ -143,7 +170,11 @@ export const useTodayTodoList = (
       openTimerPanel();
     }
 
-    if (activeTimer && activeTimer.todoId === todoId) {
+    if (
+      activeTimer &&
+      activeTimer.todoId === todoId &&
+      activeTimer.date === dateKey
+    ) {
       changeStatus(
         {
           timerId: activeTimer.timerId,
@@ -163,7 +194,7 @@ export const useTodayTodoList = (
     }
 
     startTimer(
-      { todoId },
+      { todoId, params: { date: dateKey } },
       {
         onSuccess: () => invalidateTodoDetail(todoId, dateKey),
         onError: (error: ErrorType<ErrorDto>) => {
@@ -207,9 +238,11 @@ export const useTodayTodoList = (
         onSuccess: () => {
           invalidateTodayView();
           invalidateTodoDetail(todoId, dateKey);
+          invalidateFocusTodo();
         },
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodos(previous);
+          onUpdateError(error.response?.data.message);
         },
       },
     );
@@ -218,6 +251,7 @@ export const useTodayTodoList = (
   return {
     todos,
     activeTimer,
+    isTimerActionPending,
     handlePlay,
     handleToggleCompleted,
     handleDelete,

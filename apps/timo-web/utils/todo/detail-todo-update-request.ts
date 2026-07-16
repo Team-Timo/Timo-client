@@ -3,7 +3,7 @@ import type {
   TodoUpdateRequest,
   TodoUpdateRequestRepeatWeekdaysItem,
 } from "@/api/generated/models";
-import type { DetailTodoSubtaskInput } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
+import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/DetailTodoTaskFields";
 
 const DETAIL_TODO_UPDATE_WEEKDAYS = [
   "MON",
