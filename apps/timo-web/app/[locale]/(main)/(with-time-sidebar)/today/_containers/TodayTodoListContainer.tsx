@@ -69,6 +69,8 @@ export const TodayTodoListContainer = () => {
     onStopFeedback: setFeedbackText,
     onPlayError: (message) =>
       setPlayErrorMessage(message ?? tToast("timerStartFailed")),
+    onUpdateError: (message) =>
+      setPlayErrorMessage(message ?? tToast("todoUpdateFailed")),
   });
 
   const handleConfirmPendingComplete = () => {
@@ -104,7 +106,9 @@ export const TodayTodoListContainer = () => {
         ))}
         {todos.map((todo) => {
           const isActiveTodo =
-            activeTimer && activeTimer.todoId === todo.todoId;
+            activeTimer &&
+            activeTimer.todoId === todo.todoId &&
+            activeTimer.date === todo.date;
           const durationSeconds = isActiveTodo
             ? activeTimer.plannedSeconds + activeTimer.extendedSeconds
             : todo.durationSeconds;

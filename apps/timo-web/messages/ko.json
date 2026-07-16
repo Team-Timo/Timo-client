@@ -148,7 +148,7 @@
     }
   },
   "Toast": {
-    "tagLimit": "태그는 <blue>최대 8개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
+    "tagLimit": "태그는 <blue>최대 {count}개</blue>까지 만들 수 있으며, 추가하려면 기존 태그를 삭제해 주세요.",
     "todoLimitLine1": "투두는 하루에 <blue>최대 20개</blue>까지 추가할 수 있어요.",
     "todoLimitLine2": "새로운 투두를 추가하려면 기존 투두를 삭제해주세요.",
     "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요.",

@@ -26,6 +26,7 @@ export interface UseTodayTodoListOptions {
   onTimerAlreadyRunning: () => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
   onPlayError: (message: string | undefined) => void;
+  onUpdateError: (message: string | undefined) => void;
 }
 
 export const useTodayTodoList = (
@@ -35,6 +36,7 @@ export const useTodayTodoList = (
     onTimerAlreadyRunning,
     onStopFeedback,
     onPlayError,
+    onUpdateError,
   }: UseTodayTodoListOptions,
 ) => {
   const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
@@ -94,13 +96,17 @@ export const useTodayTodoList = (
   };
 
   const handleToggleCompleted = (todoId: number, completed: boolean) => {
-    if (completed && activeTimer?.todoId === todoId) {
+    const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
+    if (!dateKey) return;
+
+    if (
+      completed &&
+      activeTimer?.todoId === todoId &&
+      activeTimer.date === dateKey
+    ) {
       onNeedStopConfirm(todoId);
       return;
     }
-
-    const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
-    if (!dateKey) return;
 
     const previous = todos;
     updateTodo(todoId, (todo) => ({ ...todo, completed }));
@@ -114,8 +120,9 @@ export const useTodayTodoList = (
           invalidateTodoDetail(todoId, dateKey);
           invalidateFocusTodo();
         },
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodos(previous);
+          onUpdateError(error.response?.data.message);
         },
       },
     );
@@ -163,7 +170,11 @@ export const useTodayTodoList = (
       openTimerPanel();
     }
 
-    if (activeTimer && activeTimer.todoId === todoId) {
+    if (
+      activeTimer &&
+      activeTimer.todoId === todoId &&
+      activeTimer.date === dateKey
+    ) {
       changeStatus(
         {
           timerId: activeTimer.timerId,
@@ -229,8 +240,9 @@ export const useTodayTodoList = (
           invalidateTodoDetail(todoId, dateKey);
           invalidateFocusTodo();
         },
-        onError: () => {
+        onError: (error: ErrorType<ErrorDto>) => {
           setTodos(previous);
+          onUpdateError(error.response?.data.message);
         },
       },
     );

@@ -9,6 +9,7 @@ import {
 } from "@/api/generated/endpoints/home/home";
 import { getGetTimeBoxesQueryKey } from "@/api/generated/endpoints/time-box/time-box";
 import { getGetActiveTimerQueryKey } from "@/api/generated/endpoints/timer/timer";
+import { getGetTodoDetailQueryKey } from "@/api/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 
 export const useTimerQueryInvalidation = () => {
@@ -25,6 +26,10 @@ export const useTimerQueryInvalidation = () => {
     queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+  const invalidateTodoDetail = (todoId: number) =>
+    queryClient.invalidateQueries({
+      queryKey: getGetTodoDetailQueryKey(todoId),
+    });
   const invalidateTimerState = () => {
     invalidateActiveTimer();
     invalidateHomeView();
@@ -39,6 +44,7 @@ export const useTimerQueryInvalidation = () => {
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
+    invalidateTodoDetail,
     invalidateTimerState,
   };
 };

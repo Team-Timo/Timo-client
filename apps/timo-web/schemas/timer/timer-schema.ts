@@ -4,6 +4,7 @@ import { z } from "zod";
 export const activeTimerSchema = z.object({
   timerId: z.number(),
   todoId: z.number(),
+  date: z.string(),
   iconType: z
     .enum(TODO_ICON_VALUES)
     .nullish()

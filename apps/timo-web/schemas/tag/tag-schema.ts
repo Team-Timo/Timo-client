@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const MAX_CUSTOM_TAG_COUNT = 4;
+
 export const tagSchema = z.object({
   tagId: z.number(),
   name: z.string(),

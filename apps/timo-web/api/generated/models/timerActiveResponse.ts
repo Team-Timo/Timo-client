@@ -9,6 +9,7 @@
 export interface TimerActiveResponse {
   timerId: number;
   todoId: number;
+  date: string;
   todoTitle: string;
   iconType?: string;
   status: string;
