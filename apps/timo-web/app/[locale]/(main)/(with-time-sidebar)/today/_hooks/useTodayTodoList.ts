@@ -194,7 +194,7 @@ export const useTodayTodoList = (
     }
 
     startTimer(
-      { todoId },
+      { todoId, params: { date: dateKey } },
       {
         onSuccess: () => invalidateTodoDetail(todoId, dateKey),
         onError: (error: ErrorType<ErrorDto>) => {
