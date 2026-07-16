@@ -7,7 +7,6 @@ import type { ApiError } from "@/api/error/api-error";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
   useChangeStatus,
   useStartTimer,
@@ -48,14 +47,28 @@ export const useHomeTodosByDate = (
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: reorderTodo } = useReorderTodo();
   const { mutate: stopTimer } = useStopTimer();
-  const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
+  const {
+    invalidateHomeView,
+    invalidateTimerState,
+    invalidateTimeBoxes,
+    invalidateFocusTodo,
+  } = useTimerQueryInvalidation();
 
   const { mutate: startTimer } = useStartTimer<ApiError>({
-    mutation: { onSuccess: invalidateTimerState },
+    mutation: {
+      onSuccess: () => {
+        invalidateTimerState();
+        invalidateFocusTodo();
+      },
+    },
   });
   const { mutate: changeStatus } = useChangeStatus({
-    mutation: { onSuccess: invalidateTimerState },
+    mutation: {
+      onSuccess: () => {
+        invalidateTimerState();
+        invalidateFocusTodo();
+      },
+    },
   });
 
   useEffect(() => {
@@ -77,9 +90,6 @@ export const useHomeTodosByDate = (
     }));
   };
 
-  const invalidateFocusTodo = () => {
-    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
-  };
   const invalidateHomeAndFocus = () => {
     invalidateHomeView();
     invalidateFocusTodo();

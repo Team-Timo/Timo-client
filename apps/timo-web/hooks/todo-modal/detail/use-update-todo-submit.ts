@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
 
+import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
   getGetHomeQueryKey,
   getGetTodayQueryKey,
@@ -41,6 +42,9 @@ export const useUpdateTodoSubmit = () => {
           queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
           queryClient.invalidateQueries({
             queryKey: getGetTodoDetailQueryKey(todoId, { date }),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getGetFocusTodoQueryKey(),
           });
           onSuccess?.();
         },
