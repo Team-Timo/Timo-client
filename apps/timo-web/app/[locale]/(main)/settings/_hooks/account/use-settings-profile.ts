@@ -27,7 +27,7 @@ const LANGUAGE_REQUEST_MAP: Record<
   en: UpdateLanguageRequestLanguage.EN,
 };
 
-const MAX_SETTING_CUSTOM_TAG_COUNT = 4;
+export const MAX_SETTING_CUSTOM_TAG_COUNT = 4;
 
 export interface ActionErrorHandlers {
   onError: () => void;
