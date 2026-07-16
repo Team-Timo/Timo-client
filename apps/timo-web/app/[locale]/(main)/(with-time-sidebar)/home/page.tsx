@@ -8,7 +8,7 @@ export default function HomePage() {
       <AsyncBoundary>
         <HomeHeaderContainer />
       </AsyncBoundary>
-      <section className="min-h-0 flex-1 px-5 pt-2.5">
+      <section className="min-h-0 flex-1 px-5 pt-2.5 pb-3">
         <AsyncBoundary>
           <HomeTodoContainer />
         </AsyncBoundary>

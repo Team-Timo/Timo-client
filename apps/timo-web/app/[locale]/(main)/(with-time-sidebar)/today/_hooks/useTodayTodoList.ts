@@ -7,7 +7,6 @@ import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto } from "@/api/generated/models";
 import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
 
-import { getGetTodayQueryKey } from "@/api/generated/endpoints/home/home";
 import {
   useChangeStatus,
   useStartTimer,
@@ -46,15 +45,30 @@ export const useTodayTodoList = (
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: stopTimer } = useStopTimer();
-  const { invalidateTimerState, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
+  const {
+    invalidateTimerState,
+    invalidateTimeBoxes,
+    invalidateTodayView,
+    invalidateFocusTodo,
+  } = useTimerQueryInvalidation();
 
   const { mutate: startTimer, isPending: isStartTimerPending } = useStartTimer({
-    mutation: { onSuccess: invalidateTimerState },
+    mutation: {
+      onSuccess: () => {
+        invalidateTimerState();
+        invalidateFocusTodo();
+      },
+    },
   });
+
   const { mutate: changeStatus, isPending: isChangeStatusPending } =
     useChangeStatus({
-      mutation: { onSuccess: invalidateTimerState },
+      mutation: {
+        onSuccess: () => {
+          invalidateTimerState();
+          invalidateFocusTodo();
+        },
+      },
     });
 
   const isTimerActionPending =
@@ -73,9 +87,6 @@ export const useTodayTodoList = (
     );
   };
 
-  const invalidateTodayView = () => {
-    queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
-  };
   const invalidateTodoDetail = (todoId: number, dateKey: string) => {
     queryClient.invalidateQueries({
       queryKey: getGetTodoDetailQueryKey(todoId, { date: dateKey }),
@@ -101,6 +112,7 @@ export const useTodayTodoList = (
           invalidateTodayView();
           invalidateTimeBoxes();
           invalidateTodoDetail(todoId, dateKey);
+          invalidateFocusTodo();
         },
         onError: () => {
           setTodos(previous);
@@ -129,6 +141,7 @@ export const useTodayTodoList = (
               onSuccess: () => {
                 invalidateTodayView();
                 invalidateTodoDetail(todoId, dateKey);
+                invalidateFocusTodo();
               },
             },
           );
@@ -214,6 +227,7 @@ export const useTodayTodoList = (
         onSuccess: () => {
           invalidateTodayView();
           invalidateTodoDetail(todoId, dateKey);
+          invalidateFocusTodo();
         },
         onError: () => {
           setTodos(previous);
