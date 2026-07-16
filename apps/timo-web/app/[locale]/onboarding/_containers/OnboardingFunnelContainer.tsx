@@ -60,7 +60,7 @@ export const OnboardingFunnelContainer = () => {
         className="hidden shrink-0 lg:block lg:size-[350px] xl:size-[430px] 2xl:size-[500px]"
         ariaLabel="온보딩 애니메이션"
       />
-      <div className="border-timo-gray-500 shadow-timo flex min-h-153.5 flex-col rounded-[4px] border bg-white px-16 py-12">
+      <div className="border-timo-gray-500 shadow-timo flex h-153.5 w-108 flex-col rounded-[4px] border bg-white px-16 py-12">
         <div className="flex w-76 flex-1 flex-col gap-10">
           <OnboardingStepButton step={STEP_NUMBER[funnel.step]} />
 

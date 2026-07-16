@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 
 import type { TimerSessionControlsHandle } from "@/components/timer/TimerSessionControls";
 
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
   useChangeStatus,
   useCompleteTimer,
@@ -14,6 +13,7 @@ import {
   useStopTimer,
 } from "@/api/generated/endpoints/timer/timer";
 import {
+  getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
 } from "@/api/generated/endpoints/todo/todo";
@@ -41,10 +41,20 @@ export const useFocusSession = ({
   const { data: focusView } = useFocusTodoQuery();
   const { data: activeTimer } = useActiveTimer();
 
-  const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
-  const invalidateFocusTodo = () =>
-    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
+  const {
+    invalidateActiveTimer,
+    invalidateHomeView,
+    invalidateTimeBoxes,
+    invalidateTodayView,
+    invalidateFocusTodo,
+  } = useTimerQueryInvalidation();
+  const invalidateTodoDetail = () => {
+    const todo = focusView.todo;
+    if (!todo) return;
+    queryClient.invalidateQueries({
+      queryKey: getGetTodoDetailQueryKey(todo.todoId, { date: focusView.date }),
+    });
+  };
 
   const { mutate: startTimer } = useStartTimer({
     mutation: {
@@ -84,6 +94,7 @@ export const useFocusSession = ({
         invalidateFocusTodo();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
       },
       onError: onMutationError,
     },
@@ -96,6 +107,7 @@ export const useFocusSession = ({
         invalidateFocusTodo();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
       },
       onError: onMutationError,
     },
@@ -105,6 +117,8 @@ export const useFocusSession = ({
       onSuccess: () => {
         invalidateFocusTodo();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },
@@ -114,6 +128,8 @@ export const useFocusSession = ({
       onSuccess: () => {
         invalidateFocusTodo();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateTodoDetail();
       },
       onError: onMutationError,
     },

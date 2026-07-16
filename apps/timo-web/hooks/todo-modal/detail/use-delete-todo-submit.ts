@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto } from "@/api/generated/models";
 
+import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
   getGetHomeQueryKey,
   getGetTodayQueryKey,
@@ -30,6 +31,9 @@ export const useDeleteTodoSubmit = () => {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
           queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
+          queryClient.invalidateQueries({
+            queryKey: getGetFocusTodoQueryKey(),
+          });
           onSuccess();
         },
         onError,
