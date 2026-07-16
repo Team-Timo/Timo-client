@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
+import { MAX_CUSTOM_TAG_COUNT } from "@/schemas/tag/tag-schema";
 
 interface TagLimitToastContainerProps {
   count?: number;
@@ -10,7 +11,7 @@ interface TagLimitToastContainerProps {
 }
 
 export const TagLimitToastContainer = ({
-  count = 8,
+  count = MAX_CUSTOM_TAG_COUNT,
   onClose,
 }: TagLimitToastContainerProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);

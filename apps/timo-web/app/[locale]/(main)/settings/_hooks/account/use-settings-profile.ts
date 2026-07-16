@@ -16,7 +16,10 @@ import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
 import { useCreateTagMutation } from "@/queries/tag/use-create-tag-mutation";
 import { useDeleteTagMutation } from "@/queries/tag/use-delete-tag-mutation";
 import { useTagsQuery } from "@/queries/tag/use-tags-query";
-import { tagCreateDataSchema } from "@/schemas/tag/tag-schema";
+import {
+  MAX_CUSTOM_TAG_COUNT,
+  tagCreateDataSchema,
+} from "@/schemas/tag/tag-schema";
 import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 const LANGUAGE_REQUEST_MAP: Record<
@@ -26,8 +29,6 @@ const LANGUAGE_REQUEST_MAP: Record<
   ko: UpdateLanguageRequestLanguage.KO,
   en: UpdateLanguageRequestLanguage.EN,
 };
-
-export const MAX_SETTING_CUSTOM_TAG_COUNT = 4;
 
 export interface ActionErrorHandlers {
   onError: () => void;
@@ -91,7 +92,7 @@ export const useSettingsProfile = () => {
   const handleCreateTag = (label: string, handlers: CreateTagHandlers) => {
     const customTagCount = tagItems.filter((tag) => !tag.isDefault).length;
 
-    if (customTagCount >= MAX_SETTING_CUSTOM_TAG_COUNT) {
+    if (customTagCount >= MAX_CUSTOM_TAG_COUNT) {
       handlers.onError();
       return;
     }

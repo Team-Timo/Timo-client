@@ -14,6 +14,7 @@ import type {
 } from "@/api/generated/models";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
+import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
 import { OverlayModal } from "@/components/modal/OverlayModal";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
@@ -292,20 +293,9 @@ export const DetailTodoModalContent = ({
         </Modal.Panel>
       </Modal>
 
-      <AnimatedToast
-        isOpen={detailTodoForm.isTagLimitToastOpen}
-        onClose={detailTodoForm.closeTagLimitToast}
-        message={
-          <p className="mb-0">
-            {tToast.rich("tagLimit", {
-              count: 8,
-              blue: (chunks) => (
-                <span className="text-timo-blue-300">{chunks}</span>
-              ),
-            })}
-          </p>
-        }
-      />
+      {detailTodoForm.isTagLimitToastOpen && (
+        <TagLimitToastContainer onClose={detailTodoForm.closeTagLimitToast} />
+      )}
 
       <AnimatedToast
         isOpen={detailTodoForm.isCreateTagErrorToastOpen}
