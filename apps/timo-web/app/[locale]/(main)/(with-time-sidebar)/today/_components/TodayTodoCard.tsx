@@ -2,8 +2,6 @@ import {
   PlayDisabledIcon,
   PlayIcon,
   StopIcon,
-  TrashDisableIcon,
-  TrashOnIcon,
 } from "@repo/timo-design-system/icons";
 import {
   Checkbox,
@@ -200,7 +198,6 @@ export const TodayTodoCard = ({
             }}
           />
         </div>
-        <span>{isDimmed ? <TrashDisableIcon /> : <TrashOnIcon />}</span>
       </div>
     </div>
   );
