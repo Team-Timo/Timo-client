@@ -164,7 +164,7 @@
     "headline": "Manage your day with clear timeboxes.",
     "description": "Please log in to your timo account.",
     "connectLabel": "Log in with Google",
-    "termsNotice": "By continuing, you agree to the timo <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+    "termsNotice": "By continuing, you agree to the timo \n<terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
   },
   "Error": {
     "title": "A problem has occurred.",

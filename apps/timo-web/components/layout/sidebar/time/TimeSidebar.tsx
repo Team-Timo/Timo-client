@@ -2,7 +2,7 @@
 
 import { TogglePanel } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 
 import {
   TIME_SIDEBAR_COLLAPSED_WIDTH_CLASS_NAME,
@@ -31,6 +31,20 @@ export const TimeSidebar = ({
   const id = useId();
   const activeTab = useTimeSidebarStore((state) => state.activeTab);
   const setActiveTab = useTimeSidebarStore((state) => state.setActiveTab);
+
+  const timeboxScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen || activeTab !== "timebox") return;
+    const container = timeboxScrollRef.current;
+    if (!container) return;
+    const now = new Date();
+    const offset = (now.getHours() + now.getMinutes() / 60) * 50;
+    container.scrollTo({
+      top: Math.max(0, offset - container.clientHeight / 2),
+      behavior: "smooth",
+    });
+  }, [activeTab, isOpen]);
 
   const timeboxPanelId = `${id}-timebox-panel`;
   const timerPanelId = `${id}-timer-panel`;
@@ -73,6 +87,7 @@ export const TimeSidebar = ({
           </div>
 
           <div
+            ref={timeboxScrollRef}
             id={timeboxPanelId}
             role="tabpanel"
             aria-labelledby={`${id}-timebox-tab`}

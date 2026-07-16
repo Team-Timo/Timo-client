@@ -18,7 +18,7 @@ export const SettingsTermsContainer = ({
   const { data: term } = useTermsQuery(type);
 
   return (
-    <div className="px-15 pt-7.5">
+    <div className="px-15 pt-7.5 pb-12.5">
       {term ? (
         <PolicyDocument title={term.title} content={term.content} />
       ) : (

@@ -9,7 +9,6 @@ import type { ErrorDto } from "@/api/generated/models";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
   useChangeStatus,
   useStartTimer,
@@ -47,20 +46,41 @@ export const useHomeTodosByDate = (
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const queryClient = useQueryClient();
-  const { data: activeTimer } = useActiveTimer();
+  const { data: activeTimer, isFetching: isActiveTimerFetching } =
+    useActiveTimer();
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: reorderTodo } = useReorderTodo();
   const { mutate: stopTimer } = useStopTimer();
-  const { invalidateHomeView, invalidateTimerState, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
+  const {
+    invalidateHomeView,
+    invalidateStatistics,
+    invalidateTimerState,
+    invalidateTimeBoxes,
+    invalidateFocusTodo,
+  } = useTimerQueryInvalidation();
 
-  const { mutate: startTimer } = useStartTimer<ApiError>({
-    mutation: { onSuccess: invalidateTimerState },
-  });
-  const { mutate: changeStatus } = useChangeStatus({
-    mutation: { onSuccess: invalidateTimerState },
-  });
+  const { mutate: startTimer, isPending: isStartTimerPending } =
+    useStartTimer<ApiError>({
+      mutation: {
+        onSuccess: () => {
+          invalidateTimerState();
+          invalidateFocusTodo();
+        },
+      },
+    });
+  const { mutate: changeStatus, isPending: isChangeStatusPending } =
+    useChangeStatus({
+      mutation: {
+        onSuccess: () => {
+          invalidateTimerState();
+          invalidateFocusTodo();
+        },
+      },
+    });
+
+  const isTimerActionPending =
+    isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
 
   useEffect(() => {
     setTodosByDate(
@@ -81,9 +101,6 @@ export const useHomeTodosByDate = (
     }));
   };
 
-  const invalidateFocusTodo = () => {
-    queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
-  };
   const invalidateHomeAndFocus = () => {
     invalidateHomeView();
     invalidateFocusTodo();
@@ -114,6 +131,7 @@ export const useHomeTodosByDate = (
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
           invalidateTodoDetail(dateKey, todoId);
+          invalidateStatistics();
         },
         onError: (error: ErrorType<ErrorDto>) => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
@@ -143,6 +161,7 @@ export const useHomeTodosByDate = (
               onSuccess: () => {
                 invalidateHomeAndFocus();
                 invalidateTodoDetail(dateKey, todoId);
+                invalidateStatistics();
               },
             },
           );
@@ -152,6 +171,8 @@ export const useHomeTodosByDate = (
   };
 
   const handleTogglePlay = (dateKey: string, todoId: number) => {
+    if (isTimerActionPending) return;
+
     const willRun =
       todosByDate[dateKey]?.find((todo) => todo.todoId === todoId)
         ?.timerStatus !== "RUNNING";
@@ -211,6 +232,7 @@ export const useHomeTodosByDate = (
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
           invalidateTodoDetail(dateKey, todoId);
+          invalidateStatistics();
         },
         onError: (error: ErrorType<ErrorDto>) => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
@@ -257,6 +279,7 @@ export const useHomeTodosByDate = (
   return {
     todosByDate,
     activeTimer,
+    isTimerActionPending,
     handleToggleCompleted,
     handleTogglePlay,
     handleToggleSubtaskCompleted,

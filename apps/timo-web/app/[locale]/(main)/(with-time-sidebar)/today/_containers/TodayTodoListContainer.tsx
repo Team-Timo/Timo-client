@@ -13,7 +13,7 @@ import { useTodayQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
-import { formatDate } from "@/utils/date/date";
+import { formatShortDateLabel, parseDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 
@@ -118,8 +118,10 @@ export const TodayTodoListContainer = () => {
                   timerStatus={timerStatus}
                   isPlayHighlighted={isPlayHighlighted}
                   toolbar={{
-                    date: formatDate(todo.date),
-                    dateValue: new Date(todo.date),
+                    date: formatShortDateLabel(
+                      parseDateKey(todo.date) ?? new Date(),
+                    ),
+                    dateValue: parseDateKey(todo.date) ?? new Date(),
                     time: convertDurationToTimeText(durationSeconds),
                     priority: todo.priority,
                     tag: todo.tag?.name,

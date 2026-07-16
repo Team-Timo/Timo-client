@@ -29,8 +29,13 @@ export const TimerPanel = () => {
   const wasTimeUpRef = useRef(false);
 
   const { data: activeTimer } = useActiveTimer();
-  const { invalidateActiveTimer, invalidateHomeView, invalidateTimeBoxes } =
-    useTimerQueryInvalidation();
+  const {
+    invalidateActiveTimer,
+    invalidateHomeView,
+    invalidateTimeBoxes,
+    invalidateTodayView,
+    invalidateFocusTodo,
+  } = useTimerQueryInvalidation();
 
   const { mutate: changeStatus } = useChangeStatus({
     mutation: {
@@ -56,6 +61,8 @@ export const TimerPanel = () => {
         invalidateActiveTimer();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
       },
     },
   });
@@ -66,6 +73,8 @@ export const TimerPanel = () => {
         invalidateActiveTimer();
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
       },
     },
   });
@@ -74,6 +83,8 @@ export const TimerPanel = () => {
       onSuccess: () => {
         invalidateHomeView();
         invalidateTimeBoxes();
+        invalidateTodayView();
+        invalidateFocusTodo();
       },
     },
   });

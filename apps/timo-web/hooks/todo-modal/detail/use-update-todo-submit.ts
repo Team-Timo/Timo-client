@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
 
+import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
   getGetHomeQueryKey,
   getGetTodayQueryKey,
@@ -13,6 +14,7 @@ import {
   getGetTodoDetailQueryKey,
   useUpdateTodo,
 } from "@/api/generated/endpoints/todo/todo";
+import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 
 export interface UpdateTodoSubmitParams {
   todoId: number;
@@ -28,6 +30,7 @@ export interface UpdateTodoSubmitHandlers {
 export const useUpdateTodoSubmit = () => {
   const { mutate: updateTodo } = useUpdateTodo();
   const queryClient = useQueryClient();
+  const { invalidateStatistics } = useStatisticsQueryInvalidation();
 
   const handleUpdate = (
     { todoId, date, data }: UpdateTodoSubmitParams,
@@ -41,6 +44,10 @@ export const useUpdateTodoSubmit = () => {
           queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
           queryClient.invalidateQueries({
             queryKey: getGetTodoDetailQueryKey(todoId, { date }),
+          });
+          invalidateStatistics();
+          queryClient.invalidateQueries({
+            queryKey: getGetFocusTodoQueryKey(),
           });
           onSuccess?.();
         },

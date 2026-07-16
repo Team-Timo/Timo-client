@@ -28,7 +28,7 @@ export type StatisticsSidePanelProps =
   | StatisticsDaySidePanelProps;
 
 const SIDE_PANEL_CLASS_NAME =
-  "border-timo-gray-500 bg-white h-full w-[304px] shrink-0 border-l text-timo-black";
+  "border-timo-gray-500 bg-white h-full w-[304px] shrink-0 overflow-y-auto border-l text-timo-black";
 
 const getDiffLabel = (
   diffMinutes: number,
@@ -102,14 +102,18 @@ export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
       </div>
 
       <ul className="mt-5.5 flex flex-col">
-        {detail.todos.map((todo) => {
+        {detail.todos.map((todo, index) => {
           const diffMinutes =
             todo.actualTimeMinutes - todo.estimatedTimeMinutes;
+          const isLastTodo = index === detail.todos.length - 1;
 
           return (
             <li
               key={todo.todoId}
-              className="border-timo-gray-500 flex justify-between border-b py-2.5"
+              className={cn(
+                "flex justify-between py-2.5 pt-5",
+                !isLastTodo && "border-timo-gray-500 border-b",
+              )}
             >
               <div className="flex flex-col items-start gap-2">
                 <p className="typo-headline-r-14 text-timo-gray-900">
@@ -128,7 +132,9 @@ export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
                   {formatStatisticsClockText(todo.estimatedTimeMinutes)}
                 </span>
 
-                <span className={getDiffClassName(diffMinutes)}>
+                <span
+                  className={cn("min-h-[18px]", getDiffClassName(diffMinutes))}
+                >
                   {getDiffLabel(diffMinutes, t)}
                 </span>
               </div>
