@@ -28,8 +28,7 @@ import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 import { convertDurationToTimeText } from "@/utils/todo/todo-time";
 
 const isInteractiveElement = (target: EventTarget | null) =>
-  target instanceof HTMLElement &&
-  Boolean(target.closest("button, input, label"));
+  target instanceof Element && Boolean(target.closest("button, input, label"));
 
 export interface HomeTodoCardProps {
   todoId: number;
