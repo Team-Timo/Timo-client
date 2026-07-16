@@ -83,9 +83,7 @@ export const TodayTodoListContainer = () => {
   const completedCount = todos.filter((todo) => todo.completed).length;
 
   const plannedMinutes = activeTimer
-    ? convertDurationToMinutes(
-        activeTimer.plannedSeconds + activeTimer.extendedSeconds,
-      )
+    ? convertDurationToMinutes(activeTimer.plannedSeconds)
     : 0;
   const actualMinutes = activeTimer
     ? convertDurationToMinutes(activeTimer.elapsedSeconds)

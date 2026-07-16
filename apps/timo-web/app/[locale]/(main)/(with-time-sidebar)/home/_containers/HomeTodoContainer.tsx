@@ -98,9 +98,7 @@ export const HomeTodoContainer = () => {
   }, [isWeekView, scrollRef]);
 
   const plannedMinutes = activeTimer
-    ? convertDurationToMinutes(
-        activeTimer.plannedSeconds + activeTimer.extendedSeconds,
-      )
+    ? convertDurationToMinutes(activeTimer.plannedSeconds)
     : 0;
   const actualMinutes = activeTimer
     ? convertDurationToMinutes(activeTimer.elapsedSeconds)

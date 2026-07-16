@@ -236,6 +236,10 @@ export const useFocusSession = ({
         )
       : 0;
   const plannedMinutes = convertDurationToMinutes(plannedSeconds);
+  // 완료 모달의 "계획"은 연장 시간을 제외한 순수 계획 시간만 보여줘야 한다
+  const basePlannedMinutes = convertDurationToMinutes(
+    timer ? timer.plannedSeconds : (todo?.durationSeconds ?? 0),
+  );
   const actualMinutes = convertDurationToMinutes(timer?.elapsedSeconds ?? 0);
 
   return {
@@ -253,6 +257,7 @@ export const useFocusSession = ({
       isOvertime,
       overtimeProgress,
       plannedMinutes,
+      basePlannedMinutes,
       actualMinutes,
     },
     focusSessionActions: {
