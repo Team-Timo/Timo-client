@@ -95,7 +95,7 @@ export const HomeTodoContainer = () => {
       ref={scrollRef}
       className={cn(
         "flex h-full overflow-x-auto scroll-smooth",
-        isWeekView ? "w-full gap-2.5" : "snap-x snap-proximity gap-5 pb-2",
+        isWeekView ? "w-full gap-2.5" : "snap-x snap-proximity gap-5",
       )}
     >
       {days.map((day) => {
@@ -174,7 +174,7 @@ export const HomeTodoContainer = () => {
                           durationSeconds={durationSeconds}
                           priority={todo.priority}
                           tagName={todoTagName}
-                          hasMemo={todo.hasMemo}
+                          hasSubtask={todo.hasSubtask}
                           isRepeated={todo.isRepeated}
                           timerStatus={timerStatus}
                           isPlayHighlighted={isPlayHighlighted}

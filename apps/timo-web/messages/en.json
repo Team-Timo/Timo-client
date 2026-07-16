@@ -28,10 +28,10 @@
       "additional": "Additional"
     },
     "priority": {
-      "urgent": "Very Important",
-      "high": "Important",
-      "medium": "Average",
-      "low": "Low"
+      "VERY_HIGH": "Very Important",
+      "HIGH": "Important",
+      "MEDIUM": "Average",
+      "LOW": "Low"
     },
     "close": "Close",
     "delete": "Delete"
@@ -62,6 +62,10 @@
       "ariaLabel": "To-do details",
       "save": "Save",
       "delete": "Delete to-do",
+      "deleteConfirmTitle": "Delete this to-do?",
+      "deleteConfirmDescription": "Deleting it will remove all related task information.",
+      "deleteConfirmCancel": "Go back",
+      "deleteConfirmConfirm": "Delete",
       "repeatFrequencyHeading": "Repeat",
       "repeatDayLabel": "day(s)"
     },
@@ -160,7 +164,7 @@
     "headline": "Manage your day with clear timeboxes.",
     "description": "Please log in to your timo account.",
     "connectLabel": "Log in with Google",
-    "termsNotice": "By continuing, you agree to the timo <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+    "termsNotice": "By continuing, you agree to the timo \n<terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
   },
   "Error": {
     "title": "A problem has occurred.",

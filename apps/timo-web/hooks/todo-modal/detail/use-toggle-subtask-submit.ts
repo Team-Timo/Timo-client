@@ -3,48 +3,45 @@
 import { useQueryClient } from "@tanstack/react-query";
 
 import type { ErrorType } from "@/api/client/custom-instance";
-import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
+import type { ErrorDto } from "@/api/generated/models";
 
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
 import {
   getGetHomeQueryKey,
   getGetTodayQueryKey,
 } from "@/api/generated/endpoints/home/home";
 import {
   getGetTodoDetailQueryKey,
-  useUpdateTodo,
+  useChangeSubtaskStatus,
 } from "@/api/generated/endpoints/todo/todo";
 
-export interface UpdateTodoSubmitParams {
+export interface ToggleSubtaskSubmitParams {
   todoId: number;
+  subtaskId: number;
   date: string;
-  data: TodoUpdateRequest;
+  completed: boolean;
 }
 
-export interface UpdateTodoSubmitHandlers {
+export interface ToggleSubtaskSubmitHandlers {
   onSuccess?: () => void;
   onError?: (error: ErrorType<ErrorDto>) => void;
 }
 
-export const useUpdateTodoSubmit = () => {
-  const { mutate: updateTodo } = useUpdateTodo();
+export const useToggleSubtaskSubmit = () => {
+  const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const queryClient = useQueryClient();
 
-  const handleUpdate = (
-    { todoId, date, data }: UpdateTodoSubmitParams,
-    { onSuccess, onError }: UpdateTodoSubmitHandlers = {},
+  const handleToggle = (
+    { todoId, subtaskId, date, completed }: ToggleSubtaskSubmitParams,
+    { onSuccess, onError }: ToggleSubtaskSubmitHandlers = {},
   ) => {
-    updateTodo(
-      { todoId, data },
+    changeSubtaskStatus(
+      { todoId, subtaskId, data: { isCompleted: completed } },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
           queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
           queryClient.invalidateQueries({
             queryKey: getGetTodoDetailQueryKey(todoId, { date }),
-          });
-          queryClient.invalidateQueries({
-            queryKey: getGetFocusTodoQueryKey(),
           });
           onSuccess?.();
         },
@@ -54,6 +51,6 @@ export const useUpdateTodoSubmit = () => {
   };
 
   return {
-    handleUpdate,
+    handleToggle,
   };
 };
