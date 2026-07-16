@@ -14,6 +14,7 @@ import {
   getGetTodoDetailQueryKey,
   useUpdateTodo,
 } from "@/api/generated/endpoints/todo/todo";
+import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 
 export interface UpdateTodoSubmitParams {
   todoId: number;
@@ -29,6 +30,7 @@ export interface UpdateTodoSubmitHandlers {
 export const useUpdateTodoSubmit = () => {
   const { mutate: updateTodo } = useUpdateTodo();
   const queryClient = useQueryClient();
+  const { invalidateStatistics } = useStatisticsQueryInvalidation();
 
   const handleUpdate = (
     { todoId, date, data }: UpdateTodoSubmitParams,
@@ -43,6 +45,7 @@ export const useUpdateTodoSubmit = () => {
           queryClient.invalidateQueries({
             queryKey: getGetTodoDetailQueryKey(todoId, { date }),
           });
+          invalidateStatistics();
           queryClient.invalidateQueries({
             queryKey: getGetFocusTodoQueryKey(),
           });

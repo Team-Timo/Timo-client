@@ -49,6 +49,7 @@ export const useHomeTodosByDate = (
   const { mutate: stopTimer } = useStopTimer();
   const {
     invalidateHomeView,
+    invalidateStatistics,
     invalidateTimerState,
     invalidateTimeBoxes,
     invalidateFocusTodo,
@@ -120,6 +121,7 @@ export const useHomeTodosByDate = (
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
           invalidateTodoDetail(dateKey, todoId);
+          invalidateStatistics();
         },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
@@ -148,6 +150,7 @@ export const useHomeTodosByDate = (
               onSuccess: () => {
                 invalidateHomeAndFocus();
                 invalidateTodoDetail(dateKey, todoId);
+                invalidateStatistics();
               },
             },
           );
@@ -216,6 +219,7 @@ export const useHomeTodosByDate = (
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
           invalidateTodoDetail(dateKey, todoId);
+          invalidateStatistics();
         },
         onError: () => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));

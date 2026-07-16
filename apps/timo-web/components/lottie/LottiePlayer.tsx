@@ -38,7 +38,7 @@ export const LottiePlayer = ({
   }, [src]);
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn(className)}>
       {animationData && (
         <Lottie
           animationData={animationData}
