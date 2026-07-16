@@ -178,7 +178,9 @@ export const useFocusSession = ({
     stopTimer,
     changeTodoStatus,
     onNoTimer: () => {
-      if (todo) startTimer({ todoId: todo.todoId });
+      if (todo) {
+        startTimer({ todoId: todo.todoId, params: { date: focusView.date } });
+      }
     },
   });
 

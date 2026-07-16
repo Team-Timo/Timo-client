@@ -17,6 +17,7 @@ import type {
   BaseResponseTimerStartResponse,
   BaseResponseTimerStatusResponse,
   ErrorDto,
+  StartTimerParams,
   TimerActionRequest,
   TimerExtendRequest,
 } from "../../models";
@@ -59,17 +60,23 @@ const withQueryKey = <T extends object, K>(
  * 투두의 타이머를 시작합니다.
  * 한 번에 한 개의 타이머만 실행 가능하며, 이미 실행/일시정지 중인 타이머가 있으면 409를 반환합니다.
  *
- * 응답의 date는 타이머가 귀속되는 날짜(사용자 시간대 기준 시작일)입니다.
  * 반복 투두는 여러 날짜에 같은 todoId로 노출되므로, 실행중 표시는 todoId가 아닌 (todoId, date) 조합으로 구분해야 합니다.
+ * 쿼리 파라미터 date로 타이머가 상태를 반영할 대상 날짜를 지정할 수 있으며(미래/과거 포함), 미지정 시 사용자 타임존 기준 오늘로 처리됩니다. 이후 일시정지/재개/완료/중지는 이 날짜를 그대로 사용합니다.
  * @summary 타이머 시작
  */
 export const startTimer = (
   todoId: number,
+  params?: StartTimerParams,
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
   return customInstance<BaseResponseTimerStartResponse>(
-    { url: `/api/v1/todos/${todoId}/timers/start`, method: "POST", signal },
+    {
+      url: `/api/v1/todos/${todoId}/timers/start`,
+      method: "POST",
+      params,
+      signal,
+    },
     options,
   );
 };
@@ -81,14 +88,14 @@ export const getStartTimerMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof startTimer>>,
     TError,
-    { todoId: number },
+    { todoId: number; params?: StartTimerParams },
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof startTimer>>,
   TError,
-  { todoId: number },
+  { todoId: number; params?: StartTimerParams },
   TContext
 > => {
   const mutationKey = ["startTimer"];
@@ -102,11 +109,11 @@ export const getStartTimerMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof startTimer>>,
-    { todoId: number }
+    { todoId: number; params?: StartTimerParams }
   > = (props) => {
-    const { todoId } = props ?? {};
+    const { todoId, params } = props ?? {};
 
-    return startTimer(todoId, requestOptions);
+    return startTimer(todoId, params, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -126,7 +133,7 @@ export const useStartTimer = <TError = ErrorType<ErrorDto>, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof startTimer>>,
       TError,
-      { todoId: number },
+      { todoId: number; params?: StartTimerParams },
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -135,7 +142,7 @@ export const useStartTimer = <TError = ErrorType<ErrorDto>, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof startTimer>>,
   TError,
-  { todoId: number },
+  { todoId: number; params?: StartTimerParams },
   TContext
 > => {
   return useMutation(getStartTimerMutationOptions(options), queryClient);

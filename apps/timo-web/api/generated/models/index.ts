@@ -61,6 +61,7 @@ export * from "./recommendDurationRequest";
 export * from "./recommendDurationResponse";
 export * from "./repeatResponse";
 export * from "./repeatResponseWeekdaysItem";
+export * from "./startTimerParams";
 export * from "./statisticsCalendarResponse";
 export * from "./statisticsDailyResponse";
 export * from "./statisticsSummaryResponse";

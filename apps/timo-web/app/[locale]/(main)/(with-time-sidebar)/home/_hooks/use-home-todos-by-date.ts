@@ -209,7 +209,7 @@ export const useHomeTodosByDate = (
     }
 
     startTimer(
-      { todoId },
+      { todoId, params: { date: dateKey } },
       {
         onSuccess: () => invalidateTodoDetail(dateKey, todoId),
         onError: (error: ApiError) => {
