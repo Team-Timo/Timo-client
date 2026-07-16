@@ -50,13 +50,8 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
     repeatTypeField.field.onChange(frequency);
   };
 
-  const handleWeekdayToggle = (id: string) => {
-    const day = id as TodoRepeatWeekday;
-    const next = repeatWeekdays.includes(day)
-      ? repeatWeekdays.filter((item) => item !== day)
-      : [...repeatWeekdays, day];
-
-    repeatWeekdaysField.field.onChange(next);
+  const handleWeekdaysChange = (weekdayIds: string[]) => {
+    repeatWeekdaysField.field.onChange(weekdayIds as TodoRepeatWeekday[]);
   };
 
   const handleRepeatDayChange = (value: string) => {
@@ -74,7 +69,7 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
     isRepeatActive,
     uiRepeatFrequency,
     handleFrequencyChange,
-    handleWeekdayToggle,
+    handleWeekdaysChange,
     handleRepeatDayChange,
   };
 };

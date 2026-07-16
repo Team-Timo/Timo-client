@@ -18,7 +18,7 @@ export interface TodoMock {
   durationSeconds: number;
   priority: "URGENT" | "HIGH" | "MEDIUM" | "LOW";
   tag: TodoTag | null;
-  hasMemo: boolean;
+  hasSubtask: boolean;
   isRepeated: boolean;
   timerStatus: "RUNNING" | "PAUSED" | "STOPPED";
   sortOrder: number;
@@ -35,7 +35,7 @@ export const todayTodoMocks: TodoMock[] = [
     durationSeconds: 36000,
     priority: "URGENT",
     tag: { tagId: 1, name: "작업" },
-    hasMemo: true,
+    hasSubtask: true,
     isRepeated: false,
     timerStatus: "STOPPED",
     sortOrder: 0,
@@ -53,7 +53,7 @@ export const todayTodoMocks: TodoMock[] = [
     durationSeconds: 3600,
     priority: "MEDIUM",
     tag: { tagId: 2, name: "완료" },
-    hasMemo: false,
+    hasSubtask: false,
     isRepeated: false,
     timerStatus: "STOPPED",
     sortOrder: 1,
@@ -68,7 +68,7 @@ export const todayTodoMocks: TodoMock[] = [
     durationSeconds: 1800,
     priority: "HIGH",
     tag: null,
-    hasMemo: true,
+    hasSubtask: true,
     isRepeated: true,
     timerStatus: "STOPPED",
     sortOrder: 2,
@@ -83,7 +83,7 @@ export const todayTodoMocks: TodoMock[] = [
     durationSeconds: 7200,
     priority: "HIGH",
     tag: { tagId: 3, name: "개발" },
-    hasMemo: false,
+    hasSubtask: false,
     isRepeated: false,
     timerStatus: "STOPPED",
     sortOrder: 3,
@@ -101,7 +101,7 @@ export const todayTodoMocks: TodoMock[] = [
     durationSeconds: 2700,
     priority: "MEDIUM",
     tag: { tagId: 4, name: "회의" },
-    hasMemo: true,
+    hasSubtask: true,
     isRepeated: true,
     timerStatus: "STOPPED",
     sortOrder: 4,
@@ -116,7 +116,7 @@ export const todayTodoMocks: TodoMock[] = [
     durationSeconds: 5400,
     priority: "URGENT",
     tag: { tagId: 1, name: "작업" },
-    hasMemo: false,
+    hasSubtask: false,
     isRepeated: false,
     timerStatus: "STOPPED",
     sortOrder: 5,
@@ -131,7 +131,7 @@ export const todayTodoMocks: TodoMock[] = [
     durationSeconds: 4500,
     priority: "LOW",
     tag: { tagId: 3, name: "개발" },
-    hasMemo: false,
+    hasSubtask: false,
     isRepeated: false,
     timerStatus: "STOPPED",
     sortOrder: 6,
@@ -149,7 +149,7 @@ export const todayTodoMocks: TodoMock[] = [
     durationSeconds: 9000,
     priority: "HIGH",
     tag: { tagId: 3, name: "개발" },
-    hasMemo: true,
+    hasSubtask: true,
     isRepeated: false,
     timerStatus: "STOPPED",
     sortOrder: 7,

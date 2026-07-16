@@ -6,7 +6,6 @@ import {
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 
 import type { TodoDetailResponseTimerStatus } from "@/api/generated/models";
-import type { DetailTodoSubtaskInput } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
 const resizeTextarea = (element: HTMLTextAreaElement | null) => {
@@ -14,6 +13,13 @@ const resizeTextarea = (element: HTMLTextAreaElement | null) => {
   element.style.height = "auto";
   element.style.height = `${element.scrollHeight}px`;
 };
+
+export interface DetailTodoSubtaskInput {
+  id: number;
+  subtaskId: number | null;
+  completed: boolean;
+  value: string;
+}
 
 export interface DetailTodoTaskFieldsProps {
   titleValue: string;
@@ -23,6 +29,7 @@ export interface DetailTodoTaskFieldsProps {
   isPlayHighlighted: boolean;
   subtaskInputs: DetailTodoSubtaskInput[];
   onTitleChange: (value: string) => void;
+  onTitleEnter: () => void;
   onToggleCompleted: (completed: boolean) => void;
   onTogglePlay: () => void;
   onSubtaskInputChange: (id: number, value: string) => void;
@@ -44,6 +51,7 @@ export const DetailTodoTaskFields = ({
   isPlayHighlighted,
   subtaskInputs,
   onTitleChange,
+  onTitleEnter,
   onToggleCompleted,
   onTogglePlay,
   onSubtaskInputChange,
@@ -69,16 +77,19 @@ export const DetailTodoTaskFields = ({
       <div className="flex w-full items-center justify-between">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <Checkbox checked={isCompleted} onChange={onToggleCompleted} />
-          <textarea
+          <input
+            type="text"
             value={titleValue}
-            ref={resizeTextarea}
-            onChange={(event) => {
-              onTitleChange(event.target.value);
-              resizeTextarea(event.currentTarget);
+            onChange={(event) => onTitleChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter") return;
+              if (event.nativeEvent.isComposing) return;
+
+              event.preventDefault();
+              onTitleEnter();
             }}
-            rows={1}
             disabled={disabled}
-            className="typo-headline-b-14 text-timo-black min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
+            className="typo-headline-b-14 text-timo-black min-w-0 flex-1 outline-none"
           />
         </div>
 
