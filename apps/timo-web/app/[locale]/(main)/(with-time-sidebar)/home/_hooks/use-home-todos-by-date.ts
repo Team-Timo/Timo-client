@@ -234,7 +234,12 @@ export const useHomeTodosByDate = (
     }));
 
     changeSubtaskStatus(
-      { todoId, subtaskId, data: { isCompleted: completed } },
+      {
+        todoId,
+        subtaskId,
+        data: { isCompleted: completed },
+        params: { date: dateKey },
+      },
       {
         onSuccess: () => {
           invalidateHomeAndFocus();

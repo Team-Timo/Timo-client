@@ -10,5 +10,4 @@ export interface TodoSubtaskUpdateRequest {
   subtaskId?: number;
   /** @minLength 1 */
   content: string;
-  completed: boolean;
 }

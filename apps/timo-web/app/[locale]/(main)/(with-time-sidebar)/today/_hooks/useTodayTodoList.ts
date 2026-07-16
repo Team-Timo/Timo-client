@@ -233,7 +233,12 @@ export const useTodayTodoList = (
     );
 
     changeSubtaskStatus(
-      { todoId, subtaskId, data: { isCompleted: completed } },
+      {
+        todoId,
+        subtaskId,
+        data: { isCompleted: completed },
+        params: { date: dateKey },
+      },
       {
         onSuccess: () => {
           invalidateTodayView();
