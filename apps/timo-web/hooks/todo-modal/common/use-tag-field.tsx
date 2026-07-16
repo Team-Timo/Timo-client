@@ -12,7 +12,7 @@ import {
   MAX_CUSTOM_TAG_COUNT,
   tagCreateDataSchema,
 } from "@/schemas/tag/tag-schema";
-import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
+import { getDefaultTagLabelKey, isDefaultTagId } from "@/utils/todo/tag-label";
 
 export interface UseTagFieldParams<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
@@ -63,7 +63,7 @@ export const useTagField = <TFieldValues extends FieldValues>({
     (option) => option.id === field.value,
   );
   const customTagCount = (tagsQuery.data?.tags ?? []).filter(
-    (tag) => !tag.isDefault,
+    (tag) => !isDefaultTagId(tag.tagId),
   ).length;
 
   const handleSelectTag = (label: string) => {
