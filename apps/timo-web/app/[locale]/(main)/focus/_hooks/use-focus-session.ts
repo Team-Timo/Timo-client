@@ -208,6 +208,7 @@ export const useFocusSession = ({
       todoId: todo.todoId,
       subtaskId,
       data: { isCompleted: completed },
+      params: { date: focusView.date },
     });
   };
 

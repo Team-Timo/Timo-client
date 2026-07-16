@@ -35,7 +35,12 @@ export const useToggleSubtaskSubmit = () => {
     { onSuccess, onError }: ToggleSubtaskSubmitHandlers = {},
   ) => {
     changeSubtaskStatus(
-      { todoId, subtaskId, data: { isCompleted: completed } },
+      {
+        todoId,
+        subtaskId,
+        data: { isCompleted: completed },
+        params: { date },
+      },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
