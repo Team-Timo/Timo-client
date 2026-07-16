@@ -47,7 +47,7 @@ export const FocusTaskItem = ({
 
       <div className="flex w-full items-center gap-2.5">
         <Checkbox checked={completed} onChange={onToggleCompleted} />
-        <p className="typo-headline-b-22 text-timo-black min-w-0 flex-1 wrap-break-word">
+        <p className="typo-headline-b-22 text-timo-black min-w-0 flex-1 wrap-anywhere">
           {title}
         </p>
       </div>
@@ -82,7 +82,7 @@ export const FocusTaskItem = ({
         </PlayButton>
       </div>
 
-      <div className="border-timo-gray-500 flex min-h-26 w-full min-w-0 flex-col gap-3 border-t pt-3">
+      <div className="border-timo-gray-500 flex max-h-[40vh] min-h-26 w-full min-w-0 flex-col gap-3 overflow-y-auto border-t pt-3">
         {subtasks.map((subtask) => (
           <div key={subtask.subtaskId} className="flex items-center gap-2">
             <Checkbox
@@ -93,7 +93,7 @@ export const FocusTaskItem = ({
             />
             <p
               className={cn(
-                "typo-body-r-12 min-w-0 flex-1 wrap-break-word",
+                "typo-body-r-12 min-w-0 flex-1 wrap-anywhere",
                 subtask.completed ? "text-timo-gray-700" : "text-timo-black",
               )}
             >
@@ -103,7 +103,7 @@ export const FocusTaskItem = ({
         ))}
 
         {memo && (
-          <p className="typo-body-r-12 text-timo-gray-800 min-w-0 wrap-break-word">
+          <p className="typo-body-r-12 text-timo-gray-800 min-w-0 wrap-anywhere">
             {memo}
           </p>
         )}
