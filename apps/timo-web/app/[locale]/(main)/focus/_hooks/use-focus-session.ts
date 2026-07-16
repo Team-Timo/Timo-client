@@ -47,6 +47,7 @@ export const useFocusSession = ({
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
+    invalidateStatistics,
   } = useTimerQueryInvalidation();
   const invalidateTodoDetail = () => {
     const todo = focusView.todo;
@@ -96,6 +97,7 @@ export const useFocusSession = ({
         invalidateTimeBoxes();
         invalidateTodayView();
         invalidateTodoDetail();
+        invalidateStatistics();
       },
       onError: onMutationError,
     },
@@ -110,6 +112,7 @@ export const useFocusSession = ({
         invalidateTimeBoxes();
         invalidateTodayView();
         invalidateTodoDetail();
+        invalidateStatistics();
       },
       onError: onMutationError,
     },
@@ -121,6 +124,7 @@ export const useFocusSession = ({
         invalidateTimeBoxes();
         invalidateTodayView();
         invalidateTodoDetail();
+        invalidateStatistics();
       },
       onError: onMutationError,
     },
