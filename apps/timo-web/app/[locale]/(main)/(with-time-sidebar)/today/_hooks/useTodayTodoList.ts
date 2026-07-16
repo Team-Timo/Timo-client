@@ -40,7 +40,8 @@ export const useTodayTodoList = (
   const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const queryClient = useQueryClient();
-  const { data: activeTimer } = useActiveTimer();
+  const { data: activeTimer, isFetching: isActiveTimerFetching } =
+    useActiveTimer();
   const { mutate: changeTodoStatus } = useChangeTodoStatus();
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: stopTimer } = useStopTimer();
@@ -51,7 +52,7 @@ export const useTodayTodoList = (
     invalidateFocusTodo,
   } = useTimerQueryInvalidation();
 
-  const { mutate: startTimer } = useStartTimer({
+  const { mutate: startTimer, isPending: isStartTimerPending } = useStartTimer({
     mutation: {
       onSuccess: () => {
         invalidateTimerState();
@@ -59,14 +60,19 @@ export const useTodayTodoList = (
       },
     },
   });
-  const { mutate: changeStatus } = useChangeStatus({
-    mutation: {
-      onSuccess: () => {
-        invalidateTimerState();
-        invalidateFocusTodo();
+
+  const { mutate: changeStatus, isPending: isChangeStatusPending } =
+    useChangeStatus({
+      mutation: {
+        onSuccess: () => {
+          invalidateTimerState();
+          invalidateFocusTodo();
+        },
       },
-    },
-  });
+    });
+
+  const isTimerActionPending =
+    isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
 
   useEffect(() => {
     setTodos(initialTodos);
@@ -145,6 +151,8 @@ export const useTodayTodoList = (
   };
 
   const handlePlay = (todoId: number) => {
+    if (isTimerActionPending) return;
+
     const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
     if (!dateKey) return;
 
@@ -231,6 +239,7 @@ export const useTodayTodoList = (
   return {
     todos,
     activeTimer,
+    isTimerActionPending,
     handlePlay,
     handleToggleCompleted,
     handleDelete,

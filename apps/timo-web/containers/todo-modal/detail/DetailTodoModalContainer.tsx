@@ -3,7 +3,7 @@
 import { keepPreviousData } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ErrorType } from "@/api/client/custom-instance";
 import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
@@ -153,6 +153,9 @@ export const DetailTodoModalContainer = ({
   const [actionErrorMessage, setActionErrorMessage] = useState("");
   const [isActionErrorToastOpen, setIsActionErrorToastOpen] = useState(false);
 
+  const onTogglePlayRef = useRef(onTogglePlay);
+  onTogglePlayRef.current = onTogglePlay;
+
   const showActionErrorToast = useCallback(
     (error: ErrorType<ErrorDto>) => {
       setActionErrorMessage(
@@ -171,7 +174,7 @@ export const DetailTodoModalContainer = ({
         isOpen={isOpen}
         onClose={close}
         onExited={unmount}
-        onTogglePlay={onTogglePlay}
+        onTogglePlay={() => onTogglePlayRef.current()}
         onToggleCompleted={onToggleCompleted}
         onDelete={onDelete}
         onActionError={showActionErrorToast}
