@@ -49,6 +49,7 @@ export * from "./calendarDayResponse";
 export * from "./calendarDisconnectResponse";
 export * from "./calendarEventResponse";
 export * from "./calendarEventsResponse";
+export * from "./changeSubtaskStatusParams";
 export * from "./dailyTodoResponse";
 export * from "./dayCompletionResponse";
 export * from "./dayResponse";

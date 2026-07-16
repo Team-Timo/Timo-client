@@ -17,6 +17,7 @@ import type {
   BaseResponseTodoDetailResponse,
   BaseResponseTodoReorderResponse,
   BaseResponseTodoStatusChangeResponse,
+  ChangeSubtaskStatusParams,
   ErrorDto,
   GetTodoDetailParams,
   SubtaskStatusUpdateRequest,
@@ -509,6 +510,7 @@ export const changeSubtaskStatus = (
   todoId: number,
   subtaskId: number,
   subtaskStatusUpdateRequest: BodyType<SubtaskStatusUpdateRequest>,
+  params: ChangeSubtaskStatusParams,
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
@@ -518,6 +520,7 @@ export const changeSubtaskStatus = (
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       data: subtaskStatusUpdateRequest,
+      params,
       signal,
     },
     options,
@@ -535,6 +538,7 @@ export const getChangeSubtaskStatusMutationOptions = <
       todoId: number;
       subtaskId: number;
       data: BodyType<SubtaskStatusUpdateRequest>;
+      params: ChangeSubtaskStatusParams;
     },
     TContext
   >;
@@ -546,6 +550,7 @@ export const getChangeSubtaskStatusMutationOptions = <
     todoId: number;
     subtaskId: number;
     data: BodyType<SubtaskStatusUpdateRequest>;
+    params: ChangeSubtaskStatusParams;
   },
   TContext
 > => {
@@ -564,11 +569,12 @@ export const getChangeSubtaskStatusMutationOptions = <
       todoId: number;
       subtaskId: number;
       data: BodyType<SubtaskStatusUpdateRequest>;
+      params: ChangeSubtaskStatusParams;
     }
   > = (props) => {
-    const { todoId, subtaskId, data } = props ?? {};
+    const { todoId, subtaskId, data, params } = props ?? {};
 
-    return changeSubtaskStatus(todoId, subtaskId, data, requestOptions);
+    return changeSubtaskStatus(todoId, subtaskId, data, params, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -596,6 +602,7 @@ export const useChangeSubtaskStatus = <
         todoId: number;
         subtaskId: number;
         data: BodyType<SubtaskStatusUpdateRequest>;
+        params: ChangeSubtaskStatusParams;
       },
       TContext
     >;
@@ -609,6 +616,7 @@ export const useChangeSubtaskStatus = <
     todoId: number;
     subtaskId: number;
     data: BodyType<SubtaskStatusUpdateRequest>;
+    params: ChangeSubtaskStatusParams;
   },
   TContext
 > => {

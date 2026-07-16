@@ -27,7 +27,6 @@ export const buildDetailTodoSubtasksUpdateRequest = (
     .map((subtask) => ({
       subtaskId: subtask.subtaskId ?? undefined,
       content: subtask.value.trim(),
-      completed: subtask.completed,
     }))
     .filter((subtask) => subtask.content.length > 0);
 
