@@ -12,5 +12,5 @@ export const useFocusTodoQuery = () =>
   useSuspenseQuery({
     queryKey: getGetFocusTodoQueryKey(),
     queryFn: ({ signal }) => getFocusTodo(undefined, signal),
-    select: (data) => focusViewSchema.parse(data),
+    select: ({ data }) => focusViewSchema.parse(data),
   });

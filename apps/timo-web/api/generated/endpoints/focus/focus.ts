@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { customInstance } from "../../../client/custom-instance";
 
 import type { ErrorType } from "../../../client/custom-instance";
-import type { ErrorDto, FocusTodoResponse } from "../../models";
+import type { BaseResponseFocusTodoResponse, ErrorDto } from "../../models";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -57,7 +57,7 @@ export const getFocusTodo = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<FocusTodoResponse>(
+  return customInstance<BaseResponseFocusTodoResponse>(
     { url: `/api/v1/focus`, method: "GET", signal },
     options,
   );
