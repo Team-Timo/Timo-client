@@ -5,12 +5,10 @@
  * Timo 서버 API 명세서
  * OpenAPI spec version: v1
  */
+import type { CalendarEventsResponse } from "./calendarEventsResponse";
 
-export interface ErrorDto {
-  timestamp?: string;
+export interface BaseResponseCalendarEventsResponse {
   status?: number;
-  errorCode?: string;
   message?: string;
-  path?: string;
-  traceId?: string;
+  data?: CalendarEventsResponse;
 }

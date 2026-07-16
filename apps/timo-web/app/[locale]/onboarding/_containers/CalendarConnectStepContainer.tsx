@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
+import { authorize } from "@/api/generated/endpoints/calendar/calendar";
 import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingButtonContainer";
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
 
@@ -18,7 +18,19 @@ export const CalendarConnectStepContainer = ({
   onStart,
 }: CalendarConnectStepContainerProps) => {
   const t = useTranslations("Onboarding");
-  const [isCalendarConnected, setIsCalendarConnected] = useState(false);
+  const isCalendarConnected = false;
+
+  const handleGoogleConnect = async () => {
+    try {
+      const response = await authorize();
+      const url = response.data?.authorizationUrl;
+      if (!url) return;
+      localStorage.setItem("calendarConnectOrigin", "onboarding");
+      window.location.assign(url);
+    } catch {
+      // authorize 실패 시 아무 동작 없음 — 사용자가 재시도 가능
+    }
+  };
 
   return (
     <>
@@ -40,10 +52,7 @@ export const CalendarConnectStepContainer = ({
             <OnboardingGoogleButtonContainer
               variant="connectCalendar"
               isSelected={isCalendarConnected}
-              onClick={() => {
-                // TODO: 실제 구글 캘린더 OAuth 연동 (백엔드 API 확정 후)
-                setIsCalendarConnected(true);
-              }}
+              onClick={handleGoogleConnect}
             />
           </div>
 

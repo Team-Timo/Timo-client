@@ -6,6 +6,11 @@ import { useTranslations } from "next-intl";
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
 import {
+  authorize,
+  useDisconnectCalendar,
+  getGetCalendarEventsQueryKey,
+} from "@/api/generated/endpoints/calendar/calendar";
+import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
 } from "@/api/generated/endpoints/user/user";
@@ -41,6 +46,8 @@ export interface CreateTagHandlers extends ActionErrorHandlers {
 export interface ConnectCalendarHandlers {
   onConnect: () => void;
   onDisconnect: () => void;
+  onConnectError?: () => void;
+  onDisconnectError?: () => void;
 }
 
 export const useSettingsProfile = () => {
@@ -49,6 +56,7 @@ export const useSettingsProfile = () => {
 
   const { data: profile } = useMyProfileQuery();
 
+  const { mutate: disconnectCalendar } = useDisconnectCalendar();
   const { mutateAsync: updateLanguage } = useUpdateLanguage();
   const queryClient = useQueryClient();
 
@@ -68,24 +76,40 @@ export const useSettingsProfile = () => {
     };
   });
 
-  const handleConnectCalendar = (
+  const handleConnectCalendar = async (
     isCalendarConnected: boolean,
     handlers: ConnectCalendarHandlers,
   ) => {
     if (isCalendarConnected) {
-      // TODO: 실제 확인 모달로 교체
-      const confirmed = window.confirm("구글 캘린더 연동을 해제하시겠습니까?");
-      if (!confirmed) return;
-
-      // TODO: API - 연동 토큰 파기
-      console.log("구글 캘린더 연동 토큰을 파기합니다.");
-      handlers.onDisconnect();
+      disconnectCalendar(undefined, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: getGetMyProfileQueryKey(),
+          });
+          queryClient.removeQueries({
+            queryKey: getGetCalendarEventsQueryKey(),
+          });
+          handlers.onDisconnect();
+        },
+        onError: () => {
+          handlers.onDisconnectError?.();
+        },
+      });
       return;
     }
 
-    // TODO: Google 계정 인증 및 캘린더 접근 권한 동의 팝업 호출
-    console.log("Google Calendar 연동 인증 팝업을 호출합니다.");
-    handlers.onConnect();
+    try {
+      const response = await authorize();
+      const url = response.data?.authorizationUrl;
+      if (!url) {
+        handlers.onConnectError?.();
+        return;
+      }
+      localStorage.setItem("calendarConnectOrigin", "settings");
+      window.location.assign(url);
+    } catch {
+      handlers.onConnectError?.();
+    }
   };
 
   const handleCreateTag = (label: string, handlers: CreateTagHandlers) => {

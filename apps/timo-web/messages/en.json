@@ -108,7 +108,11 @@
       "logoutConfirmTitle": "Do you want to <red>log out</red>?",
       "logoutConfirmDescription": "Your data stays saved after logging out.\nSign back in anytime to pick up where you left off.",
       "logoutConfirmCancel": "Cancel",
-      "logoutConfirmConfirm": "Log out"
+      "logoutConfirmConfirm": "Log out",
+      "calendarDisconnectConfirmTitle": "Would you like to disconnect Google Calendar integration?",
+      "calendarDisconnectConfirmDescription": "If you disconnect, the synced schedules will disappear. \nDo you really want to disconnect?",
+      "calendarDisconnectConfirmCancel": "Go back",
+      "calendarDisconnectConfirmConfirm": "Disconnect"
     },
     "withdrawal": {
       "title": "Withdraw",
@@ -155,6 +159,8 @@
     "tagActionFailed": "Failed to update the tag. Please try again.",
     "focusActionFailed": "Failed to process the request. Please try again.",
     "languageChangeFailed": "Failed to change the language. Please try again.",
+    "calendarConnectFailed": "Failed to integrate Google Calendar. Please try again.",
+    "calendarDisconnectFailed": "Failed to disconnect the calendar. Please try again.",
     "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first.",
     "timerStartFailed": "This to-do has no estimated duration set."
   },

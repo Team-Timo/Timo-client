@@ -17,5 +17,6 @@ export interface FocusTodoDetailResponse {
   priority?: string;
   tag?: TagResponse;
   isRepeated: boolean;
+  memo?: string;
   subtasks: SubtaskResponse[];
 }

@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { customInstance } from "../../../client/custom-instance";
 
 import type { ErrorType } from "../../../client/custom-instance";
-import type { BaseResponseFocusTodoResponse, ErrorDto } from "../../models";
+import type { ErrorDto, FocusTodoResponse } from "../../models";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -44,7 +44,10 @@ const withQueryKey = <T extends object, K>(
 };
 
 /**
- * 오늘 TODO 중 미완료인 최상단 TODO 하나를 조회합니다. (sortOrder가 가장 작은 미완료 TODO)
+ * 집중 모드에 노출할 TODO 하나를 다음 우선순위로 조회합니다.
+ * 1. 실행/일시정지 중인 타이머가 있으면, 날짜와 무관하게 해당 TODO를 최우선으로 반환합니다.
+ *    (이 경우 응답의 date는 오늘이 아니라 타이머가 시작된 날짜일 수 있습니다.)
+ * 2. 활성 타이머가 없으면 오늘 TODO 중 미완료인 최상단 TODO 하나를 반환합니다. (sortOrder가 가장 작은 미완료 TODO)
  * 오늘 TODO가 하나도 없으면 "오늘의 TODO가 없습니다.",
  * 오늘 TODO를 모두 완료했으면 "오늘의 TODO를 모두 완료했습니다." 메시지를 반환하며,
  * 두 경우 모두 hasTodo는 false, todo는 null입니다.
@@ -54,7 +57,7 @@ export const getFocusTodo = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<BaseResponseFocusTodoResponse>(
+  return customInstance<FocusTodoResponse>(
     { url: `/api/v1/focus`, method: "GET", signal },
     options,
   );

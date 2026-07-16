@@ -5,6 +5,7 @@ import { overlay } from "overlay-kit";
 import { useState } from "react";
 
 import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
+import { SettingsCalendarDisconnectModal } from "@/app/[locale]/(main)/settings/_components/account/SettingsCalendarDisconnectModal";
 import { SettingsProfileView } from "@/app/[locale]/(main)/settings/_components/account/SettingsProfileView";
 import { useSettingsProfile } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile";
 import { useSettingsProfileLabels } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile-labels";
@@ -21,15 +22,43 @@ export const SettingsProfileContainer = () => {
   const [isCalendarConnected, setIsCalendarConnected] = useState(
     profileState.calendarConnected,
   );
+  const [isCalendarConnectErrorToastOpen, setIsCalendarConnectErrorToastOpen] =
+    useState(false);
+  const [
+    isCalendarDisconnectErrorToastOpen,
+    setIsCalendarDisconnectErrorToastOpen,
+  ] = useState(false);
   const [isTagErrorToastOpen, setIsTagErrorToastOpen] = useState(false);
   const [isTagLimitToastOpen, setIsTagLimitToastOpen] = useState(false);
   const [isLanguageErrorToastOpen, setIsLanguageErrorToastOpen] =
     useState(false);
 
   const handleConnectCalendar = () => {
-    profileActions.onConnectCalendar(isCalendarConnected, {
+    if (isCalendarConnected) {
+      overlay.open(({ isOpen, close, unmount }) => (
+        <SettingsCalendarDisconnectModal
+          isOpen={isOpen}
+          onClose={close}
+          onExited={unmount}
+          labels={labels}
+          onDisconnect={() =>
+            profileActions.onConnectCalendar(true, {
+              onConnect: () => setIsCalendarConnected(true),
+              onDisconnect: () => setIsCalendarConnected(false),
+              onDisconnectError: () =>
+                setIsCalendarDisconnectErrorToastOpen(true),
+            })
+          }
+        />
+      ));
+      return;
+    }
+
+    profileActions.onConnectCalendar(false, {
       onConnect: () => setIsCalendarConnected(true),
       onDisconnect: () => setIsCalendarConnected(false),
+      onConnectError: () => setIsCalendarConnectErrorToastOpen(true),
+      onDisconnectError: () => setIsCalendarDisconnectErrorToastOpen(true),
     });
   };
 
@@ -93,6 +122,18 @@ export const SettingsProfileContainer = () => {
       {isTagLimitToastOpen && (
         <TagLimitToastContainer onClose={() => setIsTagLimitToastOpen(false)} />
       )}
+
+      <AnimatedToast
+        isOpen={isCalendarConnectErrorToastOpen}
+        onClose={() => setIsCalendarConnectErrorToastOpen(false)}
+        message={tToast("calendarConnectFailed")}
+      />
+
+      <AnimatedToast
+        isOpen={isCalendarDisconnectErrorToastOpen}
+        onClose={() => setIsCalendarDisconnectErrorToastOpen(false)}
+        message={tToast("calendarDisconnectFailed")}
+      />
 
       <AnimatedToast
         isOpen={isTagErrorToastOpen}

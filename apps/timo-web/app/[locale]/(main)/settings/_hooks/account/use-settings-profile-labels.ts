@@ -32,6 +32,18 @@ export const useSettingsProfileLabels = (): SettingsProfileLabels => {
     logoutConfirmDescription: tSettings("profile.logoutConfirmDescription"),
     logoutConfirmCancel: tSettings("profile.logoutConfirmCancel"),
     logoutConfirmConfirm: tSettings("profile.logoutConfirmConfirm"),
+    calendarDisconnectConfirmTitle: tSettings(
+      "profile.calendarDisconnectConfirmTitle",
+    ),
+    calendarDisconnectConfirmDescription: tSettings(
+      "profile.calendarDisconnectConfirmDescription",
+    ),
+    calendarDisconnectConfirmCancel: tSettings(
+      "profile.calendarDisconnectConfirmCancel",
+    ),
+    calendarDisconnectConfirmConfirm: tSettings(
+      "profile.calendarDisconnectConfirmConfirm",
+    ),
     removeTag: (tag: string) => tSettings("profile.removeTag", { tag }),
   };
 };

@@ -8,44 +8,42 @@
 import * as zod from "zod";
 
 /**
- * 오늘 TODO 중 미완료인 최상단 TODO 하나를 조회합니다. (sortOrder가 가장 작은 미완료 TODO)
+ * 집중 모드에 노출할 TODO 하나를 다음 우선순위로 조회합니다.
+ * 1. 실행/일시정지 중인 타이머가 있으면, 날짜와 무관하게 해당 TODO를 최우선으로 반환합니다.
+ *    (이 경우 응답의 date는 오늘이 아니라 타이머가 시작된 날짜일 수 있습니다.)
+ * 2. 활성 타이머가 없으면 오늘 TODO 중 미완료인 최상단 TODO 하나를 반환합니다. (sortOrder가 가장 작은 미완료 TODO)
  * 오늘 TODO가 하나도 없으면 "오늘의 TODO가 없습니다.",
  * 오늘 TODO를 모두 완료했으면 "오늘의 TODO를 모두 완료했습니다." 메시지를 반환하며,
  * 두 경우 모두 hasTodo는 false, todo는 null입니다.
  * @summary 집중 모드 TODO 조회
  */
 export const GetFocusTodoResponse = zod.object({
-  status: zod.number().optional(),
-  message: zod.string().optional(),
-  data: zod
+  date: zod.iso.date(),
+  dayOfWeek: zod.enum(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]),
+  hasTodo: zod.boolean(),
+  todo: zod
     .object({
-      date: zod.iso.date(),
-      dayOfWeek: zod.enum(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]),
-      hasTodo: zod.boolean(),
-      todo: zod
+      todoId: zod.number(),
+      icon: zod.string().optional(),
+      title: zod.string(),
+      completed: zod.boolean(),
+      durationSeconds: zod.number().optional(),
+      priority: zod.string().optional(),
+      tag: zod
         .object({
-          todoId: zod.number(),
-          icon: zod.string().optional(),
-          title: zod.string(),
-          completed: zod.boolean(),
-          durationSeconds: zod.number().optional(),
-          priority: zod.string().optional(),
-          tag: zod
-            .object({
-              tagId: zod.number(),
-              name: zod.string(),
-            })
-            .optional(),
-          isRepeated: zod.boolean(),
-          subtasks: zod.array(
-            zod.object({
-              subtaskId: zod.number(),
-              content: zod.string(),
-              completed: zod.boolean(),
-            }),
-          ),
+          tagId: zod.number(),
+          name: zod.string(),
         })
         .optional(),
+      isRepeated: zod.boolean(),
+      memo: zod.string().optional(),
+      subtasks: zod.array(
+        zod.object({
+          subtaskId: zod.number(),
+          content: zod.string(),
+          completed: zod.boolean(),
+        }),
+      ),
     })
     .optional(),
 });

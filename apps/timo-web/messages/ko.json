@@ -108,7 +108,11 @@
       "logoutConfirmTitle": "로그아웃할까요?",
       "logoutConfirmDescription": "로그아웃 후에도 데이터는 그대로 유지돼요.\n다시 로그인하면 이어서 사용할 수 있어요.",
       "logoutConfirmCancel": "취소",
-      "logoutConfirmConfirm": "로그아웃"
+      "logoutConfirmConfirm": "로그아웃",
+      "calendarDisconnectConfirmTitle": "구글 캘린더 연동을 해제할까요?",
+      "calendarDisconnectConfirmDescription": "연동을 해제하면 동기화된 일정이 사라져요. \n정말 연동을 해제하시겠어요?",
+      "calendarDisconnectConfirmCancel": "돌아가기",
+      "calendarDisconnectConfirmConfirm": "해제하기"
     },
     "withdrawal": {
       "title": "탈퇴",
@@ -155,6 +159,8 @@
     "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요.",
     "focusActionFailed": "요청을 처리하지 못했어요. 다시 시도해 주세요.",
     "languageChangeFailed": "언어 변경에 실패했어요. 다시 시도해 주세요.",
+    "calendarConnectFailed": "구글 캘린더 연동에 실패했어요. 다시 시도해 주세요.",
+    "calendarDisconnectFailed": "캘린더 연동 해제에 실패했어요. 다시 시도해 주세요.",
     "timerAlreadyRunning": "다른 투두의 타이머가 이미 실행 중이에요. 먼저 종료해 주세요.",
     "timerStartFailed": "예상 소요 시간이 설정되지 않은 투두입니다."
   },

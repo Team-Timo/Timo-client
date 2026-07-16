@@ -34,13 +34,34 @@ export const OnboardingButton = ({
   }
 
   if (variant === "start") {
+    // TODO: 원래 start 버튼 (항상 활성 스타일) — CalendarConnect 단계 재활성화 시 아래 주석 해제 후 isActive 분기 제거
+    // return (
+    //   <button
+    //     type="button"
+    //     onClick={onClick}
+    //     className="bg-timo-blue-300 flex items-center justify-center gap-2 rounded-[4px] px-4 py-2"
+    //   >
+    //     <span className="typo-headline-m-16 text-white">{label}</span>
+    //   </button>
+    // );
     return (
       <button
         type="button"
         onClick={onClick}
-        className="bg-timo-blue-300 flex items-center justify-center gap-2 rounded-[4px] px-4 py-2"
+        disabled={disabled || !isActive}
+        className={cn(
+          "flex items-center justify-center gap-2 rounded-[4px] px-4 py-2 transition-colors duration-200 ease-in-out",
+          isActive ? "bg-timo-blue-300" : "bg-timo-gray-200",
+        )}
       >
-        <span className="typo-headline-m-16 text-white">{label}</span>
+        <span
+          className={cn(
+            "typo-headline-m-16",
+            isActive ? "text-white" : "text-timo-gray-700",
+          )}
+        >
+          {label}
+        </span>
       </button>
     );
   }
