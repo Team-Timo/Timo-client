@@ -4,13 +4,15 @@ import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
+import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
 import { SettingsProfileView } from "@/app/[locale]/(main)/settings/_components/account/SettingsProfileView";
-import { useSettingsProfile } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile";
+import {
+  MAX_SETTING_CUSTOM_TAG_COUNT,
+  useSettingsProfile,
+} from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile";
 import { useSettingsProfileLabels } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile-labels";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
-
-const MAX_SETTING_CUSTOM_TAG_COUNT = 4;
 
 export const SettingsProfileContainer = () => {
   const tToast = useTranslations("Toast");
@@ -90,11 +92,12 @@ export const SettingsProfileContainer = () => {
         onLogout={profileActions.onLogout}
       />
 
-      <AnimatedToast
-        isOpen={isTagLimitToastOpen}
-        onClose={() => setIsTagLimitToastOpen(false)}
-        message={tToast("settingTagLimit")}
-      />
+      {isTagLimitToastOpen && (
+        <TagLimitToastContainer
+          count={MAX_SETTING_CUSTOM_TAG_COUNT}
+          onClose={() => setIsTagLimitToastOpen(false)}
+        />
+      )}
 
       <AnimatedToast
         isOpen={isTagErrorToastOpen}
