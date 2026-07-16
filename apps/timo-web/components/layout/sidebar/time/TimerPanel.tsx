@@ -35,6 +35,7 @@ export const TimerPanel = () => {
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
+    invalidateTodoDetail,
   } = useTimerQueryInvalidation();
 
   const { mutate: changeStatus } = useChangeStatus({
@@ -63,6 +64,7 @@ export const TimerPanel = () => {
         invalidateTimeBoxes();
         invalidateTodayView();
         invalidateFocusTodo();
+        if (response.data?.todoId) invalidateTodoDetail(response.data.todoId);
       },
     },
   });
@@ -75,6 +77,7 @@ export const TimerPanel = () => {
         invalidateTimeBoxes();
         invalidateTodayView();
         invalidateFocusTodo();
+        if (response.data?.todoId) invalidateTodoDetail(response.data.todoId);
       },
     },
   });
