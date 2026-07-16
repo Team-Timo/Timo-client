@@ -20,7 +20,7 @@ import {
   MAX_CUSTOM_TAG_COUNT,
   tagCreateDataSchema,
 } from "@/schemas/tag/tag-schema";
-import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
+import { getDefaultTagLabelKey, isDefaultTagId } from "@/utils/todo/tag-label";
 
 const LANGUAGE_REQUEST_MAP: Record<
   SettingsLanguage,
@@ -58,14 +58,13 @@ export const useSettingsProfile = () => {
   const { mutate: logoutMutate, isPending: isLoggingOut } = useLogoutMutation();
 
   const tagItems = (tagsQuery.data?.tags ?? []).map((tag) => {
-    const labelKey = tag.isDefault
-      ? getDefaultTagLabelKey(tag.tagId)
-      : undefined;
+    const isDefault = isDefaultTagId(tag.tagId);
+    const labelKey = isDefault ? getDefaultTagLabelKey(tag.tagId) : undefined;
 
     return {
       id: tag.tagId,
       label: labelKey ? tCommon(`tag.${labelKey}`) : tag.name,
-      isDefault: tag.isDefault,
+      isDefault,
     };
   });
 
