@@ -1,6 +1,5 @@
 "use client";
 
-import timoTextLogo from "@repo/timo-design-system/assets/images/logo/timo-text-logo.svg";
 import {
   ChartHoverIcon,
   ChartOffIcon,
@@ -8,6 +7,7 @@ import {
   HomeHoverIcon,
   HomeOffIcon,
   HomeOnIcon,
+  LogoTimoIcon,
   SettingHoverIcon,
   SettingOffIcon,
   SettingOnIcon,
@@ -20,7 +20,6 @@ import {
 } from "@repo/timo-design-system/icons";
 import { TabButton } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
@@ -119,14 +118,8 @@ export const NavigationSidebar = () => {
       )}
     >
       <div className="flex h-full w-45 shrink-0 flex-col gap-7.5">
-        <Link href={ROUTES.HOME}>
-          <Image
-            src={timoTextLogo}
-            alt="Timo"
-            width={92}
-            height={35}
-            priority
-          />
+        <Link href={ROUTES.HOME} aria-label="Timo">
+          <LogoTimoIcon width={92} height={35} />
         </Link>
         <nav className="flex flex-1 flex-col justify-between">
           <div className="flex flex-col gap-2">

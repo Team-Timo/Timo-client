@@ -1,7 +1,6 @@
 "use client";
 
-import timoTextLogo from "@repo/timo-design-system/assets/images/logo/timo-text-logo.svg";
-import Image from "next/image";
+import { LogoTimoIcon } from "@repo/timo-design-system/icons";
 import { useTranslations } from "next-intl";
 
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
@@ -23,7 +22,7 @@ export const LoginContainer = () => {
       <div className="border-timo-gray-500 shadow-timo flex flex-col items-center justify-center gap-16 rounded-[4px] border bg-white px-12.5 py-13">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-4">
-            <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
+            <LogoTimoIcon width={92} height={35} />
             <div className="flex w-full flex-col items-center gap-0.5">
               <p className="typo-headline-m-16 text-timo-blue-300">
                 Less Chaos More Focus
