@@ -1,4 +1,6 @@
 <div align="center">
+  <img width="100" height="100" alt="image" src="https://github.com/user-attachments/assets/8ab6a065-30a7-47e8-826b-cc1f42bc57d7" />
+
   <h1 align="center">Timo</h1>
 
   <p align="center">
@@ -26,11 +28,19 @@
 
 ## What Is Timo?
 
+
+<img width="1440" height="929" alt="image" src="https://github.com/user-attachments/assets/2a914423-b362-460b-a0cf-d4620e0857af" />
+
+<br />
+
 Timo is a timebox-based to-do service that converts tasks into actionable, time-bound blocks — so you actually finish what you plan.
 
 Unlike traditional to-do lists, Timo asks you to estimate how long each task will take, then builds your day around those time blocks.
 
 As you use it, Timo learns your time patterns and helps you plan more realistically with AI-powered time recommendations.
+
+<br />
+
 
 ## Why We Built It
 
