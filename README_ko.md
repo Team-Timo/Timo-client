@@ -1,4 +1,6 @@
 <div align="center">
+  <img width="100" height="100" alt="image" src="https://github.com/user-attachments/assets/8ab6a065-30a7-47e8-826b-cc1f42bc57d7" />
+
   <h1 align="center">Timo</h1>
 
   <p align="center">
@@ -26,11 +28,17 @@
 
 ## Timo란?
 
+<img width="1440" height="929" alt="image" src="https://github.com/user-attachments/assets/2a914423-b362-460b-a0cf-d4620e0857af" />
+
+<br />
+
 Timo는 할 일을 실행 가능한 시간 단위(타임박스)로 변환해주는 투두 서비스입니다.
 
 단순히 할 일 목록을 나열하는 대신, 각 태스크에 예상 소요 시간을 입력하면 하루 일정이 자동으로 구성됩니다.
 
 반복 사용을 통해 Timo는 개인의 시간 사용 패턴을 학습하고, AI 기반 시간 추천으로 점점 더 현실적인 계획 수립을 돕습니다.
+
+<br />
 
 ## 왜 만들었나요?
 
