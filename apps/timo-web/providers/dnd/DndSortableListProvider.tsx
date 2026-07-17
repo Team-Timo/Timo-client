@@ -59,6 +59,7 @@ export const DndSortableListProvider = ({
       sensors={sensors}
       collisionDetection={closestCenter}
       modifiers={[restrictToVerticalAxis]}
+      autoScroll={{ threshold: { x: 0, y: 0.2 } }}
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
