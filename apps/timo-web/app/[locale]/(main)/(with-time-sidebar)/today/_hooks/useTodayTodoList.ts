@@ -52,6 +52,7 @@ export const useTodayTodoList = (
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
+    invalidateStatistics,
   } = useTimerQueryInvalidation();
 
   const { mutate: startTimer, isPending: isStartTimerPending } = useStartTimer({
@@ -119,6 +120,7 @@ export const useTodayTodoList = (
           invalidateTimeBoxes();
           invalidateTodoDetail(todoId, dateKey);
           invalidateFocusTodo();
+          invalidateStatistics();
         },
         onError: (error: ErrorType<ErrorDto>) => {
           setTodos(previous);
@@ -149,6 +151,7 @@ export const useTodayTodoList = (
                 invalidateTodayView();
                 invalidateTodoDetail(todoId, dateKey);
                 invalidateFocusTodo();
+                invalidateStatistics();
               },
             },
           );
