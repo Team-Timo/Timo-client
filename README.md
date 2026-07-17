@@ -34,19 +34,43 @@ As you use it, Timo learns your time patterns and helps you plan more realistica
 
 ## Why We Built It
 
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/f5999e80-24d5-4163-ad7b-464a11eb6f52" />
+
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/bf1b8aa5-0f1b-4ae0-9b6a-00e23d3ce9aa" />
+
 - **To-do lists aren't enough**: Writing tasks down feels productive, but without a time structure, most lists stay unfinished at end of day.
 - **Time estimates make plans real**: A task without a duration is just a wish. Timo pairs every task with a time block from the start.
 - **Feedback closes the loop**: The gap between planned and actual time is where most tools stop. Timo closes that loop by recording real execution time and feeding it back into future planning.
 
 ## Features
 
-- **✏️ Todo + Time Estimate**: Add tasks with an expected duration and optional tags. The estimate becomes the foundation of your daily schedule.
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/d885c832-0bee-4ef7-aa38-993bd43d916e" />
 
-- **📦 Automatic Timebox Scheduling**: Each task is automatically converted into a time block on your schedule — turning a flat to-do list into an executable plan.
+- **📝 Todo + Time Estimate**: Enter what you need to do and how long you expect it to take — Timo turns it into a timebox that becomes part of your plan.
 
-- **⏱️ Timer-Based Execution**: Start a timebox and a timer begins. Pause, extend, or go full-screen to stay focused. When time is up, you get a notification. Actual time spent is recorded automatically.
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/f85b1a15-c86b-4a1b-b2ea-76779a87ae17" />
 
-- **🤖 AI Time Recommendations**: Timo learns how long similar tasks actually take you, then recommends more accurate time estimates — making future plans increasingly realistic.
+- **⏱️ Timer-Based Execution**: Start a timebox and a timer runs for exactly the duration you set, keeping you focused on getting it done.
+
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/f7b549b8-1072-4d31-abb0-0bfcefd91f8f" />
+
+- **📊 Timeline Tracking**: The actual time you spent is automatically recorded on the timeline as a time block, so you can see exactly when and how long you worked.
+
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/bcd0f9be-7cdf-4d8d-a7af-595c6fa9544e" />
+
+- **🤖 AI Feedback**: Timo compares your accumulated estimated vs. actual time data and recommends the most realistic duration for each task, giving you feedback to plan better.
+
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/71850f4c-d07a-4620-912d-3f1f2737cded" />
+
+- **▶️ Seamless Transition**: Complete a timebox and the next one starts right away, keeping your workflow moving without interruption.
+
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/1b49c2a2-bc22-4728-8e93-a52e22e6d352" />
+
+- **📈 Daily Statistics**: See how much time you focused today, and compare estimated vs. actual time at a glance.
+
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/aa70c797-e815-4b6d-a937-ec8dd5719b7c" />
+
+- **🎯 Focus Mode**: Zoom into a single todo and work through it distraction-free.
 
 ## Getting Started
 
@@ -87,7 +111,7 @@ Timo is optimized for desktop use — designed for students and job seekers who 
   <tr>
     <td align="center">
       <a href="https://github.com/kimminna">
-        <img src="https://github.com/kimminna.png" width="80" alt="김민아"/>
+        <img width="1276" height="2032" alt="image" src="https://github.com/user-attachments/assets/ebd38f45-73ad-4ad9-97d9-82d9c057abcd" />
       </a>
       <br/>
       <strong>김민아</strong>
@@ -96,7 +120,7 @@ Timo is optimized for desktop use — designed for students and job seekers who 
     </td>
     <td align="center">
       <a href="https://github.com/yumin-kim2">
-        <img src="https://github.com/yumin-kim2.png" width="80" alt="김유민"/>
+        <img width="1276" height="2032" alt="image" src="https://github.com/user-attachments/assets/d093d5c5-27a0-4e7d-b83d-de9379f82f0c" />
       </a>
       <br/>
       <strong>김유민</strong>
@@ -105,7 +129,7 @@ Timo is optimized for desktop use — designed for students and job seekers who 
     </td>
     <td align="center">
       <a href="https://github.com/jjangminii">
-        <img src="https://github.com/jjangminii.png" width="80" alt="김정민"/>
+        <img width="1276" height="2032" alt="image" src="https://github.com/user-attachments/assets/59959ce9-2cab-4a6f-b4ec-73463bac404d" />
       </a>
       <br/>
       <strong>김정민</strong>
@@ -114,7 +138,7 @@ Timo is optimized for desktop use — designed for students and job seekers who 
     </td>
     <td align="center">
       <a href="https://github.com/ehye1">
-        <img src="https://github.com/ehye1.png" width="80" alt="이혜원"/>
+     <img width="1276" height="2032" alt="image" src="https://github.com/user-attachments/assets/20bb5e37-6b5e-4f20-8255-658531293e82" />
       </a>
       <br/>
       <strong>이혜원</strong>
