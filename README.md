@@ -38,8 +38,6 @@ As you use it, Timo learns your time patterns and helps you plan more realistica
 
 <br/>
 
-<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/bf1b8aa5-0f1b-4ae0-9b6a-00e23d3ce9aa" />
-
 <br/>
 
 - **To-do lists aren't enough**: Writing tasks down feels productive, but without a time structure, most lists stay unfinished at end of day.
@@ -52,43 +50,85 @@ As you use it, Timo learns your time patterns and helps you plan more realistica
 
 <br/>
 
+<br/>
+
 - **📝 Todo + Time Estimate**: Enter what you need to do and how long you expect it to take — Timo turns it into a timebox that becomes part of your plan.
+
+<br/>
+
+<br/>
 
 <img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/f85b1a15-c86b-4a1b-b2ea-76779a87ae17" />
 
 <br/>
 
+<br/>
+
 - **⏱️ Timer-Based Execution**: Start a timebox and a timer runs for exactly the duration you set, keeping you focused on getting it done.
+
+<br/>
+
+<br/>
 
 <img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/f7b549b8-1072-4d31-abb0-0bfcefd91f8f" />
 
 <br/>
 
+<br/>
+
 - **📊 Timeline Tracking**: The actual time you spent is automatically recorded on the timeline as a time block, so you can see exactly when and how long you worked.
+
+<br/>
+
+<br/>
 
 <img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/bcd0f9be-7cdf-4d8d-a7af-595c6fa9544e" />
 
 <br/>
 
+<br/>
+
 - **🤖 AI Feedback**: Timo compares your accumulated estimated vs. actual time data and recommends the most realistic duration for each task, giving you feedback to plan better.
+
+<br/>
+
+<br/>
 
 <img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/71850f4c-d07a-4620-912d-3f1f2737cded" />
 
 <br/>
 
+<br/>
+
 - **▶️ Seamless Transition**: Complete a timebox and the next one starts right away, keeping your workflow moving without interruption.
+
+<br/>
+
+<br/>
 
 <img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/1b49c2a2-bc22-4728-8e93-a52e22e6d352" />
 
 <br/>
 
+<br/>
+
 - **📈 Daily Statistics**: See how much time you focused today, and compare estimated vs. actual time at a glance.
+
+<br/>
+
+<br/>
 
 <img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/aa70c797-e815-4b6d-a937-ec8dd5719b7c" />
 
 <br/>
 
+<br/>
+
 - **🎯 Focus Mode**: Zoom into a single todo and work through it distraction-free.
+
+<br/>
+
+<br/>
 
 ## Getting Started
 
