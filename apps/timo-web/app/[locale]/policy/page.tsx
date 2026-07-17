@@ -1,5 +1,4 @@
-import timoTextLogo from "@repo/timo-design-system/assets/images/logo/timo-text-logo.svg";
-import Image from "next/image";
+import { LogoTimoIcon } from "@repo/timo-design-system/icons";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -49,8 +48,8 @@ export default async function PolicyPage({ searchParams }: PolicyPageProps) {
   return (
     <div className="flex min-h-screen w-full flex-col items-center gap-12.5 bg-white">
       <div className="flex w-full items-center justify-between px-37 py-6.75">
-        <Link href={ROUTES.LOGIN}>
-          <Image src={timoTextLogo} alt="Timo" width={92} height={35} />
+        <Link href={ROUTES.LOGIN} aria-label="Timo">
+          <LogoTimoIcon width={92} height={35} />
         </Link>
       </div>
 
