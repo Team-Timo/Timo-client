@@ -178,7 +178,9 @@ export const CreateTodoModalContent = ({
             addTagLabel={t("createModal.addTag")}
             onSelectTag={tagField.handleSelectTag}
             onAddTagClick={tagField.handleAddTagClick}
-            hasMemo={Boolean(memoField.value?.trim())}
+            hasSubTask={subtaskField.subtaskInputs.some(
+              (entry) => entry.value.trim().length > 0,
+            )}
             isRepeatActive={repeatField.isRepeatActive}
             repeat={{
               detailHeading: t("createModal.repeatDetailHeading"),
