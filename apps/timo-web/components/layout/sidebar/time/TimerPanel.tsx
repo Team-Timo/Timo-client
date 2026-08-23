@@ -17,9 +17,9 @@ import {
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerActions } from "@/hooks/timer/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";
+import { useTimerProgress } from "@/hooks/timer/use-timer-progress";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { formatDateKey } from "@/utils/date/date";
-import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/duration/format-duration-label";
 
@@ -117,40 +117,15 @@ export const TimerPanel = () => {
     changeTodoStatus,
   });
 
-  const plannedSeconds = activeTimer
-    ? activeTimer.plannedSeconds + activeTimer.extendedSeconds
-    : 0;
-  const remainingSeconds = activeTimer ? activeTimer.remainingSeconds : 0;
-  const progress =
-    plannedSeconds > 0
-      ? ((plannedSeconds - remainingSeconds) / plannedSeconds) * 100
-      : 0;
-  const isOvertime = overtimeBaseSeconds !== null;
-  const overtimeTotal = activeTimer
-    ? activeTimer.plannedSeconds +
-      activeTimer.extendedSeconds -
-      (overtimeBaseSeconds ?? 0)
-    : 0;
-  const overtimeProgress =
-    activeTimer && overtimeBaseSeconds !== null && overtimeTotal > 0
-      ? Math.min(
-          100,
-          Math.max(
-            0,
-            ((activeTimer.elapsedSeconds - overtimeBaseSeconds) /
-              overtimeTotal) *
-              100,
-          ),
-        )
-      : 0;
-  const plannedMinutes = convertDurationToMinutes(plannedSeconds);
-  // 완료 모달의 "계획"은 연장 시간을 제외한 순수 계획 시간만 보여줘야 한다
-  const basePlannedMinutes = convertDurationToMinutes(
-    activeTimer?.plannedSeconds ?? 0,
-  );
-  const actualMinutes = convertDurationToMinutes(
-    activeTimer?.elapsedSeconds ?? 0,
-  );
+  const {
+    remainingSeconds,
+    progress,
+    isOvertime,
+    overtimeProgress,
+    plannedMinutes,
+    basePlannedMinutes,
+    actualMinutes,
+  } = useTimerProgress({ timer: activeTimer, overtimeBaseSeconds });
 
   return (
     <div className="flex flex-col items-center gap-11.25">
