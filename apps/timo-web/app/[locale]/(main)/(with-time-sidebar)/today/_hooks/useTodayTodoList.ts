@@ -48,7 +48,7 @@ export const useTodayTodoList = (
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
   const { mutate: stopTimer } = useStopTimer();
   const {
-    invalidateTimerState,
+    invalidateTimerProgress,
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
@@ -58,7 +58,7 @@ export const useTodayTodoList = (
   const { mutate: startTimer, isPending: isStartTimerPending } = useStartTimer({
     mutation: {
       onSuccess: () => {
-        invalidateTimerState();
+        invalidateTimerProgress();
         invalidateFocusTodo();
       },
     },
@@ -68,7 +68,7 @@ export const useTodayTodoList = (
     useChangeStatus({
       mutation: {
         onSuccess: () => {
-          invalidateTimerState();
+          invalidateTimerProgress();
           invalidateFocusTodo();
         },
       },
@@ -141,7 +141,7 @@ export const useTodayTodoList = (
       {
         onSuccess: (response) => {
           onStopFeedback(response.data?.aiFeedback ?? undefined);
-          invalidateTimerState();
+          invalidateTimerProgress();
 
           updateTodo(todoId, (todo) => ({ ...todo, completed: true }));
           changeTodoStatus(

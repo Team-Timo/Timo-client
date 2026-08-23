@@ -30,28 +30,25 @@ export const TimerPanel = () => {
 
   const { data: activeTimer } = useActiveTimer();
   const {
-    invalidateActiveTimer,
     invalidateHomeView,
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
-    invalidateTodoDetail,
+    invalidateTimerProgress,
+    invalidateTimerFinish,
   } = useTimerQueryInvalidation();
 
   const { mutate: changeStatus } = useChangeStatus({
     mutation: {
       onSuccess: () => {
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
+        invalidateTimerProgress();
       },
     },
   });
   const { mutate: extendTimer } = useExtendTimer({
     mutation: {
       onSuccess: () => {
-        invalidateActiveTimer();
-        invalidateTimeBoxes();
+        invalidateTimerProgress();
       },
     },
   });
@@ -59,12 +56,7 @@ export const TimerPanel = () => {
     mutation: {
       onSuccess: (response) => {
         setFeedbackText(response.data?.aiFeedback ?? undefined);
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
-        invalidateTodayView();
-        invalidateFocusTodo();
-        if (response.data?.todoId) invalidateTodoDetail(response.data.todoId);
+        invalidateTimerFinish(response.data?.todoId);
       },
     },
   });
@@ -72,12 +64,7 @@ export const TimerPanel = () => {
     mutation: {
       onSuccess: (response) => {
         setFeedbackText(response.data?.aiFeedback ?? undefined);
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
-        invalidateTodayView();
-        invalidateFocusTodo();
-        if (response.data?.todoId) invalidateTodoDetail(response.data.todoId);
+        invalidateTimerFinish(response.data?.todoId);
       },
     },
   });
