@@ -48,6 +48,7 @@ export const useFocusSession = ({
     invalidateTodayView,
     invalidateFocusTodo,
     invalidateStatistics,
+    invalidateTimerProgress,
   } = useTimerQueryInvalidation();
   const invalidateTodoDetail = () => {
     const todo = focusView.todo;
@@ -60,9 +61,7 @@ export const useFocusSession = ({
   const { mutate: startTimer } = useStartTimer({
     mutation: {
       onSuccess: () => {
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
+        invalidateTimerProgress();
       },
       onError: onMutationError,
     },
@@ -70,9 +69,7 @@ export const useFocusSession = ({
   const { mutate: changeStatus } = useChangeStatus({
     mutation: {
       onSuccess: () => {
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
+        invalidateTimerProgress();
       },
       onError: onMutationError,
     },
@@ -80,9 +77,7 @@ export const useFocusSession = ({
   const { mutate: extendTimer } = useExtendTimer({
     mutation: {
       onSuccess: () => {
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
+        invalidateTimerProgress();
       },
       onError: onMutationError,
     },

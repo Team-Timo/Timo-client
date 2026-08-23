@@ -36,6 +36,7 @@ export const useTimerQueryInvalidation = () => {
     invalidateActiveTimer();
     invalidateHomeView();
     invalidateTimeBoxes();
+    invalidateStatistics();
   };
 
   /** 완료/중지처럼 타이머가 종료되는 액션 이후 무효화 */
