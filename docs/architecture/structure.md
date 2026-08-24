@@ -40,4 +40,3 @@ timo-client/
 - `packages/timo-design-system` → `apps/*` 참조 금지
 - 패키지 간 참조는 반드시 `workspace:*`로 선언
 - 앱 내부 도메인 간 직접 import 금지 — 공유 로직은 앱 전역 디렉터리(`components/`, `hooks/`, `queries/`, `utils/`, `generated/`, `http/` 등) 또는 `packages/`로 추출
-- `apps/timo-web` 최상단에 `api/`라는 이름의 디렉터리를 만들지 않는다 — Vercel이 최상단 `api/` 폴더의 파일을 프레임워크와 무관하게 전부 개별 서버리스 함수로 취급해서, Hobby 플랜의 "배포당 함수 12개" 제한을 순식간에 초과시킨다 (`generated/`, `http/`로 분리된 이유)
