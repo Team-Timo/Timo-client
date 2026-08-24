@@ -5,20 +5,20 @@ import { useEffect, useRef } from "react";
 
 import type { TimerSessionControlsHandle } from "@/components/timer/TimerSessionControls";
 
+import { useFocusTodoQuery } from "@/app/[locale]/(main)/focus/_queries/use-focus-todo-query";
+import { convertDateToBadgeText } from "@/app/[locale]/(main)/focus/_utils/date";
 import {
   useChangeStatus,
   useCompleteTimer,
   useExtendTimer,
   useStartTimer,
   useStopTimer,
-} from "@/api/generated/endpoints/timer/timer";
+} from "@/generated/endpoints/timer/timer";
 import {
   getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
-} from "@/api/generated/endpoints/todo/todo";
-import { useFocusTodoQuery } from "@/app/[locale]/(main)/focus/_queries/use-focus-todo-query";
-import { convertDateToBadgeText } from "@/app/[locale]/(main)/focus/_utils/date";
+} from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerActions } from "@/hooks/timer/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";

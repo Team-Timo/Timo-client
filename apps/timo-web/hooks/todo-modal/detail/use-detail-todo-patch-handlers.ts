@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { TodoUpdateRequest } from "@/api/generated/models";
+import type { TodoUpdateRequest } from "@/generated/models";
 import type { UseDetailTodoFormReturn } from "@/hooks/todo-modal/detail/use-detail-todo-form";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 import type {

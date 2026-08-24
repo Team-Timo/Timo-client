@@ -2,18 +2,18 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 
-import type { ErrorType } from "@/api/client/custom-instance";
-import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
+import type { ErrorDto, TodoUpdateRequest } from "@/generated/models";
+import type { ErrorType } from "@/http/custom-instance";
 
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
+import { getGetFocusTodoQueryKey } from "@/generated/endpoints/focus/focus";
 import {
   getGetHomeQueryKey,
   getGetTodayQueryKey,
-} from "@/api/generated/endpoints/home/home";
+} from "@/generated/endpoints/home/home";
 import {
   getGetTodoDetailQueryKey,
   useUpdateTodo,
-} from "@/api/generated/endpoints/todo/todo";
+} from "@/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 
 export interface UpdateTodoSubmitParams {

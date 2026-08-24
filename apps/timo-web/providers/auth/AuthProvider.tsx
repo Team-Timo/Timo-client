@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-import { useReissue } from "@/api/generated/endpoints/auth/auth";
+import { useReissue } from "@/generated/endpoints/auth/auth";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 
 interface AuthProviderProps {

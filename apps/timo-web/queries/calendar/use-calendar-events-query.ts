@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getCalendarEvents,
   getGetCalendarEventsQueryKey,
-} from "@/api/generated/endpoints/calendar/calendar";
+} from "@/generated/endpoints/calendar/calendar";
 import {
   calendarEventsDataSchema,
   type CalendarFilter,

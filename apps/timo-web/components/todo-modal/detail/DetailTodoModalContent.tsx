@@ -11,7 +11,7 @@ import type {
   TodoDetailResponse,
   TodoDetailResponseTimerStatus,
   TodoUpdateRequest,
-} from "@/api/generated/models";
+} from "@/generated/models";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
