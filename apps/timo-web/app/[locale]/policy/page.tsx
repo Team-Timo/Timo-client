@@ -37,18 +37,18 @@ export default async function PolicyPage({ params }: PolicyPageProps) {
   const { locale } = await params;
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center gap-12.5 bg-white">
-      <div className="flex w-full items-center justify-between px-37 py-6.75">
+    <main className="flex min-h-screen w-full flex-col items-center gap-12.5 bg-white">
+      <header className="flex w-full items-center justify-between px-37 py-6.75">
         <a href={`/${locale}${ROUTES.LOGIN}`} aria-label="Timo">
           <LogoTimoIcon width={92} height={35} />
         </a>
-      </div>
+      </header>
 
-      <div className="flex w-full justify-center px-8 pb-20">
+      <article className="flex w-full justify-center px-8 pb-20">
         <AsyncBoundary>
           <PolicyContainer />
         </AsyncBoundary>
-      </div>
-    </div>
+      </article>
+    </main>
   );
 }
