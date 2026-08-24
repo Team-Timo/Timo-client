@@ -3,11 +3,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import type { TodoCreateRequest } from "@/api/generated/models";
+import type { TodoCreateRequest } from "@/generated/models";
 import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 
-import { getGetHomeQueryKey } from "@/api/generated/endpoints/home/home";
-import { useCreateTodo } from "@/api/generated/endpoints/todo/todo";
+import { getGetHomeQueryKey } from "@/generated/endpoints/home/home";
+import { useCreateTodo } from "@/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 import { todoCreateResponseSchema } from "@/schemas/todo/todo-schema";
 

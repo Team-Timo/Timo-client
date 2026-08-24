@@ -3,20 +3,20 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-import type { ErrorType } from "@/api/client/custom-instance";
-import type { ErrorDto } from "@/api/generated/models";
 import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
+import type { ErrorDto } from "@/generated/models";
+import type { ErrorType } from "@/http/custom-instance";
 
 import {
   useChangeStatus,
   useStartTimer,
   useStopTimer,
-} from "@/api/generated/endpoints/timer/timer";
+} from "@/generated/endpoints/timer/timer";
 import {
   getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
-} from "@/api/generated/endpoints/todo/todo";
+} from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";

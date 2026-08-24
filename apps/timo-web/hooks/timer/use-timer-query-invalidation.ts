@@ -2,14 +2,14 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
+import { getGetFocusTodoQueryKey } from "@/generated/endpoints/focus/focus";
 import {
   getGetHomeQueryKey,
   getGetTodayQueryKey,
-} from "@/api/generated/endpoints/home/home";
-import { getGetTimeBoxesQueryKey } from "@/api/generated/endpoints/time-box/time-box";
-import { getGetActiveTimerQueryKey } from "@/api/generated/endpoints/timer/timer";
-import { getGetTodoDetailQueryKey } from "@/api/generated/endpoints/todo/todo";
+} from "@/generated/endpoints/home/home";
+import { getGetTimeBoxesQueryKey } from "@/generated/endpoints/time-box/time-box";
+import { getGetActiveTimerQueryKey } from "@/generated/endpoints/timer/timer";
+import { getGetTodoDetailQueryKey } from "@/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 
 export const useTimerQueryInvalidation = () => {

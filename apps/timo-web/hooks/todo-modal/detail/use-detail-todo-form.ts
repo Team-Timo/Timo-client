@@ -1,10 +1,7 @@
 import { TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useController, useForm } from "react-hook-form";
 
-import type {
-  TodoDetailResponse,
-  TodoUpdateRequest,
-} from "@/api/generated/models";
+import type { TodoDetailResponse, TodoUpdateRequest } from "@/generated/models";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 import type {
   PriorityLevel,

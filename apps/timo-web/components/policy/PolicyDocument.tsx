@@ -5,7 +5,7 @@ export interface PolicyDocumentProps {
 
 export const PolicyDocument = ({ title, content }: PolicyDocumentProps) => {
   return (
-    <div className="flex w-full max-w-[1147px] flex-col gap-7.5">
+    <div className="flex w-full max-w-286.75 flex-col gap-7.5">
       <div className="flex flex-col gap-5">
         <h1 className="typo-headline-b-16 text-timo-gray-900 w-full">
           {title}

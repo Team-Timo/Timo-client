@@ -6,7 +6,7 @@ import { useLocale } from "next-intl";
 import {
   getGetTermsByConditionQueryKey,
   getTermsByCondition,
-} from "@/api/generated/endpoints/terms/terms";
+} from "@/generated/endpoints/terms/terms";
 import {
   termsDetailSchema,
   type TermsType,

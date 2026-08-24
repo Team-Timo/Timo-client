@@ -3,9 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-import { useToken } from "@/api/generated/endpoints/auth/auth";
-import { useUpdateTimezone } from "@/api/generated/endpoints/user/user";
 import { ROUTES } from "@/constants/routes";
+import { useToken } from "@/generated/endpoints/auth/auth";
+import { useUpdateTimezone } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 

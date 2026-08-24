@@ -2,18 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import {
-  useChangeStatus,
-  useCompleteTimer,
-  useExtendTimer,
-  useStopTimer,
-} from "@/api/generated/endpoints/timer/timer";
-import { useChangeTodoStatus } from "@/api/generated/endpoints/todo/todo";
 import { Timer } from "@/components/timer/Timer";
 import {
   TimerSessionControls,
   type TimerSessionControlsHandle,
 } from "@/components/timer/TimerSessionControls";
+import {
+  useChangeStatus,
+  useCompleteTimer,
+  useExtendTimer,
+  useStopTimer,
+} from "@/generated/endpoints/timer/timer";
+import { useChangeTodoStatus } from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerActions } from "@/hooks/timer/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";

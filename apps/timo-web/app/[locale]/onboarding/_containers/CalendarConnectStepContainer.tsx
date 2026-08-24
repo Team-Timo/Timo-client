@@ -2,9 +2,9 @@
 
 import { useTranslations } from "next-intl";
 
-import { authorize } from "@/api/generated/endpoints/calendar/calendar";
 import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingButtonContainer";
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
+import { authorize } from "@/generated/endpoints/calendar/calendar";
 
 interface CalendarConnectStepContainerProps {
   isPending?: boolean;

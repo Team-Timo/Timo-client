@@ -2,7 +2,7 @@ import {
   useGetCalendar,
   useGetDaily,
   useGetSummary,
-} from "@/api/generated/endpoints/statistics/statistics";
+} from "@/generated/endpoints/statistics/statistics";
 
 export const useStatisticsSummaryQuery = (yearMonth: string) => {
   return useGetSummary({ yearMonth });

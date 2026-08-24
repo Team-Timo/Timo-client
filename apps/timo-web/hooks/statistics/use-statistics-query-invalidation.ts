@@ -6,7 +6,7 @@ import {
   getGetCalendarQueryKey,
   getGetDailyQueryKey,
   getGetSummaryQueryKey,
-} from "@/api/generated/endpoints/statistics/statistics";
+} from "@/generated/endpoints/statistics/statistics";
 
 export const useStatisticsQueryInvalidation = () => {
   const queryClient = useQueryClient();
