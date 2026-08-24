@@ -1,18 +1,18 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-
-import type { TermsType } from "@/schemas/settings/terms-schema";
 
 import { PolicyDocument } from "@/components/policy/PolicyDocument";
 import { useTermsQuery } from "@/queries/settings/use-terms-query";
+import { termsTypeSchema } from "@/schemas/settings/terms-schema";
 
-export interface PolicyContainerProps {
-  type: TermsType;
-}
-
-export const PolicyContainer = ({ type }: PolicyContainerProps) => {
+export const PolicyContainer = () => {
   const t = useTranslations("Policy");
+  const searchParams = useSearchParams();
+  const parsedType = termsTypeSchema.safeParse(searchParams.get("type"));
+  const type = parsedType.success ? parsedType.data : "SERVICE";
+
   const { data: term } = useTermsQuery(type);
 
   if (!term) {
