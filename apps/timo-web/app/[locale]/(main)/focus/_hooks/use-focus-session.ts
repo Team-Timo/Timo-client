@@ -22,8 +22,8 @@ import { convertDateToBadgeText } from "@/app/[locale]/(main)/focus/_utils/date"
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerActions } from "@/hooks/timer/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";
-import { useTimerProgress } from "@/hooks/timer/use-timer-progress";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
+import { getTimerProgress } from "@/utils/timer/get-timer-progress";
 
 export interface UseFocusSessionOptions {
   onMutationError: () => void;
@@ -223,7 +223,7 @@ export const useFocusSession = ({
     plannedMinutes,
     basePlannedMinutes,
     actualMinutes,
-  } = useTimerProgress({
+  } = getTimerProgress({
     timer,
     overtimeBaseSeconds,
     fallbackPlannedSeconds: todo?.durationSeconds ?? 0,

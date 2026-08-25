@@ -17,11 +17,11 @@ import {
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerActions } from "@/hooks/timer/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";
-import { useTimerProgress } from "@/hooks/timer/use-timer-progress";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/duration/format-duration-label";
+import { getTimerProgress } from "@/utils/timer/get-timer-progress";
 
 export const TimerPanel = () => {
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
@@ -125,7 +125,7 @@ export const TimerPanel = () => {
     plannedMinutes,
     basePlannedMinutes,
     actualMinutes,
-  } = useTimerProgress({ timer: activeTimer, overtimeBaseSeconds });
+  } = getTimerProgress({ timer: activeTimer, overtimeBaseSeconds });
 
   return (
     <div className="flex flex-col items-center gap-11.25">
