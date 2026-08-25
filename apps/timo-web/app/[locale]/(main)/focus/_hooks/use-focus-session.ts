@@ -42,13 +42,12 @@ export const useFocusSession = ({
   const { data: activeTimer } = useActiveTimer();
 
   const {
-    invalidateActiveTimer,
-    invalidateHomeView,
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
     invalidateStatistics,
     invalidateTimerProgress,
+    invalidateTimerFinish,
   } = useTimerQueryInvalidation();
   const invalidateTodoDetail = () => {
     const todo = focusView.todo;
@@ -86,13 +85,7 @@ export const useFocusSession = ({
     mutation: {
       onSuccess: (response) => {
         onFeedback(response.data?.aiFeedback ?? undefined);
-        invalidateActiveTimer();
-        invalidateFocusTodo();
-        invalidateHomeView();
-        invalidateTimeBoxes();
-        invalidateTodayView();
-        invalidateTodoDetail();
-        invalidateStatistics();
+        invalidateTimerFinish(response.data?.todoId);
       },
       onError: onMutationError,
     },
@@ -101,13 +94,7 @@ export const useFocusSession = ({
     mutation: {
       onSuccess: (response) => {
         onFeedback(response.data?.aiFeedback ?? undefined);
-        invalidateActiveTimer();
-        invalidateFocusTodo();
-        invalidateHomeView();
-        invalidateTimeBoxes();
-        invalidateTodayView();
-        invalidateTodoDetail();
-        invalidateStatistics();
+        invalidateTimerFinish(response.data?.todoId);
       },
       onError: onMutationError,
     },
