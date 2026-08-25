@@ -55,7 +55,7 @@ export const useHomeTodosByDate = (
   const {
     invalidateHomeView,
     invalidateStatistics,
-    invalidateTimerState,
+    invalidateTimerProgress,
     invalidateTimeBoxes,
     invalidateFocusTodo,
   } = useTimerQueryInvalidation();
@@ -64,7 +64,7 @@ export const useHomeTodosByDate = (
     useStartTimer<ApiError>({
       mutation: {
         onSuccess: () => {
-          invalidateTimerState();
+          invalidateTimerProgress();
           invalidateFocusTodo();
         },
       },
@@ -73,7 +73,7 @@ export const useHomeTodosByDate = (
     useChangeStatus({
       mutation: {
         onSuccess: () => {
-          invalidateTimerState();
+          invalidateTimerProgress();
           invalidateFocusTodo();
         },
       },
@@ -153,7 +153,7 @@ export const useHomeTodosByDate = (
       {
         onSuccess: (response) => {
           onStopFeedback(response.data?.aiFeedback ?? undefined);
-          invalidateTimerState();
+          invalidateTimerProgress();
 
           updateTodo(dateKey, todoId, (todo) => ({
             ...todo,

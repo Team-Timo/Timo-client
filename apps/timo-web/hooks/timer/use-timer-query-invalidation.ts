@@ -30,11 +30,30 @@ export const useTimerQueryInvalidation = () => {
     queryClient.invalidateQueries({
       queryKey: getGetTodoDetailQueryKey(todoId),
     });
-  const invalidateTimerState = () => {
+
+  /**
+   * 일시정지/재개/연장처럼 타이머가 계속 진행 중인 액션 이후 무효화
+   */
+  const invalidateTimerProgress = () => {
     invalidateActiveTimer();
     invalidateHomeView();
     invalidateTimeBoxes();
     invalidateStatistics();
+  };
+
+  /**
+   * 완료/중지처럼 타이머가 종료되는 액션 이후 무효화
+   *
+   * @param todoId - 투두 상세 쿼리를 무효화할 투두 ID. 없으면 투두 상세는 건너뜁니다.
+   */
+  const invalidateTimerFinish = (todoId?: number) => {
+    invalidateActiveTimer();
+    invalidateHomeView();
+    invalidateTimeBoxes();
+    invalidateTodayView();
+    invalidateStatistics();
+    invalidateFocusTodo();
+    if (todoId) invalidateTodoDetail(todoId);
   };
 
   return {
@@ -45,6 +64,7 @@ export const useTimerQueryInvalidation = () => {
     invalidateTodayView,
     invalidateFocusTodo,
     invalidateTodoDetail,
-    invalidateTimerState,
+    invalidateTimerProgress,
+    invalidateTimerFinish,
   };
 };
