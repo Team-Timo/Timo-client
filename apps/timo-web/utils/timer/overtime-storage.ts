@@ -7,6 +7,13 @@ export interface OvertimeBase {
   baseSeconds: number;
 }
 
+const isOvertimeBase = (value: unknown): value is OvertimeBase => {
+  if (typeof value !== "object" || value === null) return false;
+
+  const { timerId, baseSeconds } = value as Record<string, unknown>;
+  return Number.isFinite(timerId) && Number.isFinite(baseSeconds);
+};
+
 /**
  * 진행 중인 타이머의 초과시간 시작 기준값을 sessionStorage에서 가져옵니다.
  *
@@ -19,11 +26,8 @@ export const getOvertimeBase = (): OvertimeBase | null => {
   if (raw === null) return null;
 
   try {
-    const parsed = JSON.parse(raw) as OvertimeBase;
-    return Number.isFinite(parsed.timerId) &&
-      Number.isFinite(parsed.baseSeconds)
-      ? parsed
-      : null;
+    const parsed: unknown = JSON.parse(raw);
+    return isOvertimeBase(parsed) ? parsed : null;
   } catch {
     return null;
   }
