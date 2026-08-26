@@ -23,7 +23,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr edit "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}" --remove-label "🫵🏻 Reminded" || true
+          if ! output=$(gh pr edit "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}" --remove-label "🫵🏻 Reminded" 2>&1); then
+            if echo "$output" | grep -qi "not found"; then
+              echo "Label not present, skipping: $output"
+            else
+              echo "$output" >&2
+              exit 1
+            fi
+          fi
 
       - name: Send Detailed Discord Message
         shell: bash
