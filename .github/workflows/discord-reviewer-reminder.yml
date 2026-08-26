@@ -5,6 +5,10 @@ on:
     - cron: '0 1,6 * * 1-5' # 평일 KST 10:00, 15:00
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   remind:
     permissions:
@@ -44,6 +48,7 @@ jobs:
             });
 
             const now = Date.now();
+            const failedPrs = [];
 
             for (const pr of pulls) {
               if (pr.draft) continue;
@@ -52,7 +57,8 @@ jobs:
               if (labels.includes(REMINDED_LABEL)) continue;
 
               const reviewers = pr.requested_reviewers ?? [];
-              if (reviewers.length === 0) continue;
+              const teams = pr.requested_teams ?? [];
+              if (reviewers.length === 0 && teams.length === 0) continue;
 
               const timelineEvents = await github.paginate(github.rest.issues.listEventsForTimeline, {
                 owner: context.repo.owner,
@@ -65,12 +71,20 @@ jobs:
               for (const event of timelineEvents) {
                 if (event.event !== 'review_requested') continue;
                 const login = event.requested_reviewer?.login;
-                if (!login) continue;
-                reviewRequestTimes.set(login, event.created_at);
+                if (login) {
+                  reviewRequestTimes.set(`user:${login}`, event.created_at);
+                  continue;
+                }
+                const teamSlug = event.requested_team?.slug;
+                if (teamSlug) {
+                  reviewRequestTimes.set(`team:${teamSlug}`, event.created_at);
+                }
               }
 
-              const requestTimestamps = reviewers
-                .map((reviewer) => reviewRequestTimes.get(reviewer.login))
+              const requestTimestamps = [
+                ...reviewers.map((reviewer) => reviewRequestTimes.get(`user:${reviewer.login}`)),
+                ...teams.map((team) => reviewRequestTimes.get(`team:${team.slug}`)),
+              ]
                 .filter(Boolean)
                 .map((timestamp) => new Date(timestamp).getTime());
 
@@ -80,7 +94,10 @@ jobs:
               const hoursOpen = (now - oldestRequestTime) / (1000 * 60 * 60);
               if (hoursOpen < REMINDER_THRESHOLD_HOURS) continue;
 
-              const reviewerNames = reviewers.map((reviewer) => resolveName(reviewer.login)).join(', ');
+              const reviewerNames = [
+                ...reviewers.map((reviewer) => resolveName(reviewer.login)),
+                ...teams.map((team) => team.name || team.slug),
+              ].join(', ');
 
               const payload = {
                 embeds: [
@@ -96,21 +113,32 @@ jobs:
                 ],
               };
 
-              const response = await fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-              });
+              try {
+                const response = await fetch(webhookUrl, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload),
+                  signal: AbortSignal.timeout(10000),
+                });
 
-              if (!response.ok) {
-                console.error(`Discord webhook failed for PR #${pr.number}: ${response.status}`);
-                continue;
+                if (!response.ok) {
+                  console.error(`Discord webhook failed for PR #${pr.number}: ${response.status}`);
+                  failedPrs.push(pr.number);
+                  continue;
+                }
+
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  labels: [REMINDED_LABEL],
+                });
+              } catch (error) {
+                console.error(`Failed to process PR #${pr.number}: ${error.message}`);
+                failedPrs.push(pr.number);
               }
+            }
 
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr.number,
-                labels: [REMINDED_LABEL],
-              });
+            if (failedPrs.length > 0) {
+              console.error(`Failed to fully process PRs: ${failedPrs.join(', ')}`);
             }
