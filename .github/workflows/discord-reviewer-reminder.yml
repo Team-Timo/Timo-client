@@ -1,0 +1,93 @@
+name: ⏰ Discord Reviewer Reminder
+
+on:
+  schedule:
+    - cron: '0 1,6 * * 1-5' # 평일 KST 10:00, 15:00
+  workflow_dispatch:
+
+jobs:
+  remind:
+    permissions:
+      pull-requests: write
+      issues: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Remind pending reviewers
+        uses: actions/github-script@v7
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_REMINDER_WEBHOOK_URL }}
+        with:
+          script: |
+            const REMINDER_THRESHOLD_HOURS = 24;
+            const REMINDED_LABEL = '🫵🏻 Reminded';
+
+            const NAME_MAP = {
+              kimminna: '민아',
+              ehye1: '혜원',
+              jjangminii: '정민',
+              'yumin-kim2': '유민',
+            };
+            const resolveName = (login) => NAME_MAP[login] || login;
+
+            const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+            if (!webhookUrl) {
+              console.log('DISCORD_REMINDER_WEBHOOK_URL not set, skipping');
+              return;
+            }
+
+            const { data: pulls } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+
+            const now = Date.now();
+
+            for (const pr of pulls) {
+              if (pr.draft) continue;
+
+              const labels = pr.labels.map((label) => label.name);
+              if (labels.includes(REMINDED_LABEL)) continue;
+
+              const reviewers = pr.requested_reviewers ?? [];
+              if (reviewers.length === 0) continue;
+
+              const hoursOpen = (now - new Date(pr.created_at).getTime()) / (1000 * 60 * 60);
+              if (hoursOpen < REMINDER_THRESHOLD_HOURS) continue;
+
+              const reviewerNames = reviewers.map((reviewer) => resolveName(reviewer.login)).join(', ');
+
+              const payload = {
+                embeds: [
+                  {
+                    title: '⏰ 리뷰 리마인드',
+                    url: pr.html_url,
+                    description: `**${pr.title}**\n리뷰 요청 후 ${Math.floor(hoursOpen)}시간째 대기 중이에요.`,
+                    color: 16776960,
+                    fields: [{ name: '리뷰어', value: reviewerNames, inline: true }],
+                    footer: { text: 'GitHub Actions' },
+                    timestamp: new Date().toISOString(),
+                  },
+                ],
+              };
+
+              const response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+              });
+
+              if (!response.ok) {
+                console.error(`Discord webhook failed for PR #${pr.number}: ${response.status}`);
+                continue;
+              }
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: [REMINDED_LABEL],
+              });
+            }

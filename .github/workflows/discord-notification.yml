@@ -12,10 +12,19 @@ on:
 
 jobs:
   notify:
-    permissions: {}
+    permissions:
+      pull-requests: write
+      issues: write
     runs-on: ubuntu-latest
 
     steps:
+      - name: Remove reminded label after review
+        if: github.event_name == 'pull_request_review' && github.event.action == 'submitted'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr edit "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}" --remove-label "🫵🏻 Reminded" || true
+
       - name: Send Detailed Discord Message
         shell: bash
         env:
