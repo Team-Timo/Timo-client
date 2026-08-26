@@ -36,7 +36,7 @@ jobs:
               return;
             }
 
-            const { data: pulls } = await github.rest.pulls.list({
+            const pulls = await github.paginate(github.rest.pulls.list, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
@@ -54,7 +54,30 @@ jobs:
               const reviewers = pr.requested_reviewers ?? [];
               if (reviewers.length === 0) continue;
 
-              const hoursOpen = (now - new Date(pr.created_at).getTime()) / (1000 * 60 * 60);
+              const timelineEvents = await github.paginate(github.rest.issues.listEventsForTimeline, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                per_page: 100,
+              });
+
+              const reviewRequestTimes = new Map();
+              for (const event of timelineEvents) {
+                if (event.event !== 'review_requested') continue;
+                const login = event.requested_reviewer?.login;
+                if (!login) continue;
+                reviewRequestTimes.set(login, event.created_at);
+              }
+
+              const requestTimestamps = reviewers
+                .map((reviewer) => reviewRequestTimes.get(reviewer.login))
+                .filter(Boolean)
+                .map((timestamp) => new Date(timestamp).getTime());
+
+              const oldestRequestTime =
+                requestTimestamps.length > 0 ? Math.min(...requestTimestamps) : new Date(pr.created_at).getTime();
+
+              const hoursOpen = (now - oldestRequestTime) / (1000 * 60 * 60);
               if (hoursOpen < REMINDER_THRESHOLD_HOURS) continue;
 
               const reviewerNames = reviewers.map((reviewer) => resolveName(reviewer.login)).join(', ');
