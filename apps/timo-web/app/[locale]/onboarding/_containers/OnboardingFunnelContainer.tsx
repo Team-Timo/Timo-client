@@ -4,8 +4,6 @@ import { useFunnel } from "@use-funnel/browser";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { useCompleteOnboarding } from "@/api/generated/endpoints/onboarding/onboarding";
-import { OnboardingRequestLanguage } from "@/api/generated/models";
 import { OnboardingStepButton } from "@/app/[locale]/onboarding/_components/OnboardingStepButton";
 import { CalendarConnectStepContainer } from "@/app/[locale]/onboarding/_containers/CalendarConnectStepContainer";
 import { LanguageStepContainer } from "@/app/[locale]/onboarding/_containers/LanguageStepContainer";
@@ -15,6 +13,8 @@ import { OnboardingFunnelSteps } from "@/app/[locale]/onboarding/_types/onboardi
 import { LottiePlayer } from "@/components/lottie/LottiePlayer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { ROUTES } from "@/constants/routes";
+import { useCompleteOnboarding } from "@/generated/endpoints/onboarding/onboarding";
+import { OnboardingRequestLanguage } from "@/generated/models";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
 

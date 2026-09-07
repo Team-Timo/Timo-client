@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   getActiveTimer,
   getGetActiveTimerQueryKey,
-} from "@/api/generated/endpoints/timer/timer";
+} from "@/generated/endpoints/timer/timer";
 import { activeTimerSchema } from "@/schemas/timer/timer-schema";
 
 export const useActiveTimer = () => {

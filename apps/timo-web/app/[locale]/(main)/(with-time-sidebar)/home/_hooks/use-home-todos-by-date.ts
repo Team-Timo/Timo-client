@@ -3,24 +3,24 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-import type { ErrorType } from "@/api/client/custom-instance";
-import type { ApiError } from "@/api/error/api-error";
-import type { ErrorDto } from "@/api/generated/models";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { ErrorDto } from "@/generated/models";
+import type { ApiError } from "@/http/api-error";
+import type { ErrorType } from "@/http/custom-instance";
 
+import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
 import {
   useChangeStatus,
   useStartTimer,
   useStopTimer,
-} from "@/api/generated/endpoints/timer/timer";
+} from "@/generated/endpoints/timer/timer";
 import {
   getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
   useReorderTodo,
-} from "@/api/generated/endpoints/todo/todo";
-import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
+} from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";

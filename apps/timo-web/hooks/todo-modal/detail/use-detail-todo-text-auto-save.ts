@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
-import type { TodoUpdateRequest } from "@/api/generated/models";
 import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/DetailTodoTaskFields";
+import type { TodoUpdateRequest } from "@/generated/models";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 import { buildDetailTodoTextUpdateRequest } from "@/utils/todo/detail-todo-update-request";

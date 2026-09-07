@@ -2,7 +2,7 @@ import { Modal, ModalButton } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
 
-import { extendTimerBodyExtendMinutesMax } from "@/api/generated/endpoints/timer/timer.zod";
+import { extendTimerBodyExtendMinutesMax } from "@/generated/endpoints/timer/timer.zod";
 
 export type ExtendTimePreset = 10 | 30 | 60 | "custom";
 

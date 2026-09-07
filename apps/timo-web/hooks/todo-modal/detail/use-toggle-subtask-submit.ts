@@ -2,17 +2,17 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 
-import type { ErrorType } from "@/api/client/custom-instance";
-import type { ErrorDto } from "@/api/generated/models";
+import type { ErrorDto } from "@/generated/models";
+import type { ErrorType } from "@/http/custom-instance";
 
 import {
   getGetHomeQueryKey,
   getGetTodayQueryKey,
-} from "@/api/generated/endpoints/home/home";
+} from "@/generated/endpoints/home/home";
 import {
   getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
-} from "@/api/generated/endpoints/todo/todo";
+} from "@/generated/endpoints/todo/todo";
 
 export interface ToggleSubtaskSubmitParams {
   todoId: number;

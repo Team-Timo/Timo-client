@@ -5,18 +5,18 @@ import { useTranslations } from "next-intl";
 
 import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
+import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
+import { useLogoutMutation } from "@/app/[locale]/(main)/settings/_queries/account/use-logout-mutation";
 import {
   authorize,
   useDisconnectCalendar,
   getGetCalendarEventsQueryKey,
-} from "@/api/generated/endpoints/calendar/calendar";
+} from "@/generated/endpoints/calendar/calendar";
 import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
-} from "@/api/generated/endpoints/user/user";
-import { UpdateLanguageRequestLanguage } from "@/api/generated/models";
-import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
-import { useLogoutMutation } from "@/app/[locale]/(main)/settings/_queries/account/use-logout-mutation";
+} from "@/generated/endpoints/user/user";
+import { UpdateLanguageRequestLanguage } from "@/generated/models";
 import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
 import { useCreateTagMutation } from "@/queries/tag/use-create-tag-mutation";
 import { useDeleteTagMutation } from "@/queries/tag/use-delete-tag-mutation";

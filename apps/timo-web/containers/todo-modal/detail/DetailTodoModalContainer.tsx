@@ -5,14 +5,14 @@ import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { ErrorType } from "@/api/client/custom-instance";
-import type { ErrorDto, TodoUpdateRequest } from "@/api/generated/models";
+import type { ErrorDto, TodoUpdateRequest } from "@/generated/models";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
+import type { ErrorType } from "@/http/custom-instance";
 import type { ReactNode } from "react";
 
-import { useGetTodoDetail } from "@/api/generated/endpoints/todo/todo";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
+import { useGetTodoDetail } from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
 import { useToggleSubtaskSubmit } from "@/hooks/todo-modal/detail/use-toggle-subtask-submit";

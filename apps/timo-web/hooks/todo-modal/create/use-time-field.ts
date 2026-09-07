@@ -5,8 +5,8 @@ import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 import type { TimeSelection } from "@repo/timo-design-system/ui";
 import type { Control } from "react-hook-form";
 
-import { useRecommendDuration } from "@/api/generated/endpoints/ai/ai";
 import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "@/constants/time";
+import { useRecommendDuration } from "@/generated/endpoints/ai/ai";
 import { recommendDurationResponseSchema } from "@/schemas/todo/todo-schema";
 import {
   convertApiDurationToSeconds,

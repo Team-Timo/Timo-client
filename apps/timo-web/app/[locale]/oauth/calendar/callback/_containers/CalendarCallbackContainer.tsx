@@ -4,9 +4,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-import { useConnectCalendar } from "@/api/generated/endpoints/calendar/calendar";
-import { getGetMyProfileQueryKey } from "@/api/generated/endpoints/user/user";
 import { ROUTES } from "@/constants/routes";
+import { useConnectCalendar } from "@/generated/endpoints/calendar/calendar";
+import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
 
 export const CalendarCallbackContainer = () => {

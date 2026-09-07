@@ -2,13 +2,10 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import type { BodyType } from "@/api/client/custom-instance";
-import type { TagCreateRequest } from "@/api/generated/models";
+import type { TagCreateRequest } from "@/generated/models";
+import type { BodyType } from "@/http/custom-instance";
 
-import {
-  createTag,
-  getGetTagsQueryKey,
-} from "@/api/generated/endpoints/tag/tag";
+import { createTag, getGetTagsQueryKey } from "@/generated/endpoints/tag/tag";
 
 export const useCreateTagMutation = () => {
   const queryClient = useQueryClient();
