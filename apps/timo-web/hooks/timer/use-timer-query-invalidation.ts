@@ -12,6 +12,13 @@ import { getGetActiveTimerQueryKey } from "@/api/generated/endpoints/timer/timer
 import { getGetTodoDetailQueryKey } from "@/api/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 
+export interface InvalidateTimerProgressOptions {
+  /** 포커스 화면 상세도 함께 무효화할지 여부 */
+  includeFocus?: boolean;
+  /** 함께 무효화할 투두 상세 쿼리의 ID */
+  todoId?: number;
+}
+
 export const useTimerQueryInvalidation = () => {
   const queryClient = useQueryClient();
   const { invalidateStatistics } = useStatisticsQueryInvalidation();
@@ -33,12 +40,19 @@ export const useTimerQueryInvalidation = () => {
 
   /**
    * 일시정지/재개/연장처럼 타이머가 계속 진행 중인 액션 이후 무효화
+   *
+   * @param options.includeFocus - 포커스 화면 상세도 함께 무효화
+   * @param options.todoId - 함께 무효화할 투두 상세 쿼리의 ID
    */
-  const invalidateTimerProgress = () => {
+  const invalidateTimerProgress = (
+    options: InvalidateTimerProgressOptions = {},
+  ) => {
     invalidateActiveTimer();
     invalidateHomeView();
     invalidateTimeBoxes();
     invalidateStatistics();
+    if (options.includeFocus) invalidateFocusTodo();
+    if (options.todoId) invalidateTodoDetail(options.todoId);
   };
 
   /**

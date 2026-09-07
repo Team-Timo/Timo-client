@@ -49,30 +49,18 @@ export const useTodayTodoList = (
   const { mutate: stopTimer } = useStopTimer();
   const {
     invalidateTimerProgress,
+    invalidateTimerFinish,
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
     invalidateStatistics,
   } = useTimerQueryInvalidation();
 
-  const { mutate: startTimer, isPending: isStartTimerPending } = useStartTimer({
-    mutation: {
-      onSuccess: () => {
-        invalidateTimerProgress();
-        invalidateFocusTodo();
-      },
-    },
-  });
+  const { mutate: startTimer, isPending: isStartTimerPending } =
+    useStartTimer();
 
   const { mutate: changeStatus, isPending: isChangeStatusPending } =
-    useChangeStatus({
-      mutation: {
-        onSuccess: () => {
-          invalidateTimerProgress();
-          invalidateFocusTodo();
-        },
-      },
-    });
+    useChangeStatus();
 
   const isTimerActionPending =
     isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
@@ -141,20 +129,13 @@ export const useTodayTodoList = (
       {
         onSuccess: (response) => {
           onStopFeedback(response.data?.aiFeedback ?? undefined);
-          invalidateTimerProgress();
+          invalidateTimerFinish(todoId);
 
           updateTodo(todoId, (todo) => ({ ...todo, completed: true }));
-          changeTodoStatus(
-            { todoId, data: { isCompleted: true, date: dateKey } },
-            {
-              onSuccess: () => {
-                invalidateTodayView();
-                invalidateTodoDetail(todoId, dateKey);
-                invalidateFocusTodo();
-                invalidateStatistics();
-              },
-            },
-          );
+          changeTodoStatus({
+            todoId,
+            data: { isCompleted: true, date: dateKey },
+          });
         },
       },
     );
@@ -185,7 +166,10 @@ export const useTodayTodoList = (
             action: activeTimer.status === "RUNNING" ? "PAUSE" : "RESUME",
           },
         },
-        { onSuccess: () => invalidateTodoDetail(todoId, dateKey) },
+        {
+          onSuccess: () =>
+            invalidateTimerProgress({ includeFocus: true, todoId }),
+        },
       );
       return;
     }
@@ -199,7 +183,8 @@ export const useTodayTodoList = (
     startTimer(
       { todoId, params: { date: dateKey } },
       {
-        onSuccess: () => invalidateTodoDetail(todoId, dateKey),
+        onSuccess: () =>
+          invalidateTimerProgress({ includeFocus: true, todoId }),
         onError: (error: ErrorType<ErrorDto>) => {
           onPlayError(error.response?.data.message);
         },
