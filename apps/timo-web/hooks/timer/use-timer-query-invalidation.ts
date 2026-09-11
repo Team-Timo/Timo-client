@@ -33,9 +33,9 @@ export const useTimerQueryInvalidation = () => {
     queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
-  const invalidateTodoDetail = (todoId: number) =>
+  const invalidateTodoDetail = (todoId: number, date?: string) =>
     queryClient.invalidateQueries({
-      queryKey: getGetTodoDetailQueryKey(todoId),
+      queryKey: getGetTodoDetailQueryKey(todoId, date ? { date } : undefined),
     });
 
   /**

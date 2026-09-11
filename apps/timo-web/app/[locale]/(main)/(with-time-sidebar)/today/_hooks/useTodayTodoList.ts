@@ -1,6 +1,5 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 import type { TodayTodo } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
@@ -13,7 +12,6 @@ import {
   useStopTimer,
 } from "@/generated/endpoints/timer/timer";
 import {
-  getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
 } from "@/generated/endpoints/todo/todo";
@@ -41,12 +39,8 @@ export const useTodayTodoList = (
 ) => {
   const [todos, setTodos] = useState<TodayTodo[]>(initialTodos);
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
-  const queryClient = useQueryClient();
   const { data: activeTimer, isFetching: isActiveTimerFetching } =
     useActiveTimer();
-  const { mutate: changeTodoStatus } = useChangeTodoStatus();
-  const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
-  const { mutate: stopTimer } = useStopTimer();
   const {
     invalidateTimerProgress,
     invalidateTimerFinish,
@@ -54,7 +48,21 @@ export const useTodayTodoList = (
     invalidateTodayView,
     invalidateFocusTodo,
     invalidateStatistics,
+    invalidateTodoDetail,
   } = useTimerQueryInvalidation();
+  const { mutate: changeTodoStatus } = useChangeTodoStatus({
+    mutation: {
+      onSuccess: (_data, variables) => {
+        invalidateTodayView();
+        invalidateTimeBoxes();
+        invalidateFocusTodo();
+        invalidateStatistics();
+        invalidateTodoDetail(variables.todoId, variables.data.date);
+      },
+    },
+  });
+  const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
+  const { mutate: stopTimer } = useStopTimer();
 
   const { mutate: startTimer, isPending: isStartTimerPending } =
     useStartTimer();
@@ -78,12 +86,6 @@ export const useTodayTodoList = (
     );
   };
 
-  const invalidateTodoDetail = (todoId: number, dateKey: string) => {
-    queryClient.invalidateQueries({
-      queryKey: getGetTodoDetailQueryKey(todoId, { date: dateKey }),
-    });
-  };
-
   const handleToggleCompleted = (todoId: number, completed: boolean) => {
     const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
     if (!dateKey) return;
@@ -103,13 +105,6 @@ export const useTodayTodoList = (
     changeTodoStatus(
       { todoId, data: { isCompleted: completed, date: dateKey } },
       {
-        onSuccess: () => {
-          invalidateTodayView();
-          invalidateTimeBoxes();
-          invalidateTodoDetail(todoId, dateKey);
-          invalidateFocusTodo();
-          invalidateStatistics();
-        },
         onError: (error: ErrorType<ErrorDto>) => {
           setTodos(previous);
           onUpdateError(error.response?.data.message);
