@@ -22,9 +22,11 @@ import type {
   GetTodoDetailParams,
   SubtaskStatusUpdateRequest,
   TodoCreateRequest,
+  TodoMemoUpdateRequest,
   TodoReorderRequest,
   TodoStatusUpdateRequest,
   TodoUpdateRequest,
+  UpdateMemoParams,
 } from "../../models";
 import type {
   DataTag,
@@ -820,4 +822,115 @@ export const useReorderTodo = <
   TContext
 > => {
   return useMutation(getReorderTodoMutationOptions(options), queryClient);
+};
+/**
+ * 해당 날짜의 메모를 수정합니다.
+ * 메모는 생성 시에만 모든 날짜에 공유되고, 이후 수정은 요청한 date의 인스턴스에만 저장됩니다(다른 날짜는 규칙 메모로 폴백).
+ * @summary 메모 수정 (날짜별)
+ */
+export const updateMemo = (
+  todoId: number,
+  todoMemoUpdateRequest: BodyType<TodoMemoUpdateRequest>,
+  params: UpdateMemoParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<BaseResponseObject>(
+    {
+      url: `/api/v1/todos/${todoId}/memo`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: todoMemoUpdateRequest,
+      params,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getUpdateMemoMutationOptions = <
+  TError = ErrorType<ErrorDto>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateMemo>>,
+    TError,
+    {
+      todoId: number;
+      data: BodyType<TodoMemoUpdateRequest>;
+      params: UpdateMemoParams;
+    },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateMemo>>,
+  TError,
+  {
+    todoId: number;
+    data: BodyType<TodoMemoUpdateRequest>;
+    params: UpdateMemoParams;
+  },
+  TContext
+> => {
+  const mutationKey = ["updateMemo"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateMemo>>,
+    {
+      todoId: number;
+      data: BodyType<TodoMemoUpdateRequest>;
+      params: UpdateMemoParams;
+    }
+  > = (props) => {
+    const { todoId, data, params } = props ?? {};
+
+    return updateMemo(todoId, data, params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateMemoMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateMemo>>
+>;
+export type UpdateMemoMutationBody = BodyType<TodoMemoUpdateRequest>;
+export type UpdateMemoMutationError = ErrorType<ErrorDto>;
+
+/**
+ * @summary 메모 수정 (날짜별)
+ */
+export const useUpdateMemo = <TError = ErrorType<ErrorDto>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateMemo>>,
+      TError,
+      {
+        todoId: number;
+        data: BodyType<TodoMemoUpdateRequest>;
+        params: UpdateMemoParams;
+      },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateMemo>>,
+  TError,
+  {
+    todoId: number;
+    data: BodyType<TodoMemoUpdateRequest>;
+    params: UpdateMemoParams;
+  },
+  TContext
+> => {
+  return useMutation(getUpdateMemoMutationOptions(options), queryClient);
 };
