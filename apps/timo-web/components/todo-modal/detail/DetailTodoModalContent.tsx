@@ -102,7 +102,7 @@ export const DetailTodoModalContent = ({
     removeIcon: detailTodoForm.removeIcon,
     onUpdate: patchHandlers.updateTodo,
   });
-  const { submitTextUpdate } = useDetailTodoTextAutoSave({
+  const { submitPendingUpdates } = useDetailTodoTextAutoSave({
     isOpen,
     title: detailTodoForm.title,
     memo: detailTodoForm.memo,
@@ -112,7 +112,7 @@ export const DetailTodoModalContent = ({
   });
 
   const handleClose = () => {
-    submitTextUpdate();
+    submitPendingUpdates();
     onClose();
   };
 

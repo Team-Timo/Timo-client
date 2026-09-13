@@ -31,7 +31,6 @@ export const useDetailTodoTextAutoSave = ({
 }: UseDetailTodoTextAutoSaveParams) => {
   const latestOnUpdateRef = useRef(onUpdate);
   const latestOnUpdateMemoRef = useRef(onUpdateMemo);
-  const latestMemoRef = useRef(memo);
   const didStartTextUpdateRef = useRef(false);
 
   const textUpdateSignature = useMemo(
@@ -75,16 +74,14 @@ export const useDetailTodoTextAutoSave = ({
   const submitMemoUpdate = useCallback(() => {
     if (lastSubmittedMemoRef.current === memo) return;
 
-    const nextMemo = memo;
-
-    latestOnUpdateMemoRef.current(latestMemoRef.current, {
+    latestOnUpdateMemoRef.current(memo, {
       onSuccess: () => {
-        lastSubmittedMemoRef.current = nextMemo;
+        lastSubmittedMemoRef.current = memo;
       },
     });
   }, [memo]);
 
-  const submitPendingTextAndMemoUpdates = useCallback(() => {
+  const submitPendingUpdates = useCallback(() => {
     submitTextUpdate();
     submitMemoUpdate();
   }, [submitMemoUpdate, submitTextUpdate]);
@@ -96,10 +93,6 @@ export const useDetailTodoTextAutoSave = ({
   useEffect(() => {
     latestOnUpdateMemoRef.current = onUpdateMemo;
   }, [onUpdateMemo]);
-
-  useEffect(() => {
-    latestMemoRef.current = memo;
-  }, [memo]);
 
   useEffect(() => {
     latestBuildTextUpdateRequestRef.current = buildTextUpdateRequest;
@@ -114,14 +107,14 @@ export const useDetailTodoTextAutoSave = ({
     }
 
     const updateTimer = window.setTimeout(
-      submitPendingTextAndMemoUpdates,
+      submitPendingUpdates,
       TEXT_UPDATE_DEBOUNCE_MS,
     );
 
     return () => window.clearTimeout(updateTimer);
-  }, [isOpen, submitPendingTextAndMemoUpdates]);
+  }, [isOpen, submitPendingUpdates]);
 
   return {
-    submitTextUpdate: submitPendingTextAndMemoUpdates,
+    submitPendingUpdates,
   };
 };
