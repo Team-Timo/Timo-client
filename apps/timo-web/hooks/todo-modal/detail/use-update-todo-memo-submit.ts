@@ -1,20 +1,11 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
-
 import type { ErrorDto } from "@/generated/models";
 import type { ErrorType } from "@/http/custom-instance";
 
-import { getGetFocusTodoQueryKey } from "@/generated/endpoints/focus/focus";
-import {
-  getGetHomeQueryKey,
-  getGetTodayQueryKey,
-} from "@/generated/endpoints/home/home";
-import {
-  getGetTodoDetailQueryKey,
-  useUpdateMemo,
-} from "@/generated/endpoints/todo/todo";
+import { useUpdateMemo } from "@/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
+import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
 
 export interface UpdateTodoMemoSubmitParams {
   todoId: number;
@@ -29,8 +20,13 @@ export interface UpdateTodoMemoSubmitHandlers {
 
 export const useUpdateTodoMemoSubmit = () => {
   const { mutate: updateMemo } = useUpdateMemo();
-  const queryClient = useQueryClient();
   const { invalidateStatistics } = useStatisticsQueryInvalidation();
+  const {
+    invalidateHome,
+    invalidateToday,
+    invalidateTodoDetail,
+    invalidateFocus,
+  } = useTodoQueryInvalidation();
 
   const handleUpdateMemo = (
     { todoId, date, memo }: UpdateTodoMemoSubmitParams,
@@ -40,15 +36,11 @@ export const useUpdateTodoMemoSubmit = () => {
       { todoId, data: { memo }, params: { date } },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
-          queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
-          queryClient.invalidateQueries({
-            queryKey: getGetTodoDetailQueryKey(todoId, { date }),
-          });
+          invalidateHome();
+          invalidateToday();
+          invalidateTodoDetail(todoId, date);
           invalidateStatistics();
-          queryClient.invalidateQueries({
-            queryKey: getGetFocusTodoQueryKey(),
-          });
+          invalidateFocus();
           onSuccess?.();
         },
         onError,

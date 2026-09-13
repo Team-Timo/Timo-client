@@ -1,18 +1,10 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
-
 import type { ErrorDto } from "@/generated/models";
 import type { ErrorType } from "@/http/custom-instance";
 
-import {
-  getGetHomeQueryKey,
-  getGetTodayQueryKey,
-} from "@/generated/endpoints/home/home";
-import {
-  getGetTodoDetailQueryKey,
-  useChangeSubtaskStatus,
-} from "@/generated/endpoints/todo/todo";
+import { useChangeSubtaskStatus } from "@/generated/endpoints/todo/todo";
+import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
 
 export interface ToggleSubtaskSubmitParams {
   todoId: number;
@@ -28,7 +20,8 @@ export interface ToggleSubtaskSubmitHandlers {
 
 export const useToggleSubtaskSubmit = () => {
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
-  const queryClient = useQueryClient();
+  const { invalidateHome, invalidateToday, invalidateTodoDetail } =
+    useTodoQueryInvalidation();
 
   const handleToggle = (
     { todoId, subtaskId, date, completed }: ToggleSubtaskSubmitParams,
@@ -43,11 +36,9 @@ export const useToggleSubtaskSubmit = () => {
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
-          queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
-          queryClient.invalidateQueries({
-            queryKey: getGetTodoDetailQueryKey(todoId, { date }),
-          });
+          invalidateHome();
+          invalidateToday();
+          invalidateTodoDetail(todoId, date);
           onSuccess?.();
         },
         onError,
