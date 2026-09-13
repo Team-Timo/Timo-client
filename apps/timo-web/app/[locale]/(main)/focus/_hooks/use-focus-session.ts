@@ -23,7 +23,7 @@ import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerActions } from "@/hooks/timer/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
-import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
+import { getTimerProgress } from "@/utils/timer/get-timer-progress";
 
 export interface UseFocusSessionOptions {
   onMutationError: () => void;
@@ -42,12 +42,12 @@ export const useFocusSession = ({
   const { data: activeTimer } = useActiveTimer();
 
   const {
-    invalidateActiveTimer,
-    invalidateHomeView,
     invalidateTimeBoxes,
     invalidateTodayView,
     invalidateFocusTodo,
     invalidateStatistics,
+    invalidateTimerProgress,
+    invalidateTimerFinish,
   } = useTimerQueryInvalidation();
   const invalidateTodoDetail = () => {
     const todo = focusView.todo;
@@ -60,9 +60,7 @@ export const useFocusSession = ({
   const { mutate: startTimer } = useStartTimer({
     mutation: {
       onSuccess: () => {
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
+        invalidateTimerProgress();
       },
       onError: onMutationError,
     },
@@ -70,9 +68,7 @@ export const useFocusSession = ({
   const { mutate: changeStatus } = useChangeStatus({
     mutation: {
       onSuccess: () => {
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
+        invalidateTimerProgress();
       },
       onError: onMutationError,
     },
@@ -80,9 +76,7 @@ export const useFocusSession = ({
   const { mutate: extendTimer } = useExtendTimer({
     mutation: {
       onSuccess: () => {
-        invalidateActiveTimer();
-        invalidateHomeView();
-        invalidateTimeBoxes();
+        invalidateTimerProgress();
       },
       onError: onMutationError,
     },
@@ -91,13 +85,7 @@ export const useFocusSession = ({
     mutation: {
       onSuccess: (response) => {
         onFeedback(response.data?.aiFeedback ?? undefined);
-        invalidateActiveTimer();
-        invalidateFocusTodo();
-        invalidateHomeView();
-        invalidateTimeBoxes();
-        invalidateTodayView();
-        invalidateTodoDetail();
-        invalidateStatistics();
+        invalidateTimerFinish(response.data?.todoId);
       },
       onError: onMutationError,
     },
@@ -106,13 +94,7 @@ export const useFocusSession = ({
     mutation: {
       onSuccess: (response) => {
         onFeedback(response.data?.aiFeedback ?? undefined);
-        invalidateActiveTimer();
-        invalidateFocusTodo();
-        invalidateHomeView();
-        invalidateTimeBoxes();
-        invalidateTodayView();
-        invalidateTodoDetail();
-        invalidateStatistics();
+        invalidateTimerFinish(response.data?.todoId);
       },
       onError: onMutationError,
     },
@@ -219,35 +201,20 @@ export const useFocusSession = ({
   const today = new Date(focusView.date);
   const dateText = convertDateToBadgeText(today);
 
-  const plannedSeconds = timer
-    ? timer.plannedSeconds + timer.extendedSeconds
-    : (todo?.durationSeconds ?? 0);
-  const remainingSeconds = timer ? timer.remainingSeconds : plannedSeconds;
-  const progress =
-    plannedSeconds > 0
-      ? ((plannedSeconds - remainingSeconds) / plannedSeconds) * 100
-      : 0;
-  const isOvertime = overtimeBaseSeconds !== null;
-  const overtimeTotal = timer
-    ? timer.plannedSeconds + timer.extendedSeconds - (overtimeBaseSeconds ?? 0)
-    : 0;
-  const overtimeProgress =
-    timer && overtimeBaseSeconds !== null && overtimeTotal > 0
-      ? Math.min(
-          100,
-          Math.max(
-            0,
-            ((timer.elapsedSeconds - overtimeBaseSeconds) / overtimeTotal) *
-              100,
-          ),
-        )
-      : 0;
-  const plannedMinutes = convertDurationToMinutes(plannedSeconds);
-  // 완료 모달의 "계획"은 연장 시간을 제외한 순수 계획 시간만 보여줘야 한다
-  const basePlannedMinutes = convertDurationToMinutes(
-    timer ? timer.plannedSeconds : (todo?.durationSeconds ?? 0),
-  );
-  const actualMinutes = convertDurationToMinutes(timer?.elapsedSeconds ?? 0);
+  const {
+    plannedSeconds,
+    remainingSeconds,
+    progress,
+    isOvertime,
+    overtimeProgress,
+    plannedMinutes,
+    basePlannedMinutes,
+    actualMinutes,
+  } = getTimerProgress({
+    timer,
+    overtimeBaseSeconds,
+    fallbackPlannedSeconds: todo?.durationSeconds ?? 0,
+  });
 
   return {
     focusSessionState: {

@@ -12,6 +12,13 @@ import { getGetActiveTimerQueryKey } from "@/generated/endpoints/timer/timer";
 import { getGetTodoDetailQueryKey } from "@/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 
+export interface InvalidateTimerProgressOptions {
+  /** 포커스 화면 상세도 함께 무효화할지 여부 */
+  includeFocus?: boolean;
+  /** 함께 무효화할 투두 상세 쿼리의 ID */
+  todoId?: number;
+}
+
 export const useTimerQueryInvalidation = () => {
   const queryClient = useQueryClient();
   const { invalidateStatistics } = useStatisticsQueryInvalidation();
@@ -26,15 +33,41 @@ export const useTimerQueryInvalidation = () => {
     queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
   const invalidateFocusTodo = () =>
     queryClient.invalidateQueries({ queryKey: getGetFocusTodoQueryKey() });
-  const invalidateTodoDetail = (todoId: number) =>
+  const invalidateTodoDetail = (todoId: number, date?: string) =>
     queryClient.invalidateQueries({
-      queryKey: getGetTodoDetailQueryKey(todoId),
+      queryKey: getGetTodoDetailQueryKey(todoId, date ? { date } : undefined),
     });
-  const invalidateTimerState = () => {
+
+  /**
+   * 일시정지/재개/연장처럼 타이머가 계속 진행 중인 액션 이후 무효화
+   *
+   * @param options.includeFocus - 포커스 화면 상세도 함께 무효화
+   * @param options.todoId - 함께 무효화할 투두 상세 쿼리의 ID
+   */
+  const invalidateTimerProgress = (
+    options: InvalidateTimerProgressOptions = {},
+  ) => {
     invalidateActiveTimer();
     invalidateHomeView();
     invalidateTimeBoxes();
     invalidateStatistics();
+    if (options.includeFocus) invalidateFocusTodo();
+    if (options.todoId) invalidateTodoDetail(options.todoId);
+  };
+
+  /**
+   * 완료/중지처럼 타이머가 종료되는 액션 이후 무효화
+   *
+   * @param todoId - 투두 상세 쿼리를 무효화할 투두 ID. 없으면 투두 상세는 건너뜁니다.
+   */
+  const invalidateTimerFinish = (todoId?: number) => {
+    invalidateActiveTimer();
+    invalidateHomeView();
+    invalidateTimeBoxes();
+    invalidateTodayView();
+    invalidateStatistics();
+    invalidateFocusTodo();
+    if (todoId) invalidateTodoDetail(todoId);
   };
 
   return {
@@ -45,6 +78,7 @@ export const useTimerQueryInvalidation = () => {
     invalidateTodayView,
     invalidateFocusTodo,
     invalidateTodoDetail,
-    invalidateTimerState,
+    invalidateTimerProgress,
+    invalidateTimerFinish,
   };
 };
