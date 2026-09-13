@@ -165,9 +165,6 @@ export const UpdateTodoParams = zod.object({
 
 export const updateTodoBodyRepeatDayOfMonthMax = 31;
 
-export const updateTodoBodyMemoMin = 0;
-export const updateTodoBodyMemoMax = 300;
-
 export const UpdateTodoBody = zod.object({
   icon: zod
     .enum([
@@ -195,11 +192,6 @@ export const UpdateTodoBody = zod.object({
     .number()
     .min(1)
     .max(updateTodoBodyRepeatDayOfMonthMax)
-    .optional(),
-  memo: zod
-    .string()
-    .min(updateTodoBodyMemoMin)
-    .max(updateTodoBodyMemoMax)
     .optional(),
   subtasks: zod
     .array(
@@ -307,4 +299,35 @@ export const ReorderTodoResponse = zod.object({
       sortOrder: zod.number(),
     })
     .optional(),
+});
+
+/**
+ * 해당 날짜의 메모를 수정합니다.
+ * 메모는 생성 시에만 모든 날짜에 공유되고, 이후 수정은 요청한 date의 인스턴스에만 저장됩니다(다른 날짜는 규칙 메모로 폴백).
+ * @summary 메모 수정 (날짜별)
+ */
+export const UpdateMemoParams = zod.object({
+  todoId: zod.number().describe("대상 TODO ID"),
+});
+
+export const UpdateMemoQueryParams = zod.object({
+  date: zod.iso.date().describe("메모를 저장할 날짜 (ISO)"),
+});
+
+export const updateMemoBodyMemoMin = 0;
+export const updateMemoBodyMemoMax = 300;
+
+export const UpdateMemoBody = zod.object({
+  memo: zod
+    .string()
+    .min(updateMemoBodyMemoMin)
+    .max(updateMemoBodyMemoMax)
+    .optional()
+    .describe("해당 날짜에 저장할 메모 (null이면 규칙 메모로 폴백)"),
+});
+
+export const UpdateMemoResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod.unknown().optional(),
 });

@@ -6,6 +6,7 @@ import { overlay } from "overlay-kit";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ErrorDto, TodoUpdateRequest } from "@/generated/models";
+import type { UpdateTodoMemoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-memo-submit";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 import type { ErrorType } from "@/http/custom-instance";
 import type { ReactNode } from "react";
@@ -16,6 +17,7 @@ import { useGetTodoDetail } from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
 import { useToggleSubtaskSubmit } from "@/hooks/todo-modal/detail/use-toggle-subtask-submit";
+import { useUpdateTodoMemoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-memo-submit";
 import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 export interface DetailTodoModalContainerProps {
@@ -56,6 +58,7 @@ const DetailTodoModalQuery = ({
   );
   const { handleDelete } = useDeleteTodoSubmit();
   const { handleUpdate } = useUpdateTodoSubmit();
+  const { handleUpdateMemo } = useUpdateTodoMemoSubmit();
   const { handleToggle } = useToggleSubtaskSubmit();
   const { data: activeTimer } = useActiveTimer();
   const todo = data?.data;
@@ -111,6 +114,22 @@ const DetailTodoModalQuery = ({
     );
   };
 
+  const updateMemo = (
+    memo: string,
+    handlers: UpdateTodoMemoSubmitHandlers = {},
+  ) => {
+    handleUpdateMemo(
+      { todoId, date: currentDate, memo },
+      {
+        onSuccess: handlers.onSuccess,
+        onError: (error) => {
+          handlers.onError?.(error);
+          onActionError(error);
+        },
+      },
+    );
+  };
+
   const toggleSubtask = (
     subtaskId: number,
     completed: boolean,
@@ -139,6 +158,7 @@ const DetailTodoModalQuery = ({
       onToggleCompleted={onToggleCompleted}
       onDelete={deleteTodo}
       onUpdate={updateTodo}
+      onUpdateMemo={updateMemo}
       onToggleSubtask={toggleSubtask}
       timerStatus={timerStatus}
     />

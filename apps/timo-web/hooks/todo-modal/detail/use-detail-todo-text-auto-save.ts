@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/DetailTodoTaskFields";
 import type { TodoUpdateRequest } from "@/generated/models";
+import type { UpdateTodoMemoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-memo-submit";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 import { buildDetailTodoTextUpdateRequest } from "@/utils/todo/detail-todo-update-request";
@@ -17,6 +18,7 @@ export interface UseDetailTodoTextAutoSaveParams {
     data: TodoUpdateRequest,
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
+  onUpdateMemo: (memo: string, handlers?: UpdateTodoMemoSubmitHandlers) => void;
 }
 
 export const useDetailTodoTextAutoSave = ({
@@ -25,32 +27,34 @@ export const useDetailTodoTextAutoSave = ({
   memo,
   subtasks,
   onUpdate,
+  onUpdateMemo,
 }: UseDetailTodoTextAutoSaveParams) => {
   const latestOnUpdateRef = useRef(onUpdate);
+  const latestOnUpdateMemoRef = useRef(onUpdateMemo);
   const didStartTextUpdateRef = useRef(false);
+
   const textUpdateSignature = useMemo(
     () =>
       JSON.stringify({
         title,
-        memo,
         subtasks: subtasks.map((subtask) => ({
           id: subtask.id,
           subtaskId: subtask.subtaskId,
           value: subtask.value,
         })),
       }),
-    [memo, subtasks, title],
+    [subtasks, title],
   );
   const lastSubmittedTextUpdateSignatureRef = useRef(textUpdateSignature);
+  const lastSubmittedMemoRef = useRef(memo);
 
   const buildTextUpdateRequest = useCallback(
     (): TodoUpdateRequest =>
       buildDetailTodoTextUpdateRequest({
         title,
-        memo,
         subtasks,
       }),
-    [memo, subtasks, title],
+    [subtasks, title],
   );
   const latestBuildTextUpdateRequestRef = useRef(buildTextUpdateRequest);
 
@@ -67,9 +71,28 @@ export const useDetailTodoTextAutoSave = ({
     });
   }, [textUpdateSignature, title]);
 
+  const submitMemoUpdate = useCallback(() => {
+    if (lastSubmittedMemoRef.current === memo) return;
+
+    latestOnUpdateMemoRef.current(memo, {
+      onSuccess: () => {
+        lastSubmittedMemoRef.current = memo;
+      },
+    });
+  }, [memo]);
+
+  const submitPendingUpdates = useCallback(() => {
+    submitTextUpdate();
+    submitMemoUpdate();
+  }, [submitMemoUpdate, submitTextUpdate]);
+
   useEffect(() => {
     latestOnUpdateRef.current = onUpdate;
   }, [onUpdate]);
+
+  useEffect(() => {
+    latestOnUpdateMemoRef.current = onUpdateMemo;
+  }, [onUpdateMemo]);
 
   useEffect(() => {
     latestBuildTextUpdateRequestRef.current = buildTextUpdateRequest;
@@ -84,14 +107,14 @@ export const useDetailTodoTextAutoSave = ({
     }
 
     const updateTimer = window.setTimeout(
-      submitTextUpdate,
+      submitPendingUpdates,
       TEXT_UPDATE_DEBOUNCE_MS,
     );
 
     return () => window.clearTimeout(updateTimer);
-  }, [isOpen, submitTextUpdate]);
+  }, [isOpen, submitPendingUpdates]);
 
   return {
-    submitTextUpdate,
+    submitPendingUpdates,
   };
 };

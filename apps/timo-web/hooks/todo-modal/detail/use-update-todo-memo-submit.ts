@@ -1,25 +1,25 @@
 "use client";
 
-import type { ErrorDto, TodoUpdateRequest } from "@/generated/models";
+import type { ErrorDto } from "@/generated/models";
 import type { ErrorType } from "@/http/custom-instance";
 
-import { useUpdateTodo } from "@/generated/endpoints/todo/todo";
+import { useUpdateMemo } from "@/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
 
-export interface UpdateTodoSubmitParams {
+export interface UpdateTodoMemoSubmitParams {
   todoId: number;
   date: string;
-  data: TodoUpdateRequest;
+  memo: string;
 }
 
-export interface UpdateTodoSubmitHandlers {
+export interface UpdateTodoMemoSubmitHandlers {
   onSuccess?: () => void;
   onError?: (error: ErrorType<ErrorDto>) => void;
 }
 
-export const useUpdateTodoSubmit = () => {
-  const { mutate: updateTodo } = useUpdateTodo();
+export const useUpdateTodoMemoSubmit = () => {
+  const { mutate: updateMemo } = useUpdateMemo();
   const { invalidateStatistics } = useStatisticsQueryInvalidation();
   const {
     invalidateHome,
@@ -28,12 +28,12 @@ export const useUpdateTodoSubmit = () => {
     invalidateFocus,
   } = useTodoQueryInvalidation();
 
-  const handleUpdate = (
-    { todoId, date, data }: UpdateTodoSubmitParams,
-    { onSuccess, onError }: UpdateTodoSubmitHandlers = {},
+  const handleUpdateMemo = (
+    { todoId, date, memo }: UpdateTodoMemoSubmitParams,
+    { onSuccess, onError }: UpdateTodoMemoSubmitHandlers = {},
   ) => {
-    updateTodo(
-      { todoId, data },
+    updateMemo(
+      { todoId, data: { memo }, params: { date } },
       {
         onSuccess: () => {
           invalidateHome();
@@ -49,6 +49,6 @@ export const useUpdateTodoSubmit = () => {
   };
 
   return {
-    handleUpdate,
+    handleUpdateMemo,
   };
 };
