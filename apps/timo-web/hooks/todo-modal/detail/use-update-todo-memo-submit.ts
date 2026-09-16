@@ -4,7 +4,6 @@ import type { ErrorDto } from "@/generated/models";
 import type { ErrorType } from "@/http/custom-instance";
 
 import { useUpdateMemo } from "@/generated/endpoints/todo/todo";
-import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
 import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
 
 export interface UpdateTodoMemoSubmitParams {
@@ -20,13 +19,7 @@ export interface UpdateTodoMemoSubmitHandlers {
 
 export const useUpdateTodoMemoSubmit = () => {
   const { mutate: updateMemo } = useUpdateMemo();
-  const { invalidateStatistics } = useStatisticsQueryInvalidation();
-  const {
-    invalidateHome,
-    invalidateToday,
-    invalidateTodoDetail,
-    invalidateFocus,
-  } = useTodoQueryInvalidation();
+  const { invalidateTodoDetail, invalidateFocus } = useTodoQueryInvalidation();
 
   const handleUpdateMemo = (
     { todoId, date, memo }: UpdateTodoMemoSubmitParams,
@@ -36,10 +29,7 @@ export const useUpdateTodoMemoSubmit = () => {
       { todoId, data: { memo }, params: { date } },
       {
         onSuccess: () => {
-          invalidateHome();
-          invalidateToday();
           invalidateTodoDetail(todoId, date);
-          invalidateStatistics();
           invalidateFocus();
           onSuccess?.();
         },
