@@ -26,10 +26,5 @@ export interface TodoUpdateRequest {
    * @maximum 31
    */
   repeatDayOfMonth?: number;
-  /**
-   * @minLength 0
-   * @maxLength 300
-   */
-  memo?: string;
   subtasks?: TodoSubtaskUpdateRequest[];
 }
