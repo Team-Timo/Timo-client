@@ -6,6 +6,7 @@ import type { BaseResponseAuthReissueResponse } from "@/generated/models";
 import { ROUTES } from "@/constants/routes";
 import { parseApiError } from "@/http/api-error";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { hasOtherTabsOpen } from "@/utils/auth/tab-presence";
 import { getAccessToken } from "@/utils/auth/token-manager";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -44,10 +45,14 @@ const reissueAccessToken = () => {
       .catch((error) => {
         const tokenAfterReissue = getAccessToken();
         if (tokenAfterReissue && tokenAfterReissue !== tokenBeforeReissue) {
+          useAuthStore.getState().setAccessToken(tokenAfterReissue);
           return tokenAfterReissue;
         }
 
-        if (process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT !== "local") {
+        if (
+          process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT !== "local" &&
+          hasOtherTabsOpen()
+        ) {
           Sentry.captureException(error);
         }
         useAuthStore.getState().clearAccessToken();

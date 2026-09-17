@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { useReissue } from "@/generated/endpoints/auth/auth";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { startTabPresenceHeartbeat } from "@/utils/auth/tab-presence";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -15,6 +16,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const setInitialized = useAuthStore((state) => state.setInitialized);
   const { mutate } = useReissue();
   const hasChecked = useRef(false);
+
+  useEffect(() => {
+    return startTabPresenceHeartbeat();
+  }, []);
 
   useEffect(() => {
     if (accessToken || hasChecked.current) {
