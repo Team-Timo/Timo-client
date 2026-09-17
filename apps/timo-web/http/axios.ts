@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import axios, { AxiosError } from "axios";
 
 import type { BaseResponseAuthReissueResponse } from "@/generated/models";
@@ -5,6 +6,8 @@ import type { BaseResponseAuthReissueResponse } from "@/generated/models";
 import { ROUTES } from "@/constants/routes";
 import { parseApiError } from "@/http/api-error";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { hasOtherTabsOpen } from "@/utils/auth/tab-presence";
+import { getAccessToken } from "@/utils/auth/token-manager";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 if (!baseURL)
@@ -29,6 +32,8 @@ let reissuePromise: Promise<string | undefined> | null = null;
 
 const reissueAccessToken = () => {
   if (!reissuePromise) {
+    const tokenBeforeReissue = getAccessToken();
+
     reissuePromise = instance
       .post<BaseResponseAuthReissueResponse>(REISSUE_URL)
       .then(({ data }) => {
@@ -38,6 +43,18 @@ const reissueAccessToken = () => {
         return reissueData?.accessToken;
       })
       .catch((error) => {
+        const tokenAfterReissue = getAccessToken();
+        if (tokenAfterReissue && tokenAfterReissue !== tokenBeforeReissue) {
+          useAuthStore.getState().setAccessToken(tokenAfterReissue);
+          return tokenAfterReissue;
+        }
+
+        if (
+          process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT !== "local" &&
+          hasOtherTabsOpen()
+        ) {
+          Sentry.captureException(error);
+        }
         useAuthStore.getState().clearAccessToken();
         throw error;
       })
