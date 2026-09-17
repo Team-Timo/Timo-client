@@ -1,6 +1,8 @@
 const OPEN_TABS_KEY = "openTabs";
 const HEARTBEAT_INTERVAL_MS = 5000;
-const TAB_TTL_MS = 15000;
+// 백그라운드 탭은 setInterval이 강하게 스로틀링될 수 있어(브라우저에 따라 최대 1분 이상),
+// heartbeat 주기보다 훨씬 여유 있게 잡아 비활성 탭도 "열려있음"으로 인식되게 합니다.
+const TAB_TTL_MS = 60000;
 
 const isBrowser = typeof window !== "undefined";
 
@@ -33,6 +35,19 @@ const writeRegistry = (registry: TabRegistry): void => {
 };
 
 /**
+ * TTL이 지난(=beforeunload 없이 종료된 탭의) 항목을 걷어낸 레지스트리를 반환합니다.
+ * heartbeat마다 호출해 죽은 탭 항목이 localStorage에 무한정 쌓이지 않게 합니다.
+ */
+const filterStaleEntries = (registry: TabRegistry): TabRegistry => {
+  const now = Date.now();
+  return Object.fromEntries(
+    Object.entries(registry).filter(
+      ([, lastSeenAt]) => now - lastSeenAt <= TAB_TTL_MS,
+    ),
+  );
+};
+
+/**
  * 현재 탭의 생존 여부를 localStorage 탭 레지스트리에 주기적으로 기록합니다 (heartbeat).
  * beforeunload로 정상 종료 시 자신의 항목을 지우고, 크래시 등으로 정리가 유실돼도
  * TAB_TTL_MS가 지나면 hasOtherTabsOpen에서 자동으로 무시됩니다.
@@ -45,7 +60,7 @@ export const startTabPresenceHeartbeat = (): (() => void) => {
   const id = getTabId();
 
   const beat = () => {
-    const registry = readRegistry();
+    const registry = filterStaleEntries(readRegistry());
     registry[id] = Date.now();
     writeRegistry(registry);
   };
