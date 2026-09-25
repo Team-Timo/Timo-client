@@ -46,7 +46,9 @@ export const useDetailTodoTextAutoSave = ({
     [subtasks, title],
   );
   const lastSubmittedTextUpdateSignatureRef = useRef(textUpdateSignature);
-  const lastSubmittedMemoRef = useRef(memo);
+  const latestMemoRef = useRef(memo);
+  const lastSavedMemoRef = useRef(memo);
+  const savingMemoRef = useRef<string | null>(null);
 
   const buildTextUpdateRequest = useCallback(
     (): TodoUpdateRequest =>
@@ -71,20 +73,36 @@ export const useDetailTodoTextAutoSave = ({
     });
   }, [textUpdateSignature, title]);
 
-  const submitMemoUpdate = useCallback(() => {
-    if (lastSubmittedMemoRef.current === memo) return;
+  const saveLatestMemo = useCallback(
+    ({ force = false }: { force?: boolean } = {}) => {
+      const memoToSave = latestMemoRef.current;
 
-    latestOnUpdateMemoRef.current(memo, {
-      onSuccess: () => {
-        lastSubmittedMemoRef.current = memo;
-      },
-    });
-  }, [memo]);
+      if (savingMemoRef.current !== null) {
+        // 저장 중이면 완료 후 최신값을 이어서 저장한다. 닫을 때는 후속 저장이 보장되지 않아 바로 보낸다.
+        if (!force || savingMemoRef.current === memoToSave) return;
+      } else if (lastSavedMemoRef.current === memoToSave) {
+        return;
+      }
+
+      savingMemoRef.current = memoToSave;
+      latestOnUpdateMemoRef.current(memoToSave, {
+        onSuccess: () => {
+          lastSavedMemoRef.current = memoToSave;
+          savingMemoRef.current = null;
+          saveLatestMemo();
+        },
+        onError: () => {
+          savingMemoRef.current = null;
+        },
+      });
+    },
+    [],
+  );
 
   const submitPendingUpdates = useCallback(() => {
     submitTextUpdate();
-    submitMemoUpdate();
-  }, [submitMemoUpdate, submitTextUpdate]);
+    saveLatestMemo({ force: true });
+  }, [saveLatestMemo, submitTextUpdate]);
 
   useEffect(() => {
     latestOnUpdateRef.current = onUpdate;
@@ -99,6 +117,10 @@ export const useDetailTodoTextAutoSave = ({
   }, [buildTextUpdateRequest]);
 
   useEffect(() => {
+    latestMemoRef.current = memo;
+  }, [memo]);
+
+  useEffect(() => {
     if (!isOpen) return;
 
     if (!didStartTextUpdateRef.current) {
@@ -106,13 +128,13 @@ export const useDetailTodoTextAutoSave = ({
       return;
     }
 
-    const updateTimer = window.setTimeout(
-      submitPendingUpdates,
-      TEXT_UPDATE_DEBOUNCE_MS,
-    );
+    const updateTimer = window.setTimeout(() => {
+      submitTextUpdate();
+      saveLatestMemo();
+    }, TEXT_UPDATE_DEBOUNCE_MS);
 
     return () => window.clearTimeout(updateTimer);
-  }, [isOpen, submitPendingUpdates]);
+  }, [isOpen, memo, saveLatestMemo, submitTextUpdate]);
 
   return {
     submitPendingUpdates,
