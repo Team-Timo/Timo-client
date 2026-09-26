@@ -56,7 +56,7 @@ export interface TodoToolbarProps {
   onSelectTag?: (tag: string) => void;
   onAddTagClick?: () => void;
 
-  hasSubTask?: boolean;
+  hasMemo?: boolean;
 
   isRepeatActive?: boolean;
   repeat: Omit<RepeatSelectorProps, "trigger">;
@@ -86,7 +86,7 @@ export const TodoToolbar = ({
   addTagLabel,
   onSelectTag,
   onAddTagClick,
-  hasSubTask = false,
+  hasMemo = false,
   isRepeatActive = false,
   repeat,
   className,
@@ -171,7 +171,7 @@ export const TodoToolbar = ({
         onAddClick={onAddTagClick}
       />
 
-      {hasSubTask ? <MemoOnIcon /> : <MemoDisableIcon />}
+      {hasMemo ? <MemoOnIcon /> : <MemoDisableIcon />}
 
       <RepeatSelector
         {...repeat}

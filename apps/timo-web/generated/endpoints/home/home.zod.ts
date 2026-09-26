@@ -58,7 +58,7 @@ export const GetHomeResponse = zod.object({
                   name: zod.string(),
                 })
                 .optional(),
-              hasSubtask: zod.boolean(),
+              hasMemo: zod.boolean(),
               isRepeated: zod.boolean(),
               timerStatus: zod.enum(["STOPPED", "RUNNING", "PAUSED"]),
               sortOrder: zod.number().optional(),
@@ -107,7 +107,7 @@ export const GetTodayResponse = zod.object({
             })
             .optional(),
           isRepeated: zod.boolean(),
-          hasSubtask: zod.boolean(),
+          hasMemo: zod.boolean(),
           timerStatus: zod.enum(["STOPPED", "RUNNING", "PAUSED"]),
           sortOrder: zod.number().optional(),
           subtasks: zod.array(

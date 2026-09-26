@@ -17,7 +17,7 @@ export interface TodoResponse {
   durationSeconds?: number;
   priority?: string;
   tag?: TagResponse;
-  hasSubtask: boolean;
+  hasMemo: boolean;
   isRepeated: boolean;
   timerStatus: TodoResponseTimerStatus;
   sortOrder?: number;

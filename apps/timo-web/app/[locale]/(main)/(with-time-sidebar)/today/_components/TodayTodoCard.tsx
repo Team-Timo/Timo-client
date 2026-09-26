@@ -39,7 +39,7 @@ export interface TodayTodoCardToolbar {
   time: string;
   priority?: PriorityLevel;
   tag?: string;
-  hasSubtask: boolean;
+  hasMemo: boolean;
   hasRepeat: boolean;
 }
 
@@ -185,7 +185,7 @@ export const TodayTodoCard = ({
             tagLabel={toolbar.tag ?? t("tagLabel")}
             tags={[]}
             selectedTag={toolbar.tag}
-            hasSubTask={toolbar.hasSubtask}
+            hasMemo={toolbar.hasMemo}
             isRepeatActive={toolbar.hasRepeat}
             repeat={{
               detailHeading: "상세 설정",

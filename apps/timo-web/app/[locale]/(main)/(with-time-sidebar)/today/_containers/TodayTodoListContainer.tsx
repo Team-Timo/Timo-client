@@ -143,7 +143,7 @@ export const TodayTodoListContainer = () => {
                     time: convertDurationToTimeText(durationSeconds),
                     priority: todo.priority,
                     tag: todo.tag ? getTagLabel(todo.tag) : undefined,
-                    hasSubtask: todo.hasSubtask,
+                    hasMemo: todo.hasMemo,
                     hasRepeat: todo.isRepeated,
                   }}
                   subTodos={todo.subtasks.map((s) => ({

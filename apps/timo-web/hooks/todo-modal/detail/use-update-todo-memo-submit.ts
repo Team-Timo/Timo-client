@@ -19,7 +19,12 @@ export interface UpdateTodoMemoSubmitHandlers {
 
 export const useUpdateTodoMemoSubmit = () => {
   const { mutate: updateMemo } = useUpdateMemo();
-  const { invalidateTodoDetail, invalidateFocus } = useTodoQueryInvalidation();
+  const {
+    invalidateTodoDetail,
+    invalidateFocus,
+    invalidateToday,
+    invalidateHome,
+  } = useTodoQueryInvalidation();
 
   const handleUpdateMemo = (
     { todoId, date, memo }: UpdateTodoMemoSubmitParams,
@@ -31,6 +36,8 @@ export const useUpdateTodoMemoSubmit = () => {
         onSuccess: () => {
           invalidateTodoDetail(todoId, date);
           invalidateFocus();
+          invalidateToday();
+          invalidateHome();
           onSuccess?.();
         },
         onError,
