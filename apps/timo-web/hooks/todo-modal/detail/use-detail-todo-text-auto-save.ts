@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/DetailTodoTaskFields";
 import type { TodoUpdateRequest } from "@/generated/models";
+import type { UpdateTodoMemoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-memo-submit";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 import { buildDetailTodoTextUpdateRequest } from "@/utils/todo/detail-todo-update-request";
@@ -17,6 +18,7 @@ export interface UseDetailTodoTextAutoSaveParams {
     data: TodoUpdateRequest,
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
+  onUpdateMemo: (memo: string, handlers?: UpdateTodoMemoSubmitHandlers) => void;
 }
 
 export const useDetailTodoTextAutoSave = ({
@@ -25,32 +27,36 @@ export const useDetailTodoTextAutoSave = ({
   memo,
   subtasks,
   onUpdate,
+  onUpdateMemo,
 }: UseDetailTodoTextAutoSaveParams) => {
   const latestOnUpdateRef = useRef(onUpdate);
+  const latestOnUpdateMemoRef = useRef(onUpdateMemo);
   const didStartTextUpdateRef = useRef(false);
+
   const textUpdateSignature = useMemo(
     () =>
       JSON.stringify({
         title,
-        memo,
         subtasks: subtasks.map((subtask) => ({
           id: subtask.id,
           subtaskId: subtask.subtaskId,
           value: subtask.value,
         })),
       }),
-    [memo, subtasks, title],
+    [subtasks, title],
   );
   const lastSubmittedTextUpdateSignatureRef = useRef(textUpdateSignature);
+  const latestMemoRef = useRef(memo);
+  const lastSavedMemoRef = useRef(memo);
+  const savingMemoRef = useRef<string | null>(null);
 
   const buildTextUpdateRequest = useCallback(
     (): TodoUpdateRequest =>
       buildDetailTodoTextUpdateRequest({
         title,
-        memo,
         subtasks,
       }),
-    [memo, subtasks, title],
+    [subtasks, title],
   );
   const latestBuildTextUpdateRequestRef = useRef(buildTextUpdateRequest);
 
@@ -67,13 +73,52 @@ export const useDetailTodoTextAutoSave = ({
     });
   }, [textUpdateSignature, title]);
 
+  const saveLatestMemo = useCallback(
+    ({ force = false }: { force?: boolean } = {}) => {
+      const memoToSave = latestMemoRef.current;
+
+      if (savingMemoRef.current !== null) {
+        // 저장 중이면 완료 후 최신값을 이어서 저장한다. 닫을 때는 후속 저장이 보장되지 않아 바로 보낸다.
+        if (!force || savingMemoRef.current === memoToSave) return;
+      } else if (lastSavedMemoRef.current === memoToSave) {
+        return;
+      }
+
+      savingMemoRef.current = memoToSave;
+      latestOnUpdateMemoRef.current(memoToSave, {
+        onSuccess: () => {
+          lastSavedMemoRef.current = memoToSave;
+          savingMemoRef.current = null;
+          saveLatestMemo();
+        },
+        onError: () => {
+          savingMemoRef.current = null;
+        },
+      });
+    },
+    [],
+  );
+
+  const submitPendingUpdates = useCallback(() => {
+    submitTextUpdate();
+    saveLatestMemo({ force: true });
+  }, [saveLatestMemo, submitTextUpdate]);
+
   useEffect(() => {
     latestOnUpdateRef.current = onUpdate;
   }, [onUpdate]);
 
   useEffect(() => {
+    latestOnUpdateMemoRef.current = onUpdateMemo;
+  }, [onUpdateMemo]);
+
+  useEffect(() => {
     latestBuildTextUpdateRequestRef.current = buildTextUpdateRequest;
   }, [buildTextUpdateRequest]);
+
+  useEffect(() => {
+    latestMemoRef.current = memo;
+  }, [memo]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -83,15 +128,15 @@ export const useDetailTodoTextAutoSave = ({
       return;
     }
 
-    const updateTimer = window.setTimeout(
-      submitTextUpdate,
-      TEXT_UPDATE_DEBOUNCE_MS,
-    );
+    const updateTimer = window.setTimeout(() => {
+      submitTextUpdate();
+      saveLatestMemo();
+    }, TEXT_UPDATE_DEBOUNCE_MS);
 
     return () => window.clearTimeout(updateTimer);
-  }, [isOpen, submitTextUpdate]);
+  }, [isOpen, memo, saveLatestMemo, submitTextUpdate]);
 
   return {
-    submitTextUpdate,
+    submitPendingUpdates,
   };
 };

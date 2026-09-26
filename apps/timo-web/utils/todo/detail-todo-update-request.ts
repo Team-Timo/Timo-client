@@ -32,16 +32,13 @@ export const buildDetailTodoSubtasksUpdateRequest = (
 
 export interface BuildDetailTodoTextUpdateRequestParams {
   title: string;
-  memo: string;
   subtasks: DetailTodoSubtaskInput[];
 }
 
 export const buildDetailTodoTextUpdateRequest = ({
   title,
-  memo,
   subtasks,
 }: BuildDetailTodoTextUpdateRequestParams): TodoUpdateRequest => ({
   title: title.trim(),
-  memo: memo.trim(),
   subtasks: buildDetailTodoSubtasksUpdateRequest(subtasks),
 });
