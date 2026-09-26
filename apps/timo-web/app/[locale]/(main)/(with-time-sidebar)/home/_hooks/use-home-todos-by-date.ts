@@ -1,26 +1,24 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-import type { ErrorType } from "@/api/client/custom-instance";
-import type { ApiError } from "@/api/error/api-error";
-import type { ErrorDto } from "@/api/generated/models";
 import type { HomeViewDay } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 import type { Todo } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { ErrorDto } from "@/generated/models";
+import type { ApiError } from "@/http/api-error";
+import type { ErrorType } from "@/http/custom-instance";
 
+import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
 import {
   useChangeStatus,
   useStartTimer,
   useStopTimer,
-} from "@/api/generated/endpoints/timer/timer";
+} from "@/generated/endpoints/timer/timer";
 import {
-  getGetTodoDetailQueryKey,
   useChangeSubtaskStatus,
   useChangeTodoStatus,
   useReorderTodo,
-} from "@/api/generated/endpoints/todo/todo";
-import { reorderTodos } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_utils/todo-order";
+} from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
@@ -45,39 +43,39 @@ export const useHomeTodosByDate = (
 ) => {
   const [todosByDate, setTodosByDate] = useState<Record<string, Todo[]>>({});
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
-  const queryClient = useQueryClient();
   const { data: activeTimer, isFetching: isActiveTimerFetching } =
     useActiveTimer();
-  const { mutate: changeTodoStatus } = useChangeTodoStatus();
-  const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
-  const { mutate: reorderTodo } = useReorderTodo();
-  const { mutate: stopTimer } = useStopTimer();
   const {
     invalidateHomeView,
     invalidateStatistics,
-    invalidateTimerState,
+    invalidateTimerProgress,
+    invalidateTimerFinish,
     invalidateTimeBoxes,
     invalidateFocusTodo,
+    invalidateTodoDetail,
   } = useTimerQueryInvalidation();
+  const invalidateHomeAndFocus = () => {
+    invalidateHomeView();
+    invalidateFocusTodo();
+  };
+  const { mutate: changeTodoStatus } = useChangeTodoStatus({
+    mutation: {
+      onSuccess: (_data, variables) => {
+        invalidateHomeAndFocus();
+        invalidateTimeBoxes();
+        invalidateStatistics();
+        invalidateTodoDetail(variables.todoId, variables.data.date);
+      },
+    },
+  });
+  const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
+  const { mutate: reorderTodo } = useReorderTodo();
+  const { mutate: stopTimer } = useStopTimer();
 
   const { mutate: startTimer, isPending: isStartTimerPending } =
-    useStartTimer<ApiError>({
-      mutation: {
-        onSuccess: () => {
-          invalidateTimerState();
-          invalidateFocusTodo();
-        },
-      },
-    });
+    useStartTimer<ApiError>();
   const { mutate: changeStatus, isPending: isChangeStatusPending } =
-    useChangeStatus({
-      mutation: {
-        onSuccess: () => {
-          invalidateTimerState();
-          invalidateFocusTodo();
-        },
-      },
-    });
+    useChangeStatus();
 
   const isTimerActionPending =
     isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
@@ -101,16 +99,6 @@ export const useHomeTodosByDate = (
     }));
   };
 
-  const invalidateHomeAndFocus = () => {
-    invalidateHomeView();
-    invalidateFocusTodo();
-  };
-  const invalidateTodoDetail = (dateKey: string, todoId: number) => {
-    queryClient.invalidateQueries({
-      queryKey: getGetTodoDetailQueryKey(todoId, { date: dateKey }),
-    });
-  };
-
   const handleToggleCompleted = (
     dateKey: string,
     todoId: number,
@@ -131,12 +119,6 @@ export const useHomeTodosByDate = (
     changeTodoStatus(
       { todoId, data: { isCompleted: completed, date: dateKey } },
       {
-        onSuccess: () => {
-          invalidateHomeAndFocus();
-          invalidateTimeBoxes();
-          invalidateTodoDetail(dateKey, todoId);
-          invalidateStatistics();
-        },
         onError: (error: ErrorType<ErrorDto>) => {
           setTodosByDate((prev) => ({ ...prev, [dateKey]: previous }));
           onUpdateError(error.response?.data.message);
@@ -153,22 +135,16 @@ export const useHomeTodosByDate = (
       {
         onSuccess: (response) => {
           onStopFeedback(response.data?.aiFeedback ?? undefined);
-          invalidateTimerState();
+          invalidateTimerFinish(todoId);
 
           updateTodo(dateKey, todoId, (todo) => ({
             ...todo,
             completed: true,
           }));
-          changeTodoStatus(
-            { todoId, data: { isCompleted: true, date: dateKey } },
-            {
-              onSuccess: () => {
-                invalidateHomeAndFocus();
-                invalidateTodoDetail(dateKey, todoId);
-                invalidateStatistics();
-              },
-            },
-          );
+          changeTodoStatus({
+            todoId,
+            data: { isCompleted: true, date: dateKey },
+          });
         },
       },
     );
@@ -197,7 +173,10 @@ export const useHomeTodosByDate = (
             action: activeTimer.status === "RUNNING" ? "PAUSE" : "RESUME",
           },
         },
-        { onSuccess: () => invalidateTodoDetail(dateKey, todoId) },
+        {
+          onSuccess: () =>
+            invalidateTimerProgress({ includeFocus: true, todoId }),
+        },
       );
       return;
     }
@@ -211,7 +190,8 @@ export const useHomeTodosByDate = (
     startTimer(
       { todoId, params: { date: dateKey } },
       {
-        onSuccess: () => invalidateTodoDetail(dateKey, todoId),
+        onSuccess: () =>
+          invalidateTimerProgress({ includeFocus: true, todoId }),
         onError: (error: ApiError) => {
           onPlayError(error.message);
         },
@@ -244,7 +224,7 @@ export const useHomeTodosByDate = (
         onSuccess: () => {
           invalidateHomeAndFocus();
           invalidateTimeBoxes();
-          invalidateTodoDetail(dateKey, todoId);
+          invalidateTodoDetail(todoId, dateKey);
           invalidateStatistics();
         },
         onError: (error: ErrorType<ErrorDto>) => {

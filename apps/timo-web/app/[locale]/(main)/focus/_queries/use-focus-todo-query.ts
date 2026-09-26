@@ -2,11 +2,11 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 
+import { focusViewSchema } from "@/app/[locale]/(main)/focus/_types/task-type";
 import {
   getFocusTodo,
   getGetFocusTodoQueryKey,
-} from "@/api/generated/endpoints/focus/focus";
-import { focusViewSchema } from "@/app/[locale]/(main)/focus/_types/task-type";
+} from "@/generated/endpoints/focus/focus";
 
 export const useFocusTodoQuery = () =>
   useSuspenseQuery({

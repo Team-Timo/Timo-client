@@ -3,7 +3,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 
-import { queryClient } from "@/api/client/query-client";
+import { queryClient } from "@/http/query-client";
 
 const ReactQueryDevtools =
   process.env.NODE_ENV === "development"

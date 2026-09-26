@@ -2,11 +2,8 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import {
-  getGetTodayQueryKey,
-  getToday,
-} from "@/api/generated/endpoints/home/home";
 import { todayDataSchema } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_types/today-type";
+import { getGetTodayQueryKey, getToday } from "@/generated/endpoints/home/home";
 
 export const useTodayQuery = () =>
   useSuspenseQuery({

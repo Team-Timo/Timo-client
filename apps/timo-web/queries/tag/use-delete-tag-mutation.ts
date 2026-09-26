@@ -2,10 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import {
-  deleteTag,
-  getGetTagsQueryKey,
-} from "@/api/generated/endpoints/tag/tag";
+import { deleteTag, getGetTagsQueryKey } from "@/generated/endpoints/tag/tag";
 
 export const useDeleteTagMutation = () => {
   const queryClient = useQueryClient();

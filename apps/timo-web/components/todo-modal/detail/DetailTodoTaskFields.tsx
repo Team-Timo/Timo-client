@@ -5,7 +5,7 @@ import {
 } from "@repo/timo-design-system/icons";
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 
-import type { TodoDetailResponseTimerStatus } from "@/api/generated/models";
+import type { TodoDetailResponseTimerStatus } from "@/generated/models";
 import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
 const resizeTextarea = (element: HTMLTextAreaElement | null) => {

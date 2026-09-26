@@ -1,9 +1,9 @@
+import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/DetailTodoTaskFields";
 import type {
   TodoSubtaskUpdateRequest,
   TodoUpdateRequest,
   TodoUpdateRequestRepeatWeekdaysItem,
-} from "@/api/generated/models";
-import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/DetailTodoTaskFields";
+} from "@/generated/models";
 
 const DETAIL_TODO_UPDATE_WEEKDAYS = [
   "MON",
@@ -32,16 +32,13 @@ export const buildDetailTodoSubtasksUpdateRequest = (
 
 export interface BuildDetailTodoTextUpdateRequestParams {
   title: string;
-  memo: string;
   subtasks: DetailTodoSubtaskInput[];
 }
 
 export const buildDetailTodoTextUpdateRequest = ({
   title,
-  memo,
   subtasks,
 }: BuildDetailTodoTextUpdateRequestParams): TodoUpdateRequest => ({
   title: title.trim(),
-  memo: memo.trim(),
   subtasks: buildDetailTodoSubtasksUpdateRequest(subtasks),
 });

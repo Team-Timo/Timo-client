@@ -14,6 +14,7 @@ import { TodayCalendarEventCard } from "@/components/calendar/TodayCalendarEvent
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
+import { useTagLabel } from "@/hooks/todo/use-tag-label";
 import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
 import { useCalendarEventsQuery } from "@/queries/calendar/use-calendar-events-query";
 import { formatShortDateLabel, parseDateKey } from "@/utils/date/date";
@@ -33,6 +34,7 @@ const renderTodoIcon = (icon: string | undefined) => {
 
 export const TodayTodoListContainer = () => {
   const tToast = useTranslations("Toast");
+  const getTagLabel = useTagLabel();
   const { data } = useTodayQuery();
   const { data: profile } = useMyProfileQuery();
   const { data: calendarEventsData } = useCalendarEventsQuery({
@@ -140,8 +142,8 @@ export const TodayTodoListContainer = () => {
                     dateValue: parseDateKey(todo.date) ?? new Date(),
                     time: convertDurationToTimeText(durationSeconds),
                     priority: todo.priority,
-                    tag: todo.tag?.name,
-                    hasSubtask: todo.hasSubtask,
+                    tag: todo.tag ? getTagLabel(todo.tag) : undefined,
+                    hasMemo: todo.hasMemo,
                     hasRepeat: todo.isRepeated,
                   }}
                   subTodos={todo.subtasks.map((s) => ({

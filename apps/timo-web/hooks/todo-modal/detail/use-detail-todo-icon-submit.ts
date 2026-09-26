@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { TodoUpdateRequest } from "@/api/generated/models";
+import type { TodoUpdateRequest } from "@/generated/models";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 import type { TodoIconValue } from "@repo/timo-design-system/ui";
 

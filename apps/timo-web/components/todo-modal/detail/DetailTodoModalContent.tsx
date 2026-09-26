@@ -11,7 +11,8 @@ import type {
   TodoDetailResponse,
   TodoDetailResponseTimerStatus,
   TodoUpdateRequest,
-} from "@/api/generated/models";
+} from "@/generated/models";
+import type { UpdateTodoMemoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-memo-submit";
 import type { UpdateTodoSubmitHandlers } from "@/hooks/todo-modal/detail/use-update-todo-submit";
 
 import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
@@ -52,6 +53,7 @@ export interface DetailTodoModalContentProps {
     data: TodoUpdateRequest,
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
+  onUpdateMemo: (memo: string, handlers?: UpdateTodoMemoSubmitHandlers) => void;
   onToggleSubtask: (
     subtaskId: number,
     completed: boolean,
@@ -70,6 +72,7 @@ export const DetailTodoModalContent = ({
   onToggleCompleted,
   onDelete,
   onUpdate,
+  onUpdateMemo,
   onToggleSubtask,
   timerStatus,
 }: DetailTodoModalContentProps) => {
@@ -99,16 +102,17 @@ export const DetailTodoModalContent = ({
     removeIcon: detailTodoForm.removeIcon,
     onUpdate: patchHandlers.updateTodo,
   });
-  const { submitTextUpdate } = useDetailTodoTextAutoSave({
+  const { submitPendingUpdates } = useDetailTodoTextAutoSave({
     isOpen,
     title: detailTodoForm.title,
     memo: detailTodoForm.memo,
     subtasks: detailTodoForm.subtaskInputs,
     onUpdate: patchHandlers.updateTodo,
+    onUpdateMemo,
   });
 
   const handleClose = () => {
-    submitTextUpdate();
+    submitPendingUpdates();
     onClose();
   };
 
@@ -215,9 +219,7 @@ export const DetailTodoModalContent = ({
                   addTagLabel={tCreateModal("addTag")}
                   onSelectTag={patchHandlers.handleSelectTag}
                   onAddTagClick={detailTodoForm.handleAddTagClick}
-                  hasSubTask={detailTodoForm.subtaskInputs.some(
-                    (input) => input.value.trim().length > 0,
-                  )}
+                  hasMemo={detailTodoForm.memo.trim().length > 0}
                   isRepeatActive={detailTodoForm.isRepeatActive}
                   repeat={{
                     frequencyHeading: t("repeatFrequencyHeading"),

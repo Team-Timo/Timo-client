@@ -2,8 +2,8 @@
 
 import { useMutation } from "@tanstack/react-query";
 
-import { withdraw } from "@/api/generated/endpoints/auth/auth";
 import { useClearSession } from "@/app/[locale]/(main)/settings/_hooks/use-clear-session";
+import { withdraw } from "@/generated/endpoints/auth/auth";
 
 export const useWithdrawMutation = () => {
   const clearSession = useClearSession();

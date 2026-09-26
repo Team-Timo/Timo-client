@@ -5,7 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   getGetMyProfileQueryKey,
   getMyProfile,
-} from "@/api/generated/endpoints/user/user";
+} from "@/generated/endpoints/user/user";
 import { userProfileSchema } from "@/schemas/auth/user-profile-schema";
 
 /**

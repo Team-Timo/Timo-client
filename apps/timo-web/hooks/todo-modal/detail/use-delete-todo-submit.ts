@@ -1,17 +1,11 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
+import type { ErrorDto } from "@/generated/models";
+import type { ErrorType } from "@/http/custom-instance";
 
-import type { ErrorType } from "@/api/client/custom-instance";
-import type { ErrorDto } from "@/api/generated/models";
-
-import { getGetFocusTodoQueryKey } from "@/api/generated/endpoints/focus/focus";
-import {
-  getGetHomeQueryKey,
-  getGetTodayQueryKey,
-} from "@/api/generated/endpoints/home/home";
-import { useDeleteTodo } from "@/api/generated/endpoints/todo/todo";
+import { useDeleteTodo } from "@/generated/endpoints/todo/todo";
 import { useStatisticsQueryInvalidation } from "@/hooks/statistics/use-statistics-query-invalidation";
+import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
 
 export interface DeleteTodoSubmitHandlers {
   onSuccess: () => void;
@@ -20,8 +14,9 @@ export interface DeleteTodoSubmitHandlers {
 
 export const useDeleteTodoSubmit = () => {
   const { mutate: deleteTodo } = useDeleteTodo();
-  const queryClient = useQueryClient();
   const { invalidateStatistics } = useStatisticsQueryInvalidation();
+  const { invalidateHome, invalidateToday, invalidateFocus } =
+    useTodoQueryInvalidation();
 
   const handleDelete = (
     todoId: number,
@@ -31,12 +26,10 @@ export const useDeleteTodoSubmit = () => {
       { todoId },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
-          queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
+          invalidateHome();
+          invalidateToday();
           invalidateStatistics();
-          queryClient.invalidateQueries({
-            queryKey: getGetFocusTodoQueryKey(),
-          });
+          invalidateFocus();
           onSuccess();
         },
         onError,

@@ -4,11 +4,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import type { GetHomeViewParams } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
-import {
-  getGetHomeQueryKey,
-  getHome,
-} from "@/api/generated/endpoints/home/home";
 import { homeViewDataSchema } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
+import { getGetHomeQueryKey, getHome } from "@/generated/endpoints/home/home";
 
 export const useHomeViewQuery = ({ filter, baseDate }: GetHomeViewParams) =>
   useSuspenseQuery({
