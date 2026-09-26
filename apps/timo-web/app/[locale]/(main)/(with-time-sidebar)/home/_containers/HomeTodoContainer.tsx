@@ -19,12 +19,12 @@ import { HomeCalendarEventCard } from "@/components/calendar/HomeCalendarEventCa
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
+import { useTagLabel } from "@/hooks/todo/use-tag-label";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
 import { useCalendarEventsQuery } from "@/queries/calendar/use-calendar-events-query";
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
-import { getDefaultTagLabelKey } from "@/utils/todo/tag-label";
 
 interface PendingCompleteTodo {
   token: number;
@@ -33,7 +33,7 @@ interface PendingCompleteTodo {
 }
 
 export const HomeTodoContainer = () => {
-  const tCommon = useTranslations("Common");
+  const getTagLabel = useTagLabel();
   const tToast = useTranslations("Toast");
   const { isWeekView, referenceDate } = useHomeViewMode();
 
@@ -167,13 +167,8 @@ export const HomeTodoContainer = () => {
                   const isPlayHighlighted =
                     !activeTimer || Boolean(isActiveTodo);
 
-                  const todoTagLabelKey = todo.tag
-                    ? getDefaultTagLabelKey(todo.tag.tagId)
-                    : undefined;
                   const todoTagName = todo.tag
-                    ? todoTagLabelKey
-                      ? tCommon(`tag.${todoTagLabelKey}`)
-                      : todo.tag.name
+                    ? getTagLabel(todo.tag)
                     : undefined;
 
                   return (
