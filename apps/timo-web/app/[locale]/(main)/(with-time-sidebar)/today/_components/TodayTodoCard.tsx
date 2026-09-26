@@ -10,6 +10,7 @@ import {
   type PriorityLevel,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
+import { useTranslations } from "next-intl";
 
 import type { KeyboardEvent, ReactNode } from "react";
 
@@ -78,6 +79,7 @@ export const TodayTodoCard = ({
   onMouseEnter,
   onMouseLeave,
 }: TodayTodoCardProps) => {
+  const t = useTranslations("Home.createModal");
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
 
   const handleCardKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -180,7 +182,7 @@ export const TodayTodoCard = ({
             timeLabel={toolbar.time}
             timeOptions={[]}
             priority={toolbar.priority}
-            tagLabel={toolbar.tag ?? "태그"}
+            tagLabel={toolbar.tag ?? t("tagLabel")}
             tags={[]}
             selectedTag={toolbar.tag}
             hasSubTask={toolbar.hasSubtask}

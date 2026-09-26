@@ -14,10 +14,12 @@ import {
   useStatisticsSummaryQuery,
 } from "@/app/[locale]/(main)/statistics/_queries/use-statistics-query";
 import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/_utils/format-statistics-date";
+import { useTagLabel } from "@/hooks/todo/use-tag-label";
 import { formatDateKey } from "@/utils/date/date";
 
 export const StatisticsContainer = () => {
   const locale = useLocale();
+  const getTagLabel = useTagLabel();
   const [currentMonth, setCurrentMonth] = useState(() => new Date());
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [sidePanelVariant, setSidePanelVariant] =
@@ -47,7 +49,7 @@ export const StatisticsContainer = () => {
         title: todo.title,
         actualTimeMinutes: todo.actualTimeMinutes,
         estimatedTimeMinutes: todo.estimatedTimeMinutes ?? 0,
-        tagName: todo.tag?.name ?? "",
+        tagName: todo.tag ? getTagLabel(todo.tag) : "",
       })) ?? [],
   };
 
