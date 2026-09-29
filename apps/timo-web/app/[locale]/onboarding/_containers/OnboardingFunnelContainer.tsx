@@ -71,92 +71,64 @@ export const OnboardingFunnelContainer = () => {
         ariaLabel="온보딩 애니메이션"
       />
       <div className="border-timo-gray-500 shadow-timo flex h-153.5 w-108 flex-col rounded-[4px] border bg-white px-16 py-12">
-        <div className="flex w-76 flex-1 flex-col gap-10">
+        <div className="flex w-76 flex-1 flex-col gap-6">
           <OnboardingStepButton step={STEP_NUMBER[funnel.step]} />
 
-          <funnel.Render
-            Language={({ history }) => (
-              <LanguageStepContainer
-                language={answers.language}
-                onSelect={(language) =>
-                  setAnswers((prev) => ({ ...prev, language }))
-                }
-                onNext={() => {
-                  if (!answers.language) return;
-                  history.push("TimePrediction", {
-                    language: answers.language,
-                  });
-                }}
-              />
-            )}
-            TimePrediction={({ history, index, context }) => (
-              <TimePredictionStepContainer
-                predictionAccuracy={answers.predictionAccuracy}
-                onSelect={(predictionAccuracy) =>
-                  setAnswers((prev) => ({ ...prev, predictionAccuracy }))
-                }
-                onPrev={() =>
-                  index > 0
-                    ? history.back()
-                    : history.replace("Language", {
-                        language: context.language,
-                      })
-                }
-                onNext={() => {
-                  if (!answers.language || !answers.predictionAccuracy) return;
-                  history.push("LifePattern", {
-                    language: answers.language,
-                    predictionAccuracy: answers.predictionAccuracy,
-                  });
-                }}
-              />
-            )}
-            LifePattern={({ history, index, context }) => (
-              <LifePatternStepContainer
-                wakeUpTime={answers.wakeUpTime}
-                bedTime={answers.bedTime}
-                onSelectWakeUpTime={(wakeUpTime) =>
-                  setAnswers((prev) => ({ ...prev, wakeUpTime }))
-                }
-                onSelectBedTime={(bedTime) =>
-                  setAnswers((prev) => ({ ...prev, bedTime }))
-                }
-                onPrev={() =>
-                  index > 0
-                    ? history.back()
-                    : history.replace("TimePrediction", context)
-                }
-                onNext={() => {
-                  if (
-                    !answers.language ||
-                    !answers.predictionAccuracy ||
-                    !answers.wakeUpTime ||
-                    !answers.bedTime
-                  )
-                    return;
-                  history.push("CalendarConnect", {
-                    language: answers.language,
-                    predictionAccuracy: answers.predictionAccuracy,
-                    wakeUpTime: answers.wakeUpTime,
-                    bedTime: answers.bedTime,
-                  });
-                }}
-              />
-            )}
-            CalendarConnect={({ history, index, context }) => (
-              <AsyncBoundary>
-                <CalendarConnectStepContainer
-                  answers={context}
-                  isPending={isPending}
-                  onConnectError={() =>
-                    setErrorToastMessage(t("calendarConnectFailed"))
+          <div className="flex flex-1 flex-col">
+            <funnel.Render
+              Language={({ history }) => (
+                <LanguageStepContainer
+                  language={answers.language}
+                  onSelect={(language) =>
+                    setAnswers((prev) => ({ ...prev, language }))
+                  }
+                  onNext={() => {
+                    if (!answers.language) return;
+                    history.push("TimePrediction", {
+                      language: answers.language,
+                    });
+                  }}
+                />
+              )}
+              TimePrediction={({ history, index, context }) => (
+                <TimePredictionStepContainer
+                  predictionAccuracy={answers.predictionAccuracy}
+                  onSelect={(predictionAccuracy) =>
+                    setAnswers((prev) => ({ ...prev, predictionAccuracy }))
                   }
                   onPrev={() =>
                     index > 0
                       ? history.back()
-                      : history.replace("LifePattern", context)
+                      : history.replace("Language", {
+                          language: context.language,
+                        })
                   }
-                  onStart={() => {
+                  onNext={() => {
+                    if (!answers.language || !answers.predictionAccuracy)
+                      return;
+                    history.push("LifePattern", {
+                      language: answers.language,
+                      predictionAccuracy: answers.predictionAccuracy,
+                    });
+                  }}
+                />
+              )}
+              LifePattern={({ history, index, context }) => (
+                <LifePatternStepContainer
+                  wakeUpTime={answers.wakeUpTime}
+                  bedTime={answers.bedTime}
+                  onSelectWakeUpTime={(wakeUpTime) =>
+                    setAnswers((prev) => ({ ...prev, wakeUpTime }))
+                  }
+                  onSelectBedTime={(bedTime) =>
+                    setAnswers((prev) => ({ ...prev, bedTime }))
+                  }
+                  onPrev={() =>
+                    index > 0
+                      ? history.back()
+                      : history.replace("TimePrediction", context)
+                  }
+                  onNext={() => {
                     if (
                       !answers.language ||
                       !answers.predictionAccuracy ||
@@ -164,33 +136,64 @@ export const OnboardingFunnelContainer = () => {
                       !answers.bedTime
                     )
                       return;
-                    completeOnboarding(
-                      {
-                        data: {
-                          language: ONBOARDING_LANGUAGE_MAP[answers.language],
-                          predictionAccuracy: answers.predictionAccuracy,
-                          wakeUpTime: answers.wakeUpTime,
-                          bedTime: answers.bedTime,
-                        },
-                      },
-                      {
-                        onSuccess: () => {
-                          removeOnboardingAnswers();
-                          setOnboardingCompleted(true);
-                          router.replace(ROUTES.HOME, {
-                            locale: answers.language,
-                          });
-                        },
-                        onError: () => {
-                          setErrorToastMessage(t("onboardingSubmitFailed"));
-                        },
-                      },
-                    );
+                    history.push("CalendarConnect", {
+                      language: answers.language,
+                      predictionAccuracy: answers.predictionAccuracy,
+                      wakeUpTime: answers.wakeUpTime,
+                      bedTime: answers.bedTime,
+                    });
                   }}
                 />
-              </AsyncBoundary>
-            )}
-          />
+              )}
+              CalendarConnect={({ history, index, context }) => (
+                <AsyncBoundary>
+                  <CalendarConnectStepContainer
+                    answers={context}
+                    isPending={isPending}
+                    onConnectError={() =>
+                      setErrorToastMessage(t("calendarConnectFailed"))
+                    }
+                    onPrev={() =>
+                      index > 0
+                        ? history.back()
+                        : history.replace("LifePattern", context)
+                    }
+                    onStart={() => {
+                      if (
+                        !answers.language ||
+                        !answers.predictionAccuracy ||
+                        !answers.wakeUpTime ||
+                        !answers.bedTime
+                      )
+                        return;
+                      completeOnboarding(
+                        {
+                          data: {
+                            language: ONBOARDING_LANGUAGE_MAP[answers.language],
+                            predictionAccuracy: answers.predictionAccuracy,
+                            wakeUpTime: answers.wakeUpTime,
+                            bedTime: answers.bedTime,
+                          },
+                        },
+                        {
+                          onSuccess: () => {
+                            removeOnboardingAnswers();
+                            setOnboardingCompleted(true);
+                            router.replace(ROUTES.HOME, {
+                              locale: answers.language,
+                            });
+                          },
+                          onError: () => {
+                            setErrorToastMessage(t("onboardingSubmitFailed"));
+                          },
+                        },
+                      );
+                    }}
+                  />
+                </AsyncBoundary>
+              )}
+            />
+          </div>
         </div>
       </div>
     </section>
