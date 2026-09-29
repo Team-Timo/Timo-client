@@ -3,9 +3,9 @@
 import { LogoTimoIcon } from "@repo/timo-design-system/icons";
 import { useTranslations } from "next-intl";
 
-import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
 import { LottiePlayer } from "@/components/lottie/LottiePlayer";
 import { ROUTES } from "@/constants/routes";
+import { AuthButtonContainer } from "@/containers/auth/AuthButtonContainer";
 import { Link } from "@/i18n/navigation";
 
 export const LoginContainer = () => {
@@ -42,8 +42,8 @@ export const LoginContainer = () => {
             <p className="typo-body-r-12 text-timo-gray-700">
               {t("connectLabel")}
             </p>
-            <OnboardingGoogleButtonContainer
-              variant="login"
+            <AuthButtonContainer
+              variant="googleLogin"
               onClick={() => {
                 const redirectOrigin = window.location.origin;
                 window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/oauth2/authorization/google?redirect_origin=${encodeURIComponent(redirectOrigin)}`;

@@ -34,7 +34,11 @@
       "LOW": "Low"
     },
     "close": "Close",
-    "delete": "Delete"
+    "delete": "Delete",
+    "authButton": {
+      "googleLogin": "Continue with your Google account",
+      "googleCalendar": "Connect Google Calendar"
+    }
   },
   "Home": {
     "today": "Today",
@@ -192,10 +196,6 @@
       "next": "Next",
       "prev": "Previous",
       "start": "Get Started"
-    },
-    "onboardingGoogleButton": {
-      "login": "Continue with your Google account",
-      "connectCalendar": "Connect Google Calendar"
     },
     "language": {
       "title": "Please select a language to use.",

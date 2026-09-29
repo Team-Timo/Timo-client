@@ -3,11 +3,11 @@
 import { useTranslations } from "next-intl";
 
 import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingButtonContainer";
-import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
 import {
   CALENDAR_CONNECT_ORIGIN,
   CALENDAR_CONNECT_ORIGIN_KEY,
 } from "@/constants/calendar";
+import { AuthButtonContainer } from "@/containers/auth/AuthButtonContainer";
 import { authorize } from "@/generated/endpoints/calendar/calendar";
 
 interface CalendarConnectStepContainerProps {
@@ -56,8 +56,8 @@ export const CalendarConnectStepContainer = ({
             <p className="typo-body-r-12 text-timo-gray-700">
               {t("calendarConnect.connectLabel")}
             </p>
-            <OnboardingGoogleButtonContainer
-              variant="connectCalendar"
+            <AuthButtonContainer
+              variant="googleCalendar"
               isSelected={isCalendarConnected}
               onClick={handleGoogleConnect}
             />
