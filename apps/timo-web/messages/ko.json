@@ -125,7 +125,7 @@
       "withdraw": "탈퇴하기",
       "withdrawConfirmTitle": "정말 <red>탈퇴</red>하시겠어요?",
       "withdrawConfirmDescription": "탈퇴 후에는 모든 데이터가 삭제되며 되돌릴 수 없어요.",
-      "withdrawConfirmCancel": "돌아가기",
+      "withdrawConfirmCancel": "취소",
       "withdrawConfirmConfirm": "탈퇴하기",
       "withdrawError": "탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
     }
