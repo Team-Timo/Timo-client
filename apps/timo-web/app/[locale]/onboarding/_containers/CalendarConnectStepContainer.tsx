@@ -33,6 +33,8 @@ export const CalendarConnectStepContainer = ({
   const { data: profile } = useMyProfileQuery();
 
   const handleGoogleConnect = async () => {
+    if (profile.calendarConnected) return;
+
     try {
       const response = await authorize();
       const url = response.data?.authorizationUrl;

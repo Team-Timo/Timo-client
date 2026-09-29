@@ -47,13 +47,19 @@ export const CalendarCallbackContainer = () => {
 
     const origin = localStorage.getItem(CALENDAR_CONNECT_ORIGIN_KEY);
     localStorage.removeItem(CALENDAR_CONNECT_ORIGIN_KEY);
-    const redirectTarget = isCalendarConnectOrigin(origin)
+    const hasOrigin = isCalendarConnectOrigin(origin);
+    const redirectTarget = hasOrigin
       ? CALENDAR_CONNECT_REDIRECT[origin]
       : ROUTES.HOME;
 
+    // 실패 토스트는 온보딩·설정에서만 띄우므로, 출발지를 알 때만 실패를 기록합니다.
+    const notifyConnectFailed = () => {
+      if (hasOrigin) markCalendarConnectFailed();
+    };
+
     if (error || !code || !state) {
       // 사용자가 권한 동의를 취소한 경우(access_denied)는 실패로 보지 않습니다.
-      if (error !== ACCESS_DENIED_ERROR) markCalendarConnectFailed();
+      if (error !== ACCESS_DENIED_ERROR) notifyConnectFailed();
       router.replace(redirectTarget);
       return;
     }
@@ -68,7 +74,7 @@ export const CalendarCallbackContainer = () => {
           router.replace(redirectTarget);
         },
         onError: () => {
-          markCalendarConnectFailed();
+          notifyConnectFailed();
           router.replace(redirectTarget);
         },
       },
