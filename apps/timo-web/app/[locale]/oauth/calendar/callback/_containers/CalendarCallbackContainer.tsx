@@ -14,8 +14,11 @@ import { ROUTES } from "@/constants/routes";
 import { useConnectCalendar } from "@/generated/endpoints/calendar/calendar";
 import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
+import { markCalendarConnectFailed } from "@/utils/calendar/calendar-connect-failed";
 
 type Route = (typeof ROUTES)[keyof typeof ROUTES];
+
+const ACCESS_DENIED_ERROR = "access_denied";
 
 const CALENDAR_CONNECT_REDIRECT: Record<CalendarConnectOrigin, Route> = {
   [CALENDAR_CONNECT_ORIGIN.ONBOARDING]: ROUTES.ONBOARDING,
@@ -49,6 +52,8 @@ export const CalendarCallbackContainer = () => {
       : ROUTES.HOME;
 
     if (error || !code || !state) {
+      // 사용자가 권한 동의를 취소한 경우(access_denied)는 실패로 보지 않습니다.
+      if (error !== ACCESS_DENIED_ERROR) markCalendarConnectFailed();
       router.replace(redirectTarget);
       return;
     }
@@ -63,6 +68,7 @@ export const CalendarCallbackContainer = () => {
           router.replace(redirectTarget);
         },
         onError: () => {
+          markCalendarConnectFailed();
           router.replace(redirectTarget);
         },
       },

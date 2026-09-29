@@ -2,7 +2,7 @@
 
 import { useFunnel } from "@use-funnel/browser";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { OnboardingStepButton } from "@/app/[locale]/onboarding/_components/OnboardingStepButton";
 import { CalendarConnectStepContainer } from "@/app/[locale]/onboarding/_containers/CalendarConnectStepContainer";
@@ -22,6 +22,10 @@ import { useCompleteOnboarding } from "@/generated/endpoints/onboarding/onboardi
 import { OnboardingRequestLanguage } from "@/generated/models";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import {
+  clearCalendarConnectFailed,
+  hasCalendarConnectFailed,
+} from "@/utils/calendar/calendar-connect-failed";
 
 const STEP_NUMBER: Record<keyof OnboardingFunnelSteps, 1 | 2 | 3 | 4> = {
   Language: 1,
@@ -47,8 +51,12 @@ export const OnboardingFunnelContainer = () => {
     Partial<OnboardingFunnelSteps["CalendarConnect"]>
   >(() => restoredAnswers ?? {});
   const [errorToastMessage, setErrorToastMessage] = useState<string | null>(
-    null,
+    () => (hasCalendarConnectFailed() ? t("calendarConnectFailed") : null),
   );
+
+  useEffect(() => {
+    clearCalendarConnectFailed();
+  }, []);
 
   const funnel = useFunnel<OnboardingFunnelSteps>({
     id: "onboarding",
