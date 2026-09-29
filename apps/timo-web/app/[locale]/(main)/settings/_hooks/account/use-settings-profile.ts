@@ -8,6 +8,10 @@ import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/acc
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
 import { useLogoutMutation } from "@/app/[locale]/(main)/settings/_queries/account/use-logout-mutation";
 import {
+  CALENDAR_CONNECT_ORIGIN,
+  CALENDAR_CONNECT_ORIGIN_KEY,
+} from "@/constants/calendar";
+import {
   authorize,
   useDisconnectCalendar,
   getGetCalendarEventsQueryKey,
@@ -105,7 +109,10 @@ export const useSettingsProfile = () => {
         handlers.onConnectError?.();
         return;
       }
-      localStorage.setItem("calendarConnectOrigin", "settings");
+      localStorage.setItem(
+        CALENDAR_CONNECT_ORIGIN_KEY,
+        CALENDAR_CONNECT_ORIGIN.SETTINGS,
+      );
       window.location.assign(url);
     } catch {
       handlers.onConnectError?.();

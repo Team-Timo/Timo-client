@@ -4,10 +4,29 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
+import type { CalendarConnectOrigin } from "@/constants/calendar";
+
+import {
+  CALENDAR_CONNECT_ORIGIN,
+  CALENDAR_CONNECT_ORIGIN_KEY,
+} from "@/constants/calendar";
 import { ROUTES } from "@/constants/routes";
 import { useConnectCalendar } from "@/generated/endpoints/calendar/calendar";
 import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
+
+type Route = (typeof ROUTES)[keyof typeof ROUTES];
+
+const CALENDAR_CONNECT_REDIRECT: Record<CalendarConnectOrigin, Route> = {
+  // TODO: 온보딩 캘린더 연동 단계 재활성화 시 ROUTES.ONBOARDING으로 변경
+  [CALENDAR_CONNECT_ORIGIN.ONBOARDING]: ROUTES.HOME,
+  [CALENDAR_CONNECT_ORIGIN.SETTINGS]: ROUTES.SETTINGS,
+};
+
+const isCalendarConnectOrigin = (
+  value: string | null,
+): value is CalendarConnectOrigin =>
+  Object.values(CALENDAR_CONNECT_ORIGIN).some((origin) => origin === value);
 
 export const CalendarCallbackContainer = () => {
   const searchParams = useSearchParams();
@@ -21,16 +40,19 @@ export const CalendarCallbackContainer = () => {
   const hasRequested = useRef(false);
 
   useEffect(() => {
-    const origin = localStorage.getItem("calendarConnectOrigin");
-    const redirectTarget =
-      origin === "settings" ? ROUTES.SETTINGS : ROUTES.HOME;
+    if (hasRequested.current) return;
+    hasRequested.current = true;
+
+    const origin = localStorage.getItem(CALENDAR_CONNECT_ORIGIN_KEY);
+    localStorage.removeItem(CALENDAR_CONNECT_ORIGIN_KEY);
+    const redirectTarget = isCalendarConnectOrigin(origin)
+      ? CALENDAR_CONNECT_REDIRECT[origin]
+      : ROUTES.HOME;
 
     if (error || !code || !state) {
       router.replace(redirectTarget);
       return;
     }
-    if (hasRequested.current) return;
-    hasRequested.current = true;
 
     connectCalendar(
       { data: { authorizationCode: code, state } },
@@ -39,7 +61,6 @@ export const CalendarCallbackContainer = () => {
           await queryClient.invalidateQueries({
             queryKey: getGetMyProfileQueryKey(),
           });
-          localStorage.removeItem("calendarConnectOrigin");
           router.replace(redirectTarget);
         },
         onError: () => {

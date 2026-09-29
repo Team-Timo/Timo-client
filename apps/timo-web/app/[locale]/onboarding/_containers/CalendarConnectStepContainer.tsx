@@ -4,6 +4,10 @@ import { useTranslations } from "next-intl";
 
 import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingButtonContainer";
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
+import {
+  CALENDAR_CONNECT_ORIGIN,
+  CALENDAR_CONNECT_ORIGIN_KEY,
+} from "@/constants/calendar";
 import { authorize } from "@/generated/endpoints/calendar/calendar";
 
 interface CalendarConnectStepContainerProps {
@@ -25,7 +29,10 @@ export const CalendarConnectStepContainer = ({
       const response = await authorize();
       const url = response.data?.authorizationUrl;
       if (!url) return;
-      localStorage.setItem("calendarConnectOrigin", "onboarding");
+      localStorage.setItem(
+        CALENDAR_CONNECT_ORIGIN_KEY,
+        CALENDAR_CONNECT_ORIGIN.ONBOARDING,
+      );
       window.location.assign(url);
     } catch {
       // authorize 실패 시 아무 동작 없음 — 사용자가 재시도 가능
