@@ -69,10 +69,11 @@ export const SettingsProfileView = ({
               <p className="typo-headline-b-20 text-timo-black">{name}</p>
               <div className="bg-timo-gray-300 flex items-center gap-2 rounded-lg px-4 py-2">
                 <Image
-                  src="/images/google-login.svg"
+                  src="/images/google-logo.png"
                   alt="Google"
-                  width={24}
-                  height={24}
+                  width={20}
+                  height={20}
+                  unoptimized
                 />
                 <span className="typo-headline-m-16 text-timo-gray-900">
                   {googleEmail}
@@ -91,10 +92,11 @@ export const SettingsProfileView = ({
           <div className="bg-timo-gray-300 flex h-10.25 w-fit items-center gap-4 self-start rounded-lg px-2.5 py-1.5">
             <div className="flex items-center gap-1.5">
               <Image
-                src="/images/google-calendar.svg"
+                src="/images/google-calendar.png"
                 alt=""
-                width={24}
-                height={24}
+                width={20}
+                height={20}
+                unoptimized
               />
               <span className="typo-headline-m-16 text-timo-gray-700 whitespace-nowrap">
                 Google Calendar
@@ -111,10 +113,11 @@ export const SettingsProfileView = ({
           <div className="bg-timo-gray-300 flex h-10.25 w-fit items-center gap-4 self-start rounded-lg px-2.5 py-1.5">
             <div className="flex items-center gap-1.5">
               <Image
-                src="/images/apple-calendar.svg"
+                src="/images/apple-calendar.png"
                 alt=""
-                width={24}
-                height={24}
+                width={20}
+                height={20}
+                unoptimized
               />
               <span className="typo-headline-m-16 text-timo-gray-700 whitespace-nowrap">
                 Apple Calendar

@@ -6,16 +6,10 @@ export type AuthButtonVariant =
   | "googleCalendar"
   | "appleCalendar";
 
-const AUTH_BUTTON_LOGO: Record<
-  AuthButtonVariant,
-  { src: string; alt: string }
-> = {
-  googleLogin: { src: "/images/google-login.svg", alt: "Google" },
-  googleCalendar: {
-    src: "/images/google-calendar.svg",
-    alt: "Google Calendar",
-  },
-  appleCalendar: { src: "/images/apple-calendar.svg", alt: "Apple Calendar" },
+const AUTH_BUTTON_LOGO_SRC: Record<AuthButtonVariant, string> = {
+  googleLogin: "/images/google-logo.png",
+  googleCalendar: "/images/google-calendar.png",
+  appleCalendar: "/images/apple-calendar.png",
 };
 
 interface AuthButtonProps {
@@ -31,8 +25,6 @@ export const AuthButton = ({
   isSelected = false,
   onClick,
 }: AuthButtonProps) => {
-  const logo = AUTH_BUTTON_LOGO[variant];
-
   return (
     <button
       type="button"
@@ -46,7 +38,15 @@ export const AuthButton = ({
       )}
     >
       <div className="flex items-center gap-2.5 px-2">
-        <Image src={logo.src} alt={logo.alt} width={24} height={24} />
+        <div className="flex size-[22px] items-center justify-center">
+          <Image
+            src={AUTH_BUTTON_LOGO_SRC[variant]}
+            alt=""
+            width={18}
+            height={18}
+            unoptimized
+          />
+        </div>
         <span className="typo-headline-m-16 text-timo-blue-300">{label}</span>
       </div>
     </button>
