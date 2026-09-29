@@ -187,6 +187,17 @@ export const RepeatSelector = ({
   )?.label;
 
   const handleSelectFrequency = (value: RepeatFrequency) => {
+    if (draftFrequencyRef.current !== value) {
+      if (draftFrequencyRef.current === "WEEKLY" || value === "WEEKLY") {
+        draftWeekdayIdsRef.current = [];
+        setDraftWeekdayIds([]);
+      }
+      if (draftFrequencyRef.current === "MONTHLY" || value === "MONTHLY") {
+        draftRepeatDayRef.current = "";
+        setDraftRepeatDay("");
+      }
+    }
+
     hasSelectedFrequencyRef.current = true;
     draftFrequencyRef.current = value;
     setDraftFrequency(value);
@@ -226,6 +237,7 @@ export const RepeatSelector = ({
       onFrequencyChange?.(draftFrequencyRef.current);
     }
     if (
+      draftFrequencyRef.current === "WEEKLY" &&
       !isSameWeekdaySelection(
         draftWeekdayIdsRef.current,
         weekly.selectedWeekdayIds,
@@ -233,7 +245,10 @@ export const RepeatSelector = ({
     ) {
       weekly.onWeekdaysChange?.(draftWeekdayIdsRef.current);
     }
-    if (draftRepeatDayRef.current !== monthly.repeatDay) {
+    if (
+      draftFrequencyRef.current === "MONTHLY" &&
+      draftRepeatDayRef.current !== monthly.repeatDay
+    ) {
       monthly.onRepeatDayChange?.(draftRepeatDayRef.current);
     }
   };
