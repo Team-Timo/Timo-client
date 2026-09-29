@@ -47,6 +47,10 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
     repeatType === "NONE" ? "DAILY" : repeatType;
 
   const handleFrequencyChange = (frequency: RepeatFrequency) => {
+    if (repeatTypeField.field.value !== frequency) {
+      repeatWeekdaysField.field.onChange([]);
+      repeatDayField.field.onChange(null);
+    }
     repeatTypeField.field.onChange(frequency);
   };
 

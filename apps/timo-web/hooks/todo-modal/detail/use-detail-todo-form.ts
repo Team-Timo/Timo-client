@@ -164,9 +164,31 @@ export const useDetailTodoForm = ({
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {
+    if (
+      !isRepeatActiveField.value ||
+      repeatFrequencyField.value !== frequency
+    ) {
+      selectedWeekdayIdsField.onChange([]);
+      repeatDayField.onChange("");
+    }
     isRepeatActiveField.onChange(true);
     repeatFrequencyField.onChange(frequency);
   };
+
+  const initialWeekdayIds = todo.repeat.weekdays ?? [];
+  const currentWeekdayIds = selectedWeekdayIdsField.value ?? [];
+  const sortedInitialWeekdayIds = [...initialWeekdayIds].sort();
+  const sortedCurrentWeekdayIds = [...currentWeekdayIds].sort();
+  const hasSameWeekdays =
+    sortedInitialWeekdayIds.length === sortedCurrentWeekdayIds.length &&
+    sortedInitialWeekdayIds.every(
+      (weekdayId, index) => weekdayId === sortedCurrentWeekdayIds[index],
+    );
+  const hasRepeatChanges =
+    isRepeatActiveField.value !== (todo.repeat.type !== "NONE") ||
+    repeatFrequencyField.value !== repeatType ||
+    !hasSameWeekdays ||
+    repeatDayField.value !== (todo.repeat.dayOfMonth?.toString() ?? "");
 
   const getTagIdByLabel = (label: string) => {
     const option = tagField.tagOptions.find((item) => item.label === label);
@@ -212,6 +234,7 @@ export const useDetailTodoForm = ({
     removeIcon,
     selectTime,
     changeRepeatFrequency,
+    hasRepeatChanges,
     handleSubmit,
     dirtyFields: formState.dirtyFields,
   };
