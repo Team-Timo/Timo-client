@@ -68,11 +68,15 @@ export const CalendarConnectStepContainer = ({
             <p className="typo-body-r-12 text-timo-gray-700">
               {t("calendarConnect.connectLabel")}
             </p>
-            <AuthButtonContainer
-              variant="googleCalendar"
-              isSelected={profile.calendarConnected}
-              onClick={handleGoogleConnect}
-            />
+            <div className="flex flex-col gap-2.5">
+              <AuthButtonContainer
+                variant="googleCalendar"
+                isSelected={profile.calendarConnected}
+                onClick={handleGoogleConnect}
+              />
+              {/* TODO: Apple 캘린더 연동 API 연결 후 onClick·isSelected 추가 */}
+              <AuthButtonContainer variant="appleCalendar" />
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">

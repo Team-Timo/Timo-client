@@ -69,10 +69,10 @@ export const SettingsProfileView = ({
               <p className="typo-headline-b-20 text-timo-black">{name}</p>
               <div className="bg-timo-gray-300 flex items-center gap-2 rounded-lg px-4 py-2">
                 <Image
-                  src="/images/google-logo.png"
+                  src="/images/google-login.svg"
                   alt="Google"
-                  width={20}
-                  height={20}
+                  width={24}
+                  height={24}
                 />
                 <span className="typo-headline-m-16 text-timo-gray-900">
                   {googleEmail}
@@ -91,10 +91,10 @@ export const SettingsProfileView = ({
           <div className="bg-timo-gray-300 flex h-10.25 w-fit items-center gap-4 self-start rounded-lg px-2.5 py-1.5">
             <div className="flex items-center gap-1.5">
               <Image
-                src="/images/google-calendar.png"
+                src="/images/google-calendar.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={24}
+                height={24}
               />
               <span className="typo-headline-m-16 text-timo-gray-700 whitespace-nowrap">
                 Google Calendar
@@ -106,6 +106,24 @@ export const SettingsProfileView = ({
               onClick={onConnectCalendar}
             >
               {isCalendarConnected ? labels.disconnect : labels.connect}
+            </PillButton>
+          </div>
+          <div className="bg-timo-gray-300 flex h-10.25 w-fit items-center gap-4 self-start rounded-lg px-2.5 py-1.5">
+            <div className="flex items-center gap-1.5">
+              <Image
+                src="/images/apple-calendar.svg"
+                alt=""
+                width={24}
+                height={24}
+              />
+              <span className="typo-headline-m-16 text-timo-gray-700 whitespace-nowrap">
+                Apple Calendar
+              </span>
+            </div>
+
+            {/* TODO: Apple 캘린더 연동 API 연결 후 연결 상태·onClick 연동 */}
+            <PillButton variant="blue" onClick={() => {}}>
+              {labels.connect}
             </PillButton>
           </div>
         </section>

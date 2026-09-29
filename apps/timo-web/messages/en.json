@@ -37,7 +37,8 @@
     "delete": "Delete",
     "authButton": {
       "googleLogin": "Continue with your Google account",
-      "googleCalendar": "Connect Google Calendar"
+      "googleCalendar": "Connect Google Calendar",
+      "appleCalendar": "Connect Apple Calendar"
     }
   },
   "Home": {
@@ -91,7 +92,7 @@
     "profile": {
       "title": "Personal information",
       "profileSection": "Profile",
-      "calendarSection": "Google Calendar integration",
+      "calendarSection": "Calendar integration",
       "connect": "Integrate",
       "disconnect": "Disconnect",
       "languageSection": "Language",
@@ -231,9 +232,9 @@
       "bedTimeError": "Please set different times for bedtime and wake-up."
     },
     "calendarConnect": {
-      "title": "Connect your Google Calendar.",
+      "title": "Connect your Calendar.",
       "description": "You can import your existing schedules into timo and manage them in one place.",
-      "connectLabel": "Google Calendar integration",
+      "connectLabel": "Calendar integration",
       "consentNotice": "Clicking will display the Google authentication and calendar access permission screen.",
       "permissionNotice": "timo only requests permission to view your schedules."
     }
