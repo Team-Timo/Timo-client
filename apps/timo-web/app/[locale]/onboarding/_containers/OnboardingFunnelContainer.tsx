@@ -167,20 +167,13 @@ export const OnboardingFunnelContainer = () => {
                         : history.replace("LifePattern", context)
                     }
                     onStart={() => {
-                      if (
-                        !answers.language ||
-                        !answers.predictionAccuracy ||
-                        !answers.wakeUpTime ||
-                        !answers.bedTime
-                      )
-                        return;
                       completeOnboarding(
                         {
                           data: {
-                            language: ONBOARDING_LANGUAGE_MAP[answers.language],
-                            predictionAccuracy: answers.predictionAccuracy,
-                            wakeUpTime: answers.wakeUpTime,
-                            bedTime: answers.bedTime,
+                            language: ONBOARDING_LANGUAGE_MAP[context.language],
+                            predictionAccuracy: context.predictionAccuracy,
+                            wakeUpTime: context.wakeUpTime,
+                            bedTime: context.bedTime,
                           },
                         },
                         {
@@ -188,7 +181,7 @@ export const OnboardingFunnelContainer = () => {
                             removeOnboardingAnswers();
                             setOnboardingCompleted(true);
                             router.replace(ROUTES.HOME, {
-                              locale: answers.language,
+                              locale: context.language,
                             });
                           },
                           onError: () => {
