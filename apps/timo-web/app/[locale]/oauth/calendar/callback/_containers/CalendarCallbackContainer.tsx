@@ -18,8 +18,7 @@ import { useRouter } from "@/i18n/navigation";
 type Route = (typeof ROUTES)[keyof typeof ROUTES];
 
 const CALENDAR_CONNECT_REDIRECT: Record<CalendarConnectOrigin, Route> = {
-  // TODO: 온보딩 캘린더 연동 단계 재활성화 시 ROUTES.ONBOARDING으로 변경
-  [CALENDAR_CONNECT_ORIGIN.ONBOARDING]: ROUTES.HOME,
+  [CALENDAR_CONNECT_ORIGIN.ONBOARDING]: ROUTES.ONBOARDING,
   [CALENDAR_CONNECT_ORIGIN.SETTINGS]: ROUTES.SETTINGS,
 };
 

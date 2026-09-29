@@ -10,6 +10,11 @@ import { LanguageStepContainer } from "@/app/[locale]/onboarding/_containers/Lan
 import { LifePatternStepContainer } from "@/app/[locale]/onboarding/_containers/LifePatternStepContainer";
 import { TimePredictionStepContainer } from "@/app/[locale]/onboarding/_containers/TimePredictionStepContainer";
 import { OnboardingFunnelSteps } from "@/app/[locale]/onboarding/_types/onboarding-funnel";
+import {
+  getOnboardingAnswers,
+  removeOnboardingAnswers,
+} from "@/app/[locale]/onboarding/_utils/onboarding-answers-storage";
+import { AsyncBoundary } from "@/components/boundary/AsyncBoundary";
 import { LottiePlayer } from "@/components/lottie/LottiePlayer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { ROUTES } from "@/constants/routes";
@@ -37,23 +42,28 @@ export const OnboardingFunnelContainer = () => {
   const setOnboardingCompleted = useAuthStore(
     (state) => state.setOnboardingCompleted,
   );
+  const [restoredAnswers] = useState(getOnboardingAnswers);
   const [answers, setAnswers] = useState<
     Partial<OnboardingFunnelSteps["CalendarConnect"]>
-  >({});
-  const [isErrorToastOpen, setIsErrorToastOpen] = useState(false);
+  >(() => restoredAnswers ?? {});
+  const [errorToastMessage, setErrorToastMessage] = useState<string | null>(
+    null,
+  );
 
   const funnel = useFunnel<OnboardingFunnelSteps>({
     id: "onboarding",
-    initial: { step: "Language", context: {} },
+    initial: restoredAnswers
+      ? { step: "CalendarConnect", context: restoredAnswers }
+      : { step: "Language", context: {} },
   });
   const { mutate: completeOnboarding, isPending } = useCompleteOnboarding();
 
   return (
     <section className="flex min-h-screen items-center justify-center gap-10 bg-white px-8 lg:gap-16 xl:gap-36 2xl:gap-[225px]">
       <AnimatedToast
-        isOpen={isErrorToastOpen}
-        onClose={() => setIsErrorToastOpen(false)}
-        message={t("onboardingSubmitFailed")}
+        isOpen={errorToastMessage !== null}
+        onClose={() => setErrorToastMessage(null)}
+        message={errorToastMessage ?? ""}
       />
       <LottiePlayer
         src="/lottie/onboarding.json"
@@ -79,13 +89,19 @@ export const OnboardingFunnelContainer = () => {
                 }}
               />
             )}
-            TimePrediction={({ history }) => (
+            TimePrediction={({ history, index, context }) => (
               <TimePredictionStepContainer
                 predictionAccuracy={answers.predictionAccuracy}
                 onSelect={(predictionAccuracy) =>
                   setAnswers((prev) => ({ ...prev, predictionAccuracy }))
                 }
-                onPrev={() => history.back()}
+                onPrev={() =>
+                  index > 0
+                    ? history.back()
+                    : history.replace("Language", {
+                        language: context.language,
+                      })
+                }
                 onNext={() => {
                   if (!answers.language || !answers.predictionAccuracy) return;
                   history.push("LifePattern", {
@@ -95,7 +111,7 @@ export const OnboardingFunnelContainer = () => {
                 }}
               />
             )}
-            LifePattern={({ history }) => (
+            LifePattern={({ history, index, context }) => (
               <LifePatternStepContainer
                 wakeUpTime={answers.wakeUpTime}
                 bedTime={answers.bedTime}
@@ -105,7 +121,11 @@ export const OnboardingFunnelContainer = () => {
                 onSelectBedTime={(bedTime) =>
                   setAnswers((prev) => ({ ...prev, bedTime }))
                 }
-                onPrev={() => history.back()}
+                onPrev={() =>
+                  index > 0
+                    ? history.back()
+                    : history.replace("TimePrediction", context)
+                }
                 onNext={() => {
                   if (
                     !answers.language ||
@@ -114,67 +134,61 @@ export const OnboardingFunnelContainer = () => {
                     !answers.bedTime
                   )
                     return;
-                  // TODO: 구글 캘린더 연동 단계 재활성화 시 아래 completeOnboarding 블록을 제거하고
-                  // history.push("CalendarConnect", { language: answers.language, predictionAccuracy: answers.predictionAccuracy, wakeUpTime: answers.wakeUpTime, bedTime: answers.bedTime }) 로 복구
-                  completeOnboarding(
-                    {
-                      data: {
-                        language: ONBOARDING_LANGUAGE_MAP[answers.language],
-                        predictionAccuracy: answers.predictionAccuracy,
-                        wakeUpTime: answers.wakeUpTime,
-                        bedTime: answers.bedTime,
-                      },
-                    },
-                    {
-                      onSuccess: () => {
-                        setOnboardingCompleted(true);
-                        router.replace(ROUTES.HOME, {
-                          locale: answers.language,
-                        });
-                      },
-                      onError: () => {
-                        setIsErrorToastOpen(true);
-                      },
-                    },
-                  );
+                  history.push("CalendarConnect", {
+                    language: answers.language,
+                    predictionAccuracy: answers.predictionAccuracy,
+                    wakeUpTime: answers.wakeUpTime,
+                    bedTime: answers.bedTime,
+                  });
                 }}
               />
             )}
-            CalendarConnect={({ history }) => (
-              <CalendarConnectStepContainer
-                isPending={isPending}
-                onPrev={() => history.back()}
-                onStart={() => {
-                  if (
-                    !answers.language ||
-                    !answers.predictionAccuracy ||
-                    !answers.wakeUpTime ||
-                    !answers.bedTime
-                  )
-                    return;
-                  completeOnboarding(
-                    {
-                      data: {
-                        language: ONBOARDING_LANGUAGE_MAP[answers.language],
-                        predictionAccuracy: answers.predictionAccuracy,
-                        wakeUpTime: answers.wakeUpTime,
-                        bedTime: answers.bedTime,
+            CalendarConnect={({ history, index, context }) => (
+              <AsyncBoundary>
+                <CalendarConnectStepContainer
+                  answers={context}
+                  isPending={isPending}
+                  onConnectError={() =>
+                    setErrorToastMessage(t("calendarConnectFailed"))
+                  }
+                  onPrev={() =>
+                    index > 0
+                      ? history.back()
+                      : history.replace("LifePattern", context)
+                  }
+                  onStart={() => {
+                    if (
+                      !answers.language ||
+                      !answers.predictionAccuracy ||
+                      !answers.wakeUpTime ||
+                      !answers.bedTime
+                    )
+                      return;
+                    completeOnboarding(
+                      {
+                        data: {
+                          language: ONBOARDING_LANGUAGE_MAP[answers.language],
+                          predictionAccuracy: answers.predictionAccuracy,
+                          wakeUpTime: answers.wakeUpTime,
+                          bedTime: answers.bedTime,
+                        },
                       },
-                    },
-                    {
-                      onSuccess: () => {
-                        setOnboardingCompleted(true);
-                        router.replace(ROUTES.HOME, {
-                          locale: answers.language,
-                        });
+                      {
+                        onSuccess: () => {
+                          removeOnboardingAnswers();
+                          setOnboardingCompleted(true);
+                          router.replace(ROUTES.HOME, {
+                            locale: answers.language,
+                          });
+                        },
+                        onError: () => {
+                          setErrorToastMessage(t("onboardingSubmitFailed"));
+                        },
                       },
-                      onError: () => {
-                        setIsErrorToastOpen(true);
-                      },
-                    },
-                  );
-                }}
-              />
+                    );
+                  }}
+                />
+              </AsyncBoundary>
             )}
           />
         </div>
