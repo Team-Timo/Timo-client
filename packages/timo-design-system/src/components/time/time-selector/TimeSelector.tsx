@@ -10,8 +10,7 @@ export type TimeSelection = number | "ai";
 
 export interface TimeOption {
   minute: number;
-  value: string;
-  unit: string;
+  label: string;
 }
 
 export interface TimeSelectorProps {
@@ -122,16 +121,16 @@ export const TimeSelector = ({
             type="button"
             onClick={() => selectDraft("ai")}
             aria-pressed={isAiSelected}
-            className="flex w-full items-center gap-1"
+            className="flex w-full items-center"
           >
             {isAiSelected ? (
-              <AiWhiteIcon className="size-3.5 shrink-0" />
+              <AiWhiteIcon className="m-1.25 size-3 shrink-0" />
             ) : (
-              <AiDefaultIcon className="size-3.5 shrink-0" />
+              <AiDefaultIcon className="m-1.25 size-3 shrink-0" />
             )}
             <span
               className={cn(
-                "text-[8px] leading-normal tracking-[-0.03em]",
+                "typo-caption-r-10",
                 isAiSelected ? "text-white" : "text-timo-black",
               )}
             >
@@ -175,8 +174,8 @@ export const TimeSelector = ({
           </div>
         </div>
 
-        <div className="border-timo-gray-500 flex w-full flex-col items-start gap-1.5 border-t pt-2">
-          {times.map(({ minute, value, unit }) => {
+        <div className="border-timo-gray-500 flex w-full flex-col items-start gap-1 border-t pt-2">
+          {times.map(({ minute, label }) => {
             const isSelected = minute === draftSelected;
 
             return (
@@ -186,7 +185,7 @@ export const TimeSelector = ({
                 closeOnSelect={false}
                 aria-pressed={isSelected}
                 className={cn(
-                  "justify-between px-[3.5px] py-[2.5px]",
+                  "px-[3.5px] py-0.5",
                   isSelected && "bg-timo-blue-300",
                 )}
               >
@@ -196,15 +195,7 @@ export const TimeSelector = ({
                     isSelected && "text-white",
                   )}
                 >
-                  {value}
-                </span>
-                <span
-                  className={cn(
-                    "typo-headline-r-14 text-timo-black",
-                    isSelected && "text-white",
-                  )}
-                >
-                  {unit}
+                  {label}
                 </span>
               </Dropdown.Item>
             );
