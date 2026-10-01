@@ -5,3 +5,4 @@ export {
   unregisterOpenFloatingLayer,
 } from "./floating-layer-registry";
 export { acquireModalStackIndex } from "./modal-stack-registry";
+export { useEscapeKey } from "./use-escape-key";

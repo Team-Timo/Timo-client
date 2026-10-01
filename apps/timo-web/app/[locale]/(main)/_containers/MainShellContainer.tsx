@@ -13,8 +13,8 @@ interface MainShellContainerProps {
 }
 
 const MAIN_MARGIN_CLASS_NAME = {
-  open: "ml-55",
-  collapsed: "ml-5",
+  open: "md:ml-55",
+  collapsed: "md:ml-5",
 } as const;
 
 const MainContent = ({ children }: { children: React.ReactNode }) => {
@@ -23,7 +23,7 @@ const MainContent = ({ children }: { children: React.ReactNode }) => {
   return (
     <main
       className={cn(
-        "rounded-8 h-full overflow-y-auto bg-white transition-[margin-left] duration-200 ease-in-out",
+        "md:rounded-8 h-full overflow-y-auto bg-white transition-[margin-left] duration-200 ease-in-out",
         isOpen ? MAIN_MARGIN_CLASS_NAME.open : MAIN_MARGIN_CLASS_NAME.collapsed,
       )}
     >
