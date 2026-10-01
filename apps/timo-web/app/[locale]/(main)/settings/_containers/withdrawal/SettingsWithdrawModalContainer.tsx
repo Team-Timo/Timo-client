@@ -44,9 +44,6 @@ export const SettingsWithdrawModalContainer = ({
         {t("withdrawConfirmDescription")}
       </p>
       <div className="mt-6 flex w-full gap-3">
-        <ModalButton variant="fill" className="flex-1 px-0" onClick={onClose}>
-          {t("withdrawConfirmCancel")}
-        </ModalButton>
         <ModalButton
           variant="border"
           className="flex-1 px-0"
@@ -56,6 +53,9 @@ export const SettingsWithdrawModalContainer = ({
           }}
         >
           {t("withdrawConfirmConfirm")}
+        </ModalButton>
+        <ModalButton variant="fill" className="flex-1 px-0" onClick={onClose}>
+          {t("withdrawConfirmCancel")}
         </ModalButton>
       </div>
     </OverlayModal>
