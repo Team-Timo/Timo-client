@@ -16,6 +16,7 @@ export const SidebarButton = ({
     <button
       type="button"
       onClick={onClick}
+      aria-expanded={isOpen}
       aria-label={isOpen ? "사이드바 닫기" : "사이드바 열기"}
       className={cn(
         "border-timo-gray-500 flex size-8 items-center justify-center rounded-[4px] border bg-white",
