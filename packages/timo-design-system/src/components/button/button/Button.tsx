@@ -22,16 +22,13 @@ const BUTTON_VARIANTS: Record<
   },
 };
 
-const BUTTON_HEIGHT: Record<ButtonSizeTypes, string> = {
-  m: "h-8.5",
-  lg: "h-11.5",
+const BUTTON_SIZE: Record<
+  ButtonSizeTypes,
+  { height: string; padding: { text: string; icon: string } }
+> = {
+  m: { height: "h-8.5", padding: { text: "px-4", icon: "px-2" } },
+  lg: { height: "h-11.5", padding: { text: "px-12", icon: "px-12" } },
 };
-
-const BUTTON_PADDING: Record<ButtonSizeTypes, { text: string; icon: string }> =
-  {
-    m: { text: "px-4", icon: "px-2" },
-    lg: { text: "px-12", icon: "px-12" },
-  };
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant: ButtonVariantTypes;
@@ -58,8 +55,8 @@ export const Button = ({
         "focus-visible:ring-timo-blue-300 focus-visible:ring-2 focus-visible:ring-offset-2",
         "disabled:cursor-not-allowed",
         BUTTON_VARIANTS[variant][appearance],
-        BUTTON_HEIGHT[size],
-        BUTTON_PADDING[size][icon ? "icon" : "text"],
+        BUTTON_SIZE[size].height,
+        BUTTON_SIZE[size].padding[icon ? "icon" : "text"],
         className,
       )}
       {...rest}
