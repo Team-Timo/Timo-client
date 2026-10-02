@@ -113,9 +113,14 @@ export const useDetailTodoPatchHandlers = ({
     };
 
     if (form.isRepeatActive && form.repeatFrequency === "WEEKLY") {
-      updateData.repeatWeekdays = form.selectedWeekdayIds.filter(
+      const repeatWeekdays = form.selectedWeekdayIds.filter(
         isTodoUpdateRepeatWeekday,
       );
+      if (repeatWeekdays.length === 0) {
+        updateData.repeatType = "NONE";
+      } else {
+        updateData.repeatWeekdays = repeatWeekdays;
+      }
     }
 
     if (form.isRepeatActive && form.repeatFrequency === "MONTHLY") {
