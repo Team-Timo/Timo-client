@@ -6,6 +6,7 @@ import { triggerScrollToToday } from "@/app/[locale]/(main)/(with-time-sidebar)/
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { Header } from "@/components/layout/header/Header";
 import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
+import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export const HomeHeaderContainer = () => {
   const t = useTranslations("Home");
@@ -15,6 +16,10 @@ export const HomeHeaderContainer = () => {
   const viewOptions = [basicLabel, weekLabel];
 
   const { isOpen, toggle } = useNavigationSidebar();
+  const isTimeSidebarOpen = useTimeSidebarStore((state) => state.isOpen);
+  const toggleTimeSidebarOpen = useTimeSidebarStore(
+    (state) => state.toggleOpen,
+  );
   const { isWeekView, setViewMode, goToNextWeek, goToPrevWeek, goToToday } =
     useHomeViewMode();
 
@@ -44,11 +49,19 @@ export const HomeHeaderContainer = () => {
         </>
       }
       right={
-        <Header.ViewDropdown
-          items={viewOptions}
-          value={isWeekView ? weekLabel : basicLabel}
-          onChange={handleChangeView}
-        />
+        <div className="flex items-center gap-3">
+          <Header.ViewDropdown
+            items={viewOptions}
+            value={isWeekView ? weekLabel : basicLabel}
+            onChange={handleChangeView}
+          />
+          <Header.SidebarButton
+            isOpen={isTimeSidebarOpen}
+            onClick={toggleTimeSidebarOpen}
+            label="시간 패널"
+            className="md:hidden"
+          />
+        </div>
       }
     />
   );
