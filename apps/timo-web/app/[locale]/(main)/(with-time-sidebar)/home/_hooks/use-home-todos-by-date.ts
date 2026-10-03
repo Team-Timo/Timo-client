@@ -153,19 +153,13 @@ export const useHomeTodosByDate = (
   const handleTogglePlay = (dateKey: string, todoId: number) => {
     if (isTimerActionPending) return;
 
-    const willRun =
-      todosByDate[dateKey]?.find((todo) => todo.todoId === todoId)
-        ?.timerStatus !== "RUNNING";
-
-    if (willRun) {
-      openTimerPanel();
-    }
-
     if (
       activeTimer &&
       activeTimer.todoId === todoId &&
       activeTimer.date === dateKey
     ) {
+      const isResuming = activeTimer.status !== "RUNNING";
+
       changeStatus(
         {
           timerId: activeTimer.timerId,
@@ -174,8 +168,10 @@ export const useHomeTodosByDate = (
           },
         },
         {
-          onSuccess: () =>
-            invalidateTimerProgress({ includeFocus: true, todoId }),
+          onSuccess: () => {
+            if (isResuming) openTimerPanel();
+            invalidateTimerProgress({ includeFocus: true, todoId });
+          },
         },
       );
       return;
@@ -190,8 +186,10 @@ export const useHomeTodosByDate = (
     startTimer(
       { todoId, params: { date: dateKey } },
       {
-        onSuccess: () =>
-          invalidateTimerProgress({ includeFocus: true, todoId }),
+        onSuccess: () => {
+          openTimerPanel();
+          invalidateTimerProgress({ includeFocus: true, todoId });
+        },
         onError: (error: ApiError) => {
           onPlayError(error.message);
         },
