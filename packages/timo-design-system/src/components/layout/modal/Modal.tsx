@@ -170,7 +170,7 @@ const ModalPanel = ({ children, className }: ModalPanelProps) => {
       aria-labelledby={titleId}
       style={{ zIndex: panelZIndex }}
       className={cn(
-        "fixed top-1/2 left-1/2 flex w-100 -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-5.5",
+        "fixed top-1/2 left-1/2 flex w-100 max-w-[calc(100vw-0.5rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-4.5 md:max-w-none md:p-5.5",
         className,
       )}
     >

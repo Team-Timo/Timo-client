@@ -9,6 +9,7 @@
 
 - `docs/conventions/code-style.md` → 컴포넌트·타입·A11y 규칙
 - `docs/architecture/components.md` → 컴포넌트 계층
+- `docs/architecture/responsive.md` → 반응형 구현 규칙 (모바일 대응이 필요한 경우)
 
 ## 워크플로우
 
