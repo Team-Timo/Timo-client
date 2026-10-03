@@ -128,7 +128,7 @@ export const DetailTodoModalContent = ({
         onClose={handleClose}
         onExited={onExited}
         ariaLabel={t("ariaLabel")}
-        className="w-124 items-start px-7.5 py-5"
+        className="m-1 w-124 items-start px-6.5 py-4 md:m-0 md:px-7.5 md:py-5"
       >
         <div className="flex w-full justify-end">
           <button

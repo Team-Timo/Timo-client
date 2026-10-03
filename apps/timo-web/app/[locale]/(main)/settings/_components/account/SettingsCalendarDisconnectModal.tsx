@@ -29,7 +29,7 @@ export const SettingsCalendarDisconnectModal = ({
       onClose={onClose}
       onExited={onExited}
       ariaLabel={labels.calendarDisconnectConfirmTitle}
-      className="w-100 p-5.5"
+      className="m-1 w-100 p-4.5 md:m-0 md:p-5.5"
     >
       <div className="mb-4 size-10 shrink-0">
         <Image src={timoTimerLogo} alt="" width={40} height={40} />
