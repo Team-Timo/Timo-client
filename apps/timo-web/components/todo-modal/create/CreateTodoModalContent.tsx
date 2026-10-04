@@ -179,7 +179,7 @@ export const CreateTodoModalContent = ({
             onSelectTag={tagField.handleSelectTag}
             onAddTagClick={tagField.handleAddTagClick}
             hasMemo={(memoField.value ?? "").trim().length > 0}
-            isRepeatActive={repeatField.isRepeatActive}
+            isRepeatActive={repeatField.isRepeatEffective}
             repeat={{
               detailHeading: t("createModal.repeatDetailHeading"),
               options: [

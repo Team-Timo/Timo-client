@@ -43,8 +43,17 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
 
   const repeatType = repeatTypeField.field.value;
   const repeatWeekdays = repeatWeekdaysField.field.value ?? [];
+  const repeatDayOfMonth = repeatDayField.field.value;
 
   const isRepeatActive = repeatType !== "NONE";
+  const isRepeatEffective =
+    repeatType === "DAILY" ||
+    (repeatType === "WEEKLY" && repeatWeekdays.length > 0) ||
+    (repeatType === "MONTHLY" &&
+      typeof repeatDayOfMonth === "number" &&
+      Number.isInteger(repeatDayOfMonth) &&
+      repeatDayOfMonth >= 1 &&
+      repeatDayOfMonth <= 31);
   const uiRepeatFrequency: RepeatFrequency =
     repeatType === "NONE" ? "DAILY" : repeatType;
 
@@ -77,9 +86,9 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
   return {
     repeatType,
     repeatWeekdays,
-    repeatDayOfMonth: repeatDayField.field.value,
+    repeatDayOfMonth,
     weekdays,
-    isRepeatActive,
+    isRepeatEffective,
     uiRepeatFrequency,
     handleFrequencyChange,
     handleWeekdaysChange,
