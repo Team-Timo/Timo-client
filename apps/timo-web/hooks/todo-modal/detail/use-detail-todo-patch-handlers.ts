@@ -131,6 +131,8 @@ export const useDetailTodoPatchHandlers = ({
         repeatDayOfMonth <= 31
       ) {
         updateData.repeatDayOfMonth = repeatDayOfMonth;
+      } else if (form.repeatDay.trim() === "") {
+        updateData.repeatType = "NONE";
       }
     }
 
