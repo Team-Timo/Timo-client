@@ -15,6 +15,10 @@ import { SECONDS_PER_MINUTE } from "@/constants/time";
 import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
 import { useDetailSubtaskField } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import { parseDateKey } from "@/utils/date/date";
+import {
+  getEffectiveDetailTodoRepeat,
+  isSameEffectiveDetailTodoRepeat,
+} from "@/utils/todo/detail-todo-repeat";
 import { getRepeatDetailsReset } from "@/utils/todo/repeat-detail-reset";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
@@ -180,20 +184,22 @@ export const useDetailTodoForm = ({
     repeatFrequencyField.onChange(frequency);
   };
 
-  const initialWeekdayIds = todo.repeat.weekdays ?? [];
-  const currentWeekdayIds = selectedWeekdayIdsField.value ?? [];
-  const sortedInitialWeekdayIds = [...initialWeekdayIds].sort();
-  const sortedCurrentWeekdayIds = [...currentWeekdayIds].sort();
-  const hasSameWeekdays =
-    sortedInitialWeekdayIds.length === sortedCurrentWeekdayIds.length &&
-    sortedInitialWeekdayIds.every(
-      (weekdayId, index) => weekdayId === sortedCurrentWeekdayIds[index],
-    );
-  const hasRepeatChanges =
-    isRepeatActiveField.value !== (todo.repeat.type !== "NONE") ||
-    repeatFrequencyField.value !== repeatType ||
-    !hasSameWeekdays ||
-    repeatDayField.value !== (todo.repeat.dayOfMonth?.toString() ?? "");
+  const effectiveRepeat = getEffectiveDetailTodoRepeat({
+    isRepeatActive: isRepeatActiveField.value,
+    repeatFrequency: repeatFrequencyField.value,
+    selectedWeekdayIds: selectedWeekdayIdsField.value ?? [],
+    repeatDay: repeatDayField.value,
+  });
+  const initialEffectiveRepeat = getEffectiveDetailTodoRepeat({
+    isRepeatActive: todo.repeat.type !== "NONE",
+    repeatFrequency: repeatType,
+    selectedWeekdayIds: todo.repeat.weekdays ?? [],
+    repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
+  });
+  const hasRepeatChanges = !isSameEffectiveDetailTodoRepeat(
+    effectiveRepeat,
+    initialEffectiveRepeat,
+  );
 
   const getTagIdByLabel = (label: string) => {
     const option = tagField.tagOptions.find((item) => item.label === label);
@@ -218,7 +224,8 @@ export const useDetailTodoForm = ({
     closeTagLimitToast: tagField.closeTagLimitToast,
     isCreateTagErrorToastOpen: tagField.isCreateTagErrorToastOpen,
     closeCreateTagErrorToast: tagField.closeCreateTagErrorToast,
-    isRepeatActive: isRepeatActiveField.value,
+    isRepeatEffective: effectiveRepeat.repeatType !== "NONE",
+    effectiveRepeat,
     repeatFrequency: repeatFrequencyField.value,
     selectedWeekdayIds: selectedWeekdayIdsField.value,
     setSelectedWeekdayIds,

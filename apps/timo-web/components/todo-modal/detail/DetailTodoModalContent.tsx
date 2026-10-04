@@ -221,7 +221,7 @@ export const DetailTodoModalContent = ({
                   onSelectTag={patchHandlers.handleSelectTag}
                   onAddTagClick={detailTodoForm.handleAddTagClick}
                   hasMemo={detailTodoForm.memo.trim().length > 0}
-                  isRepeatActive={detailTodoForm.isRepeatActive}
+                  isRepeatActive={detailTodoForm.isRepeatEffective}
                   repeat={{
                     frequencyHeading: t("repeatFrequencyHeading"),
                     detailHeading: tCreateModal("repeatDetailHeading"),
