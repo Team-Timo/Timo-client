@@ -15,6 +15,7 @@ import { SECONDS_PER_MINUTE } from "@/constants/time";
 import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
 import { useDetailSubtaskField } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import { parseDateKey } from "@/utils/date/date";
+import { getRepeatDetailsReset } from "@/utils/todo/repeat-detail-reset";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
@@ -164,12 +165,16 @@ export const useDetailTodoForm = ({
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {
-    if (
-      !isRepeatActiveField.value ||
-      repeatFrequencyField.value !== frequency
-    ) {
-      selectedWeekdayIdsField.onChange([]);
-      repeatDayField.onChange("");
+    const reset = getRepeatDetailsReset({
+      currentFrequency: repeatFrequencyField.value,
+      nextFrequency: frequency,
+      isRepeatActive: isRepeatActiveField.value,
+      emptyDay: "",
+    });
+
+    if (reset) {
+      selectedWeekdayIdsField.onChange(reset.weekdays);
+      repeatDayField.onChange(reset.day);
     }
     isRepeatActiveField.onChange(true);
     repeatFrequencyField.onChange(frequency);
