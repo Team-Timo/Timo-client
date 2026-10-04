@@ -8,6 +8,8 @@ import type {
 import type { RepeatFrequency } from "@repo/timo-design-system/ui";
 import type { Control } from "react-hook-form";
 
+import { getRepeatDetailsReset } from "@/utils/todo/repeat-detail-reset";
+
 const WEEKDAY_CODES: TodoRepeatWeekday[] = [
   "MON",
   "TUE",
@@ -47,6 +49,17 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
     repeatType === "NONE" ? "DAILY" : repeatType;
 
   const handleFrequencyChange = (frequency: RepeatFrequency) => {
+    const reset = getRepeatDetailsReset({
+      currentFrequency: repeatTypeField.field.value,
+      nextFrequency: frequency,
+      isRepeatActive,
+      emptyDay: null,
+    });
+
+    if (reset) {
+      repeatWeekdaysField.field.onChange(reset.weekdays);
+      repeatDayField.field.onChange(reset.day);
+    }
     repeatTypeField.field.onChange(frequency);
   };
 

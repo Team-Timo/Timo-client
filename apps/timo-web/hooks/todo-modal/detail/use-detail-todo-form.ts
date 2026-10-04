@@ -15,6 +15,7 @@ import { SECONDS_PER_MINUTE } from "@/constants/time";
 import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
 import { useDetailSubtaskField } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import { parseDateKey } from "@/utils/date/date";
+import { getRepeatDetailsReset } from "@/utils/todo/repeat-detail-reset";
 import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
@@ -164,9 +165,35 @@ export const useDetailTodoForm = ({
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {
+    const reset = getRepeatDetailsReset({
+      currentFrequency: repeatFrequencyField.value,
+      nextFrequency: frequency,
+      isRepeatActive: isRepeatActiveField.value,
+      emptyDay: "",
+    });
+
+    if (reset) {
+      selectedWeekdayIdsField.onChange(reset.weekdays);
+      repeatDayField.onChange(reset.day);
+    }
     isRepeatActiveField.onChange(true);
     repeatFrequencyField.onChange(frequency);
   };
+
+  const initialWeekdayIds = todo.repeat.weekdays ?? [];
+  const currentWeekdayIds = selectedWeekdayIdsField.value ?? [];
+  const sortedInitialWeekdayIds = [...initialWeekdayIds].sort();
+  const sortedCurrentWeekdayIds = [...currentWeekdayIds].sort();
+  const hasSameWeekdays =
+    sortedInitialWeekdayIds.length === sortedCurrentWeekdayIds.length &&
+    sortedInitialWeekdayIds.every(
+      (weekdayId, index) => weekdayId === sortedCurrentWeekdayIds[index],
+    );
+  const hasRepeatChanges =
+    isRepeatActiveField.value !== (todo.repeat.type !== "NONE") ||
+    repeatFrequencyField.value !== repeatType ||
+    !hasSameWeekdays ||
+    repeatDayField.value !== (todo.repeat.dayOfMonth?.toString() ?? "");
 
   const getTagIdByLabel = (label: string) => {
     const option = tagField.tagOptions.find((item) => item.label === label);
@@ -212,6 +239,7 @@ export const useDetailTodoForm = ({
     removeIcon,
     selectTime,
     changeRepeatFrequency,
+    hasRepeatChanges,
     handleSubmit,
     dirtyFields: formState.dirtyFields,
   };

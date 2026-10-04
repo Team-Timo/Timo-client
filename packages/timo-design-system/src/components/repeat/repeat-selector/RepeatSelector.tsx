@@ -174,26 +174,46 @@ export const RepeatSelector = ({
   const [draftRepeatDay, setDraftRepeatDay] = useState(monthly.repeatDay);
 
   const draftFrequencyRef = useRef(frequency);
+  const confirmedFrequencyRef = useRef(frequency);
   const draftWeekdayIdsRef = useRef(weekly.selectedWeekdayIds);
   const draftRepeatDayRef = useRef(monthly.repeatDay);
-  // 반복이 꺼져 있을 때(isActive=false) frequency는 "DAILY"라는 기본값을 표시할
-  // 뿐 실제로 저장된 값이 아니다. 이 경우 "매일"을 선택해도 draft가 기본값과
-  // 같아서 "변경 없음"으로 오인되므로, 사용자가 실제로 클릭했는지를 별도로
-  // 추적해 그 경우엔 값이 같아도 반드시 커밋한다.
-  const hasSelectedFrequencyRef = useRef(false);
+  const hasConfirmedFrequencySelectionRef = useRef(false);
 
   const selectedLabel = options.find(
     (option) => option.frequency === draftFrequency,
   )?.label;
 
   const handleSelectFrequency = (value: RepeatFrequency) => {
-    hasSelectedFrequencyRef.current = true;
+    if (value === "WEEKLY" && confirmedFrequencyRef.current !== "WEEKLY") {
+      draftWeekdayIdsRef.current = [];
+      setDraftWeekdayIds([]);
+    }
+    if (value === "MONTHLY" && confirmedFrequencyRef.current !== "MONTHLY") {
+      draftRepeatDayRef.current = "";
+      setDraftRepeatDay("");
+    }
+    if (value === "DAILY") {
+      confirmedFrequencyRef.current = "DAILY";
+      hasConfirmedFrequencySelectionRef.current = true;
+      draftWeekdayIdsRef.current = [];
+      setDraftWeekdayIds([]);
+      draftRepeatDayRef.current = "";
+      setDraftRepeatDay("");
+    }
+
     draftFrequencyRef.current = value;
     setDraftFrequency(value);
     if (value !== "DAILY") setIsPicking(false);
   };
 
   const handleWeekdayToggle = (id: string) => {
+    if (confirmedFrequencyRef.current !== "WEEKLY") {
+      confirmedFrequencyRef.current = "WEEKLY";
+      hasConfirmedFrequencySelectionRef.current = true;
+      draftRepeatDayRef.current = "";
+      setDraftRepeatDay("");
+    }
+
     const next = draftWeekdayIdsRef.current.includes(id)
       ? draftWeekdayIdsRef.current.filter((item) => item !== id)
       : [...draftWeekdayIdsRef.current, id];
@@ -203,13 +223,28 @@ export const RepeatSelector = ({
   };
 
   const handleRepeatDayChange = (value: string) => {
+    const day = Number(value);
+    if (
+      confirmedFrequencyRef.current !== "MONTHLY" &&
+      value.trim() !== "" &&
+      Number.isInteger(day) &&
+      day >= 1 &&
+      day <= 31
+    ) {
+      confirmedFrequencyRef.current = "MONTHLY";
+      hasConfirmedFrequencySelectionRef.current = true;
+      draftWeekdayIdsRef.current = [];
+      setDraftWeekdayIds([]);
+    }
+
     draftRepeatDayRef.current = value;
     setDraftRepeatDay(value);
   };
 
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
-      hasSelectedFrequencyRef.current = false;
+      hasConfirmedFrequencySelectionRef.current = false;
+      confirmedFrequencyRef.current = frequency;
       draftFrequencyRef.current = frequency;
       setDraftFrequency(frequency);
       draftWeekdayIdsRef.current = weekly.selectedWeekdayIds;
@@ -219,13 +254,20 @@ export const RepeatSelector = ({
       return;
     }
 
+    if (draftFrequencyRef.current !== confirmedFrequencyRef.current) {
+      draftFrequencyRef.current = confirmedFrequencyRef.current;
+      setDraftFrequency(confirmedFrequencyRef.current);
+      if (confirmedFrequencyRef.current === "DAILY") setIsPicking(true);
+    }
+
     if (
-      hasSelectedFrequencyRef.current &&
-      (draftFrequencyRef.current !== frequency || !isActive)
+      hasConfirmedFrequencySelectionRef.current &&
+      (confirmedFrequencyRef.current !== frequency || !isActive)
     ) {
-      onFrequencyChange?.(draftFrequencyRef.current);
+      onFrequencyChange?.(confirmedFrequencyRef.current);
     }
     if (
+      confirmedFrequencyRef.current === "WEEKLY" &&
       !isSameWeekdaySelection(
         draftWeekdayIdsRef.current,
         weekly.selectedWeekdayIds,
@@ -233,7 +275,10 @@ export const RepeatSelector = ({
     ) {
       weekly.onWeekdaysChange?.(draftWeekdayIdsRef.current);
     }
-    if (draftRepeatDayRef.current !== monthly.repeatDay) {
+    if (
+      confirmedFrequencyRef.current === "MONTHLY" &&
+      draftRepeatDayRef.current !== monthly.repeatDay
+    ) {
       monthly.onRepeatDayChange?.(draftRepeatDayRef.current);
     }
   };

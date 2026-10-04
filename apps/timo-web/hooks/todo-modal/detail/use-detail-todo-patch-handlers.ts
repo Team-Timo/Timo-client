@@ -94,37 +94,49 @@ export const useDetailTodoPatchHandlers = ({
   };
 
   const handleRepeatFrequencyChange = (repeatFrequency: RepeatFrequency) => {
-    updateTodo(
-      { repeatType: repeatFrequency },
-      { onSuccess: () => form.changeRepeatFrequency(repeatFrequency) },
-    );
+    form.changeRepeatFrequency(repeatFrequency);
   };
 
   const handleWeekdaysChange = (weekdayIds: string[]) => {
-    updateTodo(
-      {
-        repeatType: "WEEKLY",
-        repeatWeekdays: weekdayIds.filter(isTodoUpdateRepeatWeekday),
-      },
-      {
-        onSuccess: () => form.setSelectedWeekdayIds(weekdayIds),
-      },
-    );
+    form.setSelectedWeekdayIds(weekdayIds);
   };
 
   const handleRepeatDayChange = (repeatDay: string) => {
-    const repeatDayOfMonth = Number(repeatDay);
+    form.setRepeatDay(repeatDay);
+  };
 
-    if (
-      Number.isInteger(repeatDayOfMonth) &&
-      repeatDayOfMonth >= 1 &&
-      repeatDayOfMonth <= 31
-    ) {
-      updateTodo(
-        { repeatType: "MONTHLY", repeatDayOfMonth },
-        { onSuccess: () => form.setRepeatDay(repeatDay) },
+  const submitRepeatChange = () => {
+    if (!form.hasRepeatChanges) return;
+
+    const updateData: TodoUpdateRequest = {
+      repeatType: form.isRepeatActive ? form.repeatFrequency : "NONE",
+    };
+
+    if (form.isRepeatActive && form.repeatFrequency === "WEEKLY") {
+      const repeatWeekdays = form.selectedWeekdayIds.filter(
+        isTodoUpdateRepeatWeekday,
       );
+      if (repeatWeekdays.length === 0) {
+        updateData.repeatType = "NONE";
+      } else {
+        updateData.repeatWeekdays = repeatWeekdays;
+      }
     }
+
+    if (form.isRepeatActive && form.repeatFrequency === "MONTHLY") {
+      const repeatDayOfMonth = Number(form.repeatDay);
+      if (
+        Number.isInteger(repeatDayOfMonth) &&
+        repeatDayOfMonth >= 1 &&
+        repeatDayOfMonth <= 31
+      ) {
+        updateData.repeatDayOfMonth = repeatDayOfMonth;
+      } else if (form.repeatDay.trim() === "") {
+        updateData.repeatType = "NONE";
+      }
+    }
+
+    updateTodo(updateData);
   };
 
   const handleSubtaskCompletedChange = (id: number, completed: boolean) => {
@@ -147,6 +159,7 @@ export const useDetailTodoPatchHandlers = ({
     handleRepeatFrequencyChange,
     handleWeekdaysChange,
     handleRepeatDayChange,
+    submitRepeatChange,
     handleSubtaskCompletedChange,
   };
 };
