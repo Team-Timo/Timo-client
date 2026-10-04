@@ -1,11 +1,19 @@
 import { Button } from "./Button";
-import { TrashOnIcon } from "../../../icons";
+import { TrashDisableIcon, TrashOnIcon, TrashWhiteIcon } from "../../../icons";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
 const VARIANTS = ["primary", "secondary"] as const;
 const APPEARANCES = ["fill", "outline"] as const;
 const SIZES = ["m", "lg"] as const;
+
+const getTrashIcon = (
+  variant: (typeof VARIANTS)[number],
+  disabled: boolean,
+) => {
+  if (variant === "primary") return <TrashWhiteIcon />;
+  return disabled ? <TrashDisableIcon /> : <TrashOnIcon />;
+};
 
 const meta = {
   title: "Components/Button/Button",
@@ -62,7 +70,7 @@ export const AllVariants: Story = {
                   appearance="fill"
                   size={size}
                   disabled={disabled}
-                  icon={<TrashOnIcon />}
+                  icon={getTrashIcon(variant, disabled)}
                 >
                   삭제하기
                 </Button>
@@ -77,7 +85,7 @@ export const AllVariants: Story = {
 
 export const WithIcon: Story = {
   args: {
-    icon: <TrashOnIcon />,
+    icon: <TrashWhiteIcon />,
     children: "삭제하기",
   },
 };

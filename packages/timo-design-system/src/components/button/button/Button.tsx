@@ -2,9 +2,9 @@ import { cn } from "../../../lib";
 
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-export type ButtonVariantTypes = "primary" | "secondary";
-export type ButtonAppearanceTypes = "fill" | "outline";
-export type ButtonSizeTypes = "m" | "lg";
+type ButtonVariantTypes = "primary" | "secondary";
+type ButtonAppearanceTypes = "fill" | "outline";
+type ButtonSizeTypes = "m" | "lg";
 
 const BUTTON_VARIANTS: Record<
   ButtonVariantTypes,
@@ -62,7 +62,10 @@ export const Button = ({
       {...rest}
     >
       {icon && (
-        <span className="flex size-5.5 shrink-0 items-center justify-center [&_:is(path,circle,rect)]:fill-current">
+        <span
+          aria-hidden="true"
+          className="flex size-5.5 shrink-0 items-center justify-center"
+        >
           {icon}
         </span>
       )}
