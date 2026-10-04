@@ -86,7 +86,7 @@ export const StatisticsCalendar = ({
   const todayTime = getDateTime(today);
 
   return (
-    <section className="relative min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13">
+    <section className="relative min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13">
       <button
         type="button"
         className="absolute inset-0 cursor-default"
