@@ -5,6 +5,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 type ButtonVariantTypes = "primary" | "secondary";
 type ButtonAppearanceTypes = "fill" | "outline";
 type ButtonSizeTypes = "m" | "lg";
+type ButtonIconPositionTypes = "left" | "right";
 
 const BUTTON_VARIANTS: Record<
   ButtonVariantTypes,
@@ -22,12 +23,9 @@ const BUTTON_VARIANTS: Record<
   },
 };
 
-const BUTTON_SIZE: Record<
-  ButtonSizeTypes,
-  { height: string; padding: { text: string; icon: string } }
-> = {
-  m: { height: "h-8.5", padding: { text: "px-4", icon: "px-2" } },
-  lg: { height: "h-11.5", padding: { text: "px-12", icon: "px-12" } },
+const BUTTON_SIZE: Record<ButtonSizeTypes, string> = {
+  m: "h-8.5",
+  lg: "h-11.5",
 };
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -35,6 +33,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   appearance: ButtonAppearanceTypes;
   size: ButtonSizeTypes;
   icon?: ReactNode;
+  iconPosition?: ButtonIconPositionTypes;
+  children: ReactNode;
 }
 
 export const Button = ({
@@ -42,34 +42,37 @@ export const Button = ({
   appearance,
   size,
   icon,
+  iconPosition = "left",
   type = "button",
   className,
   children,
   ...rest
 }: ButtonProps) => {
+  const iconElement = icon ? (
+    <span
+      aria-hidden="true"
+      className="flex size-5.5 shrink-0 items-center justify-center"
+    >
+      {icon}
+    </span>
+  ) : null;
+
   return (
     <button
       type={type}
       className={cn(
-        "typo-headline-m-14 inline-flex items-center justify-center gap-0.5 rounded-[4px] whitespace-nowrap outline-hidden",
+        "typo-headline-m-14 flex w-full items-center justify-center gap-0.5 rounded-[4px] whitespace-nowrap outline-hidden",
         "focus-visible:ring-timo-blue-300 focus-visible:ring-2 focus-visible:ring-offset-2",
         "disabled:cursor-not-allowed",
         BUTTON_VARIANTS[variant][appearance],
-        BUTTON_SIZE[size].height,
-        BUTTON_SIZE[size].padding[icon ? "icon" : "text"],
+        BUTTON_SIZE[size],
         className,
       )}
       {...rest}
     >
-      {icon && (
-        <span
-          aria-hidden="true"
-          className="flex size-5.5 shrink-0 items-center justify-center"
-        >
-          {icon}
-        </span>
-      )}
+      {iconPosition === "left" && iconElement}
       {children}
+      {iconPosition === "right" && iconElement}
     </button>
   );
 };
