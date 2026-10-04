@@ -66,6 +66,14 @@ export const StatisticsContainer = () => {
   };
 
   const handleSelectDate = (date: Date) => {
+    if (
+      sidePanelVariant === "day" &&
+      formatDateKey(selectedDate) === formatDateKey(date)
+    ) {
+      setSidePanelVariant("month");
+      return;
+    }
+
     setSelectedDate(date);
     setSidePanelVariant("day");
   };
@@ -83,6 +91,7 @@ export const StatisticsContainer = () => {
             displayDate={selectedDate}
             selectedDate={sidePanelVariant === "day" ? selectedDate : null}
             onSelectDate={handleSelectDate}
+            onDeselectDate={() => setSidePanelVariant("month")}
           />
         </div>
       </div>
