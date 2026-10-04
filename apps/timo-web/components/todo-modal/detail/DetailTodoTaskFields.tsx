@@ -89,7 +89,7 @@ export const DetailTodoTaskFields = ({
               onTitleEnter();
             }}
             disabled={disabled}
-            className="typo-headline-b-14 text-timo-black min-w-0 flex-1 outline-none"
+            className="typo-headline-b-14 text-timo-black min-w-0 flex-1 outline-none disabled:cursor-not-allowed"
           />
         </div>
 
@@ -121,6 +121,7 @@ export const DetailTodoTaskFields = ({
             <div key={subtask.id} className="flex items-center gap-2">
               <Checkbox
                 checked={subtask.completed}
+                disabled={disabled || isCompleted}
                 onChange={(completed) =>
                   onToggleSubtaskCompleted(subtask.id, completed)
                 }
@@ -135,7 +136,7 @@ export const DetailTodoTaskFields = ({
                 onKeyDown={(event) => onSubtaskInputKeyDown(index, event)}
                 rows={1}
                 disabled={disabled}
-                className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
+                className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none disabled:cursor-not-allowed"
               />
             </div>
           ))}

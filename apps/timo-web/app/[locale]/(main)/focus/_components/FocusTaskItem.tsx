@@ -72,6 +72,7 @@ export const FocusTaskItem = ({
         <PlayButton
           variant={isRunning ? "stop" : "play"}
           size="lg"
+          disabled={completed}
           onClick={onTogglePlay}
         >
           {isRunning ? (
@@ -87,6 +88,7 @@ export const FocusTaskItem = ({
           <div key={subtask.subtaskId} className="flex items-center gap-2">
             <Checkbox
               checked={subtask.completed}
+              disabled={completed}
               onChange={(checked) =>
                 onToggleSubtaskCompleted(subtask.subtaskId, checked)
               }

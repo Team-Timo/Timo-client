@@ -93,6 +93,8 @@ const DetailTodoModalQuery = ({
     updateData: TodoUpdateRequest,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
+    if (todo.completed) return;
+
     const nextDate = updateData.date ?? currentDate;
 
     handleUpdate(
@@ -118,6 +120,8 @@ const DetailTodoModalQuery = ({
     memo: string,
     handlers: UpdateTodoMemoSubmitHandlers = {},
   ) => {
+    if (todo.completed) return;
+
     handleUpdateMemo(
       { todoId, date: currentDate, memo },
       {
@@ -135,6 +139,8 @@ const DetailTodoModalQuery = ({
     completed: boolean,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
+    if (todo.completed) return;
+
     handleToggle(
       { todoId, subtaskId, date: currentDate, completed },
       {

@@ -177,6 +177,7 @@ export const HomeTodoCard = ({
           <div className="flex w-full min-w-0 items-center gap-2">
             <Checkbox
               checked={isSubtaskCompleted}
+              disabled={isCompleted}
               onChange={(checked) => onToggleSubtaskCompleted?.(checked)}
             />
             <p className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 truncate">

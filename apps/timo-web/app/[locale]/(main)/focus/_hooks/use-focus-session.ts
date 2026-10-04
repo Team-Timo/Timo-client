@@ -188,7 +188,7 @@ export const useFocusSession = ({
     subtaskId: number,
     completed: boolean,
   ) => {
-    if (!todo) return;
+    if (!todo || todo.completed) return;
 
     changeSubtaskStatus({
       todoId: todo.todoId,

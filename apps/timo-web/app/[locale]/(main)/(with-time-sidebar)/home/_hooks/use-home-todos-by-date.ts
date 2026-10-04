@@ -206,6 +206,8 @@ export const useHomeTodosByDate = (
     completed: boolean,
   ) => {
     const previous = todosByDate[dateKey] ?? [];
+    if (previous.find((todo) => todo.todoId === todoId)?.completed) return;
+
     updateTodo(dateKey, todoId, (todo) => ({
       ...todo,
       subtasks: todo.subtasks.map((subtask) =>

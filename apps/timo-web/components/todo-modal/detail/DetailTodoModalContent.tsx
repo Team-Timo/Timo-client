@@ -90,7 +90,7 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
   const displayTime = convertApiDurationToClockTimeText(detailTodoForm.time);
-  const canUpdateTodo = timerStatus === "STOPPED";
+  const canUpdateTodo = !todo.completed;
   const patchHandlers = useDetailTodoPatchHandlers({
     form: detailTodoForm,
     onUpdate,
@@ -149,16 +149,18 @@ export const DetailTodoModalContent = ({
               </p>
             </div>
 
-            <div className={canUpdateTodo ? undefined : "pointer-events-none"}>
-              <TodoIconField
-                icon={iconField.icon}
-                isIconPanelOpen={iconField.isIconPanelOpen}
-                addIconLabel={tCreateModal("addIcon")}
-                onOpenPanel={iconField.handleOpenIconPanel}
-                onTogglePanel={iconField.handleToggleIconPanel}
-                onSelectIcon={iconField.handleSelectIcon}
-                onRemoveIcon={iconField.handleRemoveIcon}
-              />
+            <div className={canUpdateTodo ? undefined : "cursor-not-allowed"}>
+              <div inert={!canUpdateTodo}>
+                <TodoIconField
+                  icon={iconField.icon}
+                  isIconPanelOpen={iconField.isIconPanelOpen}
+                  addIconLabel={tCreateModal("addIcon")}
+                  onOpenPanel={iconField.handleOpenIconPanel}
+                  onTogglePanel={iconField.handleToggleIconPanel}
+                  onSelectIcon={iconField.handleSelectIcon}
+                  onRemoveIcon={iconField.handleRemoveIcon}
+                />
+              </div>
             </div>
           </div>
 
@@ -186,73 +188,75 @@ export const DetailTodoModalContent = ({
             </div>
 
             <div className="flex flex-col gap-3">
-              <div
-                className={
-                  canUpdateTodo
-                    ? "flex items-center gap-2 py-3"
-                    : "pointer-events-none flex items-center gap-2 py-3"
-                }
-              >
-                <TodoToolbar
-                  dateLabel={formatShortDateLabel(detailTodoForm.date)}
-                  date={detailTodoForm.date}
-                  onDateChange={patchHandlers.handleDateChange}
-                  timeLabel={displayTime}
-                  timeOptions={DETAIL_TODO_TIME_OPTIONS}
-                  time={displayTime}
-                  onTimeChange={patchHandlers.handleTimeChange}
-                  selectedTime={patchHandlers.selectedTime}
-                  onSelectTime={patchHandlers.handleSelectTime}
-                  priority={detailTodoForm.priority}
-                  priorityLabels={{
-                    VERY_HIGH: tCommon("priority.VERY_HIGH"),
-                    HIGH: tCommon("priority.HIGH"),
-                    MEDIUM: tCommon("priority.MEDIUM"),
-                    LOW: tCommon("priority.LOW"),
-                  }}
-                  onSelectPriority={patchHandlers.handleSelectPriority}
-                  tagLabel={
-                    detailTodoForm.selectedTagLabel ?? tCreateModal("tagLabel")
-                  }
-                  tags={detailTodoForm.tagLabels}
-                  selectedTag={detailTodoForm.selectedTagLabel}
-                  addTagLabel={tCreateModal("addTag")}
-                  onSelectTag={patchHandlers.handleSelectTag}
-                  onAddTagClick={detailTodoForm.handleAddTagClick}
-                  hasMemo={detailTodoForm.memo.trim().length > 0}
-                  isRepeatActive={detailTodoForm.isRepeatActive}
-                  repeat={{
-                    frequencyHeading: t("repeatFrequencyHeading"),
-                    detailHeading: tCreateModal("repeatDetailHeading"),
-                    options: [
-                      {
-                        frequency: "DAILY",
-                        label: tCreateModal("repeatDaily"),
-                      },
-                      {
-                        frequency: "WEEKLY",
-                        label: tCreateModal("repeatWeekly"),
-                      },
-                      {
-                        frequency: "MONTHLY",
-                        label: tCreateModal("repeatMonthly"),
-                      },
-                    ],
-                    frequency: detailTodoForm.repeatFrequency,
-                    onFrequencyChange:
-                      patchHandlers.handleRepeatFrequencyChange,
-                    weekly: {
-                      weekdays,
-                      selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
-                      onWeekdaysChange: patchHandlers.handleWeekdaysChange,
-                    },
-                    monthly: {
-                      repeatDayLabel: t("repeatDayLabel"),
-                      repeatDay: detailTodoForm.repeatDay,
-                      onRepeatDayChange: patchHandlers.handleRepeatDayChange,
-                    },
-                  }}
-                />
+              <div className="flex items-center gap-2 py-3">
+                <div
+                  className={canUpdateTodo ? undefined : "cursor-not-allowed"}
+                >
+                  <div inert={!canUpdateTodo}>
+                    <TodoToolbar
+                      dateLabel={formatShortDateLabel(detailTodoForm.date)}
+                      date={detailTodoForm.date}
+                      onDateChange={patchHandlers.handleDateChange}
+                      timeLabel={displayTime}
+                      timeOptions={DETAIL_TODO_TIME_OPTIONS}
+                      time={displayTime}
+                      onTimeChange={patchHandlers.handleTimeChange}
+                      selectedTime={patchHandlers.selectedTime}
+                      onSelectTime={patchHandlers.handleSelectTime}
+                      priority={detailTodoForm.priority}
+                      priorityLabels={{
+                        VERY_HIGH: tCommon("priority.VERY_HIGH"),
+                        HIGH: tCommon("priority.HIGH"),
+                        MEDIUM: tCommon("priority.MEDIUM"),
+                        LOW: tCommon("priority.LOW"),
+                      }}
+                      onSelectPriority={patchHandlers.handleSelectPriority}
+                      tagLabel={
+                        detailTodoForm.selectedTagLabel ??
+                        tCreateModal("tagLabel")
+                      }
+                      tags={detailTodoForm.tagLabels}
+                      selectedTag={detailTodoForm.selectedTagLabel}
+                      addTagLabel={tCreateModal("addTag")}
+                      onSelectTag={patchHandlers.handleSelectTag}
+                      onAddTagClick={detailTodoForm.handleAddTagClick}
+                      hasMemo={detailTodoForm.memo.trim().length > 0}
+                      isRepeatActive={detailTodoForm.isRepeatActive}
+                      repeat={{
+                        frequencyHeading: t("repeatFrequencyHeading"),
+                        detailHeading: tCreateModal("repeatDetailHeading"),
+                        options: [
+                          {
+                            frequency: "DAILY",
+                            label: tCreateModal("repeatDaily"),
+                          },
+                          {
+                            frequency: "WEEKLY",
+                            label: tCreateModal("repeatWeekly"),
+                          },
+                          {
+                            frequency: "MONTHLY",
+                            label: tCreateModal("repeatMonthly"),
+                          },
+                        ],
+                        frequency: detailTodoForm.repeatFrequency,
+                        onFrequencyChange:
+                          patchHandlers.handleRepeatFrequencyChange,
+                        weekly: {
+                          weekdays,
+                          selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
+                          onWeekdaysChange: patchHandlers.handleWeekdaysChange,
+                        },
+                        monthly: {
+                          repeatDayLabel: t("repeatDayLabel"),
+                          repeatDay: detailTodoForm.repeatDay,
+                          onRepeatDayChange:
+                            patchHandlers.handleRepeatDayChange,
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
                 <button
                   type="button"
                   aria-label={t("delete")}

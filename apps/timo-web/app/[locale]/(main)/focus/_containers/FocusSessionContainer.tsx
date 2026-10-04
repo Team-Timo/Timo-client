@@ -128,6 +128,7 @@ export const FocusSessionContainer = () => {
             onExtend={focusSessionActions.onExtend}
             onComplete={focusSessionActions.onComplete}
             onStop={focusSessionActions.onStop}
+            disabled={todo.completed}
           />
         </div>
       </section>

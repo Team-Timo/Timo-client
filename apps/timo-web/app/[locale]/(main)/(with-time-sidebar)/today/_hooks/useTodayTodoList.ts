@@ -194,11 +194,13 @@ export const useTodayTodoList = (
 
   const handleSubTodoCheck = (todoId: number, subtaskId: number) => {
     const todo = todos.find((t) => t.todoId === todoId);
-    const subtask = todo?.subtasks.find((s) => s.subtaskId === subtaskId);
+    if (!todo || todo.completed) return;
+
+    const subtask = todo.subtasks.find((s) => s.subtaskId === subtaskId);
     if (!subtask) return;
 
     const completed = !subtask.completed;
-    const dateKey = todo?.date;
+    const dateKey = todo.date;
     if (!dateKey) return;
 
     const previous = todos;
