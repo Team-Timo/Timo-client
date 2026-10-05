@@ -6,6 +6,7 @@ import { useState } from "react";
 import { FocusEmptyTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusEmptyTaskItem";
 import { FocusSessionLayout } from "@/app/[locale]/(main)/focus/_components/FocusSessionLayout";
 import { FocusTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusTaskItem";
+import { FocusHeaderContainer } from "@/app/[locale]/(main)/focus/_containers/FocusHeaderContainer";
 import { useFocusSession } from "@/app/[locale]/(main)/focus/_hooks/use-focus-session";
 import {
   convertDateToDayNumberText,
@@ -32,9 +33,12 @@ export const FocusSessionContainer = () => {
     onFeedback: setFeedbackText,
   });
 
+  const header = <FocusHeaderContainer />;
+
   if (!focusSessionState.focusView.hasTodo || !focusSessionState.todo) {
     return (
       <FocusSessionLayout
+        header={header}
         isErrorToastOpen={isErrorToastOpen}
         onCloseErrorToast={() => setIsErrorToastOpen(false)}
         errorToastMessage={tToast("focusActionFailed")}
@@ -79,6 +83,7 @@ export const FocusSessionContainer = () => {
 
   return (
     <FocusSessionLayout
+      header={header}
       isErrorToastOpen={isErrorToastOpen}
       onCloseErrorToast={() => setIsErrorToastOpen(false)}
       errorToastMessage={tToast("focusActionFailed")}

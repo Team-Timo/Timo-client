@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 
-import { FocusHeaderContainer } from "@/app/[locale]/(main)/focus/_containers/FocusHeaderContainer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 
 export interface FocusSessionLayoutProps {
+  header?: ReactNode;
   isErrorToastOpen: boolean;
   onCloseErrorToast: () => void;
   errorToastMessage: string;
@@ -13,6 +13,7 @@ export interface FocusSessionLayoutProps {
 }
 
 export const FocusSessionLayout = ({
+  header,
   isErrorToastOpen,
   onCloseErrorToast,
   errorToastMessage,
@@ -22,7 +23,7 @@ export const FocusSessionLayout = ({
 }: FocusSessionLayoutProps) => {
   return (
     <div className="flex h-full flex-col">
-      <FocusHeaderContainer />
+      {header}
       <AnimatedToast
         isOpen={isErrorToastOpen}
         onClose={onCloseErrorToast}
