@@ -71,17 +71,23 @@ const isActivePath = (pathname: string, href: string) =>
 interface NavigationSidebarNavItemProps {
   item: (typeof MAIN_NAV_ITEMS)[number] | typeof SETTINGS_NAV_ITEM;
   pathname: string;
+  onNavigate: () => void;
 }
 
 const NavigationSidebarNavItem = ({
   item: { href, labelKey, OnIcon, OffIcon, HoverIcon },
   pathname,
+  onNavigate,
 }: NavigationSidebarNavItemProps) => {
   const t = useTranslations("Navigation");
   const isSelected = isActivePath(pathname, href);
 
   return (
-    <Link href={href} aria-current={isSelected ? "page" : undefined}>
+    <Link
+      href={href}
+      aria-current={isSelected ? "page" : undefined}
+      onClick={onNavigate}
+    >
       <TabButton
         label={t(labelKey)}
         icon={
@@ -103,13 +109,17 @@ export const NavigationSidebar = () => {
 
   const { isOpen, isMobileOpen, toggle } = useNavigationSidebar();
 
-  useEscapeKey(isMobileOpen, toggle);
+  const closeMobileSidebar = () => {
+    if (isMobileOpen) toggle();
+  };
+
+  useEscapeKey(isMobileOpen, closeMobileSidebar);
 
   return (
     <>
       <div
         aria-hidden="true"
-        onClick={toggle}
+        onClick={closeMobileSidebar}
         className={cn(
           "bg-timo-overlay fixed inset-0 z-40 transition-opacity duration-200 ease-out motion-reduce:transition-none md:hidden",
           isMobileOpen ? "opacity-100" : "pointer-events-none opacity-0",
@@ -128,7 +138,11 @@ export const NavigationSidebar = () => {
         )}
       >
         <div className="flex h-full w-45 shrink-0 flex-col gap-7.5">
-          <Link href={ROUTES.HOME} aria-label="Timo">
+          <Link
+            href={ROUTES.HOME}
+            aria-label="Timo"
+            onClick={closeMobileSidebar}
+          >
             <LogoTimoIcon width={92} height={35} />
           </Link>
           <nav className="flex flex-1 flex-col justify-between">
@@ -138,6 +152,7 @@ export const NavigationSidebar = () => {
                   key={item.href}
                   item={item}
                   pathname={pathname}
+                  onNavigate={closeMobileSidebar}
                 />
               ))}
             </div>
@@ -145,6 +160,7 @@ export const NavigationSidebar = () => {
               <NavigationSidebarNavItem
                 item={SETTINGS_NAV_ITEM}
                 pathname={pathname}
+                onNavigate={closeMobileSidebar}
               />
             </div>
           </nav>
