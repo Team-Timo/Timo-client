@@ -6,13 +6,11 @@ import type { OnboardingFunnelSteps } from "@/app/[locale]/onboarding/_types/onb
 
 import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingButtonContainer";
 import { setOnboardingAnswers } from "@/app/[locale]/onboarding/_utils/onboarding-answers-storage";
-import {
-  CALENDAR_CONNECT_ORIGIN,
-  CALENDAR_CONNECT_ORIGIN_KEY,
-} from "@/constants/calendar";
+import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import { AuthButtonContainer } from "@/containers/auth/AuthButtonContainer";
 import { authorize } from "@/generated/endpoints/calendar/calendar";
 import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
+import { setCalendarConnectOrigin } from "@/utils/calendar/calendar-connect-origin";
 
 interface CalendarConnectStepContainerProps {
   answers: OnboardingFunnelSteps["CalendarConnect"];
@@ -43,10 +41,7 @@ export const CalendarConnectStepContainer = ({
         return;
       }
       setOnboardingAnswers(answers);
-      localStorage.setItem(
-        CALENDAR_CONNECT_ORIGIN_KEY,
-        CALENDAR_CONNECT_ORIGIN.ONBOARDING,
-      );
+      setCalendarConnectOrigin(CALENDAR_CONNECT_ORIGIN.ONBOARDING);
       window.location.assign(url);
     } catch {
       onConnectError();

@@ -1,5 +1,3 @@
-export const CALENDAR_CONNECT_ORIGIN_KEY = "calendarConnectOrigin";
-
 export const CALENDAR_CONNECT_ORIGIN = {
   ONBOARDING: "onboarding",
   SETTINGS: "settings",

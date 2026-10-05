@@ -6,15 +6,13 @@ import { useEffect, useRef } from "react";
 
 import type { CalendarConnectOrigin } from "@/constants/calendar";
 
-import {
-  CALENDAR_CONNECT_ORIGIN,
-  CALENDAR_CONNECT_ORIGIN_KEY,
-} from "@/constants/calendar";
+import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import { ROUTES } from "@/constants/routes";
 import { useConnectCalendar } from "@/generated/endpoints/calendar/calendar";
 import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
 import { markCalendarConnectFailed } from "@/utils/calendar/calendar-connect-failed";
+import { consumeCalendarConnectOrigin } from "@/utils/calendar/calendar-connect-origin";
 
 type Route = (typeof ROUTES)[keyof typeof ROUTES];
 
@@ -24,11 +22,6 @@ const CALENDAR_CONNECT_REDIRECT: Record<CalendarConnectOrigin, Route> = {
   [CALENDAR_CONNECT_ORIGIN.ONBOARDING]: ROUTES.ONBOARDING,
   [CALENDAR_CONNECT_ORIGIN.SETTINGS]: ROUTES.SETTINGS,
 };
-
-const isCalendarConnectOrigin = (
-  value: string | null,
-): value is CalendarConnectOrigin =>
-  Object.values(CALENDAR_CONNECT_ORIGIN).some((origin) => origin === value);
 
 export const CalendarCallbackContainer = () => {
   const searchParams = useSearchParams();
@@ -45,14 +38,12 @@ export const CalendarCallbackContainer = () => {
     if (hasRequested.current) return;
     hasRequested.current = true;
 
-    const origin = localStorage.getItem(CALENDAR_CONNECT_ORIGIN_KEY);
-    localStorage.removeItem(CALENDAR_CONNECT_ORIGIN_KEY);
-    const hasOrigin = isCalendarConnectOrigin(origin);
+    const origin = consumeCalendarConnectOrigin();
+    const hasOrigin = origin !== null;
     const redirectTarget = hasOrigin
       ? CALENDAR_CONNECT_REDIRECT[origin]
       : ROUTES.HOME;
 
-    // 실패 토스트는 온보딩·설정에서만 띄우므로, 출발지를 알 때만 실패를 기록합니다.
     const notifyConnectFailed = () => {
       if (hasOrigin) markCalendarConnectFailed();
     };
