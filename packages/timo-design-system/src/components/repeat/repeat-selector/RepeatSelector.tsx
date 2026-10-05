@@ -183,22 +183,26 @@ export const RepeatSelector = ({
     (option) => option.frequency === draftFrequency,
   )?.label;
 
-  const handleSelectFrequency = (value: RepeatFrequency) => {
-    if (value === "WEEKLY" && confirmedFrequencyRef.current !== "WEEKLY") {
+  const clearDraftDetail = (frequency: "WEEKLY" | "MONTHLY") => {
+    if (frequency === "WEEKLY") {
       draftWeekdayIdsRef.current = [];
       setDraftWeekdayIds([]);
+      return;
     }
-    if (value === "MONTHLY" && confirmedFrequencyRef.current !== "MONTHLY") {
-      draftRepeatDayRef.current = "";
-      setDraftRepeatDay("");
+
+    draftRepeatDayRef.current = "";
+    setDraftRepeatDay("");
+  };
+
+  const handleSelectFrequency = (value: RepeatFrequency) => {
+    if (value !== "DAILY" && confirmedFrequencyRef.current !== value) {
+      clearDraftDetail(value);
     }
     if (value === "DAILY") {
       confirmedFrequencyRef.current = "DAILY";
       hasConfirmedFrequencySelectionRef.current = true;
-      draftWeekdayIdsRef.current = [];
-      setDraftWeekdayIds([]);
-      draftRepeatDayRef.current = "";
-      setDraftRepeatDay("");
+      clearDraftDetail("WEEKLY");
+      clearDraftDetail("MONTHLY");
     }
 
     draftFrequencyRef.current = value;
@@ -210,8 +214,7 @@ export const RepeatSelector = ({
     if (confirmedFrequencyRef.current !== "WEEKLY") {
       confirmedFrequencyRef.current = "WEEKLY";
       hasConfirmedFrequencySelectionRef.current = true;
-      draftRepeatDayRef.current = "";
-      setDraftRepeatDay("");
+      clearDraftDetail("MONTHLY");
     }
 
     const next = draftWeekdayIdsRef.current.includes(id)
@@ -233,8 +236,7 @@ export const RepeatSelector = ({
     ) {
       confirmedFrequencyRef.current = "MONTHLY";
       hasConfirmedFrequencySelectionRef.current = true;
-      draftWeekdayIdsRef.current = [];
-      setDraftWeekdayIds([]);
+      clearDraftDetail("WEEKLY");
     }
 
     draftRepeatDayRef.current = value;
