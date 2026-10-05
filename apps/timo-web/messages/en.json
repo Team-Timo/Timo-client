@@ -125,7 +125,7 @@
       "withdraw": "Withdraw",
       "withdrawConfirmTitle": "Are you sure you want to <red>withdraw</red>?",
       "withdrawConfirmDescription": "After withdrawal, all data will be deleted and cannot be undone.",
-      "withdrawConfirmCancel": "Go back",
+      "withdrawConfirmCancel": "Cancel",
       "withdrawConfirmConfirm": "Withdraw",
       "withdrawError": "An error occurred during withdrawal. Please try again later."
     }
