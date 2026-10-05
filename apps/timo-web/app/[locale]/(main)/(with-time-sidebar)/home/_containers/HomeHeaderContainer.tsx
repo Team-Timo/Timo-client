@@ -16,9 +16,11 @@ export const HomeHeaderContainer = () => {
   const viewOptions = [basicLabel, weekLabel];
 
   const { isOpen, toggle } = useNavigationSidebar();
-  const isTimeSidebarOpen = useTimeSidebarStore((state) => state.isOpen);
-  const toggleTimeSidebarOpen = useTimeSidebarStore(
-    (state) => state.toggleOpen,
+  const isTimeSidebarMobileOpen = useTimeSidebarStore(
+    (state) => state.isMobileOpen,
+  );
+  const toggleTimeSidebarMobileOpen = useTimeSidebarStore(
+    (state) => state.toggleMobileOpen,
   );
   const { isWeekView, setViewMode, goToNextWeek, goToPrevWeek, goToToday } =
     useHomeViewMode();
@@ -56,8 +58,8 @@ export const HomeHeaderContainer = () => {
             onChange={handleChangeView}
           />
           <Header.SidebarButton
-            isOpen={isTimeSidebarOpen}
-            onClick={toggleTimeSidebarOpen}
+            isOpen={isTimeSidebarMobileOpen}
+            onClick={toggleTimeSidebarMobileOpen}
             label="시간 패널"
             className="md:hidden"
           />

@@ -22,22 +22,28 @@ const noop = () => {};
 export interface TimeSidebarProps {
   size?: TimeSidebarSize;
   isOpen?: boolean;
+  isMobileOpen?: boolean;
   onToggleCollapse?: () => void;
+  onCloseMobile?: () => void;
 }
 
 export const TimeSidebar = ({
   size = "sm",
   isOpen = true,
+  isMobileOpen = false,
   onToggleCollapse,
+  onCloseMobile,
 }: TimeSidebarProps) => {
   const id = useId();
   const activeTab = useTimeSidebarStore((state) => state.activeTab);
   const setActiveTab = useTimeSidebarStore((state) => state.setActiveTab);
 
+  const isExpanded = isOpen || isMobileOpen;
+
   const timeboxScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isOpen || activeTab !== "timebox") return;
+    if (!isExpanded || activeTab !== "timebox") return;
     const container = timeboxScrollRef.current;
     if (!container) return;
     const now = new Date();
@@ -46,7 +52,7 @@ export const TimeSidebar = ({
       top: Math.max(0, offset - container.clientHeight / 2),
       behavior: "smooth",
     });
-  }, [activeTab, isOpen]);
+  }, [activeTab, isExpanded]);
 
   const timeboxPanelId = `${id}-timebox-panel`;
   const timerPanelId = `${id}-timer-panel`;
@@ -55,16 +61,16 @@ export const TimeSidebar = ({
     setActiveTab(value as TimeSidebarTab);
   };
 
-  useEscapeKey(isOpen, onToggleCollapse ?? noop);
+  useEscapeKey(isMobileOpen, onCloseMobile ?? noop);
 
   return (
     <>
       <div
         aria-hidden="true"
-        onClick={onToggleCollapse}
+        onClick={onCloseMobile}
         className={cn(
           "bg-timo-overlay fixed inset-0 z-40 transition-opacity duration-200 ease-out motion-reduce:transition-none md:hidden",
-          isOpen ? "opacity-100" : "pointer-events-none opacity-0",
+          isMobileOpen ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       />
 
@@ -73,7 +79,7 @@ export const TimeSidebar = ({
           "border-timo-gray-500 fixed inset-y-0 right-0 z-50 flex flex-col overflow-hidden border-l bg-white transition-[width,translate] duration-200 ease-in-out motion-reduce:transition-none",
           // sm 사이즈(TIME_SIDEBAR_WIDTH_CLASS_NAME.sm === w-76)와 같은 폭(304px)을, 화면이 더 좁을 땐 1rem 여백만 남기도록 min()으로 캡핑한다.
           "w-[min(calc(100vw-1rem),calc(var(--spacing)*76))]",
-          isOpen ? "translate-x-0" : "translate-x-full",
+          isMobileOpen ? "translate-x-0" : "translate-x-full",
           "md:top-5 md:bottom-5 md:z-10 md:translate-x-0",
           isOpen
             ? TIME_SIDEBAR_WIDTH_CLASS_NAME[size]
@@ -82,11 +88,11 @@ export const TimeSidebar = ({
       >
         <TimeSidebarHeader
           date={new Date()}
-          isOpen={isOpen}
+          isOpen={isExpanded}
           onToggleCollapse={onToggleCollapse}
         />
 
-        {isOpen && (
+        {isExpanded && (
           <>
             <div className="px-4.5">
               <TogglePanel
