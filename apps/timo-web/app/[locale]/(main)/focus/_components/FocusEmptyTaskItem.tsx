@@ -20,7 +20,7 @@ export const FocusEmptyTaskItem = ({
   const t = useTranslations("Focus");
 
   return (
-    <section className="flex w-full min-w-80 flex-col items-start gap-5 px-[34.5px] pb-8">
+    <section className="flex w-full min-w-0 flex-col items-start gap-5 px-5 pb-8 md:min-w-80 md:px-[34.5px]">
       <div className="text-timo-gray-900 flex flex-col items-start">
         <p className="typo-headline-b-30">{dayNumber}</p>
         <p className="typo-headline-m-14">{dayOfWeek}</p>
