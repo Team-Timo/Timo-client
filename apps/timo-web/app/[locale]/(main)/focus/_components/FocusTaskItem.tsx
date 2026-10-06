@@ -42,8 +42,10 @@ export const FocusTaskItem = ({
   onTogglePlay,
   onToggleSubtaskCompleted,
 }: FocusTaskItemProps) => {
+  const hasChecklist = subtasks.length > 0 || Boolean(memo);
+
   return (
-    <section className="flex w-full min-w-80 flex-col items-start gap-5 px-[34.5px] pb-8">
+    <section className="flex w-full min-w-0 flex-col items-start gap-5 px-5 pb-8 md:min-w-80 md:px-[34.5px]">
       <div className="text-timo-gray-900 flex flex-col items-start">
         <p className="typo-headline-b-30">{dayNumber}</p>
         <p className="typo-headline-m-14">{dayOfWeek}</p>
@@ -91,7 +93,14 @@ export const FocusTaskItem = ({
         </PlayButton>
       </div>
 
-      <div className="border-timo-gray-500 flex max-h-[40vh] min-h-26 w-full min-w-0 flex-col gap-3 overflow-y-auto border-t pt-3">
+      <div
+        className={cn(
+          "flex w-full min-w-0 flex-col gap-3 overflow-y-auto",
+          hasChecklist
+            ? "border-timo-gray-500 max-h-[40vh] min-h-26 border-t pt-3"
+            : "md:border-timo-gray-500 md:max-h-[40vh] md:min-h-26 md:border-t md:pt-3",
+        )}
+      >
         {subtasks.map((subtask) => (
           <div key={subtask.subtaskId} className="flex items-center gap-2">
             <Checkbox

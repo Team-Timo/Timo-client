@@ -143,18 +143,13 @@ export const useTodayTodoList = (
     const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
     if (!dateKey) return;
 
-    const willRun =
-      todos.find((todo) => todo.todoId === todoId)?.timerStatus !== "RUNNING";
-
-    if (willRun) {
-      openTimerPanel();
-    }
-
     if (
       activeTimer &&
       activeTimer.todoId === todoId &&
       activeTimer.date === dateKey
     ) {
+      const isResuming = activeTimer.status !== "RUNNING";
+
       changeStatus(
         {
           timerId: activeTimer.timerId,
@@ -163,8 +158,10 @@ export const useTodayTodoList = (
           },
         },
         {
-          onSuccess: () =>
-            invalidateTimerProgress({ includeFocus: true, todoId }),
+          onSuccess: () => {
+            if (isResuming) openTimerPanel();
+            invalidateTimerProgress({ includeFocus: true, todoId });
+          },
         },
       );
       return;
@@ -179,8 +176,10 @@ export const useTodayTodoList = (
     startTimer(
       { todoId, params: { date: dateKey } },
       {
-        onSuccess: () =>
-          invalidateTimerProgress({ includeFocus: true, todoId }),
+        onSuccess: () => {
+          openTimerPanel();
+          invalidateTimerProgress({ includeFocus: true, todoId });
+        },
         onError: (error: ErrorType<ErrorDto>) => {
           onPlayError(error.response?.data.message);
         },

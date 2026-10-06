@@ -4,6 +4,7 @@ import {
   acquireModalStackIndex,
   cn,
   hasOpenFloatingLayer,
+  useEscapeKey,
 } from "@repo/timo-design-system/utils";
 import FocusTrap from "focus-trap-react";
 import { useEffect, useRef, useState } from "react";
@@ -66,19 +67,12 @@ export const OverlayModal = ({
 
     document.body.style.overflow = "hidden";
 
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      if (hasOpenFloatingLayer()) return;
-      onClose();
-    };
-
-    document.addEventListener("keydown", handleEscape);
-
     return () => {
       document.body.style.overflow = "";
-      document.removeEventListener("keydown", handleEscape);
     };
-  }, [shouldRender, onClose]);
+  }, [shouldRender]);
+
+  useEscapeKey(shouldRender, onClose);
 
   if (!shouldRender) return null;
 

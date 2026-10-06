@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { FocusEmptyTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusEmptyTaskItem";
+import { FocusSessionLayout } from "@/app/[locale]/(main)/focus/_components/FocusSessionLayout";
 import { FocusTaskItem } from "@/app/[locale]/(main)/focus/_components/FocusTaskItem";
 import { FocusHeaderContainer } from "@/app/[locale]/(main)/focus/_containers/FocusHeaderContainer";
 import { useFocusSession } from "@/app/[locale]/(main)/focus/_hooks/use-focus-session";
@@ -13,10 +14,13 @@ import {
 } from "@/app/[locale]/(main)/focus/_utils/date";
 import { Timer } from "@/components/timer/Timer";
 import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
-import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/duration/format-duration-label";
 import { canEditTodo } from "@/utils/todo/todo-editability";
+
+const TIMER_SIZE_CLASS_NAME = "h-60.5 w-60.5 md:h-90 md:w-90";
+const TIMER_TIME_CLASS_NAME = "typo-headline-b-40 md:typo-headline-b-50";
+const TIMER_PLANNED_CLASS_NAME = "typo-headline-m-20 md:typo-headline-m-26";
 
 export const FocusSessionContainer = () => {
   const tWeekday = useTranslations("Common.weekday");
@@ -30,16 +34,16 @@ export const FocusSessionContainer = () => {
     onFeedback: setFeedbackText,
   });
 
+  const header = <FocusHeaderContainer />;
+
   if (!focusSessionState.focusView.hasTodo || !focusSessionState.todo) {
     return (
-      <div className="flex h-full overflow-x-auto">
-        <AnimatedToast
-          isOpen={isErrorToastOpen}
-          onClose={() => setIsErrorToastOpen(false)}
-          message={tToast("focusActionFailed")}
-        />
-        <div className="flex flex-1 flex-col gap-18">
-          <FocusHeaderContainer />
+      <FocusSessionLayout
+        header={header}
+        isErrorToastOpen={isErrorToastOpen}
+        onCloseErrorToast={() => setIsErrorToastOpen(false)}
+        errorToastMessage={tToast("focusActionFailed")}
+        taskItem={
           <FocusEmptyTaskItem
             dayNumber={convertDateToDayNumberText(focusSessionState.today)}
             dayOfWeek={tWeekday(
@@ -47,40 +51,44 @@ export const FocusSessionContainer = () => {
             )}
             dateText={focusSessionState.dateText}
           />
-        </div>
-
-        <section className="border-timo-gray-500 flex h-full w-136.5 shrink-0 items-center border-l bg-white">
-          <div className="flex w-full flex-col items-center gap-11.25">
-            <Timer time="00:00" plannedLabel="0M" progress={0} size="lg" />
-
-            <TimerSessionControls
-              isRunning={false}
-              onTogglePlay={() => {}}
-              plannedMinutes={0}
-              actualMinutes={0}
-              isTimeUp={false}
-              onExtend={() => {}}
-              onComplete={() => {}}
-              onStop={() => {}}
-              disabled
-            />
-          </div>
-        </section>
-      </div>
+        }
+        timer={
+          <Timer
+            time="00:00"
+            plannedLabel="0M"
+            progress={0}
+            size="lg"
+            className={TIMER_SIZE_CLASS_NAME}
+            timeClassName={TIMER_TIME_CLASS_NAME}
+            plannedClassName={TIMER_PLANNED_CLASS_NAME}
+          />
+        }
+        controls={
+          <TimerSessionControls
+            isRunning={false}
+            onTogglePlay={() => {}}
+            plannedMinutes={0}
+            actualMinutes={0}
+            isTimeUp={false}
+            onExtend={() => {}}
+            onComplete={() => {}}
+            onStop={() => {}}
+            disabled
+          />
+        }
+      />
     );
   }
 
   const todo = focusSessionState.todo;
 
   return (
-    <div className="flex h-full overflow-x-auto">
-      <AnimatedToast
-        isOpen={isErrorToastOpen}
-        onClose={() => setIsErrorToastOpen(false)}
-        message={tToast("focusActionFailed")}
-      />
-      <div className="flex flex-1 flex-col gap-18">
-        <FocusHeaderContainer />
+    <FocusSessionLayout
+      header={header}
+      isErrorToastOpen={isErrorToastOpen}
+      onCloseErrorToast={() => setIsErrorToastOpen(false)}
+      errorToastMessage={tToast("focusActionFailed")}
+      taskItem={
         <FocusTaskItem
           dayNumber={convertDateToDayNumberText(focusSessionState.today)}
           dayOfWeek={tWeekday(
@@ -102,38 +110,39 @@ export const FocusSessionContainer = () => {
             focusSessionActions.onToggleSubtaskCompleted
           }
         />
-      </div>
-
-      <section className="border-timo-gray-500 flex h-full w-136.5 shrink-0 items-center border-l bg-white">
-        <div className="flex w-full flex-col items-center gap-11.25">
-          <Timer
-            time={convertDurationToTimeText(focusSessionState.remainingSeconds)}
-            plannedLabel={formatDurationLabel(
-              focusSessionState.plannedMinutes,
-              "H",
-              "M",
-            )}
-            progress={focusSessionState.progress}
-            isOvertime={focusSessionState.isOvertime}
-            overtimeProgress={focusSessionState.overtimeProgress}
-            size="lg"
-          />
-
-          <TimerSessionControls
-            ref={focusSessionState.timerSessionControlsRef}
-            isRunning={focusSessionState.isRunning}
-            onTogglePlay={focusSessionActions.onTogglePlay}
-            plannedMinutes={focusSessionState.basePlannedMinutes}
-            actualMinutes={focusSessionState.actualMinutes}
-            feedbackText={feedbackText}
-            isTimeUp={focusSessionState.isTimeUp}
-            onExtend={focusSessionActions.onExtend}
-            onComplete={focusSessionActions.onComplete}
-            onStop={focusSessionActions.onStop}
-            disabled={!canEditTodo(todo.completed)}
-          />
-        </div>
-      </section>
-    </div>
+      }
+      timer={
+        <Timer
+          time={convertDurationToTimeText(focusSessionState.remainingSeconds)}
+          plannedLabel={formatDurationLabel(
+            focusSessionState.plannedMinutes,
+            "H",
+            "M",
+          )}
+          progress={focusSessionState.progress}
+          isOvertime={focusSessionState.isOvertime}
+          overtimeProgress={focusSessionState.overtimeProgress}
+          size="lg"
+          className={TIMER_SIZE_CLASS_NAME}
+          timeClassName={TIMER_TIME_CLASS_NAME}
+          plannedClassName={TIMER_PLANNED_CLASS_NAME}
+        />
+      }
+      controls={
+        <TimerSessionControls
+          ref={focusSessionState.timerSessionControlsRef}
+          isRunning={focusSessionState.isRunning}
+          onTogglePlay={focusSessionActions.onTogglePlay}
+          plannedMinutes={focusSessionState.basePlannedMinutes}
+          actualMinutes={focusSessionState.actualMinutes}
+          feedbackText={feedbackText}
+          isTimeUp={focusSessionState.isTimeUp}
+          onExtend={focusSessionActions.onExtend}
+          onComplete={focusSessionActions.onComplete}
+          onStop={focusSessionActions.onStop}
+          disabled={!canEditTodo(todo.completed)}
+        />
+      }
+    />
   );
 };

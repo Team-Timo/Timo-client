@@ -1,7 +1,7 @@
 "use client";
 
 import { TogglePanel } from "@repo/timo-design-system/ui";
-import { cn } from "@repo/timo-design-system/utils";
+import { cn, useEscapeKey } from "@repo/timo-design-system/utils";
 import { useEffect, useId, useRef } from "react";
 
 import {
@@ -17,25 +17,33 @@ import {
   useTimeSidebarStore,
 } from "@/stores/time-sidebar/useTimeSidebarStore";
 
+const noop = () => {};
+
 export interface TimeSidebarProps {
   size?: TimeSidebarSize;
   isOpen?: boolean;
+  isMobileOpen?: boolean;
   onToggleCollapse?: () => void;
+  onCloseMobile?: () => void;
 }
 
 export const TimeSidebar = ({
   size = "sm",
   isOpen = true,
+  isMobileOpen = false,
   onToggleCollapse,
+  onCloseMobile,
 }: TimeSidebarProps) => {
   const id = useId();
   const activeTab = useTimeSidebarStore((state) => state.activeTab);
   const setActiveTab = useTimeSidebarStore((state) => state.setActiveTab);
 
+  const isExpanded = isOpen || isMobileOpen;
+
   const timeboxScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isOpen || activeTab !== "timebox") return;
+    if (!isExpanded || activeTab !== "timebox") return;
     const container = timeboxScrollRef.current;
     if (!container) return;
     const now = new Date();
@@ -44,7 +52,7 @@ export const TimeSidebar = ({
       top: Math.max(0, offset - container.clientHeight / 2),
       behavior: "smooth",
     });
-  }, [activeTab, isOpen]);
+  }, [activeTab, isExpanded]);
 
   const timeboxPanelId = `${id}-timebox-panel`;
   const timerPanelId = `${id}-timer-panel`;
@@ -53,61 +61,78 @@ export const TimeSidebar = ({
     setActiveTab(value as TimeSidebarTab);
   };
 
+  useEscapeKey(isMobileOpen, onCloseMobile ?? noop);
+
   return (
-    <aside
-      className={cn(
-        "border-timo-gray-500 fixed top-5 right-0 bottom-5 z-10 flex flex-col overflow-hidden border-l bg-white transition-[width] duration-200 ease-in-out",
-        isOpen
-          ? TIME_SIDEBAR_WIDTH_CLASS_NAME[size]
-          : TIME_SIDEBAR_COLLAPSED_WIDTH_CLASS_NAME,
-      )}
-    >
-      <TimeSidebarHeader
-        date={new Date()}
-        isOpen={isOpen}
-        onToggleCollapse={onToggleCollapse}
+    <>
+      <div
+        aria-hidden="true"
+        onClick={onCloseMobile}
+        className={cn(
+          "bg-timo-overlay fixed inset-0 z-40 transition-opacity duration-200 ease-out motion-reduce:transition-none md:hidden",
+          isMobileOpen ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
       />
 
-      {isOpen && (
-        <>
-          <div className="px-4.5">
-            <TogglePanel
-              id={id}
-              value={activeTab}
-              onChange={handleChangeTab}
-              options={[
-                {
-                  value: "timebox",
-                  label: "Timebox",
-                  controls: timeboxPanelId,
-                },
-                { value: "timer", label: "Timer", controls: timerPanelId },
-              ]}
-            />
-          </div>
+      <aside
+        className={cn(
+          "border-timo-gray-500 fixed inset-y-0 right-0 z-50 flex flex-col overflow-hidden border-l bg-white transition-[width,translate] duration-200 ease-in-out motion-reduce:transition-none",
+          // sm 사이즈(TIME_SIDEBAR_WIDTH_CLASS_NAME.sm === w-76)와 같은 폭(304px)을, 화면이 더 좁을 땐 1rem 여백만 남기도록 min()으로 캡핑한다.
+          "w-[min(calc(100vw-1rem),calc(var(--spacing)*76))]",
+          isMobileOpen ? "translate-x-0" : "translate-x-full",
+          "md:top-5 md:bottom-5 md:z-10 md:translate-x-0",
+          isOpen
+            ? TIME_SIDEBAR_WIDTH_CLASS_NAME[size]
+            : TIME_SIDEBAR_COLLAPSED_WIDTH_CLASS_NAME,
+        )}
+      >
+        <TimeSidebarHeader
+          date={new Date()}
+          isOpen={isExpanded}
+          onToggleCollapse={onToggleCollapse}
+        />
 
-          <div
-            ref={timeboxScrollRef}
-            id={timeboxPanelId}
-            role="tabpanel"
-            aria-labelledby={`${id}-timebox-tab`}
-            hidden={activeTab !== "timebox"}
-            className="min-h-0 flex-1 overflow-y-auto px-4.5 pt-[21px]"
-          >
-            <TimeboxPanel />
-          </div>
+        {isExpanded && (
+          <>
+            <div className="px-4.5">
+              <TogglePanel
+                id={id}
+                value={activeTab}
+                onChange={handleChangeTab}
+                options={[
+                  {
+                    value: "timebox",
+                    label: "Timebox",
+                    controls: timeboxPanelId,
+                  },
+                  { value: "timer", label: "Timer", controls: timerPanelId },
+                ]}
+              />
+            </div>
 
-          <div
-            id={timerPanelId}
-            role="tabpanel"
-            aria-labelledby={`${id}-timer-tab`}
-            hidden={activeTab !== "timer"}
-            className="flex min-h-0 flex-1 justify-center overflow-y-auto pt-43.25"
-          >
-            <TimerPanel />
-          </div>
-        </>
-      )}
-    </aside>
+            <div
+              ref={timeboxScrollRef}
+              id={timeboxPanelId}
+              role="tabpanel"
+              aria-labelledby={`${id}-timebox-tab`}
+              hidden={activeTab !== "timebox"}
+              className="min-h-0 flex-1 overflow-y-auto px-4.5 pt-[21px]"
+            >
+              <TimeboxPanel />
+            </div>
+
+            <div
+              id={timerPanelId}
+              role="tabpanel"
+              aria-labelledby={`${id}-timer-tab`}
+              hidden={activeTab !== "timer"}
+              className="flex min-h-0 flex-1 justify-center overflow-y-auto pt-43.25"
+            >
+              <TimerPanel />
+            </div>
+          </>
+        )}
+      </aside>
+    </>
   );
 };
