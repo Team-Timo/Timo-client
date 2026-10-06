@@ -16,6 +16,7 @@ import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/duration/format-duration-label";
+import { canEditTodo } from "@/utils/todo/todo-editability";
 
 export const FocusSessionContainer = () => {
   const tWeekday = useTranslations("Common.weekday");
@@ -87,6 +88,7 @@ export const FocusSessionContainer = () => {
           )}
           title={todo.title}
           completed={todo.completed}
+          isTimerLookupUnavailable={focusSessionState.isTimerLookupUnavailable}
           dateText={focusSessionState.dateText}
           durationText={convertDurationToTimeText(
             focusSessionState.plannedSeconds,
@@ -128,7 +130,7 @@ export const FocusSessionContainer = () => {
             onExtend={focusSessionActions.onExtend}
             onComplete={focusSessionActions.onComplete}
             onStop={focusSessionActions.onStop}
-            disabled={todo.completed}
+            disabled={!canEditTodo(todo.completed)}
           />
         </div>
       </section>

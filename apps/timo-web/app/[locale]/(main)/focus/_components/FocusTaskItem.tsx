@@ -9,11 +9,14 @@ import { cn } from "@repo/timo-design-system/utils";
 
 import type { FocusTaskSubtask } from "@/app/[locale]/(main)/focus/_types/task-type";
 
+import { canEditTodo } from "@/utils/todo/todo-editability";
+
 export interface FocusTaskItemProps {
   dayNumber: string;
   dayOfWeek: string;
   title: string;
   completed: boolean;
+  isTimerLookupUnavailable: boolean;
   dateText: string;
   durationText: string;
   isRunning: boolean;
@@ -29,6 +32,7 @@ export const FocusTaskItem = ({
   dayOfWeek,
   title,
   completed,
+  isTimerLookupUnavailable,
   dateText,
   durationText,
   isRunning,
@@ -46,7 +50,11 @@ export const FocusTaskItem = ({
       </div>
 
       <div className="flex w-full items-center gap-2.5">
-        <Checkbox checked={completed} onChange={onToggleCompleted} />
+        <Checkbox
+          checked={completed}
+          disabled={!completed && isTimerLookupUnavailable}
+          onChange={onToggleCompleted}
+        />
         <p className="typo-headline-b-22 text-timo-black min-w-0 flex-1 wrap-anywhere">
           {title}
         </p>
@@ -72,7 +80,7 @@ export const FocusTaskItem = ({
         <PlayButton
           variant={isRunning ? "stop" : "play"}
           size="lg"
-          disabled={completed}
+          disabled={!canEditTodo(completed)}
           onClick={onTogglePlay}
         >
           {isRunning ? (
@@ -88,7 +96,7 @@ export const FocusTaskItem = ({
           <div key={subtask.subtaskId} className="flex items-center gap-2">
             <Checkbox
               checked={subtask.completed}
-              disabled={completed}
+              disabled={!canEditTodo(completed)}
               onChange={(checked) =>
                 onToggleSubtaskCompleted(subtask.subtaskId, checked)
               }

@@ -24,6 +24,7 @@ import { useTimerActions } from "@/hooks/timer/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { getTimerProgress } from "@/utils/timer/get-timer-progress";
+import { canEditTodo } from "@/utils/todo/todo-editability";
 
 export interface UseFocusSessionOptions {
   onMutationError: () => void;
@@ -39,7 +40,14 @@ export const useFocusSession = ({
   const wasTimeUpRef = useRef(false);
 
   const { data: focusView } = useFocusTodoQuery();
-  const { data: activeTimer } = useActiveTimer();
+  const {
+    data: activeTimer,
+    isPending: isTimerPending,
+    isFetching: isTimerFetching,
+    isError: isTimerError,
+  } = useActiveTimer();
+  const isTimerLookupUnavailable =
+    isTimerPending || isTimerFetching || isTimerError;
 
   const {
     invalidateTimeBoxes,
@@ -172,6 +180,7 @@ export const useFocusSession = ({
 
   const handleToggleCompleted = (completed: boolean) => {
     if (!todo) return;
+    if (completed && isTimerLookupUnavailable) return;
 
     if (completed && timer) {
       timerSessionControlsRef.current?.openStopModal();
@@ -188,7 +197,7 @@ export const useFocusSession = ({
     subtaskId: number,
     completed: boolean,
   ) => {
-    if (!todo || todo.completed) return;
+    if (!todo || !canEditTodo(todo.completed)) return;
 
     changeSubtaskStatus({
       todoId: todo.todoId,
@@ -221,6 +230,7 @@ export const useFocusSession = ({
       focusView,
       todo,
       timerSessionControlsRef,
+      isTimerLookupUnavailable,
       isRunning,
       isTimeUp,
       today,
