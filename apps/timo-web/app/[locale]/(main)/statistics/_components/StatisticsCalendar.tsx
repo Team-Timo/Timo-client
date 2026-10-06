@@ -96,7 +96,7 @@ export const StatisticsCalendar = ({
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <section
-      className="relative min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13"
+      className="min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13"
       onClick={handleCalendarClick}
     >
       <div className="w-199.5">
