@@ -226,14 +226,7 @@ export const RepeatSelector = ({
   };
 
   const handleRepeatDayChange = (value: string) => {
-    const day = Number(value);
-    if (
-      confirmedFrequencyRef.current !== "MONTHLY" &&
-      value.trim() !== "" &&
-      Number.isInteger(day) &&
-      day >= 1 &&
-      day <= 31
-    ) {
+    if (confirmedFrequencyRef.current !== "MONTHLY" && value.trim() !== "") {
       confirmedFrequencyRef.current = "MONTHLY";
       hasConfirmedFrequencySelectionRef.current = true;
       clearDraftDetail("WEEKLY");
