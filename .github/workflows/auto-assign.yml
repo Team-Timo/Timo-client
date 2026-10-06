@@ -29,10 +29,8 @@ jobs:
               // kimminna가 PR 작성 시: 나머지 3명 중 2명 랜덤
               reviewers = pickRandom(others, 2);
             } else {
-              // 나머지가 PR 작성 시: kimminna 고정 + 나머지 3명 중 작성자 제외 1명 랜덤
-              const eligible = others.filter(c => c !== author);
-              const random = pickRandom(eligible, 1);
-              reviewers = ['kimminna', ...random];
+              // 나머지가 PR 작성 시: 작성자를 제외한 나머지 2명 리뷰
+              reviewers = others.filter(c => c !== author);
             }
 
             await github.rest.pulls.requestReviewers({
