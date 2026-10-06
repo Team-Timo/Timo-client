@@ -154,6 +154,7 @@
     "onboardingSubmitFailed": "온보딩 저장에 실패했어요. 다시 시도해 주세요.",
     "todoCreateFailed": "투두 생성에 실패했어요. 다시 시도해 주세요.",
     "todoUpdateFailed": "투두 수정에 실패했어요. 다시 시도해 주세요.",
+    "repeatDayInvalid": "반복 날짜는 1~31 사이의 정수로 입력해주세요.",
     "aiDurationRecommendFailed": "AI 추천 소요 시간을 가져오지 못했어요. 다시 시도해 주세요.",
     "tagCreateFailed": "태그 생성에 실패했어요. 다시 시도해 주세요.",
     "tagActionFailed": "태그 처리에 실패했어요. 다시 시도해 주세요.",

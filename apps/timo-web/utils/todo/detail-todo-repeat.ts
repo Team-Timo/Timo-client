@@ -16,14 +16,14 @@ export type EffectiveDetailTodoRepeat =
       repeatType: "WEEKLY";
       repeatWeekdays: TodoUpdateRequestRepeatWeekdaysItem[];
     }
-  | { repeatType: "MONTHLY"; repeatDayOfMonth?: number };
+  | { repeatType: "MONTHLY"; repeatDayOfMonth: number };
 
 export const getEffectiveDetailTodoRepeat = ({
   isRepeatActive,
   repeatFrequency,
   selectedWeekdayIds,
   repeatDay,
-}: DetailTodoRepeatValues): EffectiveDetailTodoRepeat => {
+}: DetailTodoRepeatValues): EffectiveDetailTodoRepeat | null => {
   if (!isRepeatActive) return { repeatType: "NONE" };
   if (repeatFrequency === "DAILY") return { repeatType: "DAILY" };
 
@@ -43,9 +43,7 @@ export const getEffectiveDetailTodoRepeat = ({
     return { repeatType: "MONTHLY", repeatDayOfMonth };
   }
 
-  return repeatDay.trim() === ""
-    ? { repeatType: "NONE" }
-    : { repeatType: "MONTHLY" };
+  return repeatDay.trim() === "" ? { repeatType: "NONE" } : null;
 };
 
 export const isSameEffectiveDetailTodoRepeat = (

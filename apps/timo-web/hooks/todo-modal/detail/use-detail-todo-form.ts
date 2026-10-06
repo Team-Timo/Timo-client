@@ -93,21 +93,22 @@ export const useDetailTodoForm = ({
     ? todo.repeat.type
     : "DAILY";
 
-  const { control, handleSubmit, formState } = useForm<DetailTodoFormValues>({
-    defaultValues: {
-      date: todoDate,
-      time: durationText,
-      priority: isPriorityLevel(todo.priority) ? todo.priority : "MEDIUM",
-      tagId: todo.tag?.tagId ?? null,
-      isRepeatActive: todo.repeat.type !== "NONE",
-      repeatFrequency: repeatType,
-      selectedWeekdayIds: todo.repeat.weekdays ?? [],
-      repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
-      title: todo.title,
-      memo: todo.memo ?? "",
-      icon: isTodoIconValue(todoIcon) ? todoIcon : null,
-    },
-  });
+  const { control, handleSubmit, formState, getValues } =
+    useForm<DetailTodoFormValues>({
+      defaultValues: {
+        date: todoDate,
+        time: durationText,
+        priority: isPriorityLevel(todo.priority) ? todo.priority : "MEDIUM",
+        tagId: todo.tag?.tagId ?? null,
+        isRepeatActive: todo.repeat.type !== "NONE",
+        repeatFrequency: repeatType,
+        selectedWeekdayIds: todo.repeat.weekdays ?? [],
+        repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
+        title: todo.title,
+        memo: todo.memo ?? "",
+        icon: isTodoIconValue(todoIcon) ? todoIcon : null,
+      },
+    });
 
   const { field: dateField } = useController({ name: "date", control });
   const { field: timeField } = useController({ name: "time", control });
@@ -196,10 +197,25 @@ export const useDetailTodoForm = ({
     selectedWeekdayIds: todo.repeat.weekdays ?? [],
     repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
   });
-  const hasRepeatChanges = !isSameEffectiveDetailTodoRepeat(
-    effectiveRepeat,
-    initialEffectiveRepeat,
-  );
+  const getRepeatChange = () => {
+    const values = getValues();
+    const repeat = getEffectiveDetailTodoRepeat({
+      isRepeatActive: values.isRepeatActive,
+      repeatFrequency: values.repeatFrequency,
+      selectedWeekdayIds: values.selectedWeekdayIds ?? [],
+      repeatDay: values.repeatDay,
+    });
+
+    if (repeat === null) return { isValid: false } as const;
+
+    return {
+      isValid: true,
+      repeat,
+      hasChanges:
+        initialEffectiveRepeat === null ||
+        !isSameEffectiveDetailTodoRepeat(repeat, initialEffectiveRepeat),
+    } as const;
+  };
 
   const getTagIdByLabel = (label: string) => {
     const option = tagField.tagOptions.find((item) => item.label === label);
@@ -224,8 +240,8 @@ export const useDetailTodoForm = ({
     closeTagLimitToast: tagField.closeTagLimitToast,
     isCreateTagErrorToastOpen: tagField.isCreateTagErrorToastOpen,
     closeCreateTagErrorToast: tagField.closeCreateTagErrorToast,
-    isRepeatEffective: effectiveRepeat.repeatType !== "NONE",
-    effectiveRepeat,
+    isRepeatEffective:
+      effectiveRepeat !== null && effectiveRepeat.repeatType !== "NONE",
     repeatFrequency: repeatFrequencyField.value,
     selectedWeekdayIds: selectedWeekdayIdsField.value,
     setSelectedWeekdayIds,
@@ -246,7 +262,7 @@ export const useDetailTodoForm = ({
     removeIcon,
     selectTime,
     changeRepeatFrequency,
-    hasRepeatChanges,
+    getRepeatChange,
     handleSubmit,
     dirtyFields: formState.dirtyFields,
   };

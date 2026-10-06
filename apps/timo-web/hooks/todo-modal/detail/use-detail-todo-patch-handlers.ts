@@ -104,9 +104,11 @@ export const useDetailTodoPatchHandlers = ({
     form.setRepeatDay(repeatDay);
   };
 
-  const submitRepeatChange = () => {
-    if (!form.hasRepeatChanges) return;
-    updateTodo(form.effectiveRepeat);
+  const submitRepeatChange = (): boolean => {
+    const change = form.getRepeatChange();
+    if (!change.isValid) return false;
+    if (change.hasChanges) updateTodo(change.repeat);
+    return true;
   };
 
   const handleSubtaskCompletedChange = (id: number, completed: boolean) => {

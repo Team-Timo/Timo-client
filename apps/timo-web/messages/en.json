@@ -154,6 +154,7 @@
     "onboardingSubmitFailed": "Failed to save onboarding. Please try again.",
     "todoCreateFailed": "Failed to create the to-do. Please try again.",
     "todoUpdateFailed": "Failed to update the to-do. Please try again.",
+    "repeatDayInvalid": "Enter a whole number from 1 to 31 for the repeat date.",
     "aiDurationRecommendFailed": "Failed to get the AI duration recommendation. Please try again.",
     "tagCreateFailed": "Failed to create the tag. Please try again.",
     "tagActionFailed": "Failed to update the tag. Please try again.",
