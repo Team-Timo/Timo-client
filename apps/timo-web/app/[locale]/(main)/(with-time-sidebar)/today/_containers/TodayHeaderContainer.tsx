@@ -1,11 +1,10 @@
 "use client";
 
 import { Header } from "@/components/layout/header/Header";
-import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
+import { NavigationSidebarToggle } from "@/components/layout/sidebar/navigation/NavigationSidebarToggle";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export const TodayHeaderContainer = () => {
-  const { isOpen, toggle } = useNavigationSidebar();
   const isTimeSidebarMobileOpen = useTimeSidebarStore(
     (state) => state.isMobileOpen,
   );
@@ -15,7 +14,7 @@ export const TodayHeaderContainer = () => {
 
   return (
     <Header
-      left={<Header.SidebarButton isOpen={isOpen} onClick={toggle} />}
+      left={<NavigationSidebarToggle />}
       right={
         <Header.SidebarButton
           isOpen={isTimeSidebarMobileOpen}

@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { triggerScrollToToday } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-today-scroll";
 import { useHomeViewMode } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_hooks/use-home-view-mode";
 import { Header } from "@/components/layout/header/Header";
-import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
+import { NavigationSidebarToggle } from "@/components/layout/sidebar/navigation/NavigationSidebarToggle";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export const HomeHeaderContainer = () => {
@@ -15,7 +15,6 @@ export const HomeHeaderContainer = () => {
 
   const viewOptions = [basicLabel, weekLabel];
 
-  const { isOpen, toggle } = useNavigationSidebar();
   const isTimeSidebarMobileOpen = useTimeSidebarStore(
     (state) => state.isMobileOpen,
   );
@@ -42,7 +41,7 @@ export const HomeHeaderContainer = () => {
     <Header
       left={
         <>
-          <Header.SidebarButton isOpen={isOpen} onClick={toggle} />
+          <NavigationSidebarToggle />
           {isWeekView ? (
             <Header.WeeklyNav onPrev={goToPrevWeek} onNext={goToNextWeek} />
           ) : (

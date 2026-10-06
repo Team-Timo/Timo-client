@@ -107,10 +107,10 @@ const NavigationSidebarNavItem = ({
 export const NavigationSidebar = () => {
   const pathname = usePathname();
 
-  const { isOpen, isMobileOpen, toggle } = useNavigationSidebar();
+  const { isOpen, isMobileOpen, toggleMobile } = useNavigationSidebar();
 
   const closeMobileSidebar = () => {
-    if (isMobileOpen) toggle();
+    if (isMobileOpen) toggleMobile();
   };
 
   useEscapeKey(isMobileOpen, closeMobileSidebar);
