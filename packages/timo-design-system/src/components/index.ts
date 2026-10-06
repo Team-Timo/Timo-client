@@ -9,6 +9,7 @@ export { TagNameInput } from "./tag/tag-name-input/TagNameInput";
 export { PriorityIcon } from "./priority/priority-icon/PriorityIcon";
 export { PrioritySelector } from "./priority/priority-selector/PrioritySelector";
 export type { PriorityLevel } from "./priority/priority-selector/PrioritySelector";
+export { Button } from "./button/button/Button";
 export { CreateButton } from "./button/create-button/CreateButton";
 export { DeleteButton } from "./button/delete-button/DeleteButton";
 export { AddTaskButton } from "./button/add-task-button/AddTaskButton";

@@ -107,7 +107,7 @@ export const CreateTodoModalContent = ({
         onClose={onClose}
         onExited={onExited}
         ariaLabel={t("createModal.title")}
-        className="w-[490px] items-center gap-2.5 px-6 py-4"
+        className="m-1 w-[490px] items-center gap-2.5 px-5 py-3 md:m-0 md:px-6 md:py-4"
         feedback={
           <AnimatedToast
             isOpen={isRepeatDayErrorToastOpen}

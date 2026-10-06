@@ -24,7 +24,10 @@ import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
 } from "@/utils/todo/text-length";
-import { convertSecondsToApiDuration } from "@/utils/todo/todo-time";
+import {
+  convertDurationToTimeText,
+  convertSecondsToApiDuration,
+} from "@/utils/todo/todo-time";
 
 interface DetailTodoFormValues {
   date: Date;
@@ -56,13 +59,16 @@ const isRepeatFrequency = (
 ): repeatType is RepeatFrequency =>
   repeatType === "DAILY" || repeatType === "WEEKLY" || repeatType === "MONTHLY";
 
-export const DETAIL_TODO_TIME_OPTIONS: TimeOption[] = [
-  { minute: 15, value: "15", unit: "min" },
-  { minute: 30, value: "30", unit: "min" },
-  { minute: 45, value: "45", unit: "min" },
-  { minute: 60, value: "60", unit: "min" },
-  { minute: 90, value: "90", unit: "min" },
-];
+const DETAIL_TODO_TIME_OPTION_MINUTES = [15, 30, 45, 60, 90];
+
+export const DETAIL_TODO_TIME_OPTIONS: TimeOption[] =
+  DETAIL_TODO_TIME_OPTION_MINUTES.map((minute) => ({
+    minute,
+    label: convertDurationToTimeText(minute * SECONDS_PER_MINUTE).replace(
+      ":",
+      " : ",
+    ),
+  }));
 
 export const DETAIL_TODO_WEEKDAY_IDS = [
   "MON",

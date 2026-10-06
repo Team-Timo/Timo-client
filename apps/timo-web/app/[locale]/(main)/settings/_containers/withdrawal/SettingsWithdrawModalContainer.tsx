@@ -30,7 +30,7 @@ export const SettingsWithdrawModalContainer = ({
       ariaLabel={t.markup("withdrawConfirmTitle", {
         red: (chunks) => chunks,
       })}
-      className="w-100 p-5.5"
+      className="m-1 w-100 p-4.5 md:m-0 md:p-5.5"
     >
       <div className="mb-4 size-10 shrink-0">
         <Image src={timoTimerLogo} alt="" width={40} height={40} />
@@ -44,11 +44,8 @@ export const SettingsWithdrawModalContainer = ({
         {t("withdrawConfirmDescription")}
       </p>
       <div className="mt-6 flex w-full gap-3">
-        <ModalButton variant="border" className="flex-1 px-0" onClick={onClose}>
-          {t("withdrawConfirmCancel")}
-        </ModalButton>
         <ModalButton
-          variant="fill"
+          variant="border"
           className="flex-1 px-0"
           onClick={() => {
             onWithdraw();
@@ -56,6 +53,9 @@ export const SettingsWithdrawModalContainer = ({
           }}
         >
           {t("withdrawConfirmConfirm")}
+        </ModalButton>
+        <ModalButton variant="fill" className="flex-1 px-0" onClick={onClose}>
+          {t("withdrawConfirmCancel")}
         </ModalButton>
       </div>
     </OverlayModal>
