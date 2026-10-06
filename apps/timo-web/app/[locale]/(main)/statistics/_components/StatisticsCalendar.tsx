@@ -5,9 +5,10 @@ import {
   StatisticsClockOutlineIcon,
 } from "@repo/timo-design-system/icons";
 import { cn } from "@repo/timo-design-system/utils";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 import type { StatisticsCalendarResponse } from "@/app/[locale]/(main)/statistics/_types/statistics";
+import type { MouseEvent } from "react";
 
 import {
   formatStatisticsCalendarDate,
@@ -75,7 +76,6 @@ export const StatisticsCalendar = ({
   calendarData,
 }: StatisticsCalendarProps) => {
   const locale = useLocale();
-  const t = useTranslations("Statistics.calendar");
   const today = parseDateKey(calendarData.today) ?? new Date();
   const calendarDates = getCalendarDates(currentMonth);
   const firstDayOffset = getFirstDayOffset(currentMonth);
@@ -85,15 +85,21 @@ export const StatisticsCalendar = ({
   const selectedDateLabel = formatStatisticsCalendarDate(displayDate, locale);
   const todayTime = getDateTime(today);
 
+  const handleCalendarClick = (event: MouseEvent<HTMLElement>) => {
+    if (selectedDate === null) return;
+    if (!(event.target instanceof Element)) return;
+    if (event.target.closest("button")) return;
+
+    onDeselectDate();
+  };
+
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <section
       className="relative min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13"
-      onClick={(e) => {
-        if (selectedDate === null) return;
-        if ((e.target as HTMLElement).closest("button")) return;
-        onDeselectDate();
-      }}
+      onClick={handleCalendarClick}
     >
+      <div className="w-199.5">
         <div className="pb-5">
           <div className="flex flex-col gap-2 pb-[69px]">
             <h1 className="typo-headline-b-30 text-timo-gray-900">
@@ -139,7 +145,7 @@ export const StatisticsCalendar = ({
               <button
                 key={dateKey}
                 type="button"
-                className="pointer-events-auto flex flex-col items-center gap-2.5 disabled:cursor-default"
+                className="flex flex-col items-center gap-2.5 disabled:cursor-default"
                 disabled={isFutureDate}
                 onClick={() => onSelectDate(calendarDate.date)}
               >

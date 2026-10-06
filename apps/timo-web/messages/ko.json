@@ -133,8 +133,7 @@
   "Statistics": {
     "calendar": {
       "loading": "통계 캘린더를 불러오고 있어요.",
-      "error": "통계 캘린더를 불러오지 못했어요.",
-      "showMonthlyRecords": "월별 기록 보기"
+      "error": "통계 캘린더를 불러오지 못했어요."
     },
     "sidePanel": {
       "monthTotalRecordTime": "이번 달의 총 기록 시간",

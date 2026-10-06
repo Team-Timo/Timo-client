@@ -133,8 +133,7 @@
   "Statistics": {
     "calendar": {
       "loading": "Loading statistics calendar.",
-      "error": "Failed to load statistics calendar.",
-      "showMonthlyRecords": "Show monthly records"
+      "error": "Failed to load statistics calendar."
     },
     "sidePanel": {
       "monthTotalRecordTime": "Total record time this month",
