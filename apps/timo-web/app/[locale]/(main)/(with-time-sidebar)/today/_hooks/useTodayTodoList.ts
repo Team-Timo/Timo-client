@@ -58,7 +58,7 @@ export const useTodayTodoList = (
         invalidateTimeBoxes();
         invalidateFocusTodo();
         invalidateStatistics();
-        invalidateTodoDetail(variables.todoId, variables.data.date);
+        return invalidateTodoDetail(variables.todoId, variables.data.date);
       },
     },
   });

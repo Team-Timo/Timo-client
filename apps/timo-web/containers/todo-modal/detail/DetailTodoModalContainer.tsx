@@ -1,6 +1,10 @@
 "use client";
 
-import { keepPreviousData } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useIsMutating,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -61,6 +65,17 @@ const DetailTodoModalQuery = ({
   const { handleUpdate } = useUpdateTodoSubmit();
   const { handleUpdateMemo } = useUpdateTodoMemoSubmit();
   const { handleToggle } = useToggleSubtaskSubmit();
+  const queryClient = useQueryClient();
+  const completionMutationFilters = {
+    mutationKey: ["changeTodoStatus"],
+    predicate: (mutation: { state: { variables: unknown } }) => {
+      const variables = mutation.state.variables as
+        | { todoId: number; data: { isCompleted: boolean } }
+        | undefined;
+      return variables?.todoId === todoId && variables.data.isCompleted;
+    },
+  };
+  const isCompletionPending = useIsMutating(completionMutationFilters) > 0;
   const { data: activeTimer, isSuccess: isActiveTimerLoaded } =
     useActiveTimer();
   const todo = data?.data;
@@ -82,6 +97,9 @@ const DetailTodoModalQuery = ({
       : isActiveTimerLoaded
         ? "STOPPED"
         : todo.timerStatus;
+  const canSubmitEdit = () =>
+    queryClient.isMutating(completionMutationFilters) === 0 &&
+    canEditTodoDetails(todo.completed, timerStatus);
 
   const deleteTodo = () => {
     handleDelete(todoId, {
@@ -97,7 +115,7 @@ const DetailTodoModalQuery = ({
     updateData: TodoUpdateRequest,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
-    if (!canEditTodoDetails(todo.completed, timerStatus)) return false;
+    if (!canSubmitEdit()) return false;
 
     const nextDate = updateData.date ?? currentDate;
 
@@ -125,7 +143,7 @@ const DetailTodoModalQuery = ({
     memo: string,
     handlers: UpdateTodoMemoSubmitHandlers = {},
   ) => {
-    if (!canEditTodoDetails(todo.completed, timerStatus)) return false;
+    if (!canSubmitEdit()) return false;
 
     handleUpdateMemo(
       { todoId, date: currentDate, memo },
@@ -145,7 +163,7 @@ const DetailTodoModalQuery = ({
     completed: boolean,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
-    if (!canEditTodoDetails(todo.completed, timerStatus)) return;
+    if (!canSubmitEdit()) return;
 
     handleToggle(
       { todoId, subtaskId, date: currentDate, completed },
@@ -173,6 +191,7 @@ const DetailTodoModalQuery = ({
       onUpdateMemo={updateMemo}
       onToggleSubtask={toggleSubtask}
       timerStatus={timerStatus}
+      isCompletionPending={isCompletionPending}
     />
   );
 };

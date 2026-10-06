@@ -65,7 +65,7 @@ export const useHomeTodosByDate = (
         invalidateHomeAndFocus();
         invalidateTimeBoxes();
         invalidateStatistics();
-        invalidateTodoDetail(variables.todoId, variables.data.date);
+        return invalidateTodoDetail(variables.todoId, variables.data.date);
       },
     },
   });

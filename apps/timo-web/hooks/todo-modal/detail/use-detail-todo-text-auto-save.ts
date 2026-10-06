@@ -93,48 +93,37 @@ export const useDetailTodoTextAutoSave = ({
     );
   }, [textUpdateSignature, title, trackSave]);
 
-  const saveLatestMemo = useCallback(
-    ({ force = false }: { force?: boolean } = {}): Promise<boolean> => {
-      const memoToSave = latestMemoRef.current;
+  const saveLatestMemo = useCallback((): Promise<boolean> => {
+    const memoToSave = latestMemoRef.current;
 
-      if (savingMemoRef.current !== null) {
-        // 저장 중이면 완료 후 최신값을 이어서 저장한다. 닫을 때는 후속 저장이 보장되지 않아 바로 보낸다.
-        if (!force || savingMemoRef.current === memoToSave) {
-          return Promise.resolve(true);
-        }
-      } else if (lastSavedMemoRef.current === memoToSave) {
-        return Promise.resolve(true);
-      }
+    if (savingMemoRef.current !== null) {
+      return Promise.resolve(true);
+    } else if (lastSavedMemoRef.current === memoToSave) {
+      return Promise.resolve(true);
+    }
 
-      savingMemoRef.current = memoToSave;
-      return trackSave(
-        new Promise<boolean>((resolve) => {
-          const accepted = latestOnUpdateMemoRef.current(memoToSave, {
-            onSuccess: () => {
-              lastSavedMemoRef.current = memoToSave;
-              savingMemoRef.current = null;
-              resolve(true);
-              void saveLatestMemo();
-            },
-            onError: () => {
-              savingMemoRef.current = null;
-              resolve(false);
-            },
-          });
-          if (!accepted) {
+    savingMemoRef.current = memoToSave;
+    return trackSave(
+      new Promise<boolean>((resolve) => {
+        const accepted = latestOnUpdateMemoRef.current(memoToSave, {
+          onSuccess: () => {
+            lastSavedMemoRef.current = memoToSave;
+            savingMemoRef.current = null;
+            resolve(true);
+            void saveLatestMemo();
+          },
+          onError: () => {
             savingMemoRef.current = null;
             resolve(false);
-          }
-        }),
-      );
-    },
-    [trackSave],
-  );
-
-  const submitPendingUpdates = useCallback(() => {
-    void submitTextUpdate();
-    void saveLatestMemo({ force: true });
-  }, [saveLatestMemo, submitTextUpdate]);
+          },
+        });
+        if (!accepted) {
+          savingMemoRef.current = null;
+          resolve(false);
+        }
+      }),
+    );
+  }, [trackSave]);
 
   const flushPendingUpdates = useCallback(async (): Promise<boolean> => {
     latestMemoRef.current = memo;
@@ -186,7 +175,6 @@ export const useDetailTodoTextAutoSave = ({
   }, [isOpen, memo, saveLatestMemo, submitTextUpdate]);
 
   return {
-    submitPendingUpdates,
     flushPendingUpdates,
   };
 };

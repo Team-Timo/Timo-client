@@ -64,6 +64,7 @@ export interface DetailTodoModalContentProps {
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
   timerStatus: TodoDetailResponseTimerStatus;
+  isCompletionPending: boolean;
 }
 
 export const DetailTodoModalContent = ({
@@ -79,6 +80,7 @@ export const DetailTodoModalContent = ({
   onUpdateMemo,
   onToggleSubtask,
   timerStatus,
+  isCompletionPending,
 }: DetailTodoModalContentProps) => {
   const t = useTranslations("Home.detailModal");
   const tCreateModal = useTranslations("Home.createModal");
@@ -98,7 +100,9 @@ export const DetailTodoModalContent = ({
   }));
   const displayTime = convertApiDurationToClockTimeText(detailTodoForm.time);
   const canUpdateTodo =
-    canEditTodoDetails(todo.completed, timerStatus) && !isFlushingUpdates;
+    canEditTodoDetails(todo.completed, timerStatus) &&
+    !isFlushingUpdates &&
+    !isCompletionPending;
   const patchHandlers = useDetailTodoPatchHandlers({
     form: detailTodoForm,
     onUpdate,
@@ -110,15 +114,14 @@ export const DetailTodoModalContent = ({
     removeIcon: detailTodoForm.removeIcon,
     onUpdate: patchHandlers.updateTodo,
   });
-  const { submitPendingUpdates, flushPendingUpdates } =
-    useDetailTodoTextAutoSave({
-      isOpen,
-      title: detailTodoForm.title,
-      memo: detailTodoForm.memo,
-      subtasks: detailTodoForm.subtaskInputs,
-      onUpdate: patchHandlers.updateTodo,
-      onUpdateMemo,
-    });
+  const { flushPendingUpdates } = useDetailTodoTextAutoSave({
+    isOpen,
+    title: detailTodoForm.title,
+    memo: detailTodoForm.memo,
+    subtasks: detailTodoForm.subtaskInputs,
+    onUpdate: patchHandlers.updateTodo,
+    onUpdateMemo,
+  });
 
   const flushBeforeAction = async (action: () => void) => {
     if (isFlushingRef.current) return;
@@ -138,6 +141,7 @@ export const DetailTodoModalContent = ({
   };
 
   const handleToggleCompleted = (completed: boolean) => {
+    if (isCompletionPending) return;
     if (!completed) {
       onToggleCompleted(false);
       return;
@@ -154,9 +158,7 @@ export const DetailTodoModalContent = ({
   };
 
   const handleClose = () => {
-    if (isFlushingRef.current) return;
-    submitPendingUpdates();
-    onClose();
+    void flushBeforeAction(onClose);
   };
 
   const deleteModalTriggerRef = useRef<HTMLButtonElement>(null);
@@ -221,7 +223,7 @@ export const DetailTodoModalContent = ({
                 onTitleChange={detailTodoForm.changeTitle}
                 onTitleEnter={detailTodoForm.focusFirstSubtaskInput}
                 onToggleCompleted={handleToggleCompleted}
-                isSavePending={isFlushingUpdates}
+                isSavePending={isFlushingUpdates || isCompletionPending}
                 onTogglePlay={handleTogglePlay}
                 onSubtaskInputChange={detailTodoForm.changeSubtaskInput}
                 onToggleSubtaskCompleted={
