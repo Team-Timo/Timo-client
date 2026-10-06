@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { useController } from "react-hook-form";
 
 import type {
@@ -35,6 +36,7 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
     name: "repeatDayOfMonth",
     control,
   });
+  const [repeatDay, setRepeatDay] = useState("");
 
   const weekdays = WEEKDAY_CODES.map((code) => ({
     id: code,
@@ -68,6 +70,7 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
     if (reset) {
       repeatWeekdaysField.field.onChange(reset.weekdays);
       repeatDayField.field.onChange(reset.day);
+      setRepeatDay("");
     }
     repeatTypeField.field.onChange(frequency);
   };
@@ -77,16 +80,14 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
   };
 
   const handleRepeatDayChange = (value: string) => {
-    const parsed = Number(value);
-    repeatDayField.field.onChange(
-      value.trim() && Number.isFinite(parsed) ? parsed : null,
-    );
+    setRepeatDay(value);
+    repeatDayField.field.onChange(value.trim() === "" ? null : Number(value));
   };
 
   return {
     repeatType,
     repeatWeekdays,
-    repeatDayOfMonth,
+    repeatDay,
     weekdays,
     isRepeatEffective,
     uiRepeatFrequency,

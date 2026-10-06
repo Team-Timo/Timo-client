@@ -10,7 +10,7 @@ export interface DetailTodoRepeatValues {
   repeatDay: string;
 }
 
-export type EffectiveDetailTodoRepeat =
+export type EffectiveDetailTodoRepeatTypes =
   | { repeatType: "NONE" | "DAILY" }
   | {
       repeatType: "WEEKLY";
@@ -23,7 +23,7 @@ export const getEffectiveDetailTodoRepeat = ({
   repeatFrequency,
   selectedWeekdayIds,
   repeatDay,
-}: DetailTodoRepeatValues): EffectiveDetailTodoRepeat | null => {
+}: DetailTodoRepeatValues): EffectiveDetailTodoRepeatTypes | null => {
   if (!isRepeatActive) return { repeatType: "NONE" };
   if (repeatFrequency === "DAILY") return { repeatType: "DAILY" };
 
@@ -47,8 +47,8 @@ export const getEffectiveDetailTodoRepeat = ({
 };
 
 export const isSameEffectiveDetailTodoRepeat = (
-  first: EffectiveDetailTodoRepeat,
-  second: EffectiveDetailTodoRepeat,
+  first: EffectiveDetailTodoRepeatTypes,
+  second: EffectiveDetailTodoRepeatTypes,
 ): boolean => {
   if (first.repeatType !== second.repeatType) return false;
 

@@ -216,9 +216,7 @@ export const CreateTodoModalContent = ({
               },
               monthly: {
                 repeatDayLabel: t("createModal.repeatDayUnit"),
-                repeatDay: repeatField.repeatDayOfMonth
-                  ? String(repeatField.repeatDayOfMonth)
-                  : "",
+                repeatDay: repeatField.repeatDay,
                 onRepeatDayChange: repeatField.handleRepeatDayChange,
               },
             }}
