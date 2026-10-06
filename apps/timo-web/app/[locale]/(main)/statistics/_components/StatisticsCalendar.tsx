@@ -86,15 +86,14 @@ export const StatisticsCalendar = ({
   const todayTime = getDateTime(today);
 
   return (
-    <section className="relative min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13">
-      <button
-        type="button"
-        className="absolute inset-0 cursor-default"
-        aria-label={t("showMonthlyRecords")}
-        disabled={selectedDate === null}
-        onClick={onDeselectDate}
-      />
-      <div className="pointer-events-none relative w-199.5">
+    <section
+      className="relative min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13"
+      onClick={(e) => {
+        if (selectedDate === null) return;
+        if ((e.target as HTMLElement).closest("button")) return;
+        onDeselectDate();
+      }}
+    >
         <div className="pb-5">
           <div className="flex flex-col gap-2 pb-[69px]">
             <h1 className="typo-headline-b-30 text-timo-gray-900">
