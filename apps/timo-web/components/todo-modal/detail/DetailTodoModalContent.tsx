@@ -5,7 +5,7 @@ import { DeleteIcon, TrashOnIcon } from "@repo/timo-design-system/icons";
 import { Modal, TodoToolbar } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import type {
   TodoDetailResponse,
@@ -30,6 +30,7 @@ import { useDetailTodoIconSubmit } from "@/hooks/todo-modal/detail/use-detail-to
 import { useDetailTodoPatchHandlers } from "@/hooks/todo-modal/detail/use-detail-todo-patch-handlers";
 import { useDetailTodoTextAutoSave } from "@/hooks/todo-modal/detail/use-detail-todo-text-auto-save";
 import { formatShortDateLabel } from "@/utils/date/date";
+import { canEditTodoDetails } from "@/utils/todo/todo-editability";
 import { convertApiDurationToClockTimeText } from "@/utils/todo/todo-time";
 
 const DETAIL_TODO_MEMO_MAX_LENGTH = 300;
@@ -52,8 +53,11 @@ export interface DetailTodoModalContentProps {
   onUpdate: (
     data: TodoUpdateRequest,
     handlers?: UpdateTodoSubmitHandlers,
-  ) => void;
-  onUpdateMemo: (memo: string, handlers?: UpdateTodoMemoSubmitHandlers) => void;
+  ) => boolean;
+  onUpdateMemo: (
+    memo: string,
+    handlers?: UpdateTodoMemoSubmitHandlers,
+  ) => boolean;
   onToggleSubtask: (
     subtaskId: number,
     completed: boolean,
@@ -80,6 +84,9 @@ export const DetailTodoModalContent = ({
   const tCreateModal = useTranslations("Home.createModal");
   const tCommon = useTranslations("Common");
   const tToast = useTranslations("Toast");
+  const [isFlushingUpdates, setIsFlushingUpdates] = useState(false);
+  const [isSaveErrorOpen, setIsSaveErrorOpen] = useState(false);
+  const isFlushingRef = useRef(false);
   const detailTodoForm = useDetailTodoForm({ todo, onUpdate });
   const dateNumber = detailTodoForm.date.getDate();
   const dayOfWeek = isDetailTodoWeekdayId(todo.dayOfWeek)
@@ -90,7 +97,8 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
   const displayTime = convertApiDurationToClockTimeText(detailTodoForm.time);
-  const canUpdateTodo = !todo.completed;
+  const canUpdateTodo =
+    canEditTodoDetails(todo.completed, timerStatus) && !isFlushingUpdates;
   const patchHandlers = useDetailTodoPatchHandlers({
     form: detailTodoForm,
     onUpdate,
@@ -102,16 +110,51 @@ export const DetailTodoModalContent = ({
     removeIcon: detailTodoForm.removeIcon,
     onUpdate: patchHandlers.updateTodo,
   });
-  const { submitPendingUpdates } = useDetailTodoTextAutoSave({
-    isOpen,
-    title: detailTodoForm.title,
-    memo: detailTodoForm.memo,
-    subtasks: detailTodoForm.subtaskInputs,
-    onUpdate: patchHandlers.updateTodo,
-    onUpdateMemo,
-  });
+  const { submitPendingUpdates, flushPendingUpdates } =
+    useDetailTodoTextAutoSave({
+      isOpen,
+      title: detailTodoForm.title,
+      memo: detailTodoForm.memo,
+      subtasks: detailTodoForm.subtaskInputs,
+      onUpdate: patchHandlers.updateTodo,
+      onUpdateMemo,
+    });
+
+  const flushBeforeAction = async (action: () => void) => {
+    if (isFlushingRef.current) return;
+
+    isFlushingRef.current = true;
+    setIsFlushingUpdates(true);
+    try {
+      if (await flushPendingUpdates()) {
+        action();
+      } else {
+        setIsSaveErrorOpen(true);
+      }
+    } finally {
+      isFlushingRef.current = false;
+      setIsFlushingUpdates(false);
+    }
+  };
+
+  const handleToggleCompleted = (completed: boolean) => {
+    if (!completed) {
+      onToggleCompleted(false);
+      return;
+    }
+    void flushBeforeAction(() => onToggleCompleted(true));
+  };
+
+  const handleTogglePlay = () => {
+    if (timerStatus === "RUNNING") {
+      onTogglePlay();
+      return;
+    }
+    void flushBeforeAction(onTogglePlay);
+  };
 
   const handleClose = () => {
+    if (isFlushingRef.current) return;
     submitPendingUpdates();
     onClose();
   };
@@ -149,19 +192,20 @@ export const DetailTodoModalContent = ({
               </p>
             </div>
 
-            <div className={canUpdateTodo ? undefined : "cursor-not-allowed"}>
-              <div inert={!canUpdateTodo}>
-                <TodoIconField
-                  icon={iconField.icon}
-                  isIconPanelOpen={iconField.isIconPanelOpen}
-                  addIconLabel={tCreateModal("addIcon")}
-                  onOpenPanel={iconField.handleOpenIconPanel}
-                  onTogglePanel={iconField.handleToggleIconPanel}
-                  onSelectIcon={iconField.handleSelectIcon}
-                  onRemoveIcon={iconField.handleRemoveIcon}
-                />
-              </div>
-            </div>
+            <fieldset
+              disabled={!canUpdateTodo}
+              className="m-0 min-w-0 border-0 p-0 disabled:cursor-not-allowed"
+            >
+              <TodoIconField
+                icon={iconField.icon}
+                isIconPanelOpen={iconField.isIconPanelOpen}
+                addIconLabel={tCreateModal("addIcon")}
+                onOpenPanel={iconField.handleOpenIconPanel}
+                onTogglePanel={iconField.handleToggleIconPanel}
+                onSelectIcon={iconField.handleSelectIcon}
+                onRemoveIcon={iconField.handleRemoveIcon}
+              />
+            </fieldset>
           </div>
 
           <div className="flex w-full flex-col gap-2">
@@ -176,8 +220,9 @@ export const DetailTodoModalContent = ({
                 subtaskInputs={detailTodoForm.subtaskInputs}
                 onTitleChange={detailTodoForm.changeTitle}
                 onTitleEnter={detailTodoForm.focusFirstSubtaskInput}
-                onToggleCompleted={onToggleCompleted}
-                onTogglePlay={onTogglePlay}
+                onToggleCompleted={handleToggleCompleted}
+                isSavePending={isFlushingUpdates}
+                onTogglePlay={handleTogglePlay}
                 onSubtaskInputChange={detailTodoForm.changeSubtaskInput}
                 onToggleSubtaskCompleted={
                   patchHandlers.handleSubtaskCompletedChange
@@ -189,78 +234,77 @@ export const DetailTodoModalContent = ({
 
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 py-3">
-                <div
-                  className={canUpdateTodo ? undefined : "cursor-not-allowed"}
+                <fieldset
+                  disabled={!canUpdateTodo}
+                  className="m-0 min-w-0 border-0 p-0 disabled:cursor-not-allowed"
                 >
-                  <div inert={!canUpdateTodo}>
-                    <TodoToolbar
-                      dateLabel={formatShortDateLabel(detailTodoForm.date)}
-                      date={detailTodoForm.date}
-                      onDateChange={patchHandlers.handleDateChange}
-                      timeLabel={displayTime}
-                      timeOptions={DETAIL_TODO_TIME_OPTIONS}
-                      time={displayTime}
-                      onTimeChange={patchHandlers.handleTimeChange}
-                      selectedTime={patchHandlers.selectedTime}
-                      onSelectTime={patchHandlers.handleSelectTime}
-                      priority={detailTodoForm.priority}
-                      priorityLabels={{
-                        VERY_HIGH: tCommon("priority.VERY_HIGH"),
-                        HIGH: tCommon("priority.HIGH"),
-                        MEDIUM: tCommon("priority.MEDIUM"),
-                        LOW: tCommon("priority.LOW"),
-                      }}
-                      onSelectPriority={patchHandlers.handleSelectPriority}
-                      tagLabel={
-                        detailTodoForm.selectedTagLabel ??
-                        tCreateModal("tagLabel")
-                      }
-                      tags={detailTodoForm.tagLabels}
-                      selectedTag={detailTodoForm.selectedTagLabel}
-                      addTagLabel={tCreateModal("addTag")}
-                      onSelectTag={patchHandlers.handleSelectTag}
-                      onAddTagClick={detailTodoForm.handleAddTagClick}
-                      hasMemo={detailTodoForm.memo.trim().length > 0}
-                      isRepeatActive={detailTodoForm.isRepeatActive}
-                      repeat={{
-                        frequencyHeading: t("repeatFrequencyHeading"),
-                        detailHeading: tCreateModal("repeatDetailHeading"),
-                        options: [
-                          {
-                            frequency: "DAILY",
-                            label: tCreateModal("repeatDaily"),
-                          },
-                          {
-                            frequency: "WEEKLY",
-                            label: tCreateModal("repeatWeekly"),
-                          },
-                          {
-                            frequency: "MONTHLY",
-                            label: tCreateModal("repeatMonthly"),
-                          },
-                        ],
-                        frequency: detailTodoForm.repeatFrequency,
-                        onFrequencyChange:
-                          patchHandlers.handleRepeatFrequencyChange,
-                        weekly: {
-                          weekdays,
-                          selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
-                          onWeekdaysChange: patchHandlers.handleWeekdaysChange,
+                  <TodoToolbar
+                    dateLabel={formatShortDateLabel(detailTodoForm.date)}
+                    date={detailTodoForm.date}
+                    onDateChange={patchHandlers.handleDateChange}
+                    timeLabel={displayTime}
+                    timeOptions={DETAIL_TODO_TIME_OPTIONS}
+                    time={displayTime}
+                    onTimeChange={patchHandlers.handleTimeChange}
+                    selectedTime={patchHandlers.selectedTime}
+                    onSelectTime={patchHandlers.handleSelectTime}
+                    priority={detailTodoForm.priority}
+                    priorityLabels={{
+                      VERY_HIGH: tCommon("priority.VERY_HIGH"),
+                      HIGH: tCommon("priority.HIGH"),
+                      MEDIUM: tCommon("priority.MEDIUM"),
+                      LOW: tCommon("priority.LOW"),
+                    }}
+                    onSelectPriority={patchHandlers.handleSelectPriority}
+                    tagLabel={
+                      detailTodoForm.selectedTagLabel ??
+                      tCreateModal("tagLabel")
+                    }
+                    tags={detailTodoForm.tagLabels}
+                    selectedTag={detailTodoForm.selectedTagLabel}
+                    addTagLabel={tCreateModal("addTag")}
+                    onSelectTag={patchHandlers.handleSelectTag}
+                    onAddTagClick={detailTodoForm.handleAddTagClick}
+                    hasMemo={detailTodoForm.memo.trim().length > 0}
+                    isRepeatActive={detailTodoForm.isRepeatActive}
+                    repeat={{
+                      frequencyHeading: t("repeatFrequencyHeading"),
+                      detailHeading: tCreateModal("repeatDetailHeading"),
+                      options: [
+                        {
+                          frequency: "DAILY",
+                          label: tCreateModal("repeatDaily"),
                         },
-                        monthly: {
-                          repeatDayLabel: t("repeatDayLabel"),
-                          repeatDay: detailTodoForm.repeatDay,
-                          onRepeatDayChange:
-                            patchHandlers.handleRepeatDayChange,
+                        {
+                          frequency: "WEEKLY",
+                          label: tCreateModal("repeatWeekly"),
                         },
-                      }}
-                    />
-                  </div>
-                </div>
+                        {
+                          frequency: "MONTHLY",
+                          label: tCreateModal("repeatMonthly"),
+                        },
+                      ],
+                      frequency: detailTodoForm.repeatFrequency,
+                      onFrequencyChange:
+                        patchHandlers.handleRepeatFrequencyChange,
+                      weekly: {
+                        weekdays,
+                        selectedWeekdayIds: detailTodoForm.selectedWeekdayIds,
+                        onWeekdaysChange: patchHandlers.handleWeekdaysChange,
+                      },
+                      monthly: {
+                        repeatDayLabel: t("repeatDayLabel"),
+                        repeatDay: detailTodoForm.repeatDay,
+                        onRepeatDayChange: patchHandlers.handleRepeatDayChange,
+                      },
+                    }}
+                  />
+                </fieldset>
                 <button
                   type="button"
                   aria-label={t("delete")}
                   onClick={handleRequestDelete}
+                  disabled={isFlushingUpdates}
                 >
                   <TrashOnIcon />
                 </button>
@@ -309,6 +353,11 @@ export const DetailTodoModalContent = ({
         isOpen={detailTodoForm.isCreateTagErrorToastOpen}
         onClose={detailTodoForm.closeCreateTagErrorToast}
         message={tToast("tagCreateFailed")}
+      />
+      <AnimatedToast
+        isOpen={isSaveErrorOpen}
+        onClose={() => setIsSaveErrorOpen(false)}
+        message={tToast("todoUpdateFailed")}
       />
     </>
   );

@@ -19,6 +19,7 @@ import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-s
 import { useToggleSubtaskSubmit } from "@/hooks/todo-modal/detail/use-toggle-subtask-submit";
 import { useUpdateTodoMemoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-memo-submit";
 import { useUpdateTodoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-submit";
+import { canEditTodoDetails } from "@/utils/todo/todo-editability";
 
 export interface DetailTodoModalContainerProps {
   todoId: number;
@@ -60,7 +61,8 @@ const DetailTodoModalQuery = ({
   const { handleUpdate } = useUpdateTodoSubmit();
   const { handleUpdateMemo } = useUpdateTodoMemoSubmit();
   const { handleToggle } = useToggleSubtaskSubmit();
-  const { data: activeTimer } = useActiveTimer();
+  const { data: activeTimer, isSuccess: isActiveTimerLoaded } =
+    useActiveTimer();
   const todo = data?.data;
   const isPlayHighlighted =
     !activeTimer ||
@@ -77,7 +79,9 @@ const DetailTodoModalQuery = ({
   const timerStatus =
     activeTimer?.todoId === todoId && activeTimer.date === date
       ? activeTimer.status
-      : todo.timerStatus;
+      : isActiveTimerLoaded
+        ? "STOPPED"
+        : todo.timerStatus;
 
   const deleteTodo = () => {
     handleDelete(todoId, {
@@ -93,7 +97,7 @@ const DetailTodoModalQuery = ({
     updateData: TodoUpdateRequest,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
-    if (todo.completed) return;
+    if (!canEditTodoDetails(todo.completed, timerStatus)) return false;
 
     const nextDate = updateData.date ?? currentDate;
 
@@ -114,13 +118,14 @@ const DetailTodoModalQuery = ({
         },
       },
     );
+    return true;
   };
 
   const updateMemo = (
     memo: string,
     handlers: UpdateTodoMemoSubmitHandlers = {},
   ) => {
-    if (todo.completed) return;
+    if (!canEditTodoDetails(todo.completed, timerStatus)) return false;
 
     handleUpdateMemo(
       { todoId, date: currentDate, memo },
@@ -132,6 +137,7 @@ const DetailTodoModalQuery = ({
         },
       },
     );
+    return true;
   };
 
   const toggleSubtask = (
@@ -139,7 +145,7 @@ const DetailTodoModalQuery = ({
     completed: boolean,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
-    if (todo.completed) return;
+    if (!canEditTodoDetails(todo.completed, timerStatus)) return;
 
     handleToggle(
       { todoId, subtaskId, date: currentDate, completed },
