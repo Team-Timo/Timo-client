@@ -34,6 +34,8 @@ jobs:
             };
             const resolveName = (login) => NAME_MAP[login] || login;
 
+            const EXCLUDED_MENTION_LOGINS = ['kimminna'];
+
             const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
             if (!webhookUrl) {
               console.log('DISCORD_REMINDER_WEBHOOK_URL not set, skipping');
@@ -94,8 +96,13 @@ jobs:
               const hoursOpen = (now - oldestRequestTime) / (1000 * 60 * 60);
               if (hoursOpen < REMINDER_THRESHOLD_HOURS) continue;
 
+              const mentionedReviewers = reviewers.filter(
+                (reviewer) => !EXCLUDED_MENTION_LOGINS.includes(reviewer.login),
+              );
+              if (mentionedReviewers.length === 0 && teams.length === 0) continue;
+
               const reviewerNames = [
-                ...reviewers.map((reviewer) => resolveName(reviewer.login)),
+                ...mentionedReviewers.map((reviewer) => resolveName(reviewer.login)),
                 ...teams.map((team) => team.name || team.slug),
               ].join(', ');
 
