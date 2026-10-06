@@ -25,6 +25,7 @@ import type {
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
 import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
+import { canEditTodo } from "@/utils/todo/todo-editability";
 import { convertDurationToTimeText } from "@/utils/todo/todo-time";
 
 const isInteractiveElement = (target: EventTarget | null) =>
@@ -70,7 +71,7 @@ export const HomeTodoCard = ({
   const tCommon = useTranslations("Common");
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: todoId, disabled: isCompleted });
+    useSortable({ id: todoId, disabled: !canEditTodo(isCompleted) });
 
   const sortableStyle = {
     transform: CSS.Transform.toString(transform),
@@ -135,7 +136,7 @@ export const HomeTodoCard = ({
         <PlayButton
           variant={isRunning ? "stop" : "play"}
           size="sm"
-          disabled={isCompleted}
+          disabled={!canEditTodo(isCompleted)}
           active={isPlayHighlighted}
           onClick={handlePlayClick}
         >
@@ -177,7 +178,7 @@ export const HomeTodoCard = ({
           <div className="flex w-full min-w-0 items-center gap-2">
             <Checkbox
               checked={isSubtaskCompleted}
-              disabled={isCompleted}
+              disabled={!canEditTodo(isCompleted)}
               onChange={(checked) => onToggleSubtaskCompleted?.(checked)}
             />
             <p className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 truncate">
