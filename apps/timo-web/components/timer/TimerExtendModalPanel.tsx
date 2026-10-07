@@ -1,4 +1,4 @@
-import { Modal, ModalButton } from "@repo/timo-design-system/ui";
+import { Button, Modal } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
 
@@ -115,27 +115,21 @@ export const TimerExtendModalPanel = ({
 
       <div className="mt-2.5 flex w-full gap-1.5">
         {canGoBack ? (
-          <ModalButton
-            variant="border"
-            className="flex-1 px-0"
+          <Button
+            variant="secondary"
+            appearance="outline"
+            size="lg"
+            className="flex-1"
             onClick={onClose}
           >
             {t("closeButton")}
-          </ModalButton>
+          </Button>
         ) : (
-          <Modal.BorderButton className="flex-1 px-0" onClick={onClose}>
+          <Modal.BorderButton onClick={onClose}>
             {t("closeButton")}
           </Modal.BorderButton>
         )}
-        <Modal.FillButton
-          className={cn(
-            "flex-1 px-0",
-            !canSubmit &&
-              "border-timo-gray-500 text-timo-gray-700 border bg-white",
-          )}
-          disabled={!canSubmit}
-          onClick={onSubmit}
-        >
+        <Modal.FillButton disabled={!canSubmit} onClick={onSubmit}>
           {t("submitButton")}
         </Modal.FillButton>
       </div>
