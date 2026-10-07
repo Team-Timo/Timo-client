@@ -38,7 +38,7 @@ const CARD_STYLE = {
   },
 } as const;
 
-const TOOLBAR_ICON_CLASS_NAME = "size-[18px] shrink-0 md:size-[22px]";
+const TOOLBAR_ICON_CLASS_NAME = "size-4.5 shrink-0 md:size-5.5";
 
 export interface SubTodo {
   id: number;
@@ -92,7 +92,12 @@ export const TodayTodoCard = ({
   onMouseLeave,
 }: TodayTodoCardProps) => {
   const t = useTranslations("Home.createModal");
+  const tCommon = useTranslations("Common");
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
+
+  const priorityLabel = toolbar.priority
+    ? tCommon(`priority.${toolbar.priority}`)
+    : undefined;
 
   const handleCardKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -215,7 +220,7 @@ export const TodayTodoCard = ({
           </span>
           <span
             className={cn(
-              "flex items-center justify-center md:size-[22px]",
+              "flex items-center justify-center md:size-5.5",
               !toolbar.priority && "hidden md:flex",
             )}
           >
@@ -223,6 +228,7 @@ export const TodayTodoCard = ({
               priority={
                 isDimmed || !toolbar.priority ? "Disable" : toolbar.priority
               }
+              label={priorityLabel}
             />
           </span>
           <span className={cn(!toolbar.tag && "hidden md:block")}>
