@@ -5,7 +5,7 @@ import { DeleteIcon, TrashOnIcon } from "@repo/timo-design-system/icons";
 import { Modal, TodoToolbar } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import type {
   TodoDetailResponse,
@@ -80,6 +80,8 @@ export const DetailTodoModalContent = ({
   const tCreateModal = useTranslations("Home.createModal");
   const tCommon = useTranslations("Common");
   const tToast = useTranslations("Toast");
+  const [isRepeatDayErrorToastOpen, setIsRepeatDayErrorToastOpen] =
+    useState(false);
   const detailTodoForm = useDetailTodoForm({ todo, onUpdate });
   const dateNumber = detailTodoForm.date.getDate();
   const dayOfWeek = isDetailTodoWeekdayId(todo.dayOfWeek)
@@ -112,6 +114,10 @@ export const DetailTodoModalContent = ({
   });
 
   const handleClose = () => {
+    if (!patchHandlers.submitRepeatChange()) {
+      setIsRepeatDayErrorToastOpen(true);
+      return;
+    }
     submitPendingUpdates();
     onClose();
   };
@@ -129,6 +135,13 @@ export const DetailTodoModalContent = ({
         onExited={onExited}
         ariaLabel={t("ariaLabel")}
         className="m-1 w-124 items-start px-6.5 py-4 md:m-0 md:px-7.5 md:py-5"
+        feedback={
+          <AnimatedToast
+            isOpen={isRepeatDayErrorToastOpen}
+            onClose={() => setIsRepeatDayErrorToastOpen(false)}
+            message={tToast("repeatDayInvalid")}
+          />
+        }
       >
         <div className="flex w-full justify-end">
           <button
@@ -220,7 +233,7 @@ export const DetailTodoModalContent = ({
                   onSelectTag={patchHandlers.handleSelectTag}
                   onAddTagClick={detailTodoForm.handleAddTagClick}
                   hasMemo={detailTodoForm.memo.trim().length > 0}
-                  isRepeatActive={detailTodoForm.isRepeatActive}
+                  isRepeatActive={detailTodoForm.isRepeatEffective}
                   repeat={{
                     frequencyHeading: t("repeatFrequencyHeading"),
                     detailHeading: tCreateModal("repeatDetailHeading"),

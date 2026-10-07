@@ -24,6 +24,7 @@ interface OverlayModalProps {
   onClose: () => void;
   onExited?: () => void;
   children: ReactNode;
+  feedback?: ReactNode;
   className?: string;
   ariaLabel: string;
 }
@@ -33,6 +34,7 @@ export const OverlayModal = ({
   onClose,
   onExited,
   children,
+  feedback,
   className,
   ariaLabel,
 }: OverlayModalProps) => {
@@ -145,6 +147,14 @@ export const OverlayModal = ({
           </div>
         </div>
       </FocusTrap>
+      {feedback && (
+        <div
+          className="pointer-events-none fixed inset-0"
+          style={{ zIndex: panelZIndex + 1 }}
+        >
+          {feedback}
+        </div>
+      )}
     </>,
     document.body,
   );
