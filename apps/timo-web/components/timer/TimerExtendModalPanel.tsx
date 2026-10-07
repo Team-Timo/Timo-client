@@ -19,7 +19,6 @@ const PRESET_OPTIONS: {
   { preset: 60, labelKey: "presetOneHour" },
 ];
 
-// JSX 안에 인라인으로 두면 리렌더마다 다시 포커스되므로 컴포넌트 밖에 둔다
 const focusOnMount = (element: HTMLInputElement | null) => {
   element?.focus();
 };
