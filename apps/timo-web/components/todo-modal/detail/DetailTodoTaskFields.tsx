@@ -8,6 +8,8 @@ import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 import type { TodoDetailResponseTimerStatus } from "@/generated/models";
 import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
+import { canEditTodo } from "@/utils/todo/todo-editability";
+
 const resizeTextarea = (element: HTMLTextAreaElement | null) => {
   if (!element) return;
   element.style.height = "auto";
@@ -24,6 +26,7 @@ export interface DetailTodoSubtaskInput {
 export interface DetailTodoTaskFieldsProps {
   titleValue: string;
   isCompleted: boolean;
+  isSavePending?: boolean;
   disabled?: boolean;
   timerStatus: TodoDetailResponseTimerStatus;
   isPlayHighlighted: boolean;
@@ -46,6 +49,7 @@ export interface DetailTodoTaskFieldsProps {
 export const DetailTodoTaskFields = ({
   titleValue,
   isCompleted,
+  isSavePending = false,
   disabled = false,
   timerStatus,
   isPlayHighlighted,
@@ -76,7 +80,11 @@ export const DetailTodoTaskFields = ({
     <div className="flex w-full flex-col">
       <div className="flex w-full items-center justify-between">
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <Checkbox checked={isCompleted} onChange={onToggleCompleted} />
+          <Checkbox
+            checked={isCompleted}
+            disabled={isSavePending}
+            onChange={onToggleCompleted}
+          />
           <input
             type="text"
             value={titleValue}
@@ -89,7 +97,7 @@ export const DetailTodoTaskFields = ({
               onTitleEnter();
             }}
             disabled={disabled}
-            className="typo-headline-b-14 text-timo-black min-w-0 flex-1 outline-none"
+            className="typo-headline-b-14 text-timo-black min-w-0 flex-1 outline-none disabled:cursor-not-allowed"
           />
         </div>
 
@@ -97,7 +105,7 @@ export const DetailTodoTaskFields = ({
           <PlayButton
             variant={isRunning ? "stop" : "play"}
             size="lg"
-            disabled={isCompleted}
+            disabled={!canEditTodo(isCompleted) || isSavePending}
             active={isPlayHighlighted}
             onClick={handlePlayClick}
             onPointerDown={stopInteractiveEvent}
@@ -121,6 +129,7 @@ export const DetailTodoTaskFields = ({
             <div key={subtask.id} className="flex items-center gap-2">
               <Checkbox
                 checked={subtask.completed}
+                disabled={disabled}
                 onChange={(completed) =>
                   onToggleSubtaskCompleted(subtask.id, completed)
                 }
@@ -135,7 +144,7 @@ export const DetailTodoTaskFields = ({
                 onKeyDown={(event) => onSubtaskInputKeyDown(index, event)}
                 rows={1}
                 disabled={disabled}
-                className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
+                className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none disabled:cursor-not-allowed"
               />
             </div>
           ))}

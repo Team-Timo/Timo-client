@@ -22,6 +22,7 @@ import {
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
+import { canEditTodo } from "@/utils/todo/todo-editability";
 
 export interface UseHomeTodosByDateOptions {
   onNeedStopConfirm: (dateKey: string, todoId: number) => void;
@@ -64,7 +65,7 @@ export const useHomeTodosByDate = (
         invalidateHomeAndFocus();
         invalidateTimeBoxes();
         invalidateStatistics();
-        invalidateTodoDetail(variables.todoId, variables.data.date);
+        return invalidateTodoDetail(variables.todoId, variables.data.date);
       },
     },
   });
@@ -204,6 +205,9 @@ export const useHomeTodosByDate = (
     completed: boolean,
   ) => {
     const previous = todosByDate[dateKey] ?? [];
+    const todo = previous.find((item) => item.todoId === todoId);
+    if (!todo || !canEditTodo(todo.completed)) return;
+
     updateTodo(dateKey, todoId, (todo) => ({
       ...todo,
       subtasks: todo.subtasks.map((subtask) =>

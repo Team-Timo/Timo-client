@@ -16,6 +16,7 @@ import { Timer } from "@/components/timer/Timer";
 import { TimerSessionControls } from "@/components/timer/TimerSessionControls";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/duration/format-duration-label";
+import { canEditTodo } from "@/utils/todo/todo-editability";
 
 const TIMER_SIZE_CLASS_NAME = "h-60.5 w-60.5 md:h-90 md:w-90";
 const TIMER_TIME_CLASS_NAME = "typo-headline-b-40 md:typo-headline-b-50";
@@ -95,6 +96,7 @@ export const FocusSessionContainer = () => {
           )}
           title={todo.title}
           completed={todo.completed}
+          isTimerLookupUnavailable={focusSessionState.isTimerLookupUnavailable}
           dateText={focusSessionState.dateText}
           durationText={convertDurationToTimeText(
             focusSessionState.plannedSeconds,
@@ -138,6 +140,7 @@ export const FocusSessionContainer = () => {
           onExtend={focusSessionActions.onExtend}
           onComplete={focusSessionActions.onComplete}
           onStop={focusSessionActions.onStop}
+          disabled={!canEditTodo(todo.completed)}
         />
       }
     />
