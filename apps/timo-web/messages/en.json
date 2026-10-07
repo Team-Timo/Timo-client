@@ -141,7 +141,7 @@
       "activeDayCount": "{count} days",
       "dailyAverage": "Daily average",
       "accumulatedTasks": "Accumulated tasks",
-      "dayTotalRecordTime": "Total record time today",
+      "dayTotalRecordTime": "Total record time",
       "plan": "Plan",
       "overtime": "+Overdue",
       "shortened": "-Shortened"

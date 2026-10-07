@@ -141,7 +141,7 @@
       "activeDayCount": "{count}일",
       "dailyAverage": "일평균",
       "accumulatedTasks": "누적 태스크",
-      "dayTotalRecordTime": "오늘의 총 기록 시간",
+      "dayTotalRecordTime": "총 기록 시간",
       "plan": "계획",
       "overtime": "+초과",
       "shortened": "-단축"
