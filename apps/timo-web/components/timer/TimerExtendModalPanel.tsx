@@ -1,5 +1,4 @@
 import { Button, Modal } from "@repo/timo-design-system/ui";
-import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
 
 import { extendTimerBodyExtendMinutesMax } from "@/generated/endpoints/timer/timer.zod";
@@ -20,8 +19,10 @@ const PRESET_OPTIONS: {
   { preset: 60, labelKey: "presetOneHour" },
 ];
 
-const CHIP_FOCUS_BORDER_CLASS =
-  "border-2 border-transparent focus-visible:border-timo-blue-300 outline-none";
+// JSX 안에 인라인으로 두면 리렌더마다 다시 포커스되므로 컴포넌트 밖에 둔다
+const focusOnMount = (element: HTMLInputElement | null) => {
+  element?.focus();
+};
 
 export interface TimerExtendModalPanelProps {
   selectedPreset: ExtendTimePreset | null;
@@ -54,26 +55,23 @@ export const TimerExtendModalPanel = ({
 
       <div className="mt-5.75 grid w-full grid-cols-4 gap-1.25">
         {PRESET_OPTIONS.map(({ preset, labelKey }) => (
-          <button
+          <Button
             key={preset}
-            type="button"
+            variant="secondary"
+            appearance="fill"
+            size="m"
+            className="text-timo-black"
             aria-pressed={selectedPreset === preset}
             onClick={() => onSelectPreset(preset)}
-            className={cn(
-              "typo-headline-r-14 flex h-[37px] items-center justify-center rounded-[4px]",
-              CHIP_FOCUS_BORDER_CLASS,
-              selectedPreset === preset
-                ? "bg-timo-blue-300 text-white"
-                : "bg-timo-gray-300 text-timo-black",
-            )}
           >
             {t(labelKey)}
-          </button>
+          </Button>
         ))}
 
         {isCustomSelected ? (
-          <div className="border-timo-gray-500 focus-within:border-timo-blue-300 flex h-[37px] items-center justify-center rounded-[4px] border px-2">
+          <div className="border-timo-blue-300 flex h-8.5 items-center justify-center rounded-[4px] border px-2">
             <input
+              ref={focusOnMount}
               type="text"
               inputMode="numeric"
               value={customMinutes}
@@ -100,16 +98,15 @@ export const TimerExtendModalPanel = ({
             </span>
           </div>
         ) : (
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            appearance="fill"
+            size="m"
+            className="text-timo-black"
             onClick={() => onSelectPreset("custom")}
-            className={cn(
-              "typo-headline-r-14 text-timo-gray-700 bg-timo-gray-300 flex h-[37px] items-center justify-center rounded-[4px]",
-              CHIP_FOCUS_BORDER_CLASS,
-            )}
           >
             {t("customPreset")}
-          </button>
+          </Button>
         )}
       </div>
 
