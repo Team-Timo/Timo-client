@@ -18,8 +18,6 @@ export const SettingsCalendar = ({
   disconnectLabel,
   onClick,
 }: SettingsCalendarProps) => {
-  const buttonLabel = isConnected ? disconnectLabel : connectLabel;
-
   return (
     <div className="bg-timo-gray-300 flex h-10.25 w-[243px] items-center justify-between gap-4 self-start rounded-lg px-2.5 py-1.5">
       <div className="flex items-center gap-1.5">
@@ -32,9 +30,8 @@ export const SettingsCalendar = ({
       <PillButton
         variant={isConnected ? "gray-dark" : "blue"}
         onClick={onClick}
-        aria-label={`${name} ${buttonLabel}`}
       >
-        {buttonLabel}
+        {isConnected ? disconnectLabel : connectLabel}
       </PillButton>
     </div>
   );
