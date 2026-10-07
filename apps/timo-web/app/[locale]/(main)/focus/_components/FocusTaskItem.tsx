@@ -1,8 +1,8 @@
 import {
   CalendarOnIcon,
   ClockOnIcon,
-  PlayIcon,
-  StopIcon,
+  ControlPauseActiveIcon,
+  ControlPlayActiveIcon,
 } from "@repo/timo-design-system/icons";
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
@@ -77,9 +77,9 @@ export const FocusTaskItem = ({
           onClick={onTogglePlay}
         >
           {isRunning ? (
-            <StopIcon width={24} height={24} />
+            <ControlPauseActiveIcon width={24} height={24} />
           ) : (
-            <PlayIcon width={24} height={24} />
+            <ControlPlayActiveIcon width={24} height={24} />
           )}
         </PlayButton>
       </div>
