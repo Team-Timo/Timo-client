@@ -1,6 +1,6 @@
 import { cn } from "../../../lib";
 
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export type PillButtonVariant = "gray" | "gray-dark" | "blue";
 
@@ -10,11 +10,12 @@ const PILL_BUTTON_VARIANT: Record<PillButtonVariant, string> = {
   blue: "bg-timo-blue-300 text-white",
 };
 
-export interface PillButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface PillButtonProps {
   children: ReactNode;
   variant?: PillButtonVariant;
   icon?: ReactNode;
   onClick: () => void;
+  className?: string;
 }
 
 export const PillButton = ({
@@ -22,9 +23,7 @@ export const PillButton = ({
   variant = "gray",
   icon,
   onClick,
-  type = "button",
   className,
-  ...rest
 }: PillButtonProps) => {
   const chipClassName = cn(
     "typo-body-m-12 flex h-7.5 shrink-0 items-center justify-center gap-1.5 rounded-[4px] px-3",
@@ -33,7 +32,7 @@ export const PillButton = ({
   );
 
   return (
-    <button type={type} onClick={onClick} className={chipClassName} {...rest}>
+    <button type="button" onClick={onClick} className={chipClassName}>
       <span className="whitespace-nowrap">{children}</span>
       {icon}
     </button>
