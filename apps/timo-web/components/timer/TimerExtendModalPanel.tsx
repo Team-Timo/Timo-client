@@ -69,7 +69,7 @@ export const TimerExtendModalPanel = ({
         ))}
 
         {isCustomSelected ? (
-          <div className="border-timo-blue-300 flex h-8.5 items-center justify-center rounded-[4px] border px-2">
+          <div className="border-timo-blue-300 focus-within:ring-timo-blue-300 flex h-8.5 items-center justify-center rounded-[4px] border px-2 focus-within:ring-2 focus-within:ring-offset-2">
             <input
               ref={focusOnMount}
               type="text"
