@@ -101,7 +101,9 @@ export const useSettingsProfile = () => {
     }
 
     try {
-      const response = await authorize();
+      const response = await authorize({
+        redirectOrigin: window.location.origin,
+      });
       const url = response.data?.authorizationUrl;
       if (!url) {
         handlers.onConnectError?.();

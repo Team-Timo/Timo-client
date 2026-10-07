@@ -34,7 +34,9 @@ export const CalendarConnectStepContainer = ({
     if (profile.calendarConnected) return;
 
     try {
-      const response = await authorize();
+      const response = await authorize({
+        redirectOrigin: window.location.origin,
+      });
       const url = response.data?.authorizationUrl;
       if (!url) {
         onConnectError();
