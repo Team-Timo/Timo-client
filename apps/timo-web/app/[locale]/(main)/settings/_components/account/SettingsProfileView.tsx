@@ -52,7 +52,7 @@ export const SettingsProfileView = ({
           <h2 className="typo-headline-b-16 text-timo-gray-900">
             {labels.profileSection}
           </h2>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3 md:gap-5">
             {profileImageUrl ? (
               <Image
                 src={profileImageUrl}
@@ -60,10 +60,10 @@ export const SettingsProfileView = ({
                 width={114}
                 height={114}
                 priority
-                className="size-28.5 shrink-0 rounded-full object-cover"
+                className="size-16 shrink-0 rounded-full object-cover md:size-28.5"
               />
             ) : (
-              <div className="bg-timo-gray-300 size-28.5 shrink-0 rounded-full" />
+              <div className="bg-timo-gray-300 size-16 shrink-0 rounded-full md:size-28.5" />
             )}
             <div className="flex flex-col gap-2">
               <p className="typo-headline-b-20 text-timo-black">{name}</p>
@@ -88,7 +88,7 @@ export const SettingsProfileView = ({
           <h2 className="typo-headline-b-16 text-timo-gray-900">
             {labels.calendarSection}
           </h2>
-          <div className="bg-timo-gray-300 flex h-10.25 w-fit items-center gap-4 self-start rounded-lg px-2.5 py-1.5">
+          <div className="bg-timo-gray-300 flex h-10.25 w-full items-center justify-between gap-4 self-start rounded-lg px-2.5 py-1.5 md:w-fit md:justify-start">
             <div className="flex items-center gap-1.5">
               <Image
                 src="/images/google-calendar.png"

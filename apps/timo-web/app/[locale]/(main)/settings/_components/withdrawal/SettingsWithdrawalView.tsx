@@ -12,11 +12,11 @@ export const SettingsWithdrawalView = ({
   onWithdraw,
 }: SettingsWithdrawalViewProps) => {
   return (
-    <div className="flex flex-col gap-5 px-15 pt-7.5">
+    <div className="flex flex-col gap-5 px-5 pt-5 md:px-15 md:pt-7.5">
       <h1 className="typo-headline-m-16 text-timo-gray-900">{labels.title}</h1>
       <hr className="border-timo-gray-500" />
 
-      <div className="flex w-106.25 flex-col gap-7.5">
+      <div className="flex w-full flex-col gap-7.5 md:w-106.25">
         <div className="flex flex-col gap-1.5">
           <p className="typo-headline-b-18 text-timo-gray-900">
             {labels.guideTitle}
@@ -26,7 +26,7 @@ export const SettingsWithdrawalView = ({
           </p>
         </div>
 
-        <div className="bg-timo-gray-200 flex flex-col gap-3 rounded-lg py-7.5 pr-45 pl-7.5">
+        <div className="bg-timo-gray-200 flex flex-col gap-3 rounded-lg px-5 py-5 md:py-7.5 md:pr-45 md:pl-7.5">
           <p className="typo-headline-b-16 text-timo-gray-900">
             {labels.warningTitle}
           </p>
