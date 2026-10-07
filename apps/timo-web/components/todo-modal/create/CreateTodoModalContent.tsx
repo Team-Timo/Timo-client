@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DeleteIcon } from "@repo/timo-design-system/icons";
-import { CreateButton, TodoToolbar } from "@repo/timo-design-system/ui";
+import { Button, TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useController, useForm } from "react-hook-form";
 
@@ -207,11 +207,16 @@ export const CreateTodoModalContent = ({
             }}
           />
 
-          <CreateButton
-            label={t("createModal.create")}
+          <Button
+            variant="primary"
+            appearance="fill"
+            size="m"
+            className="w-auto shrink-0 px-4"
             disabled={!titleField.title.trim()}
             onClick={handleSubmit(handleFormSubmit)}
-          />
+          >
+            {t("createModal.create")}
+          </Button>
         </div>
       </OverlayModal>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { DeleteIcon } from "@repo/timo-design-system/icons";
-import { CreateButton, TagNameInput } from "@repo/timo-design-system/ui";
+import { Button, TagNameInput } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -81,11 +81,16 @@ export const CreateTagModalContainer = ({
       </div>
 
       <div className="flex w-full items-center justify-end">
-        <CreateButton
-          label={t("createTagModal.create")}
+        <Button
+          variant="primary"
+          appearance="fill"
+          size="m"
+          className="w-auto px-4"
           disabled={!isValid}
           onClick={handleCreate}
-        />
+        >
+          {t("createTagModal.create")}
+        </Button>
       </div>
     </OverlayModal>
   );
