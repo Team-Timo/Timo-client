@@ -1,6 +1,6 @@
 import { cn } from "../../../lib";
 
-export type TagVariant = "disable" | "default" | "blue";
+export type TagVariant = "default" | "blue";
 
 export interface TagIconProps {
   text: string;
@@ -8,7 +8,6 @@ export interface TagIconProps {
 }
 
 const TEXT_COLOR: Record<TagVariant, string> = {
-  disable: "text-timo-gray-700",
   default: "text-timo-gray-800",
   blue: "text-white",
 };
