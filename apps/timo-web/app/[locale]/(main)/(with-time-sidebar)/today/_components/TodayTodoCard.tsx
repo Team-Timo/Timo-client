@@ -18,12 +18,10 @@ const CARD_STYLE = {
   active: {
     card: "bg-white",
     title: "text-timo-gray-900",
-    subText: "text-timo-gray-700",
   },
   done: {
     card: "bg-timo-gray-200",
     title: "text-timo-gray-700",
-    subText: "text-timo-gray-700",
   },
 } as const;
 
@@ -160,12 +158,7 @@ export const TodayTodoCard = ({
                   onChange={() => onSubTodoCheck(sub.id)}
                 />
               </div>
-              <span
-                className={cn(
-                  "typo-body-r-12",
-                  sub.isDone ? "text-timo-gray-500" : style.subText,
-                )}
-              >
+              <span className="typo-body-r-12 text-timo-gray-800">
                 {sub.text}
               </span>
             </li>

@@ -179,7 +179,7 @@ export const HomeTodoCard = ({
               checked={isSubtaskCompleted}
               onChange={(checked) => onToggleSubtaskCompleted?.(checked)}
             />
-            <p className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 truncate">
+            <p className="typo-body-r-12 text-timo-gray-800 min-w-0 flex-1 truncate">
               {subtaskTitle}
             </p>
           </div>
