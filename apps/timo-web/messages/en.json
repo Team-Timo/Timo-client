@@ -34,7 +34,12 @@
       "LOW": "Low"
     },
     "close": "Close",
-    "delete": "Delete"
+    "delete": "Delete",
+    "authButton": {
+      "googleLogin": "Continue with your Google account",
+      "googleCalendar": "Connect Google Calendar",
+      "appleCalendar": "Connect Apple Calendar"
+    }
   },
   "Home": {
     "today": "Today",
@@ -87,7 +92,7 @@
     "profile": {
       "title": "Personal information",
       "profileSection": "Profile",
-      "calendarSection": "Google Calendar integration",
+      "calendarSection": "Calendar integration",
       "connect": "Integrate",
       "disconnect": "Disconnect",
       "languageSection": "Language",
@@ -194,10 +199,6 @@
       "prev": "Previous",
       "start": "Get Started"
     },
-    "onboardingGoogleButton": {
-      "login": "Continue with your Google account",
-      "connectCalendar": "Connect Google Calendar"
-    },
     "language": {
       "title": "Please select a language to use.",
       "description": "timo will be displayed in your selected language.\nYou can change it later in settings."
@@ -232,9 +233,9 @@
       "bedTimeError": "Please set different times for bedtime and wake-up."
     },
     "calendarConnect": {
-      "title": "Connect your Google Calendar.",
+      "title": "Connect your Calendar.",
       "description": "You can import your existing schedules into timo and manage them in one place.",
-      "connectLabel": "Google Calendar integration",
+      "connectLabel": "Calendar integration",
       "consentNotice": "Clicking will display the Google authentication and calendar access permission screen.",
       "permissionNotice": "timo only requests permission to view your schedules."
     }

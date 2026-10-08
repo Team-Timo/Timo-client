@@ -17,6 +17,7 @@ export const TodayCalendarEventCard = ({
           alt="Google Calendar"
           width={14}
           height={14}
+          unoptimized
         />
       </div>
       <span className="typo-headline-b-14 text-timo-gray-900 min-w-0 truncate">

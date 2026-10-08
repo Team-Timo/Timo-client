@@ -9,6 +9,6 @@
 export interface CalendarConnectResponse {
   calendarConnected?: boolean;
   calendarEmail?: string;
-  /** UTC 기준 연동 시각 */
+  /** 사용자 시간대(zoneId) 기준 연동 시각 */
   connectedAt?: string;
 }

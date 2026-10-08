@@ -34,7 +34,10 @@ export const ConnectCalendarResponse = zod.object({
     .object({
       calendarConnected: zod.boolean().optional(),
       calendarEmail: zod.string().optional(),
-      connectedAt: zod.string().optional().describe("UTC 기준 연동 시각"),
+      connectedAt: zod
+        .string()
+        .optional()
+        .describe("사용자 시간대(zoneId) 기준 연동 시각"),
     })
     .optional(),
 });
@@ -103,8 +106,20 @@ export const GetCalendarEventsResponse = zod.object({
  * 구글 캘린더 연동을 시작하는 구글 인증 URL을 발급합니다.
  *
  * 프론트는 이 응답의 authorizationUrl로 window.location.assign 등을 통해 직접 이동해야 합니다.
+ *
+ * redirectOrigin을 전달하면 {redirectOrigin}/oauth/calendar/callback을 redirect_uri로 사용합니다.
+ * 미입력이면 기본 프론트 주소로 redirect되고, 허용되지 않은 origin이면 400(COMMON_400)을 반환합니다.
  * @summary 구글 캘린더 연동 시작
  */
+export const AuthorizeQueryParams = zod.object({
+  redirectOrigin: zod
+    .string()
+    .optional()
+    .describe(
+      "연동 완료 후 돌아올 프론트 origin (미입력 시 기본 프론트 주소, 미허용 시 400)",
+    ),
+});
+
 export const AuthorizeResponse = zod.object({
   status: zod.number().optional(),
   message: zod.string().optional(),
