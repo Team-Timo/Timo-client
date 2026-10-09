@@ -24,6 +24,7 @@ import { useTimerActions } from "@/hooks/timer/use-timer-actions";
 import { useTimerOvertime } from "@/hooks/timer/use-timer-overtime";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { getTimerProgress } from "@/utils/timer/get-timer-progress";
+import { playTimerSound } from "@/utils/timer/timer-sound";
 
 export interface UseFocusSessionOptions {
   onMutationError: () => void;
@@ -138,6 +139,7 @@ export const useFocusSession = ({
   useEffect(() => {
     if (isTimeUp && !wasTimeUpRef.current) {
       timerSessionControlsRef.current?.openEndModal();
+      void playTimerSound();
       if (timer && isRunning) {
         changeStatus({ timerId: timer.timerId, data: { action: "PAUSE" } });
       }
