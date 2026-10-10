@@ -16,6 +16,11 @@ import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
 import { useDetailSubtaskField } from "@/hooks/todo-modal/detail/use-detail-subtask-field";
 import { parseDateKey } from "@/utils/date/date";
 import {
+  getEffectiveDetailTodoRepeat,
+  isSameEffectiveDetailTodoRepeat,
+} from "@/utils/todo/detail-todo-repeat";
+import { getRepeatDetailsReset } from "@/utils/todo/repeat-detail-reset";
+import {
   TITLE_MAX_WEIGHTED_LENGTH,
   truncateToWeightedLength,
 } from "@/utils/todo/text-length";
@@ -94,21 +99,22 @@ export const useDetailTodoForm = ({
     ? todo.repeat.type
     : "DAILY";
 
-  const { control, handleSubmit, formState } = useForm<DetailTodoFormValues>({
-    defaultValues: {
-      date: todoDate,
-      time: durationText,
-      priority: isPriorityLevel(todo.priority) ? todo.priority : "MEDIUM",
-      tagId: todo.tag?.tagId ?? null,
-      isRepeatActive: todo.repeat.type !== "NONE",
-      repeatFrequency: repeatType,
-      selectedWeekdayIds: todo.repeat.weekdays ?? [],
-      repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
-      title: todo.title,
-      memo: todo.memo ?? "",
-      icon: isTodoIconValue(todoIcon) ? todoIcon : null,
-    },
-  });
+  const { control, handleSubmit, formState, getValues } =
+    useForm<DetailTodoFormValues>({
+      defaultValues: {
+        date: todoDate,
+        time: durationText,
+        priority: isPriorityLevel(todo.priority) ? todo.priority : "MEDIUM",
+        tagId: todo.tag?.tagId ?? null,
+        isRepeatActive: todo.repeat.type !== "NONE",
+        repeatFrequency: repeatType,
+        selectedWeekdayIds: todo.repeat.weekdays ?? [],
+        repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
+        title: todo.title,
+        memo: todo.memo ?? "",
+        icon: isTodoIconValue(todoIcon) ? todoIcon : null,
+      },
+    });
 
   const { field: dateField } = useController({ name: "date", control });
   const { field: timeField } = useController({ name: "time", control });
@@ -170,8 +176,51 @@ export const useDetailTodoForm = ({
   };
 
   const changeRepeatFrequency = (frequency: RepeatFrequency) => {
+    const reset = getRepeatDetailsReset({
+      currentFrequency: repeatFrequencyField.value,
+      nextFrequency: frequency,
+      isRepeatActive: isRepeatActiveField.value,
+      emptyDay: "",
+    });
+
+    if (reset) {
+      selectedWeekdayIdsField.onChange(reset.weekdays);
+      repeatDayField.onChange(reset.day);
+    }
     isRepeatActiveField.onChange(true);
     repeatFrequencyField.onChange(frequency);
+  };
+
+  const effectiveRepeat = getEffectiveDetailTodoRepeat({
+    isRepeatActive: isRepeatActiveField.value,
+    repeatFrequency: repeatFrequencyField.value,
+    selectedWeekdayIds: selectedWeekdayIdsField.value ?? [],
+    repeatDay: repeatDayField.value,
+  });
+  const initialEffectiveRepeat = getEffectiveDetailTodoRepeat({
+    isRepeatActive: todo.repeat.type !== "NONE",
+    repeatFrequency: repeatType,
+    selectedWeekdayIds: todo.repeat.weekdays ?? [],
+    repeatDay: todo.repeat.dayOfMonth?.toString() ?? "",
+  });
+  const getRepeatChange = () => {
+    const values = getValues();
+    const repeat = getEffectiveDetailTodoRepeat({
+      isRepeatActive: values.isRepeatActive,
+      repeatFrequency: values.repeatFrequency,
+      selectedWeekdayIds: values.selectedWeekdayIds ?? [],
+      repeatDay: values.repeatDay,
+    });
+
+    if (repeat === null) return { isValid: false } as const;
+
+    return {
+      isValid: true,
+      repeat,
+      hasChanges:
+        initialEffectiveRepeat === null ||
+        !isSameEffectiveDetailTodoRepeat(repeat, initialEffectiveRepeat),
+    } as const;
   };
 
   const getTagIdByLabel = (label: string) => {
@@ -197,7 +246,8 @@ export const useDetailTodoForm = ({
     closeTagLimitToast: tagField.closeTagLimitToast,
     isCreateTagErrorToastOpen: tagField.isCreateTagErrorToastOpen,
     closeCreateTagErrorToast: tagField.closeCreateTagErrorToast,
-    isRepeatActive: isRepeatActiveField.value,
+    isRepeatEffective:
+      effectiveRepeat !== null && effectiveRepeat.repeatType !== "NONE",
     repeatFrequency: repeatFrequencyField.value,
     selectedWeekdayIds: selectedWeekdayIdsField.value,
     setSelectedWeekdayIds,
@@ -218,6 +268,7 @@ export const useDetailTodoForm = ({
     removeIcon,
     selectTime,
     changeRepeatFrequency,
+    getRepeatChange,
     handleSubmit,
     dirtyFields: formState.dirtyFields,
   };

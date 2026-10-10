@@ -17,6 +17,17 @@ import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/
 import { useTagLabel } from "@/hooks/todo/use-tag-label";
 import { formatDateKey } from "@/utils/date/date";
 
+const getMonthDisplayDate = (month: Date): Date => {
+  const today = new Date();
+  const isCurrentMonth =
+    month.getFullYear() === today.getFullYear() &&
+    month.getMonth() === today.getMonth();
+
+  return isCurrentMonth
+    ? today
+    : new Date(month.getFullYear(), month.getMonth(), 1);
+};
+
 export const StatisticsContainer = () => {
   const locale = useLocale();
   const getTagLabel = useTagLabel();
@@ -61,11 +72,24 @@ export const StatisticsContainer = () => {
   const handleChangeMonth = (updater: (prev: Date) => Date) => {
     const nextMonth = updater(currentMonth);
     setCurrentMonth(nextMonth);
-    setSelectedDate(new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 1));
+    setSelectedDate(getMonthDisplayDate(nextMonth));
+    setSidePanelVariant("month");
+  };
+
+  const handleDeselectDate = () => {
+    setSelectedDate(getMonthDisplayDate(currentMonth));
     setSidePanelVariant("month");
   };
 
   const handleSelectDate = (date: Date) => {
+    if (
+      sidePanelVariant === "day" &&
+      formatDateKey(selectedDate) === formatDateKey(date)
+    ) {
+      handleDeselectDate();
+      return;
+    }
+
     setSelectedDate(date);
     setSidePanelVariant("day");
   };
@@ -83,6 +107,7 @@ export const StatisticsContainer = () => {
             displayDate={selectedDate}
             selectedDate={sidePanelVariant === "day" ? selectedDate : null}
             onSelectDate={handleSelectDate}
+            onDeselectDate={handleDeselectDate}
           />
         </div>
       </div>

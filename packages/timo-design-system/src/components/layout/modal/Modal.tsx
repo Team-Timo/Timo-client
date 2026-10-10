@@ -15,7 +15,7 @@ import {
 import { createPortal } from "react-dom";
 
 import { acquireModalStackIndex, cn, hasOpenFloatingLayer } from "../../../lib";
-import { ModalButton } from "../../button/modal-button/ModalButton";
+import { Button } from "../../button/button/Button";
 
 // tailwind-config theme.css의 --z-index-modal-overlay/--z-index-modal-panel과 동일한 기준값이다.
 const BASE_OVERLAY_Z_INDEX = 40;
@@ -232,20 +232,25 @@ export type ModalBorderButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 const ModalBorderButton = ({
   onClick,
   className,
+  children,
   ...rest
 }: ModalBorderButtonProps) => {
   const { close } = useModalContext();
 
   return (
-    <ModalButton
-      variant="border"
+    <Button
+      variant="secondary"
+      appearance="outline"
+      size="lg"
       {...rest}
       onClick={(e) => {
         onClick?.(e);
         close();
       }}
-      className={cn("flex-1 px-0", className)}
-    />
+      className={cn("flex-1", className)}
+    >
+      {children}
+    </Button>
   );
 };
 
@@ -254,20 +259,25 @@ export type ModalFillButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 const ModalFillButton = ({
   onClick,
   className,
+  children,
   ...rest
 }: ModalFillButtonProps) => {
   const { close } = useModalContext();
 
   return (
-    <ModalButton
-      variant="fill"
+    <Button
+      variant="primary"
+      appearance="fill"
+      size="lg"
       {...rest}
       onClick={(e) => {
         onClick?.(e);
         close();
       }}
-      className={cn("flex-1 px-0", className)}
-    />
+      className={cn("flex-1", className)}
+    >
+      {children}
+    </Button>
   );
 };
 
