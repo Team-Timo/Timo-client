@@ -3,6 +3,10 @@ import {
   StatisticsClockFilledIcon,
   StatisticsClockLightIcon,
   StatisticsClockOutlineIcon,
+  StatisticsClockEmptySelectedIcon,
+  StatisticsClockFilledSelectedIcon,
+  StatisticsClockLightSelectedIcon,
+  StatisticsClockOutlineSelectedIcon,
 } from "@repo/timo-design-system/icons";
 import { cn } from "@repo/timo-design-system/utils";
 import { useLocale } from "next-intl";
@@ -22,8 +26,8 @@ import { formatDateKey, parseDateKey } from "@/utils/date/date";
 
 type CalendarIconStatus = "disabled" | "empty" | "outline" | "light" | "filled";
 
-const DisabledClockIcon = () => (
-  <div className="bg-timo-gray-300 size-16.5 rounded-full" />
+const DisabledClockIcon = ({ className }: { className?: string }) => (
+  <div className={cn("bg-timo-gray-300 rounded-full", className)} />
 );
 
 const STATUS_ICON = {
@@ -33,16 +37,24 @@ const STATUS_ICON = {
   light: StatisticsClockLightIcon,
   filled: StatisticsClockFilledIcon,
 };
+const SELECTED_STATUS_ICON = {
+  disabled: DisabledClockIcon,
+  empty: StatisticsClockEmptySelectedIcon,
+  outline: StatisticsClockOutlineSelectedIcon,
+  light: StatisticsClockLightSelectedIcon,
+  filled: StatisticsClockFilledSelectedIcon,
+};
 
 const getIconStatus = (
   completionRate: number | null,
   isFutureDate: boolean,
 ): CalendarIconStatus => {
   if (isFutureDate) return "disabled";
-  if (completionRate === null || completionRate === 0) return "empty";
-  if (completionRate < 50) return "outline";
+  if (completionRate === null) return "empty";
+  if (completionRate === 0) return "outline";
+  if (completionRate <= 50) return "filled";
   if (completionRate < 100) return "light";
-  return "filled";
+  return "empty";
 };
 
 const getDateTime = (date: Date) =>
@@ -96,13 +108,13 @@ export const StatisticsCalendar = ({
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <section
-      className="min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13"
+      className="min-w-0 flex-1 px-4 pt-4 pb-8 md:min-h-full md:overflow-x-auto md:px-14.75 md:pt-10 md:pb-13"
       onClick={handleCalendarClick}
     >
-      <div className="w-199.5">
+      <div className="w-full md:w-199.5">
         <div className="pb-5">
-          <div className="flex flex-col gap-2 pb-[69px]">
-            <h1 className="typo-headline-b-30 text-timo-gray-900">
+          <div className="flex flex-col gap-2 pb-6 md:pb-[69px]">
+            <h1 className="typo-headline-b-24 text-timo-gray-900 md:typo-headline-b-30">
               {formatStatisticsMonth(currentMonth, locale)}
             </h1>
 
@@ -111,7 +123,7 @@ export const StatisticsCalendar = ({
             </p>
           </div>
 
-          <div className="grid grid-cols-7 gap-x-14">
+          <div className="grid grid-cols-7 md:gap-x-14">
             {WEEKDAYS.map(({ label, ariaLabel }, index) => (
               <div
                 key={ariaLabel}
@@ -127,7 +139,7 @@ export const StatisticsCalendar = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-7 gap-x-14 gap-y-5">
+        <div className="grid grid-cols-7 gap-y-3 md:gap-x-14 md:gap-y-5">
           {Array.from({ length: firstDayOffset }, (_, index) => (
             <div key={`empty-${index}`} />
           ))}
@@ -139,25 +151,27 @@ export const StatisticsCalendar = ({
             const isFutureDate = getDateTime(calendarDate.date) > todayTime;
             const completionRate = completionRateByDate.get(dateKey) ?? null;
             const status = getIconStatus(completionRate, isFutureDate);
-            const Icon = STATUS_ICON[status];
+            const Icon = isSelected
+              ? SELECTED_STATUS_ICON[status]
+              : STATUS_ICON[status];
 
             return (
               <button
                 key={dateKey}
                 type="button"
-                className="flex flex-col items-center gap-2.5 disabled:cursor-default"
+                className="flex min-w-0 flex-col items-center gap-1.5 disabled:cursor-default md:gap-2.5"
                 disabled={isFutureDate}
                 onClick={() => onSelectDate(calendarDate.date)}
               >
-                <span
-                  className={cn(
-                    "rounded-full",
-                    isSelected &&
-                      !isFutureDate &&
-                      "drop-shadow-[0_0_10px_var(--color-timo-blue-75)]",
-                  )}
-                >
-                  <Icon />
+                <span className="relative aspect-square w-full max-w-12 rounded-full md:size-16.5 md:max-w-none">
+                  <Icon
+                    className={cn(
+                      "size-full",
+                      isSelected &&
+                        !isFutureDate &&
+                        "absolute top-1/2 left-1/2 size-[calc(100%*86/66)] max-w-none -translate-x-1/2 -translate-y-1/2",
+                    )}
+                  />
                 </span>
                 <span
                   className={cn(

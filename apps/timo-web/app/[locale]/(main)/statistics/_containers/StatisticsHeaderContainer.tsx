@@ -27,14 +27,17 @@ export const StatisticsHeaderContainer = ({
 
   return (
     <Header
+      className="shrink-0 px-3 py-1.5 md:px-5 md:py-3 [&>div:first-child]:flex-1 md:[&>div:first-child]:flex-none"
       left={
         <>
           <NavigationSidebarToggle />
-          <Header.WeeklyNav
-            onPrev={handlePrev}
-            onNext={handleNext}
-            label={monthLabel}
-          />
+          <div className="ml-auto md:ml-0">
+            <Header.WeeklyNav
+              onPrev={handlePrev}
+              onNext={handleNext}
+              label={monthLabel}
+            />
+          </div>
         </>
       }
     />
