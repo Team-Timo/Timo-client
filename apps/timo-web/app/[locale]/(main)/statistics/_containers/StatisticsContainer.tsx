@@ -95,13 +95,13 @@ export const StatisticsContainer = () => {
   };
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto md:flex-row md:overflow-hidden">
+    <div className="flex h-full flex-col overflow-y-auto [scrollbar-gutter:stable] md:flex-row md:overflow-hidden md:[scrollbar-gutter:auto]">
       <div className="flex min-w-0 shrink-0 flex-col md:flex-1 md:overflow-hidden">
         <StatisticsHeaderContainer
           currentMonth={currentMonth}
           onChangeMonth={handleChangeMonth}
         />
-        <div className="md:min-h-0 md:flex-1 md:overflow-auto">
+        <div className="md:min-h-0 md:flex-1 md:overflow-auto md:[scrollbar-gutter:stable]">
           <StatisticsCalendarContainer
             currentMonth={currentMonth}
             displayDate={selectedDate}
