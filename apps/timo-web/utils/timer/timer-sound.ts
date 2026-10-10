@@ -1,7 +1,7 @@
 let audioContext: AudioContext | undefined;
 let soundBuffer: Promise<AudioBuffer> | undefined;
 
-export const prepareTimerSound = async () => {
+export const playTimerSound = async () => {
   try {
     audioContext ??= new AudioContext();
     const context = audioContext;
@@ -16,22 +16,23 @@ export const prepareTimerSound = async () => {
         soundBuffer = undefined;
         throw error;
       });
-    await Promise.all([resume, soundBuffer]);
-  } catch {
-    return;
-  }
-};
+    const [, buffer] = await Promise.all([resume, soundBuffer]);
 
-export const playTimerSound = async () => {
-  if (!audioContext || !soundBuffer) return;
-
-  try {
-    const source = audioContext.createBufferSource();
-    source.buffer = await soundBuffer;
-    source.connect(audioContext.destination);
+    const source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
     source.onended = () => source.disconnect();
     source.start();
   } catch {
     return;
   }
+  const context = audioContext;
+
+  console.log("오디오 상태:", context.state);
+  console.log("사용자 상호작용:", navigator.userActivation.hasBeenActive);
+
+  const resume = context.resume();
+  resume.then(() => {
+    console.log("활성화 후 상태:", context.state);
+  });
 };

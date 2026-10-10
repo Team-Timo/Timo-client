@@ -18,7 +18,6 @@ import {
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
-import { prepareTimerSound } from "@/utils/timer/timer-sound";
 
 export interface UseTodayTodoListOptions {
   onNeedStopConfirm: (todoId: number) => void;
@@ -149,7 +148,6 @@ export const useTodayTodoList = (
       activeTimer.date === dateKey
     ) {
       const isResuming = activeTimer.status !== "RUNNING";
-      if (isResuming) void prepareTimerSound();
 
       changeStatus(
         {
@@ -174,7 +172,6 @@ export const useTodayTodoList = (
       return;
     }
 
-    void prepareTimerSound();
     startTimer(
       { todoId, params: { date: dateKey } },
       {

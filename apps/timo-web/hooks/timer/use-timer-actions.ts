@@ -9,8 +9,6 @@ import type {
 import type { useChangeTodoStatus } from "@/generated/endpoints/todo/todo";
 import type { ActiveTimer } from "@/schemas/timer/timer-schema";
 
-import { prepareTimerSound } from "@/utils/timer/timer-sound";
-
 type ChangeStatusMutate = ReturnType<typeof useChangeStatus>["mutate"];
 type ExtendTimerMutate = ReturnType<typeof useExtendTimer>["mutate"];
 type CompleteTimerMutate = ReturnType<typeof useCompleteTimer>["mutate"];
@@ -46,12 +44,10 @@ export const useTimerActions = ({
 }: UseTimerActionsOptions) => {
   const handleTogglePlay = () => {
     if (!timer) {
-      if (onNoTimer) void prepareTimerSound();
       onNoTimer?.();
       return;
     }
 
-    if (!isRunning) void prepareTimerSound();
     changeStatus({
       timerId: timer.timerId,
       data: { action: isRunning ? "PAUSE" : "RESUME" },
@@ -62,7 +58,6 @@ export const useTimerActions = ({
     if (!timer) return;
 
     if (isTimeUp) {
-      void prepareTimerSound();
       markOvertimeStart(
         timer.timerId,
         timer.plannedSeconds + timer.extendedSeconds,

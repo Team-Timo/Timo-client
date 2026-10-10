@@ -11,7 +11,7 @@ import {
   type ExtendTimePreset,
 } from "@/components/timer/TimerExtendModalPanel";
 import { TimerStopModalPanel } from "@/components/timer/TimerStopModalPanel";
-import { playTimerSound, prepareTimerSound } from "@/utils/timer/timer-sound";
+import { playTimerSound } from "@/utils/timer/timer-sound";
 
 type TimerModalStep = "end" | "stop" | "extend" | "complete";
 
@@ -126,7 +126,7 @@ export const TimerSessionControls = forwardRef<
           <TimerStopModalPanel
             minutes={actualMinutes}
             onSwitch={() => {
-              void prepareTimerSound().then(playTimerSound);
+              void playTimerSound();
               setStep("complete");
             }}
           />
