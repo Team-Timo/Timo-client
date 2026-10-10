@@ -4,10 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DeleteIcon } from "@repo/timo-design-system/icons";
 import { Button, TodoToolbar } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { useController, useForm } from "react-hook-form";
 
 import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
 import type { PriorityLevel } from "@repo/timo-design-system/ui";
+import type { FieldErrors } from "react-hook-form";
 
 import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
 import { OverlayModal } from "@/components/modal/OverlayModal";
@@ -56,6 +58,8 @@ export const CreateTodoModalContent = ({
   const t = useTranslations("Home");
   const tCommon = useTranslations("Common");
   const tToast = useTranslations("Toast");
+  const [isRepeatDayErrorToastOpen, setIsRepeatDayErrorToastOpen] =
+    useState(false);
 
   const { control, handleSubmit, reset, formState } =
     useForm<CreateTodoRequest>({
@@ -90,6 +94,12 @@ export const CreateTodoModalContent = ({
     onClose();
   };
 
+  const handleFormInvalid = (errors: FieldErrors<CreateTodoRequest>) => {
+    if (errors.repeatDayOfMonth) {
+      setIsRepeatDayErrorToastOpen(true);
+    }
+  };
+
   return (
     <>
       <OverlayModal
@@ -98,6 +108,13 @@ export const CreateTodoModalContent = ({
         onExited={onExited}
         ariaLabel={t("createModal.title")}
         className="m-1 w-[490px] items-center gap-2.5 px-5 py-3 md:m-0 md:px-6 md:py-4"
+        feedback={
+          <AnimatedToast
+            isOpen={isRepeatDayErrorToastOpen}
+            onClose={() => setIsRepeatDayErrorToastOpen(false)}
+            message={tToast("repeatDayInvalid")}
+          />
+        }
       >
         <div className="flex w-full items-center justify-between">
           <p className="typo-body-sb-12 text-timo-blue-300">
@@ -179,7 +196,7 @@ export const CreateTodoModalContent = ({
             onSelectTag={tagField.handleSelectTag}
             onAddTagClick={tagField.handleAddTagClick}
             hasMemo={(memoField.value ?? "").trim().length > 0}
-            isRepeatActive={repeatField.isRepeatActive}
+            isRepeatActive={repeatField.isRepeatEffective}
             repeat={{
               detailHeading: t("createModal.repeatDetailHeading"),
               options: [
@@ -199,9 +216,7 @@ export const CreateTodoModalContent = ({
               },
               monthly: {
                 repeatDayLabel: t("createModal.repeatDayUnit"),
-                repeatDay: repeatField.repeatDayOfMonth
-                  ? String(repeatField.repeatDayOfMonth)
-                  : "",
+                repeatDay: repeatField.repeatDay,
                 onRepeatDayChange: repeatField.handleRepeatDayChange,
               },
             }}
@@ -213,7 +228,7 @@ export const CreateTodoModalContent = ({
             size="m"
             className="w-auto shrink-0 px-4"
             disabled={!titleField.title.trim()}
-            onClick={handleSubmit(handleFormSubmit)}
+            onClick={handleSubmit(handleFormSubmit, handleFormInvalid)}
           >
             {t("createModal.create")}
           </Button>
