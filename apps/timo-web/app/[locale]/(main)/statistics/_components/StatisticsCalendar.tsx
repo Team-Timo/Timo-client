@@ -50,10 +50,11 @@ const getIconStatus = (
   isFutureDate: boolean,
 ): CalendarIconStatus => {
   if (isFutureDate) return "disabled";
-  if (completionRate === null || completionRate === 0) return "empty";
-  if (completionRate < 50) return "outline";
+  if (completionRate === null) return "empty";
+  if (completionRate === 0) return "outline";
+  if (completionRate <= 50) return "filled";
   if (completionRate < 100) return "light";
-  return "filled";
+  return "empty";
 };
 
 const getDateTime = (date: Date) =>
