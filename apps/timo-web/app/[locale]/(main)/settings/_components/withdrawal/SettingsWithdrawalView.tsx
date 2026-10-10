@@ -14,7 +14,7 @@ export const SettingsWithdrawalView = ({
 }: SettingsWithdrawalViewProps) => {
   return (
     <div className="flex flex-col gap-5 px-5 pt-5 md:px-15 md:pt-7.5">
-      <h1 className="typo-headline-m-16 text-timo-gray-900 hidden md:block">
+      <h1 className="typo-headline-m-16 text-timo-gray-900 sr-only md:not-sr-only">
         {labels.title}
       </h1>
       <hr className="border-timo-gray-500 hidden md:block" />
