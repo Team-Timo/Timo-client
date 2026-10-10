@@ -9,6 +9,7 @@ interface StatisticsCalendarContainerProps {
   displayDate: Date;
   selectedDate: Date | null;
   onSelectDate: (date: Date) => void;
+  onDeselectDate: () => void;
 }
 
 export const StatisticsCalendarContainer = ({
@@ -16,6 +17,7 @@ export const StatisticsCalendarContainer = ({
   displayDate,
   selectedDate,
   onSelectDate,
+  onDeselectDate,
 }: StatisticsCalendarContainerProps) => {
   const yearMonth = formatDateKey(currentMonth).slice(0, 7);
   const calendarQuery = useStatisticsCalendarQuery(yearMonth);
@@ -31,6 +33,7 @@ export const StatisticsCalendarContainer = ({
       displayDate={displayDate}
       selectedDate={selectedDate}
       onSelectDate={onSelectDate}
+      onDeselectDate={onDeselectDate}
       calendarData={calendarData}
     />
   );

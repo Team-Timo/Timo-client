@@ -52,16 +52,11 @@ export const createTodoRequestSchema = z
       return { ...value, repeatType: "NONE" as const, repeatWeekdays: null };
     }
 
-    return value;
-  })
-  .superRefine((value, ctx) => {
-    if (value.repeatType === "MONTHLY" && !value.repeatDayOfMonth) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["repeatDayOfMonth"],
-        message: "반복할 날짜를 선택해주세요.",
-      });
+    if (value.repeatType === "MONTHLY" && value.repeatDayOfMonth === null) {
+      return { ...value, repeatType: "NONE" as const };
     }
+
+    return value;
   });
 
 export const recommendDurationResponseSchema = z.object({

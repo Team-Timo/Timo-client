@@ -8,6 +8,7 @@ import { cn } from "@repo/timo-design-system/utils";
 import { useLocale } from "next-intl";
 
 import type { StatisticsCalendarResponse } from "@/app/[locale]/(main)/statistics/_types/statistics";
+import type { MouseEvent } from "react";
 
 import {
   formatStatisticsCalendarDate,
@@ -62,6 +63,7 @@ interface StatisticsCalendarProps {
   displayDate: Date;
   selectedDate: Date | null;
   onSelectDate: (date: Date) => void;
+  onDeselectDate: () => void;
   calendarData: StatisticsCalendarResponse;
 }
 
@@ -70,6 +72,7 @@ export const StatisticsCalendar = ({
   displayDate,
   selectedDate,
   onSelectDate,
+  onDeselectDate,
   calendarData,
 }: StatisticsCalendarProps) => {
   const locale = useLocale();
@@ -82,8 +85,20 @@ export const StatisticsCalendar = ({
   const selectedDateLabel = formatStatisticsCalendarDate(displayDate, locale);
   const todayTime = getDateTime(today);
 
+  const handleCalendarClick = (event: MouseEvent<HTMLElement>) => {
+    if (selectedDate === null) return;
+    if (!(event.target instanceof Element)) return;
+    if (event.target.closest("button")) return;
+
+    onDeselectDate();
+  };
+
   return (
-    <section className="min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13">
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <section
+      className="min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13"
+      onClick={handleCalendarClick}
+    >
       <div className="w-199.5">
         <div className="pb-5">
           <div className="flex flex-col gap-2 pb-[69px]">
