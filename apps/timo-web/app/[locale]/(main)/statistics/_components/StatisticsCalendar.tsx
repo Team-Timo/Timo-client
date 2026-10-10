@@ -22,8 +22,8 @@ import { formatDateKey, parseDateKey } from "@/utils/date/date";
 
 type CalendarIconStatus = "disabled" | "empty" | "outline" | "light" | "filled";
 
-const DisabledClockIcon = () => (
-  <div className="bg-timo-gray-300 size-16.5 rounded-full" />
+const DisabledClockIcon = ({ className }: { className?: string }) => (
+  <div className={cn("bg-timo-gray-300 rounded-full", className)} />
 );
 
 const STATUS_ICON = {
@@ -96,13 +96,13 @@ export const StatisticsCalendar = ({
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <section
-      className="min-h-full min-w-0 flex-1 overflow-x-auto px-14.75 pt-10 pb-13"
+      className="min-w-0 flex-1 px-4 pt-4 pb-8 md:min-h-full md:overflow-x-auto md:px-14.75 md:pt-10 md:pb-13"
       onClick={handleCalendarClick}
     >
-      <div className="w-199.5">
+      <div className="w-full md:w-199.5">
         <div className="pb-5">
-          <div className="flex flex-col gap-2 pb-[69px]">
-            <h1 className="typo-headline-b-30 text-timo-gray-900">
+          <div className="flex flex-col gap-2 pb-6 md:pb-[69px]">
+            <h1 className="typo-headline-b-24 text-timo-gray-900 md:typo-headline-b-30">
               {formatStatisticsMonth(currentMonth, locale)}
             </h1>
 
@@ -111,7 +111,7 @@ export const StatisticsCalendar = ({
             </p>
           </div>
 
-          <div className="grid grid-cols-7 gap-x-14">
+          <div className="grid grid-cols-7 md:gap-x-14">
             {WEEKDAYS.map(({ label, ariaLabel }, index) => (
               <div
                 key={ariaLabel}
@@ -127,7 +127,7 @@ export const StatisticsCalendar = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-7 gap-x-14 gap-y-5">
+        <div className="grid grid-cols-7 gap-y-3 md:gap-x-14 md:gap-y-5">
           {Array.from({ length: firstDayOffset }, (_, index) => (
             <div key={`empty-${index}`} />
           ))}
@@ -145,7 +145,7 @@ export const StatisticsCalendar = ({
               <button
                 key={dateKey}
                 type="button"
-                className="flex flex-col items-center gap-2.5 disabled:cursor-default"
+                className="flex min-w-0 flex-col items-center gap-1.5 disabled:cursor-default md:gap-2.5"
                 disabled={isFutureDate}
                 onClick={() => onSelectDate(calendarDate.date)}
               >
@@ -157,7 +157,7 @@ export const StatisticsCalendar = ({
                       "drop-shadow-[0_0_10px_var(--color-timo-blue-75)]",
                   )}
                 >
-                  <Icon />
+                  <Icon className="size-9 md:size-16.5" />
                 </span>
                 <span
                   className={cn(

@@ -28,7 +28,7 @@ export type StatisticsSidePanelProps =
   | StatisticsDaySidePanelProps;
 
 const SIDE_PANEL_CLASS_NAME =
-  "border-timo-gray-500 bg-white h-full w-[304px] shrink-0 overflow-y-auto border-l text-timo-black";
+  "border-timo-gray-500 bg-white h-auto w-full shrink-0 border-t text-timo-black md:h-full md:w-[304px] md:overflow-y-auto md:border-t-0 md:border-l";
 
 const getDiffLabel = (
   diffMinutes: number,
@@ -52,16 +52,21 @@ export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
     const { summary } = props;
 
     return (
-      <aside className={cn(SIDE_PANEL_CLASS_NAME, "pt-[83px] pb-148")}>
+      <aside
+        className={cn(
+          SIDE_PANEL_CLASS_NAME,
+          "px-4 py-6 md:px-0 md:pt-[83px] md:pb-148",
+        )}
+      >
         <div className="flex h-46.25 flex-col gap-5">
-          <div className="px-7.5 py-2.5">
+          <div className="py-2.5 md:px-7.5">
             <SummaryTimeBlock
               label={t("monthTotalRecordTime")}
               minutes={summary.totalRecordMinutes}
             />
           </div>
 
-          <dl className="typo-headline-r-14 flex flex-col gap-2 px-7.5">
+          <dl className="typo-headline-r-14 flex flex-col gap-2 md:px-7.5">
             <div className="flex items-center gap-3">
               <dt className="text-timo-gray-900">{t("activeDays")}</dt>
               <dd>{t("activeDayCount", { count: summary.activeDayCount })}</dd>
@@ -89,7 +94,12 @@ export const StatisticsSidePanel = (props: StatisticsSidePanelProps) => {
   const { detail } = props;
 
   return (
-    <aside className={cn(SIDE_PANEL_CLASS_NAME, "px-7.5 pt-20.5 pb-76")}>
+    <aside
+      className={cn(
+        SIDE_PANEL_CLASS_NAME,
+        "px-4 py-6 md:px-7.5 md:pt-20.5 md:pb-76",
+      )}
+    >
       <div className="flex flex-col gap-6">
         <h2 className="typo-headline-b-24 whitespace-pre-line">
           {detail.date}
