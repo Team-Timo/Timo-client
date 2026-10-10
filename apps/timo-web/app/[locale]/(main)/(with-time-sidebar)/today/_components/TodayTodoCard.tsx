@@ -3,13 +3,13 @@ import {
   CalendarOnIcon,
   ClockDisableIcon,
   ClockOnIcon,
+  ControlPauseActiveIcon,
+  ControlPlayActiveIcon,
   MemoDisableIcon,
   MemoOnIcon,
   PlayDisabledIcon,
-  PlayIcon,
   RepeatDisableIcon,
   RepeatOnIcon,
-  StopIcon,
 } from "@repo/timo-design-system/icons";
 import {
   Checkbox,
@@ -152,9 +152,9 @@ export const TodayTodoCard = ({
             {isDone ? (
               <PlayDisabledIcon width={24} height={24} />
             ) : isPlaying ? (
-              <StopIcon width={24} height={24} />
+              <ControlPauseActiveIcon width={24} height={24} />
             ) : isPlayHighlighted ? (
-              <PlayIcon width={24} height={24} />
+              <ControlPlayActiveIcon width={24} height={24} />
             ) : (
               <PlayDisabledIcon width={24} height={24} />
             )}

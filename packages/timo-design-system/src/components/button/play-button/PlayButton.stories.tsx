@@ -1,7 +1,7 @@
 import { PlayButton } from "./PlayButton";
-import { PlayIcon } from "../../../icons/generated/Play";
+import { ControlPauseActiveIcon } from "../../../icons/generated/ControlPauseActive";
+import { ControlPlayActiveIcon } from "../../../icons/generated/ControlPlayActive";
 import { PlayDisabledIcon } from "../../../icons/generated/PlayDisabled";
-import { StopIcon } from "../../../icons/generated/Stop";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
@@ -47,7 +47,7 @@ export const Play: Story = {
   args: { variant: "play", size: "sm" },
   render: (args) => (
     <PlayButton {...args}>
-      <PlayIcon
+      <ControlPlayActiveIcon
         width={args.size === "lg" ? 24 : 12}
         height={args.size === "lg" ? 24 : 12}
       />
@@ -59,7 +59,7 @@ export const Stop: Story = {
   args: { variant: "stop", size: "sm" },
   render: (args) => (
     <PlayButton {...args}>
-      <StopIcon
+      <ControlPauseActiveIcon
         width={args.size === "lg" ? 24 : 12}
         height={args.size === "lg" ? 24 : 12}
       />
@@ -86,10 +86,10 @@ export const AllVariants: Story = {
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
         <PlayButton variant="play" size="sm">
-          <PlayIcon width={12} height={12} />
+          <ControlPlayActiveIcon width={12} height={12} />
         </PlayButton>
         <PlayButton variant="stop" size="sm">
-          <StopIcon width={12} height={12} />
+          <ControlPauseActiveIcon width={12} height={12} />
         </PlayButton>
         <PlayButton variant="play" size="sm" disabled>
           <PlayDisabledIcon width={12} height={12} />
@@ -97,10 +97,10 @@ export const AllVariants: Story = {
       </div>
       <div className="flex items-center gap-4">
         <PlayButton variant="play" size="lg">
-          <PlayIcon width={24} height={24} />
+          <ControlPlayActiveIcon width={24} height={24} />
         </PlayButton>
         <PlayButton variant="stop" size="lg">
-          <StopIcon width={24} height={24} />
+          <ControlPauseActiveIcon width={24} height={24} />
         </PlayButton>
         <PlayButton variant="play" size="lg" disabled>
           <PlayDisabledIcon width={24} height={24} />

@@ -1,4 +1,4 @@
-import { PillButton } from "@repo/timo-design-system/ui";
+import { Button } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 
 import type {
@@ -88,25 +88,30 @@ export const SettingsProfileView = ({
           <h2 className="typo-headline-b-16 text-timo-gray-900">
             {labels.calendarSection}
           </h2>
-          <div className="bg-timo-gray-300 flex h-10.25 w-fit items-center gap-4 self-start rounded-lg px-2.5 py-1.5">
+          <div className="bg-timo-gray-300 flex w-fit items-center gap-4 self-start rounded-lg px-2.5 py-1.5">
             <div className="flex items-center gap-1.5">
-              <Image
-                src="/images/google-calendar.png"
-                alt=""
-                width={20}
-                height={20}
-              />
+              <div className="flex size-6 shrink-0 items-center justify-center p-1">
+                <Image
+                  src="/images/google-calendar.png"
+                  alt=""
+                  width={20}
+                  height={20}
+                />
+              </div>
               <span className="typo-headline-m-16 text-timo-gray-700 whitespace-nowrap">
                 Google Calendar
               </span>
             </div>
 
-            <PillButton
-              variant={isCalendarConnected ? "gray-dark" : "blue"}
+            <Button
+              variant={isCalendarConnected ? "secondary" : "primary"}
+              appearance="fill"
+              size="m"
+              className="w-20"
               onClick={onConnectCalendar}
             >
               {isCalendarConnected ? labels.disconnect : labels.connect}
-            </PillButton>
+            </Button>
           </div>
         </section>
 
