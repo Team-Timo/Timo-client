@@ -144,6 +144,49 @@ export const WithRightIcon: Story = {
   ),
 };
 
+export const Pressed: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="grid w-100 grid-cols-4 gap-1.25">
+      <Button
+        variant="secondary"
+        appearance="fill"
+        size="m"
+        className="text-timo-black"
+        aria-pressed
+      >
+        +10M
+      </Button>
+      <Button
+        variant="secondary"
+        appearance="fill"
+        size="m"
+        className="text-timo-black"
+        aria-pressed={false}
+      >
+        +30M
+      </Button>
+      <Button
+        variant="secondary"
+        appearance="fill"
+        size="m"
+        className="text-timo-black"
+        aria-pressed={false}
+      >
+        +1H
+      </Button>
+      <Button
+        variant="secondary"
+        appearance="fill"
+        size="m"
+        className="text-timo-black"
+      >
+        직접입력
+      </Button>
+    </div>
+  ),
+};
+
 export const Layout: Story = {
   parameters: { controls: { disable: true } },
   render: () => (

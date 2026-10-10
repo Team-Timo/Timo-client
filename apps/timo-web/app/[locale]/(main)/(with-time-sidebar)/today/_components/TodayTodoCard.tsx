@@ -1,12 +1,21 @@
 import {
+  CalendarDisableIcon,
+  CalendarOnIcon,
+  ClockDisableIcon,
+  ClockOnIcon,
+  ControlPauseActiveIcon,
+  ControlPlayActiveIcon,
+  MemoDisableIcon,
+  MemoOnIcon,
   PlayDisabledIcon,
-  PlayIcon,
-  StopIcon,
+  RepeatDisableIcon,
+  RepeatOnIcon,
 } from "@repo/timo-design-system/icons";
 import {
   Checkbox,
   PlayButton,
-  TodoToolbar,
+  PriorityIcon,
+  TagIcon,
   type PriorityLevel,
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
@@ -19,13 +28,17 @@ const CARD_STYLE = {
     card: "bg-white",
     title: "text-timo-gray-900",
     subText: "text-timo-gray-700",
+    toolbarText: "text-timo-gray-900",
   },
   done: {
     card: "bg-timo-gray-200",
     title: "text-timo-gray-700",
     subText: "text-timo-gray-700",
+    toolbarText: "text-timo-gray-700",
   },
 } as const;
+
+const TOOLBAR_ICON_CLASS_NAME = "size-4.5 shrink-0 md:size-5.5";
 
 export interface SubTodo {
   id: number;
@@ -35,7 +48,6 @@ export interface SubTodo {
 
 export interface TodayTodoCardToolbar {
   date: string;
-  dateValue: Date;
   time: string;
   priority?: PriorityLevel;
   tag?: string;
@@ -80,7 +92,12 @@ export const TodayTodoCard = ({
   onMouseLeave,
 }: TodayTodoCardProps) => {
   const t = useTranslations("Home.createModal");
+  const tCommon = useTranslations("Common");
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
+
+  const priorityLabel = toolbar.priority
+    ? tCommon(`priority.${toolbar.priority}`)
+    : undefined;
 
   const handleCardKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -98,7 +115,7 @@ export const TodayTodoCard = ({
       onClick={onCardClick}
       onKeyDown={onCardClick ? handleCardKeyDown : undefined}
       className={cn(
-        "border-timo-gray-500 flex min-w-80 flex-col gap-1 rounded-[4px] border px-5 py-4",
+        "border-timo-gray-500 flex w-full flex-col gap-1 overflow-hidden rounded-[4px] border px-3.5 py-3 md:min-w-80 md:px-5 md:py-4",
         style.card,
         onCardClick && "cursor-pointer",
       )}
@@ -135,9 +152,9 @@ export const TodayTodoCard = ({
             {isDone ? (
               <PlayDisabledIcon width={24} height={24} />
             ) : isPlaying ? (
-              <StopIcon width={24} height={24} />
+              <ControlPauseActiveIcon width={24} height={24} />
             ) : isPlayHighlighted ? (
-              <PlayIcon width={24} height={24} />
+              <ControlPlayActiveIcon width={24} height={24} />
             ) : (
               <PlayDisabledIcon width={24} height={24} />
             )}
@@ -173,33 +190,73 @@ export const TodayTodoCard = ({
         </ul>
       )}
 
-      <div className="flex items-center justify-end gap-2">
-        <div className="pointer-events-none">
-          <TodoToolbar
-            date={isDimmed ? undefined : toolbar.dateValue}
-            dateLabel={toolbar.date}
-            time={isDimmed ? undefined : toolbar.time}
-            timeLabel={toolbar.time}
-            timeOptions={[]}
-            priority={toolbar.priority}
-            tagLabel={toolbar.tag ?? t("tagLabel")}
-            tags={[]}
-            selectedTag={toolbar.tag}
-            hasMemo={toolbar.hasMemo}
-            isRepeatActive={toolbar.hasRepeat}
-            repeat={{
-              detailHeading: "상세 설정",
-              options: [
-                { frequency: "DAILY", label: "매일" },
-                { frequency: "WEEKLY", label: "매주" },
-                { frequency: "MONTHLY", label: "매월" },
-              ],
-              frequency: "DAILY",
-              weekly: { weekdays: [], selectedWeekdayIds: [] },
-              monthly: { repeatDayLabel: "일", repeatDay: "1" },
-            }}
-          />
+      <div className="flex items-center justify-between gap-2 md:justify-end">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="flex shrink-0 items-center gap-0.5">
+            {isDimmed ? (
+              <CalendarDisableIcon className={TOOLBAR_ICON_CLASS_NAME} />
+            ) : (
+              <CalendarOnIcon className={TOOLBAR_ICON_CLASS_NAME} />
+            )}
+            <span
+              className={cn(
+                "typo-caption-r-10 whitespace-nowrap",
+                style.toolbarText,
+              )}
+            >
+              {toolbar.date}
+            </span>
+          </span>
+          <span className="hidden items-center gap-0.5 md:flex">
+            {isDimmed ? <ClockDisableIcon /> : <ClockOnIcon />}
+            <span
+              className={cn(
+                "typo-caption-r-10 whitespace-nowrap",
+                style.toolbarText,
+              )}
+            >
+              {toolbar.time}
+            </span>
+          </span>
+          <span
+            className={cn(
+              "flex items-center justify-center md:size-5.5",
+              !toolbar.priority && "hidden md:flex",
+            )}
+          >
+            <PriorityIcon
+              priority={
+                isDimmed || !toolbar.priority ? "Disable" : toolbar.priority
+              }
+              label={priorityLabel}
+            />
+          </span>
+          <span className={cn(!toolbar.tag && "hidden md:block")}>
+            <TagIcon text={toolbar.tag ?? t("tagLabel")} />
+          </span>
+          <span className={cn(!toolbar.hasMemo && "hidden md:block")}>
+            {isDimmed || !toolbar.hasMemo ? (
+              <MemoDisableIcon className={TOOLBAR_ICON_CLASS_NAME} />
+            ) : (
+              <MemoOnIcon className={TOOLBAR_ICON_CLASS_NAME} />
+            )}
+          </span>
+          <span className={cn(!toolbar.hasRepeat && "hidden md:block")}>
+            {isDimmed || !toolbar.hasRepeat ? (
+              <RepeatDisableIcon className={TOOLBAR_ICON_CLASS_NAME} />
+            ) : (
+              <RepeatOnIcon className={TOOLBAR_ICON_CLASS_NAME} />
+            )}
+          </span>
         </div>
+        <span
+          className={cn(
+            "typo-body-sb-12 shrink-0 whitespace-nowrap md:hidden",
+            style.toolbarText,
+          )}
+        >
+          {toolbar.time}
+        </span>
       </div>
     </div>
   );

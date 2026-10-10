@@ -6,8 +6,8 @@ export default function TodayPage() {
   return (
     <div className="flex h-full flex-col">
       <TodayHeaderContainer />
-      <section className="flex min-h-0 flex-1 flex-col overflow-x-auto px-20 pt-4">
-        <div className="h-full min-w-[400px]">
+      <section className="flex min-h-0 flex-1 flex-col px-5 pt-4 md:overflow-x-auto md:px-20">
+        <div className="h-full md:min-w-[400px]">
           <AsyncBoundary>
             <TodayTodoListContainer />
           </AsyncBoundary>

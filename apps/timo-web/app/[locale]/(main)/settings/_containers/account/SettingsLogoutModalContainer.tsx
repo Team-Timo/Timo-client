@@ -1,7 +1,7 @@
 "use client";
 
 import timoTimerLogo from "@repo/timo-design-system/assets/images/logo/timo-timer.svg";
-import { Modal, PillButton } from "@repo/timo-design-system/ui";
+import { Button, Modal } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
@@ -22,12 +22,15 @@ export const SettingsLogoutModalContainer = ({
 
   return (
     <Modal>
-      <PillButton
+      <Button
+        variant="secondary"
+        appearance="fill"
+        size="m"
         onClick={() => modalTriggerRef.current?.click()}
-        className="w-fit"
+        className="w-20"
       >
         {labels.logout}
-      </PillButton>
+      </Button>
       <Modal.Trigger
         ref={modalTriggerRef}
         className="hidden"

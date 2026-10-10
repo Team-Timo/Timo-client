@@ -17,7 +17,7 @@ const BUTTON_VARIANTS: Record<
       "border-timo-blue-300 text-timo-blue-300 border bg-white disabled:border-timo-gray-500 disabled:text-timo-gray-700",
   },
   secondary: {
-    fill: "bg-timo-gray-300 text-timo-gray-900 disabled:text-timo-gray-700",
+    fill: "bg-timo-gray-300 text-timo-gray-900 disabled:text-timo-gray-700 aria-pressed:border aria-pressed:border-timo-blue-300 aria-pressed:bg-white",
     outline:
       "border-timo-gray-500 text-timo-gray-900 border bg-white disabled:text-timo-gray-700",
   },

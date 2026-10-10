@@ -1,4 +1,5 @@
 import { WarningGrayIcon } from "@repo/timo-design-system/icons";
+import { Button } from "@repo/timo-design-system/ui";
 
 import type { SettingsWithdrawalLabels } from "@/app/[locale]/(main)/settings/_types/withdrawal/withdrawal-type";
 
@@ -44,13 +45,15 @@ export const SettingsWithdrawalView = ({
           </div>
         </div>
 
-        <button
-          type="button"
+        <Button
+          variant="secondary"
+          appearance="fill"
+          size="m"
           onClick={onWithdraw}
-          className="bg-timo-gray-500 typo-headline-b-16 text-timo-gray-700 flex items-center justify-center self-start rounded-[4px] px-5 py-2.5"
+          className="w-20"
         >
           {labels.withdraw}
-        </button>
+        </Button>
       </div>
     </div>
   );
