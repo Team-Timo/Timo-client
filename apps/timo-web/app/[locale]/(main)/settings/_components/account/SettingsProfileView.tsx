@@ -43,10 +43,10 @@ export const SettingsProfileView = ({
   return (
     <div className="flex flex-col items-end gap-7.5 pb-15">
       <div className="flex w-full flex-col gap-7.5">
-        <h1 className="typo-headline-m-16 text-timo-gray-900">
+        <h1 className="typo-headline-m-16 text-timo-gray-900 hidden md:block">
           {labels.title}
         </h1>
-        <hr className="border-timo-gray-500" />
+        <hr className="border-timo-gray-500 hidden md:block" />
 
         <section className="flex flex-col gap-4">
           <h2 className="typo-headline-b-16 text-timo-gray-900">
