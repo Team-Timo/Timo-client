@@ -36,7 +36,7 @@ export const SettingsLanguageSectionContainer = ({
   };
 
   return (
-    <section className="flex w-67 flex-col gap-3">
+    <section className="flex w-full flex-col gap-3 md:w-67">
       <h2 className="typo-headline-b-16 text-timo-gray-900">
         {labels.languageSection}
       </h2>
