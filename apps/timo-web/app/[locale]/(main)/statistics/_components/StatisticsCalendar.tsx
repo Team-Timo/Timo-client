@@ -3,6 +3,10 @@ import {
   StatisticsClockFilledIcon,
   StatisticsClockLightIcon,
   StatisticsClockOutlineIcon,
+  StatisticsClockEmptySelectedIcon,
+  StatisticsClockFilledSelectedIcon,
+  StatisticsClockLightSelectedIcon,
+  StatisticsClockOutlineSelectedIcon,
 } from "@repo/timo-design-system/icons";
 import { cn } from "@repo/timo-design-system/utils";
 import { useLocale } from "next-intl";
@@ -32,6 +36,13 @@ const STATUS_ICON = {
   outline: StatisticsClockOutlineIcon,
   light: StatisticsClockLightIcon,
   filled: StatisticsClockFilledIcon,
+};
+const SELECTED_STATUS_ICON = {
+  disabled: DisabledClockIcon,
+  empty: StatisticsClockEmptySelectedIcon,
+  outline: StatisticsClockOutlineSelectedIcon,
+  light: StatisticsClockLightSelectedIcon,
+  filled: StatisticsClockFilledSelectedIcon,
 };
 
 const getIconStatus = (
@@ -139,7 +150,9 @@ export const StatisticsCalendar = ({
             const isFutureDate = getDateTime(calendarDate.date) > todayTime;
             const completionRate = completionRateByDate.get(dateKey) ?? null;
             const status = getIconStatus(completionRate, isFutureDate);
-            const Icon = STATUS_ICON[status];
+            const Icon = isSelected
+              ? SELECTED_STATUS_ICON[status]
+              : STATUS_ICON[status];
 
             return (
               <button
@@ -149,15 +162,15 @@ export const StatisticsCalendar = ({
                 disabled={isFutureDate}
                 onClick={() => onSelectDate(calendarDate.date)}
               >
-                <span
-                  className={cn(
-                    "rounded-full",
-                    isSelected &&
-                      !isFutureDate &&
-                      "drop-shadow-[0_0_10px_var(--color-timo-blue-75)]",
-                  )}
-                >
-                  <Icon className="size-9 md:size-16.5" />
+                <span className="relative aspect-square w-full max-w-12 rounded-full md:size-16.5 md:max-w-none">
+                  <Icon
+                    className={cn(
+                      "size-full",
+                      isSelected &&
+                        !isFutureDate &&
+                        "absolute top-1/2 left-1/2 size-[calc(100%*86/66)] max-w-none -translate-x-1/2 -translate-y-1/2",
+                    )}
+                  />
                 </span>
                 <span
                   className={cn(
