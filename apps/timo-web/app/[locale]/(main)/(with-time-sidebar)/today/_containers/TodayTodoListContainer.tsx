@@ -139,7 +139,6 @@ export const TodayTodoListContainer = () => {
                     date: formatShortDateLabel(
                       parseDateKey(todo.date) ?? new Date(),
                     ),
-                    dateValue: parseDateKey(todo.date) ?? new Date(),
                     time: convertDurationToTimeText(durationSeconds),
                     priority: todo.priority,
                     tag: todo.tag ? getTagLabel(todo.tag) : undefined,

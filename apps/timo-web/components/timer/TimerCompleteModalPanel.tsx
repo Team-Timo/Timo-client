@@ -50,7 +50,7 @@ export const TimerCompleteModalPanel = ({
       </div>
 
       <Modal.Footer>
-        <Modal.FillButton className="flex-1 px-0" onClick={onComplete}>
+        <Modal.FillButton onClick={onComplete}>
           {t("completeButton")}
         </Modal.FillButton>
       </Modal.Footer>

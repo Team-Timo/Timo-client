@@ -1,5 +1,5 @@
 import timoTimerLogo from "@repo/timo-design-system/assets/images/logo/timo-timer.svg";
-import { Modal, ModalButton } from "@repo/timo-design-system/ui";
+import { Button, Modal } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
@@ -37,12 +37,16 @@ export const TimerStopModalPanel = ({
         })}
       </Modal.Description>
       <Modal.Footer>
-        <Modal.BorderButton className="flex-1 px-0">
-          {t("continueButton")}
-        </Modal.BorderButton>
-        <ModalButton variant="fill" className="flex-1 px-0" onClick={onSwitch}>
+        <Modal.BorderButton>{t("continueButton")}</Modal.BorderButton>
+        <Button
+          variant="primary"
+          appearance="fill"
+          size="lg"
+          className="flex-1"
+          onClick={onSwitch}
+        >
           {t("switchButton")}
-        </ModalButton>
+        </Button>
       </Modal.Footer>
     </>
   );

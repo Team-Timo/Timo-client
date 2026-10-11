@@ -7,6 +7,7 @@ export type TimerControlButtonVariant = "default" | "active";
 export interface TimerControlButtonProps {
   icon: ReactNode;
   activeIcon?: ReactNode;
+  disabledIcon?: ReactNode;
   label: string;
   variant?: TimerControlButtonVariant;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -16,6 +17,7 @@ export interface TimerControlButtonProps {
 export const TimerControlButton = ({
   icon,
   activeIcon,
+  disabledIcon,
   label,
   variant = "default",
   onClick,
@@ -38,7 +40,9 @@ export const TimerControlButton = ({
             : "bg-timo-gray-300",
       )}
     >
-      {isForcedActive || !activeIcon ? (
+      {disabled && disabledIcon ? (
+        disabledIcon
+      ) : isForcedActive || !activeIcon ? (
         icon
       ) : (
         <>
