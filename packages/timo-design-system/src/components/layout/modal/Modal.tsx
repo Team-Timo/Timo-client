@@ -14,7 +14,12 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-import { acquireModalStackIndex, cn, hasOpenFloatingLayer } from "../../../lib";
+import {
+  acquireModalStackIndex,
+  cn,
+  hasOpenFloatingLayer,
+  releaseModalStackIndex,
+} from "../../../lib";
 import { Button } from "../../button/button/Button";
 
 // tailwind-config theme.css의 --z-index-modal-overlay/--z-index-modal-panel과 동일한 기준값이다.
@@ -85,7 +90,15 @@ const ModalRoot = ({ children, className }: ModalProps) => {
     };
   }, [isOpen]);
 
+  // 모달이 닫히거나(어떤 경로로 닫히든) 언마운트될 때 스택 인덱스를 반납한다.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    return () => releaseModalStackIndex();
+  }, [isOpen]);
+
   const open = () => {
+    if (isOpen) return;
     setStackIndex(acquireModalStackIndex());
     setIsOpen(true);
   };
