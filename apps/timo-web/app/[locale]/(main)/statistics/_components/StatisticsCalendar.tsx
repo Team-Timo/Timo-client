@@ -152,7 +152,7 @@ export const StatisticsCalendar = ({
               >
                 <span
                   className={cn(
-                    "aspect-square w-full max-w-12 rounded-full md:size-16.5 md:max-w-none",
+                    "aspect-square w-[85%] max-w-11 rounded-full md:size-16.5 md:max-w-none",
                     isSelected &&
                       !isFutureDate &&
                       "shadow-[0_0_10px_0_var(--color-timo-blue-75)]",
