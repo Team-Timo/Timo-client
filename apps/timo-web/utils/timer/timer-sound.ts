@@ -16,7 +16,7 @@ export const playTimerSound = async () => {
     audioContext ??= new AudioContext();
     const context = audioContext;
     const resume = context.resume();
-    soundBuffer ??= fetch("/sounds/timer-completed.wav")
+    soundBuffer ??= fetch("/sounds/timer-completed.mp3")
       .then((response) => {
         if (!response.ok) throw new Error("Failed to load timer sound");
         return response.arrayBuffer();
