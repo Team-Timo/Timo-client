@@ -1,12 +1,14 @@
 "use client";
 
 import { cn } from "@repo/timo-design-system/utils";
+import { useEffect } from "react";
 
 import { NavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebar";
 import {
   NavigationSidebarProvider,
   useNavigationSidebar,
 } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
+import { unlockTimerSound } from "@/utils/timer/timer-sound";
 
 interface MainShellContainerProps {
   children: React.ReactNode;
@@ -33,6 +35,22 @@ const MainContent = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const MainShellContainer = ({ children }: MainShellContainerProps) => {
+  useEffect(() => {
+    const unlock = (event: Event) => {
+      if (!event.isTrusted) return;
+      void unlockTimerSound().then((isUnlocked) => {
+        if (isUnlocked) removeListeners();
+      });
+    };
+    const removeListeners = () => {
+      window.removeEventListener("click", unlock, true);
+      window.removeEventListener("keydown", unlock, true);
+    };
+    window.addEventListener("click", unlock, true);
+    window.addEventListener("keydown", unlock, true);
+    return removeListeners;
+  }, []);
+
   return (
     <NavigationSidebarProvider>
       <NavigationSidebar />

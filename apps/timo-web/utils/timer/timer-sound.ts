@@ -1,6 +1,16 @@
 let audioContext: AudioContext | undefined;
 let soundBuffer: Promise<AudioBuffer> | undefined;
 
+export const unlockTimerSound = async () => {
+  try {
+    audioContext ??= new AudioContext();
+    if (audioContext.state !== "running") await audioContext.resume();
+    return audioContext.state === "running";
+  } catch {
+    return false;
+  }
+};
+
 export const playTimerSound = async () => {
   try {
     audioContext ??= new AudioContext();
@@ -26,13 +36,4 @@ export const playTimerSound = async () => {
   } catch {
     return;
   }
-  const context = audioContext;
-
-  console.log("오디오 상태:", context.state);
-  console.log("사용자 상호작용:", navigator.userActivation.hasBeenActive);
-
-  const resume = context.resume();
-  resume.then(() => {
-    console.log("활성화 후 상태:", context.state);
-  });
 };
