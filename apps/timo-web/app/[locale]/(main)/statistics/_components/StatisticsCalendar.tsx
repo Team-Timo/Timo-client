@@ -41,8 +41,8 @@ const getIconStatus = (
   if (isFutureDate) return "disabled";
   if (completionRate === null) return "empty";
   if (completionRate === 0) return "outline";
-  if (completionRate <= 50) return "filled";
-  if (completionRate < 100) return "light";
+  if (completionRate < 50) return "light";
+  if (completionRate < 100) return "filled";
   return "empty";
 };
 
