@@ -89,6 +89,8 @@ export const DetailTodoModalContent = ({
   const [isFlushingUpdates, setIsFlushingUpdates] = useState(false);
   const [isSaveErrorOpen, setIsSaveErrorOpen] = useState(false);
   const isFlushingRef = useRef(false);
+  const [isRepeatDayErrorToastOpen, setIsRepeatDayErrorToastOpen] =
+    useState(false);
   const detailTodoForm = useDetailTodoForm({ todo, onUpdate });
   const dateNumber = detailTodoForm.date.getDate();
   const dayOfWeek = isDetailTodoWeekdayId(todo.dayOfWeek)
@@ -159,6 +161,10 @@ export const DetailTodoModalContent = ({
   };
 
   const handleClose = () => {
+    if (!patchHandlers.submitRepeatChange()) {
+      setIsRepeatDayErrorToastOpen(true);
+      return;
+    }
     submitPendingUpdates();
     onClose();
   };
@@ -176,6 +182,13 @@ export const DetailTodoModalContent = ({
         onExited={onExited}
         ariaLabel={t("ariaLabel")}
         className="m-1 w-124 items-start px-6.5 py-4 md:m-0 md:px-7.5 md:py-5"
+        feedback={
+          <AnimatedToast
+            isOpen={isRepeatDayErrorToastOpen}
+            onClose={() => setIsRepeatDayErrorToastOpen(false)}
+            message={tToast("repeatDayInvalid")}
+          />
+        }
       >
         <div className="flex w-full justify-end">
           <button
@@ -270,7 +283,7 @@ export const DetailTodoModalContent = ({
                     onSelectTag={patchHandlers.handleSelectTag}
                     onAddTagClick={detailTodoForm.handleAddTagClick}
                     hasMemo={detailTodoForm.memo.trim().length > 0}
-                    isRepeatActive={detailTodoForm.isRepeatActive}
+                    isRepeatActive={detailTodoForm.isRepeatEffective}
                     repeat={{
                       frequencyHeading: t("repeatFrequencyHeading"),
                       detailHeading: tCreateModal("repeatDetailHeading"),

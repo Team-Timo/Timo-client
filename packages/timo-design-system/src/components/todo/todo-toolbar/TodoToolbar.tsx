@@ -162,7 +162,7 @@ export const TodoToolbar = ({
 
       <TagSelector
         trigger={(isOpen) => (
-          <TagIcon text={tagLabel} variant={isOpen ? "blue" : "disable"} />
+          <TagIcon text={tagLabel} variant={isOpen ? "blue" : "default"} />
         )}
         tags={tags}
         selected={selectedTag}

@@ -4,6 +4,7 @@ import {
   acquireModalStackIndex,
   cn,
   hasOpenFloatingLayer,
+  releaseModalStackIndex,
   useEscapeKey,
 } from "@repo/timo-design-system/utils";
 import FocusTrap from "focus-trap-react";
@@ -24,6 +25,7 @@ interface OverlayModalProps {
   onClose: () => void;
   onExited?: () => void;
   children: ReactNode;
+  feedback?: ReactNode;
   className?: string;
   ariaLabel: string;
 }
@@ -33,6 +35,7 @@ export const OverlayModal = ({
   onClose,
   onExited,
   children,
+  feedback,
   className,
   ariaLabel,
 }: OverlayModalProps) => {
@@ -70,6 +73,15 @@ export const OverlayModal = ({
     return () => {
       document.body.style.overflow = "";
     };
+  }, [shouldRender]);
+
+  // 퇴장 애니메이션이 끝나 실제로 DOM에서 사라질 때 스택 인덱스를 반납한다.
+  // isOpen이 아니라 shouldRender에 맞춰야, 닫히는 중(fade-out)인 모달과
+  // 그사이 새로 열리는 모달이 같은 인덱스를 잠깐 공유하는 걸 막을 수 있다.
+  useEffect(() => {
+    if (!shouldRender) return;
+
+    return () => releaseModalStackIndex();
   }, [shouldRender]);
 
   useEscapeKey(shouldRender, onClose);
@@ -145,6 +157,14 @@ export const OverlayModal = ({
           </div>
         </div>
       </FocusTrap>
+      {feedback && (
+        <div
+          className="pointer-events-none fixed inset-0"
+          style={{ zIndex: panelZIndex + 1 }}
+        >
+          {feedback}
+        </div>
+      )}
     </>,
     document.body,
   );

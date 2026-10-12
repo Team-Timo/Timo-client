@@ -22,6 +22,7 @@ import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
 import { formatDurationLabel } from "@/utils/duration/format-duration-label";
 import { getTimerProgress } from "@/utils/timer/get-timer-progress";
+import { playTimerSound } from "@/utils/timer/timer-sound";
 
 export const TimerPanel = () => {
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
@@ -87,6 +88,7 @@ export const TimerPanel = () => {
   useEffect(() => {
     if (isTimeUp && !wasTimeUpRef.current) {
       timerSessionControlsRef.current?.openEndModal();
+      void playTimerSound();
       if (activeTimer && isRunning) {
         changeStatus({
           timerId: activeTimer.timerId,

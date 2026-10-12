@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { useController } from "react-hook-form";
 
 import type {
@@ -7,6 +8,8 @@ import type {
 } from "@/schemas/todo/todo-schema";
 import type { RepeatFrequency } from "@repo/timo-design-system/ui";
 import type { Control } from "react-hook-form";
+
+import { getRepeatDetailsReset } from "@/utils/todo/repeat-detail-reset";
 
 const WEEKDAY_CODES: TodoRepeatWeekday[] = [
   "MON",
@@ -33,6 +36,7 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
     name: "repeatDayOfMonth",
     control,
   });
+  const [repeatDay, setRepeatDay] = useState("");
 
   const weekdays = WEEKDAY_CODES.map((code) => ({
     id: code,
@@ -41,12 +45,33 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
 
   const repeatType = repeatTypeField.field.value;
   const repeatWeekdays = repeatWeekdaysField.field.value ?? [];
+  const repeatDayOfMonth = repeatDayField.field.value;
 
   const isRepeatActive = repeatType !== "NONE";
+  const isRepeatEffective =
+    repeatType === "DAILY" ||
+    (repeatType === "WEEKLY" && repeatWeekdays.length > 0) ||
+    (repeatType === "MONTHLY" &&
+      typeof repeatDayOfMonth === "number" &&
+      Number.isInteger(repeatDayOfMonth) &&
+      repeatDayOfMonth >= 1 &&
+      repeatDayOfMonth <= 31);
   const uiRepeatFrequency: RepeatFrequency =
     repeatType === "NONE" ? "DAILY" : repeatType;
 
   const handleFrequencyChange = (frequency: RepeatFrequency) => {
+    const reset = getRepeatDetailsReset({
+      currentFrequency: repeatTypeField.field.value,
+      nextFrequency: frequency,
+      isRepeatActive,
+      emptyDay: null,
+    });
+
+    if (reset) {
+      repeatWeekdaysField.field.onChange(reset.weekdays);
+      repeatDayField.field.onChange(reset.day);
+      setRepeatDay("");
+    }
     repeatTypeField.field.onChange(frequency);
   };
 
@@ -55,18 +80,16 @@ export const useRepeatField = ({ control }: UseRepeatFieldParams) => {
   };
 
   const handleRepeatDayChange = (value: string) => {
-    const parsed = Number(value);
-    repeatDayField.field.onChange(
-      value.trim() && Number.isFinite(parsed) ? parsed : null,
-    );
+    setRepeatDay(value);
+    repeatDayField.field.onChange(value.trim() === "" ? null : Number(value));
   };
 
   return {
     repeatType,
     repeatWeekdays,
-    repeatDayOfMonth: repeatDayField.field.value,
+    repeatDay,
     weekdays,
-    isRepeatActive,
+    isRepeatEffective,
     uiRepeatFrequency,
     handleFrequencyChange,
     handleWeekdaysChange,
