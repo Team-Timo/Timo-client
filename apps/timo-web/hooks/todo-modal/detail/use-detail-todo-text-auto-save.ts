@@ -142,6 +142,12 @@ export const useDetailTodoTextAutoSave = ({
     return waitForPendingSaves();
   }, [memo, saveLatestMemo, submitTextUpdate]);
 
+  const submitPendingUpdates = useCallback(() => {
+    latestMemoRef.current = memo;
+    void submitTextUpdate();
+    void saveLatestMemo();
+  }, [memo, saveLatestMemo, submitTextUpdate]);
+
   useEffect(() => {
     latestOnUpdateRef.current = onUpdate;
   }, [onUpdate]);
@@ -176,5 +182,6 @@ export const useDetailTodoTextAutoSave = ({
 
   return {
     flushPendingUpdates,
+    submitPendingUpdates,
   };
 };

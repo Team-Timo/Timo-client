@@ -114,14 +114,15 @@ export const DetailTodoModalContent = ({
     removeIcon: detailTodoForm.removeIcon,
     onUpdate: patchHandlers.updateTodo,
   });
-  const { flushPendingUpdates } = useDetailTodoTextAutoSave({
-    isOpen,
-    title: detailTodoForm.title,
-    memo: detailTodoForm.memo,
-    subtasks: detailTodoForm.subtaskInputs,
-    onUpdate: patchHandlers.updateTodo,
-    onUpdateMemo,
-  });
+  const { flushPendingUpdates, submitPendingUpdates } =
+    useDetailTodoTextAutoSave({
+      isOpen,
+      title: detailTodoForm.title,
+      memo: detailTodoForm.memo,
+      subtasks: detailTodoForm.subtaskInputs,
+      onUpdate: patchHandlers.updateTodo,
+      onUpdateMemo,
+    });
 
   const flushBeforeAction = async (action: () => void) => {
     if (isFlushingRef.current) return;
@@ -158,7 +159,8 @@ export const DetailTodoModalContent = ({
   };
 
   const handleClose = () => {
-    void flushBeforeAction(onClose);
+    submitPendingUpdates();
+    onClose();
   };
 
   const deleteModalTriggerRef = useRef<HTMLButtonElement>(null);
