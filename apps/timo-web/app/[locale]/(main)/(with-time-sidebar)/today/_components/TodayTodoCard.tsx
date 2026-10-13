@@ -113,7 +113,7 @@ export const TodayTodoCard = ({
       onClick={onCardClick}
       onKeyDown={onCardClick ? handleCardKeyDown : undefined}
       className={cn(
-        "border-timo-gray-500 flex w-full flex-col gap-1 overflow-hidden rounded-[4px] border px-3.5 py-3 md:min-w-80 md:px-5 md:py-4",
+        "border-timo-gray-500 flex w-full shrink-0 flex-col gap-1 overflow-hidden rounded-[4px] border px-3.5 py-3 md:min-w-80 md:px-5 md:py-4",
         style.card,
         onCardClick && "cursor-pointer",
       )}
