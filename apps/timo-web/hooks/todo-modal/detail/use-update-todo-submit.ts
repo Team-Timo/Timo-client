@@ -19,7 +19,7 @@ export interface UpdateTodoSubmitHandlers {
 }
 
 export const useUpdateTodoSubmit = () => {
-  const { mutate: updateTodo } = useUpdateTodo();
+  const { mutateAsync: updateTodo } = useUpdateTodo();
   const { invalidateStatistics } = useStatisticsQueryInvalidation();
   const {
     invalidateHome,
@@ -32,19 +32,16 @@ export const useUpdateTodoSubmit = () => {
     { todoId, date, data }: UpdateTodoSubmitParams,
     { onSuccess, onError }: UpdateTodoSubmitHandlers = {},
   ) => {
-    updateTodo(
-      { todoId, data },
-      {
-        onSuccess: () => {
-          invalidateHome();
-          invalidateToday();
-          invalidateTodoDetail(todoId, date);
-          invalidateStatistics();
-          invalidateFocus();
-          onSuccess?.();
-        },
-        onError,
+    void updateTodo({ todoId, data }).then(
+      () => {
+        invalidateHome();
+        invalidateToday();
+        invalidateTodoDetail(todoId, date);
+        invalidateStatistics();
+        invalidateFocus();
+        onSuccess?.();
       },
+      (error: ErrorType<ErrorDto>) => onError?.(error),
     );
   };
 

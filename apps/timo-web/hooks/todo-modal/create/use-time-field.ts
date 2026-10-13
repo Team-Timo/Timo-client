@@ -10,16 +10,19 @@ import { useRecommendDuration } from "@/generated/endpoints/ai/ai";
 import { recommendDurationResponseSchema } from "@/schemas/todo/todo-schema";
 import {
   convertApiDurationToSeconds,
+  convertDurationToTimeText,
   convertSecondsToApiDuration,
 } from "@/utils/todo/todo-time";
 
-const TIME_OPTIONS = [
-  { minute: 15, value: "15", unit: "min" },
-  { minute: 30, value: "30", unit: "min" },
-  { minute: 45, value: "45", unit: "min" },
-  { minute: 60, value: "60", unit: "min" },
-  { minute: 90, value: "90", unit: "min" },
-];
+const TIME_OPTION_MINUTES = [15, 30, 45, 60, 90];
+
+const TIME_OPTIONS = TIME_OPTION_MINUTES.map((minute) => ({
+  minute,
+  label: convertDurationToTimeText(minute * SECONDS_PER_MINUTE).replace(
+    ":",
+    " : ",
+  ),
+}));
 
 export interface UseTimeFieldParams {
   control: Control<CreateTodoRequest>;

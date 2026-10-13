@@ -18,6 +18,10 @@ export interface TimerProps {
   size: TimerSize;
   isOvertime?: boolean;
   overtimeProgress?: number;
+  /** 넘기면 기본 width/height 인라인이 꺼지고 이 클래스가 박스 크기를 전적으로 책임진다 — width/height 유틸리티 클래스를 반드시 포함해야 한다. */
+  className?: string;
+  timeClassName?: string;
+  plannedClassName?: string;
 }
 
 interface TimerSizeConfig {
@@ -50,9 +54,12 @@ export const Timer = ({
   size,
   isOvertime = false,
   overtimeProgress = 0,
+  className,
+  timeClassName,
+  plannedClassName,
 }: TimerProps) => {
-  const { diameter, strokeWidth, timeClassName, plannedClassName } =
-    TIMER_SIZE_CONFIG[size];
+  const sizeConfig = TIMER_SIZE_CONFIG[size];
+  const { diameter, strokeWidth } = sizeConfig;
   const radius = (diameter - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const sweepProgress = isOvertime ? overtimeProgress : progress;
@@ -71,13 +78,13 @@ export const Timer = ({
 
   return (
     <div
-      className="relative flex items-center justify-center"
-      style={{ width: diameter, height: diameter }}
+      className={cn("relative flex items-center justify-center", className)}
+      style={!className ? { width: diameter, height: diameter } : undefined}
     >
       <svg
         className="absolute inset-0 -rotate-90"
-        width={diameter}
-        height={diameter}
+        width="100%"
+        height="100%"
         viewBox={`0 0 ${diameter} ${diameter}`}
       >
         <circle
@@ -112,7 +119,7 @@ export const Timer = ({
 
         <p
           className={cn(
-            timeClassName,
+            timeClassName ?? sizeConfig.timeClassName,
             "text-center",
             isOvertime ? "text-timo-blue-300" : "text-timo-black",
           )}
@@ -122,7 +129,7 @@ export const Timer = ({
 
         <p
           className={cn(
-            plannedClassName,
+            plannedClassName ?? sizeConfig.plannedClassName,
             "text-center",
             isOvertime ? "text-timo-blue-300" : "text-timo-gray-800",
           )}

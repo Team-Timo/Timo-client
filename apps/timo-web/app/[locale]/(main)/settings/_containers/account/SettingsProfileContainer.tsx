@@ -103,7 +103,7 @@ export const SettingsProfileContainer = () => {
   };
 
   return (
-    <div className="px-15 pt-7.5">
+    <div className="px-3 pt-3 md:px-15 md:pt-7.5">
       <SettingsProfileView
         name={profileState.name}
         googleEmail={profileState.googleEmail}

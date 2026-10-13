@@ -1,7 +1,7 @@
 "use client";
 
 import timoTimerLogo from "@repo/timo-design-system/assets/images/logo/timo-timer.svg";
-import { ModalButton } from "@repo/timo-design-system/ui";
+import { Button } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
@@ -30,7 +30,7 @@ export const SettingsWithdrawModalContainer = ({
       ariaLabel={t.markup("withdrawConfirmTitle", {
         red: (chunks) => chunks,
       })}
-      className="w-100 p-5.5"
+      className="m-1 w-100 p-4.5 md:m-0 md:p-5.5"
     >
       <div className="mb-4 size-10 shrink-0">
         <Image src={timoTimerLogo} alt="" width={40} height={40} />
@@ -44,19 +44,27 @@ export const SettingsWithdrawModalContainer = ({
         {t("withdrawConfirmDescription")}
       </p>
       <div className="mt-6 flex w-full gap-3">
-        <ModalButton variant="border" className="flex-1 px-0" onClick={onClose}>
-          {t("withdrawConfirmCancel")}
-        </ModalButton>
-        <ModalButton
-          variant="fill"
-          className="flex-1 px-0"
+        <Button
+          variant="secondary"
+          appearance="outline"
+          size="lg"
+          className="flex-1"
           onClick={() => {
             onWithdraw();
             onClose();
           }}
         >
           {t("withdrawConfirmConfirm")}
-        </ModalButton>
+        </Button>
+        <Button
+          variant="primary"
+          appearance="fill"
+          size="lg"
+          className="flex-1"
+          onClick={onClose}
+        >
+          {t("withdrawConfirmCancel")}
+        </Button>
       </div>
     </OverlayModal>
   );

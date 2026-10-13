@@ -14,8 +14,13 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-import { acquireModalStackIndex, cn, hasOpenFloatingLayer } from "../../../lib";
-import { ModalButton } from "../../button/modal-button/ModalButton";
+import {
+  acquireModalStackIndex,
+  cn,
+  hasOpenFloatingLayer,
+  releaseModalStackIndex,
+} from "../../../lib";
+import { Button } from "../../button/button/Button";
 
 // tailwind-config theme.css의 --z-index-modal-overlay/--z-index-modal-panel과 동일한 기준값이다.
 const BASE_OVERLAY_Z_INDEX = 40;
@@ -85,7 +90,15 @@ const ModalRoot = ({ children, className }: ModalProps) => {
     };
   }, [isOpen]);
 
+  // 모달이 닫히거나(어떤 경로로 닫히든) 언마운트될 때 스택 인덱스를 반납한다.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    return () => releaseModalStackIndex();
+  }, [isOpen]);
+
   const open = () => {
+    if (isOpen) return;
     setStackIndex(acquireModalStackIndex());
     setIsOpen(true);
   };
@@ -170,7 +183,7 @@ const ModalPanel = ({ children, className }: ModalPanelProps) => {
       aria-labelledby={titleId}
       style={{ zIndex: panelZIndex }}
       className={cn(
-        "fixed top-1/2 left-1/2 flex w-100 -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-5.5",
+        "fixed top-1/2 left-1/2 flex w-100 max-w-[calc(100vw-0.5rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-4.5 md:max-w-none md:p-5.5",
         className,
       )}
     >
@@ -232,20 +245,25 @@ export type ModalBorderButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 const ModalBorderButton = ({
   onClick,
   className,
+  children,
   ...rest
 }: ModalBorderButtonProps) => {
   const { close } = useModalContext();
 
   return (
-    <ModalButton
-      variant="border"
+    <Button
+      variant="secondary"
+      appearance="outline"
+      size="lg"
       {...rest}
       onClick={(e) => {
         onClick?.(e);
         close();
       }}
-      className={cn("flex-1 px-0", className)}
-    />
+      className={cn("flex-1", className)}
+    >
+      {children}
+    </Button>
   );
 };
 
@@ -254,20 +272,25 @@ export type ModalFillButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 const ModalFillButton = ({
   onClick,
   className,
+  children,
   ...rest
 }: ModalFillButtonProps) => {
   const { close } = useModalContext();
 
   return (
-    <ModalButton
-      variant="fill"
+    <Button
+      variant="primary"
+      appearance="fill"
+      size="lg"
       {...rest}
       onClick={(e) => {
         onClick?.(e);
         close();
       }}
-      className={cn("flex-1 px-0", className)}
-    />
+      className={cn("flex-1", className)}
+    >
+      {children}
+    </Button>
   );
 };
 

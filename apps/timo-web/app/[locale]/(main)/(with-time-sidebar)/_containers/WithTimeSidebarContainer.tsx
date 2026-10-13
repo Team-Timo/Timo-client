@@ -20,7 +20,14 @@ export const WithTimeSidebarContainer = ({
   children,
 }: WithTimeSidebarContainerProps) => {
   const isOpen = useTimeSidebarStore((state) => state.isOpen);
+  const isMobileOpen = useTimeSidebarStore((state) => state.isMobileOpen);
   const toggleOpen = useTimeSidebarStore((state) => state.toggleOpen);
+  const closeMobileOpen = useTimeSidebarStore((state) => state.closeMobileOpen);
+
+  const handleToggleCollapse = () => {
+    closeMobileOpen();
+    toggleOpen();
+  };
 
   const pathname = usePathname();
 
@@ -39,7 +46,13 @@ export const WithTimeSidebarContainer = ({
         {children}
       </div>
 
-      <TimeSidebar size={size} isOpen={isOpen} onToggleCollapse={toggleOpen} />
+      <TimeSidebar
+        size={size}
+        isOpen={isOpen}
+        isMobileOpen={isMobileOpen}
+        onToggleCollapse={handleToggleCollapse}
+        onCloseMobile={closeMobileOpen}
+      />
     </>
   );
 };

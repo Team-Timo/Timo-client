@@ -19,7 +19,7 @@ const meta = {
   argTypes: {
     selected: {
       control: "select",
-      options: ["ai", 15, 30, 45, 60, 120],
+      options: ["ai", 15, 30, 45, 60, 90],
     },
   },
 } satisfies Meta<typeof TimeSelector>;
@@ -34,11 +34,11 @@ const TRIGGER = (
 );
 
 const TIMES = [
-  { minute: 15, value: "15", unit: "min" },
-  { minute: 30, value: "30", unit: "min" },
-  { minute: 45, value: "45", unit: "min" },
-  { minute: 60, value: "1", unit: "h" },
-  { minute: 120, value: "2", unit: "h" },
+  { minute: 15, label: "00 : 15" },
+  { minute: 30, label: "00 : 30" },
+  { minute: 45, label: "00 : 45" },
+  { minute: 60, label: "01 : 00" },
+  { minute: 90, label: "01 : 30" },
 ];
 
 export const Default: Story = {

@@ -10,8 +10,7 @@ export type TimeSelection = number | "ai";
 
 export interface TimeOption {
   minute: number;
-  value: string;
-  unit: string;
+  label: string;
 }
 
 export interface TimeSelectorProps {
@@ -111,10 +110,10 @@ export const TimeSelector = ({
     <Dropdown className="flex justify-center" onOpenChange={handleOpenChange}>
       <Dropdown.Trigger>{trigger}</Dropdown.Trigger>
 
-      <Dropdown.Panel className="shadow-timo w-23.75">
+      <Dropdown.Panel className="shadow-timo w-23.75 gap-1.5">
         <div
           className={cn(
-            "rounded-4 flex w-full items-center gap-2 px-[3.5px] py-[2.5px] transition-colors duration-200 ease-in-out",
+            "rounded-4 flex w-full flex-col items-start justify-center px-1 py-0.5 transition-colors duration-200 ease-in-out",
             isAiSelected && "bg-timo-blue-300",
           )}
         >
@@ -122,13 +121,24 @@ export const TimeSelector = ({
             type="button"
             onClick={() => selectDraft("ai")}
             aria-pressed={isAiSelected}
-            aria-label="AI 추천 시간 선택"
-            className="shrink-0"
+            className="flex w-full items-center"
           >
-            {isAiSelected ? <AiWhiteIcon /> : <AiDefaultIcon />}
+            {isAiSelected ? (
+              <AiWhiteIcon className="m-1.25 size-3 shrink-0" />
+            ) : (
+              <AiDefaultIcon className="m-1.25 size-3 shrink-0" />
+            )}
+            <span
+              className={cn(
+                "typo-caption-r-10",
+                isAiSelected ? "text-white" : "text-timo-black",
+              )}
+            >
+              AI 추천
+            </span>
           </button>
 
-          <div className="flex min-w-0 flex-1 items-center justify-end gap-0.5">
+          <div className="flex w-full items-center gap-0.5">
             <input
               type="text"
               inputMode="numeric"
@@ -137,13 +147,13 @@ export const TimeSelector = ({
               maxLength={TIME_SEGMENT_DIGIT_LIMIT}
               aria-label="예상 시간(시간) 입력"
               className={cn(
-                "typo-headline-r-14 focus-visible:ring-timo-blue-300 w-4.5 shrink-0 rounded-xs bg-transparent text-right outline-none focus-visible:ring-2",
+                "typo-headline-m-14 focus-visible:ring-timo-blue-300 w-4.5 shrink-0 rounded-xs bg-transparent outline-none focus-visible:ring-2",
                 isAiSelected ? "text-white" : "text-timo-black",
               )}
             />
             <span
               className={cn(
-                "typo-headline-r-14",
+                "typo-headline-m-14",
                 isAiSelected ? "text-white" : "text-timo-black",
               )}
             >
@@ -157,15 +167,15 @@ export const TimeSelector = ({
               maxLength={TIME_SEGMENT_DIGIT_LIMIT}
               aria-label="예상 시간(분) 입력"
               className={cn(
-                "typo-headline-r-14 focus-visible:ring-timo-blue-300 w-4.5 shrink-0 rounded-xs bg-transparent text-right outline-none focus-visible:ring-2",
+                "typo-headline-m-14 focus-visible:ring-timo-blue-300 w-4.5 shrink-0 rounded-xs bg-transparent outline-none focus-visible:ring-2",
                 isAiSelected ? "text-white" : "text-timo-black",
               )}
             />
           </div>
         </div>
 
-        <div className="flex w-full flex-col items-start gap-1.5">
-          {times.map(({ minute, value, unit }) => {
+        <div className="border-timo-gray-500 flex w-full flex-col items-start gap-1 border-t pt-2">
+          {times.map(({ minute, label }) => {
             const isSelected = minute === draftSelected;
 
             return (
@@ -175,7 +185,7 @@ export const TimeSelector = ({
                 closeOnSelect={false}
                 aria-pressed={isSelected}
                 className={cn(
-                  "justify-between px-[3.5px] py-[2.5px]",
+                  "px-[3.5px] py-0.5",
                   isSelected && "bg-timo-blue-300",
                 )}
               >
@@ -185,15 +195,7 @@ export const TimeSelector = ({
                     isSelected && "text-white",
                   )}
                 >
-                  {value}
-                </span>
-                <span
-                  className={cn(
-                    "typo-headline-r-14 text-timo-black",
-                    isSelected && "text-white",
-                  )}
-                >
-                  {unit}
+                  {label}
                 </span>
               </Dropdown.Item>
             );

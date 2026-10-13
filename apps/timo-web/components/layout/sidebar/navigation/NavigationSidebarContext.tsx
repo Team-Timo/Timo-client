@@ -4,7 +4,9 @@ import { createContext, useContext, useState } from "react";
 
 interface NavigationSidebarContextValue {
   isOpen: boolean;
+  isMobileOpen: boolean;
   toggle: () => void;
+  toggleMobile: () => void;
 }
 
 const NavigationSidebarContext =
@@ -18,10 +20,13 @@ export const NavigationSidebarProvider = ({
   children,
 }: NavigationSidebarProviderProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isMobileOpen, setIsMobileOpen] = useState<boolean>(false);
 
   const value: NavigationSidebarContextValue = {
     isOpen,
+    isMobileOpen,
     toggle: () => setIsOpen((prev) => !prev),
+    toggleMobile: () => setIsMobileOpen((prev) => !prev),
   };
 
   return (

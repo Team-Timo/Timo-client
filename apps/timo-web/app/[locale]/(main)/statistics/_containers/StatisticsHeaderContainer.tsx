@@ -3,7 +3,7 @@
 import { useLocale } from "next-intl";
 
 import { Header } from "@/components/layout/header/Header";
-import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
+import { NavigationSidebarToggle } from "@/components/layout/sidebar/navigation/NavigationSidebarToggle";
 
 interface StatisticsHeaderContainerProps {
   currentMonth: Date;
@@ -17,7 +17,6 @@ export const StatisticsHeaderContainer = ({
   currentMonth,
   onChangeMonth,
 }: StatisticsHeaderContainerProps) => {
-  const { isOpen, toggle } = useNavigationSidebar();
   const locale = useLocale();
   const monthLabel = new Intl.DateTimeFormat(locale, {
     month: "long",
@@ -28,14 +27,17 @@ export const StatisticsHeaderContainer = ({
 
   return (
     <Header
+      className="shrink-0 px-3 py-1.5 md:px-5 md:py-3 [&>div:first-child]:flex-1 md:[&>div:first-child]:flex-none"
       left={
         <>
-          <Header.SidebarButton isOpen={isOpen} onClick={toggle} />
-          <Header.WeeklyNav
-            onPrev={handlePrev}
-            onNext={handleNext}
-            label={monthLabel}
-          />
+          <NavigationSidebarToggle />
+          <div className="ml-auto md:ml-0">
+            <Header.WeeklyNav
+              onPrev={handlePrev}
+              onNext={handleNext}
+              label={monthLabel}
+            />
+          </div>
         </>
       }
     />

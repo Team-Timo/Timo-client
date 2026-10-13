@@ -1,7 +1,7 @@
 import {
+  ControlPauseActiveIcon,
+  ControlPlayActiveIcon,
   PlayDisabledIcon,
-  PlayIcon,
-  StopIcon,
 } from "@repo/timo-design-system/icons";
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
 
@@ -105,9 +105,9 @@ export const DetailTodoTaskFields = ({
             {isCompleted ? (
               <PlayDisabledIcon width={24} height={24} />
             ) : isRunning ? (
-              <StopIcon width={24} height={24} />
+              <ControlPauseActiveIcon width={24} height={24} />
             ) : isPlayHighlighted ? (
-              <PlayIcon width={24} height={24} />
+              <ControlPlayActiveIcon width={24} height={24} />
             ) : (
               <PlayDisabledIcon width={24} height={24} />
             )}
