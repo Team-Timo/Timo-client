@@ -23,6 +23,8 @@ import { useTranslations } from "next-intl";
 
 import type { KeyboardEvent, ReactNode } from "react";
 
+import { canEditTodo } from "@/utils/todo/todo-editability";
+
 const CARD_STYLE = {
   active: {
     card: "bg-white",
@@ -139,7 +141,7 @@ export const TodayTodoCard = ({
           <PlayButton
             variant={isPlaying ? "stop" : "play"}
             size="lg"
-            disabled={isDone}
+            disabled={!canEditTodo(isDone)}
             active={isPlayHighlighted}
             onClick={(event) => {
               stopPropagation(event);
@@ -172,6 +174,7 @@ export const TodayTodoCard = ({
               >
                 <Checkbox
                   checked={sub.isDone ?? false}
+                  disabled={!canEditTodo(isDone)}
                   onChange={() => onSubTodoCheck(sub.id)}
                 />
               </div>

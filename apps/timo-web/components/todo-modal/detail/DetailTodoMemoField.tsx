@@ -33,7 +33,7 @@ export const DetailTodoMemoField = ({
       maxLength={maxLength}
       onChange={(event) => onChange(event.target.value)}
       disabled={disabled}
-      className="typo-headline-r-14 text-timo-gray-700 min-h-20 w-full resize-none overflow-hidden p-1 outline-none"
+      className="typo-headline-r-14 text-timo-gray-700 min-h-20 w-full resize-none overflow-hidden p-1 outline-none disabled:cursor-not-allowed"
     />
   );
 };

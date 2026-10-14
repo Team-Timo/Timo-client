@@ -20,7 +20,7 @@ export interface UseDetailTodoPatchHandlersParams {
   onUpdate: (
     data: TodoUpdateRequest,
     handlers?: UpdateTodoSubmitHandlers,
-  ) => void;
+  ) => boolean;
   onToggleSubtask: (
     subtaskId: number,
     completed: boolean,
@@ -39,8 +39,8 @@ export const useDetailTodoPatchHandlers = ({
     updateData: TodoUpdateRequest,
     handlers?: UpdateTodoSubmitHandlers,
   ) => {
-    if ("title" in updateData && !updateData.title?.trim()) return;
-    onUpdate(updateData, handlers);
+    if ("title" in updateData && !updateData.title?.trim()) return false;
+    return onUpdate(updateData, handlers);
   };
 
   const handleSelectTime = (nextTime: TimeSelection) => {

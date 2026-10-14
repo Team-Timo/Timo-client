@@ -18,6 +18,7 @@ import {
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
+import { canEditTodo } from "@/utils/todo/todo-editability";
 
 export interface UseTodayTodoListOptions {
   onNeedStopConfirm: (todoId: number) => void;
@@ -57,7 +58,7 @@ export const useTodayTodoList = (
         invalidateTimeBoxes();
         invalidateFocusTodo();
         invalidateStatistics();
-        invalidateTodoDetail(variables.todoId, variables.data.date);
+        return invalidateTodoDetail(variables.todoId, variables.data.date);
       },
     },
   });
@@ -193,11 +194,13 @@ export const useTodayTodoList = (
 
   const handleSubTodoCheck = (todoId: number, subtaskId: number) => {
     const todo = todos.find((t) => t.todoId === todoId);
-    const subtask = todo?.subtasks.find((s) => s.subtaskId === subtaskId);
+    if (!todo || !canEditTodo(todo.completed)) return;
+
+    const subtask = todo.subtasks.find((s) => s.subtaskId === subtaskId);
     if (!subtask) return;
 
     const completed = !subtask.completed;
-    const dateKey = todo?.date;
+    const dateKey = todo.date;
     if (!dateKey) return;
 
     const previous = todos;
