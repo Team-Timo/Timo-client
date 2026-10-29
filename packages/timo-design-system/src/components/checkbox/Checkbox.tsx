@@ -41,7 +41,7 @@ export const Checkbox = ({
           checked && disabled && "bg-timo-blue-100 border-timo-blue-100",
         )}
       >
-        {checked && (
+        {(checked || disabled) && (
           <svg
             width="10"
             height="7"
