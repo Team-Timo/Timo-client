@@ -92,7 +92,7 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
   const displayTime = convertApiDurationToClockTimeText(detailTodoForm.time);
-  const canUpdateTodo = timerStatus === "STOPPED";
+  const canUpdateTodo = !todo.completed && timerStatus == "STOPPED";
   const patchHandlers = useDetailTodoPatchHandlers({
     form: detailTodoForm,
     onUpdate,
@@ -162,7 +162,10 @@ export const DetailTodoModalContent = ({
               </p>
             </div>
 
-            <div className={canUpdateTodo ? undefined : "pointer-events-none"}>
+            <div
+              inert={!canUpdateTodo}
+              className={canUpdateTodo ? undefined : "pointer-events-none"}
+            >
               <TodoIconField
                 icon={iconField.icon}
                 isIconPanelOpen={iconField.isIconPanelOpen}
@@ -200,6 +203,7 @@ export const DetailTodoModalContent = ({
 
             <div className="flex flex-col gap-3">
               <div
+                inert={!canUpdateTodo}
                 className={
                   canUpdateTodo
                     ? "flex items-center gap-2 py-3"
