@@ -134,11 +134,24 @@ export const GetTodoDetailResponse = zod.object({
  * TODO와 연결된 하위 태스크, 반복 규칙을 함께 삭제합니다.
  * 해당 TODO에 실행 중이거나 일시정지된 타이머가 있으면 삭제할 수 없습니다.
  *
+ * date에는 삭제를 누른 카드의 날짜를 반복 여부와 상관없이 항상 전달합니다.
+ * 반복 TODO는 date를 포함한 이후 반복 일정만 삭제하고, date 이전 일정과 완료·타이머 기록은 유지합니다.
+ * 이때 반복 종료일은 date 전날로 변경되며, date 이후 일정에 실행 중이거나 일시정지된 타이머가 있으면 삭제할 수 없습니다.
+ * 반복이 아닌 TODO는 해당 TODO 전체를 삭제합니다.
+ *
+ * 구글 캘린더에서 가져온 일정은 삭제할 수 없습니다.
+ * 단, 구글에서 삭제되었지만 타이머 기록이 있어 남아 있는 일정(isDeletedFromGoogle=true)과
+ * 캘린더 연동 해제 후 남은 일정(isDisconnectedFromGoogle=true)은 삭제할 수 있습니다.
+ *
  * Swagger UI 오른쪽 위의 Authorize 버튼을 눌러 유효한 Access Token을 입력해야 합니다.
  * @summary TODO 삭제
  */
 export const DeleteTodoParams = zod.object({
   todoId: zod.number().describe("삭제할 TODO ID"),
+});
+
+export const DeleteTodoQueryParams = zod.object({
+  date: zod.string().describe("삭제를 누른 카드의 날짜 (yyyy-MM-dd)"),
 });
 
 export const DeleteTodoResponse = zod.object({
