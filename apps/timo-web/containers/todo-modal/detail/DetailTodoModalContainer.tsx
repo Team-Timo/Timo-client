@@ -80,7 +80,7 @@ const DetailTodoModalQuery = ({
       : todo.timerStatus;
 
   const deleteTodo = () => {
-    handleDelete(todoId, {
+    handleDelete(todoId, currentDate, {
       onSuccess: () => {
         onDelete();
         onClose();
