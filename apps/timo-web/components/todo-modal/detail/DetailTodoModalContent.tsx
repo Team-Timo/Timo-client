@@ -92,7 +92,7 @@ export const DetailTodoModalContent = ({
     label: tCommon(`weekday.${weekdayId}`),
   }));
   const displayTime = convertApiDurationToClockTimeText(detailTodoForm.time);
-  const canUpdateTodo = !todo.completed && timerStatus !== "RUNNING";
+  const canUpdateTodo = !todo.completed && timerStatus == "STOPPED";
   const patchHandlers = useDetailTodoPatchHandlers({
     form: detailTodoForm,
     onUpdate,
