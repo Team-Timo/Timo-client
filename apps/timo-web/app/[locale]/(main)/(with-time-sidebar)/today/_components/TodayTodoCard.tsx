@@ -172,6 +172,7 @@ export const TodayTodoCard = ({
               >
                 <Checkbox
                   checked={sub.isDone ?? false}
+                  disabled={isDone}
                   onChange={() => onSubTodoCheck(sub.id)}
                 />
               </div>

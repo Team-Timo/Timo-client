@@ -121,6 +121,7 @@ export const DetailTodoTaskFields = ({
             <div key={subtask.id} className="flex items-center gap-2">
               <Checkbox
                 checked={subtask.completed}
+                disabled={isCompleted}
                 onChange={(completed) =>
                   onToggleSubtaskCompleted(subtask.id, completed)
                 }
