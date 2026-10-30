@@ -17,11 +17,12 @@ import {
 } from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
+import { useTimerSwitch } from "@/hooks/timer/use-timer-switch";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export interface UseTodayTodoListOptions {
   onNeedStopConfirm: (todoId: number) => void;
-  onTimerAlreadyRunning: () => void;
+  onNeedSwitchConfirm: (todoId: number) => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
   onPlayError: (message: string | undefined) => void;
   onUpdateError: (message: string | undefined) => void;
@@ -31,7 +32,7 @@ export const useTodayTodoList = (
   initialTodos: TodayTodo[],
   {
     onNeedStopConfirm,
-    onTimerAlreadyRunning,
+    onNeedSwitchConfirm,
     onStopFeedback,
     onPlayError,
     onUpdateError,
@@ -69,9 +70,13 @@ export const useTodayTodoList = (
 
   const { mutate: changeStatus, isPending: isChangeStatusPending } =
     useChangeStatus();
+  const { isSwitchPending, handleSwitchTimer } = useTimerSwitch();
 
   const isTimerActionPending =
-    isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
+    isStartTimerPending ||
+    isChangeStatusPending ||
+    isSwitchPending ||
+    isActiveTimerFetching;
 
   useEffect(() => {
     setTodos(initialTodos);
@@ -166,9 +171,9 @@ export const useTodayTodoList = (
       return;
     }
 
-    // 다른 투두의 타이머가 이미 실행/일시정지 중이면 새 타이머를 시작할 수 없다(409)
+    // 다른 투두의 타이머가 이미 실행/일시정지 중이면 전환 여부를 먼저 확인한다
     if (activeTimer) {
-      onTimerAlreadyRunning();
+      onNeedSwitchConfirm(todoId);
       return;
     }
 
@@ -182,6 +187,28 @@ export const useTodayTodoList = (
         onError: (error: ErrorType<ErrorDto>) => {
           onPlayError(error.response?.data.message);
         },
+      },
+    );
+  };
+
+  const confirmSwitchTimer = (todoId: number) => {
+    // 팝업이 열린 사이 기존 타이머가 끝났다면 전환 없이 바로 시작한다
+    if (!activeTimer) {
+      handlePlay(todoId);
+      return;
+    }
+
+    const dateKey = todos.find((todo) => todo.todoId === todoId)?.date;
+    if (!dateKey) return;
+
+    handleSwitchTimer(
+      { todoId, date: dateKey },
+      {
+        onPreviousCompleted: (previous) =>
+          updateTodo(previous.todoId, (todo) =>
+            todo.date === previous.date ? { ...todo, completed: true } : todo,
+          ),
+        onError: onPlayError,
       },
     );
   };
@@ -244,5 +271,6 @@ export const useTodayTodoList = (
     handleDelete,
     handleSubTodoCheck,
     confirmStopAndComplete,
+    confirmSwitchTimer,
   };
 };
