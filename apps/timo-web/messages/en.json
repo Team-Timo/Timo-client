@@ -162,7 +162,6 @@
     "languageChangeFailed": "Failed to change the language. Please try again.",
     "calendarConnectFailed": "Failed to integrate Google Calendar. Please try again.",
     "calendarDisconnectFailed": "Failed to disconnect the calendar. Please try again.",
-    "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first.",
     "timerStartFailed": "This to-do has no estimated duration set."
   },
   "Login": {

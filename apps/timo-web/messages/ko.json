@@ -162,7 +162,6 @@
     "languageChangeFailed": "언어 변경에 실패했어요. 다시 시도해 주세요.",
     "calendarConnectFailed": "구글 캘린더 연동에 실패했어요. 다시 시도해 주세요.",
     "calendarDisconnectFailed": "캘린더 연동 해제에 실패했어요. 다시 시도해 주세요.",
-    "timerAlreadyRunning": "다른 투두의 타이머가 이미 실행 중이에요. 먼저 종료해 주세요.",
     "timerStartFailed": "예상 소요 시간이 설정되지 않은 투두입니다."
   },
   "Login": {
