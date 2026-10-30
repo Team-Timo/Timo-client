@@ -24,7 +24,7 @@ export interface TimerSwitchHandlers {
 export const useTimerSwitch = () => {
   const openTimerPanel = useTimeSidebarStore((state) => state.openTimerPanel);
   const { data: activeTimer } = useActiveTimer();
-  const { invalidateTimerFinish, invalidateTimerProgress } =
+  const { invalidateTimerFinish, invalidateTodoDetail } =
     useTimerQueryInvalidation();
   const { mutate: switchTimer, isPending: isSwitchPending } =
     useSwitchTimer<ApiError>();
@@ -47,10 +47,7 @@ export const useTimerSwitch = () => {
           onPreviousCompleted?.(previous);
           openTimerPanel();
           invalidateTimerFinish(previous.todoId);
-          invalidateTimerProgress({
-            includeFocus: true,
-            todoId: target.todoId,
-          });
+          invalidateTodoDetail(target.todoId);
         },
         onError: (error) => onError?.(error.message),
       },

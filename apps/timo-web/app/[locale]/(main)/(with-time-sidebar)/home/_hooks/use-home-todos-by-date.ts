@@ -203,6 +203,12 @@ export const useHomeTodosByDate = (
   };
 
   const confirmSwitchTimer = (dateKey: string, todoId: number) => {
+    // 팝업이 열린 사이 기존 타이머가 끝났다면 전환 없이 바로 시작한다
+    if (!activeTimer) {
+      handleTogglePlay(dateKey, todoId);
+      return;
+    }
+
     handleSwitchTimer(
       { todoId, date: dateKey },
       {
