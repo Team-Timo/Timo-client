@@ -258,6 +258,12 @@
       "continueButton": "Continue",
       "switchButton": "Finish"
     },
+    "switchModal": {
+      "title": "Switch to a new task?",
+      "description": "Starting a new task will stop the current timer.\nDo you want to start the new task?",
+      "cancelButton": "Cancel",
+      "switchButton": "Switch"
+    },
     "completeModal": {
       "title": "The task has been completed!",
       "defaultFeedback": "You've completed this task. Great work!",
