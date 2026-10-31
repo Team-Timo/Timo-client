@@ -8,8 +8,19 @@ import {
   addSubtaskInputOnEnter,
   removeSubtaskInputOnBackspace,
 } from "@/utils/todo/subtask-input-list";
+import { reorderSubtasks } from "@/utils/todo/subtask-order";
 
 const MAX_DETAIL_SUBTASK_COUNT = 10;
+
+// 서버에 저장된 미완료 하위 태스크만 순서 변경 API로 옮길 수 있다
+const isReorderableInput = (input: DetailTodoSubtaskInput) =>
+  input.subtaskId !== null && !input.completed;
+
+export interface DetailSubtaskReorder {
+  previousInputs: DetailTodoSubtaskInput[];
+  subtaskId: number;
+  newIndex: number;
+}
 
 export interface UseDetailSubtaskFieldParams {
   subtasks: TodoSubtask[];
@@ -98,6 +109,31 @@ export const useDetailSubtaskField = ({
     );
   };
 
+  const reorderInputs = (
+    fromIndex: number,
+    toIndex: number,
+  ): DetailSubtaskReorder | null => {
+    const movedInput = subtaskInputs[fromIndex];
+    const result = reorderSubtasks(
+      subtaskInputs,
+      fromIndex,
+      toIndex,
+      isReorderableInput,
+    );
+    if (!result || movedInput?.subtaskId == null) return null;
+
+    setSubtaskInputs(result.items);
+    return {
+      previousInputs: subtaskInputs,
+      subtaskId: movedInput.subtaskId,
+      newIndex: result.newIndex,
+    };
+  };
+
+  const restoreInputs = (inputs: DetailTodoSubtaskInput[]) => {
+    setSubtaskInputs(inputs);
+  };
+
   const handleInputKeyDown = (
     index: number,
     event: KeyboardEvent<HTMLTextAreaElement>,
@@ -142,5 +178,7 @@ export const useDetailSubtaskField = ({
     handleCompletedChange,
     handleInputKeyDown,
     focusFirstInput,
+    reorderInputs,
+    restoreInputs,
   };
 };
