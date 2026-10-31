@@ -26,12 +26,18 @@ export interface UseDetailTodoPatchHandlersParams {
     completed: boolean,
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
+  onReorderSubtask: (
+    subtaskId: number,
+    newIndex: number,
+    handlers?: UpdateTodoSubmitHandlers,
+  ) => void;
 }
 
 export const useDetailTodoPatchHandlers = ({
   form,
   onUpdate,
   onToggleSubtask,
+  onReorderSubtask,
 }: UseDetailTodoPatchHandlersParams) => {
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
 
@@ -120,6 +126,15 @@ export const useDetailTodoPatchHandlers = ({
     });
   };
 
+  const handleSubtaskReorder = (fromIndex: number, toIndex: number) => {
+    const reorder = form.reorderSubtaskInputs(fromIndex, toIndex);
+    if (!reorder) return;
+
+    onReorderSubtask(reorder.subtaskId, reorder.newIndex, {
+      onError: () => form.restoreSubtaskInputs(reorder.previousInputs),
+    });
+  };
+
   return {
     selectedTime,
     updateTodo,
@@ -133,5 +148,6 @@ export const useDetailTodoPatchHandlers = ({
     handleRepeatDayChange,
     submitRepeatChange,
     handleSubtaskCompletedChange,
+    handleSubtaskReorder,
   };
 };

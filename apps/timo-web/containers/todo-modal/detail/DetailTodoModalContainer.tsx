@@ -15,6 +15,7 @@ import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { DetailTodoModalContent } from "@/components/todo-modal/detail/DetailTodoModalContent";
 import { useGetTodoDetail } from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
+import { useReorderSubtaskSubmit } from "@/hooks/todo/use-reorder-subtask-submit";
 import { useDeleteTodoSubmit } from "@/hooks/todo-modal/detail/use-delete-todo-submit";
 import { useToggleSubtaskSubmit } from "@/hooks/todo-modal/detail/use-toggle-subtask-submit";
 import { useUpdateTodoMemoSubmit } from "@/hooks/todo-modal/detail/use-update-todo-memo-submit";
@@ -60,6 +61,7 @@ const DetailTodoModalQuery = ({
   const { handleUpdate } = useUpdateTodoSubmit();
   const { handleUpdateMemo } = useUpdateTodoMemoSubmit();
   const { handleToggle } = useToggleSubtaskSubmit();
+  const { handleReorder } = useReorderSubtaskSubmit();
   const { data: activeTimer } = useActiveTimer();
   const todo = data?.data;
   const isPlayHighlighted =
@@ -147,6 +149,23 @@ const DetailTodoModalQuery = ({
     );
   };
 
+  const reorderSubtask = (
+    subtaskId: number,
+    newIndex: number,
+    handlers: UpdateTodoSubmitHandlers = {},
+  ) => {
+    handleReorder(
+      { todoId, subtaskId, date: currentDate, newIndex },
+      {
+        onSuccess: handlers.onSuccess,
+        onError: (error) => {
+          handlers.onError?.(error);
+          onActionError(error);
+        },
+      },
+    );
+  };
+
   return (
     <DetailTodoModalContent
       isOpen={isOpen}
@@ -160,6 +179,7 @@ const DetailTodoModalQuery = ({
       onUpdate={updateTodo}
       onUpdateMemo={updateMemo}
       onToggleSubtask={toggleSubtask}
+      onReorderSubtask={reorderSubtask}
       timerStatus={timerStatus}
     />
   );

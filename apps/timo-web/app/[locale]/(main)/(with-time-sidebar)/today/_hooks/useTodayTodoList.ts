@@ -17,7 +17,9 @@ import {
 } from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
+import { useReorderSubtaskSubmit } from "@/hooks/todo/use-reorder-subtask-submit";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
+import { reorderSubtasks } from "@/utils/todo/subtask-order";
 
 export interface UseTodayTodoListOptions {
   onNeedStopConfirm: (todoId: number) => void;
@@ -62,6 +64,7 @@ export const useTodayTodoList = (
     },
   });
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
+  const { handleReorder: reorderSubtask } = useReorderSubtaskSubmit();
   const { mutate: stopTimer } = useStopTimer();
 
   const { mutate: startTimer, isPending: isStartTimerPending } =
@@ -235,6 +238,42 @@ export const useTodayTodoList = (
     );
   };
 
+  const handleReorderSubtask = (
+    todoId: number,
+    fromIndex: number,
+    toIndex: number,
+  ) => {
+    const todo = todos.find((t) => t.todoId === todoId);
+    if (!todo || todo.completed) return;
+
+    const result = reorderSubtasks(
+      todo.subtasks,
+      fromIndex,
+      toIndex,
+      (subtask) => !subtask.completed,
+    );
+    const movedSubtask = todo.subtasks[fromIndex];
+    if (!result || !movedSubtask) return;
+
+    const previous = todos;
+    updateTodo(todoId, (t) => ({ ...t, subtasks: result.items }));
+
+    reorderSubtask(
+      {
+        todoId,
+        subtaskId: movedSubtask.subtaskId,
+        date: todo.date,
+        newIndex: result.newIndex,
+      },
+      {
+        onError: (error) => {
+          setTodos(previous);
+          onUpdateError(error.response?.data.message);
+        },
+      },
+    );
+  };
+
   return {
     todos,
     activeTimer,
@@ -243,6 +282,7 @@ export const useTodayTodoList = (
     handleToggleCompleted,
     handleDelete,
     handleSubTodoCheck,
+    handleReorderSubtask,
     confirmStopAndComplete,
   };
 };
