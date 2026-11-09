@@ -26,8 +26,17 @@ export const useTimerSwitch = () => {
   const { data: activeTimer } = useActiveTimer();
   const { invalidateTimerFinish, invalidateTodoDetail } =
     useTimerQueryInvalidation();
+  // 전환 도중 화면이 언마운트돼도 캐시가 갱신되도록 전역 후처리는 mutation 옵션에서 처리합니다.
   const { mutate: switchTimer, isPending: isSwitchPending } =
-    useSwitchTimer<ApiError>();
+    useSwitchTimer<ApiError>({
+      mutation: {
+        onSuccess: (response, variables) => {
+          openTimerPanel();
+          invalidateTimerFinish(response.data?.stopped.todoId);
+          invalidateTodoDetail(variables.data.todoId);
+        },
+      },
+    });
 
   const handleSwitchTimer = (
     target: TimerSwitchTodo,
@@ -45,9 +54,6 @@ export const useTimerSwitch = () => {
       {
         onSuccess: () => {
           onPreviousCompleted?.(previous);
-          openTimerPanel();
-          invalidateTimerFinish(previous.todoId);
-          invalidateTodoDetail(target.todoId);
         },
         onError: (error) => onError?.(error.message),
       },
