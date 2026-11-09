@@ -18,6 +18,7 @@ import { useHomeViewQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/home
 import { HomeCalendarEventCard } from "@/components/calendar/HomeCalendarEventCard";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
+import { TimerSwitchModalContainer } from "@/containers/timer/TimerSwitchModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { useTagLabel } from "@/hooks/todo/use-tag-label";
 import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
@@ -26,7 +27,7 @@ import { useCalendarEventsQuery } from "@/queries/calendar/use-calendar-events-q
 import { formatDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 
-interface PendingCompleteTodo {
+interface PendingTimerTodo {
   token: number;
   dateKey: string;
   todoId: number;
@@ -57,9 +58,10 @@ export const HomeTodoContainer = () => {
   const days = homeViewData.days;
 
   const [pendingCompleteTodo, setPendingCompleteTodo] =
-    useState<PendingCompleteTodo | null>(null);
+    useState<PendingTimerTodo | null>(null);
+  const [pendingSwitchTodo, setPendingSwitchTodo] =
+    useState<PendingTimerTodo | null>(null);
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
-  const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
   const [playErrorMessage, setPlayErrorMessage] = useState<string | null>(null);
 
   const {
@@ -71,10 +73,12 @@ export const HomeTodoContainer = () => {
     handleDeleteTodo,
     handleReorderTodo,
     confirmStopAndComplete,
+    confirmSwitchTimer,
   } = useHomeTodosByDate(days, {
     onNeedStopConfirm: (dateKey, todoId) =>
       setPendingCompleteTodo({ token: Date.now(), dateKey, todoId }),
-    onTimerAlreadyRunning: () => setIsTimerRunningToastOpen(true),
+    onNeedSwitchConfirm: (dateKey, todoId) =>
+      setPendingSwitchTodo({ token: Date.now(), dateKey, todoId }),
     onStopFeedback: setFeedbackText,
     onPlayError: (message) =>
       setPlayErrorMessage(message ?? tToast("timerStartFailed")),
@@ -91,6 +95,14 @@ export const HomeTodoContainer = () => {
     );
 
     setPendingCompleteTodo(null);
+  };
+
+  const handleConfirmPendingSwitch = () => {
+    if (!pendingSwitchTodo) return;
+
+    confirmSwitchTimer(pendingSwitchTodo.dateKey, pendingSwitchTodo.todoId);
+
+    setPendingSwitchTodo(null);
   };
 
   useEffect(() => {
@@ -241,10 +253,9 @@ export const HomeTodoContainer = () => {
         onConfirm={handleConfirmPendingComplete}
       />
 
-      <AnimatedToast
-        isOpen={isTimerRunningToastOpen}
-        onClose={() => setIsTimerRunningToastOpen(false)}
-        message={tToast("timerAlreadyRunning")}
+      <TimerSwitchModalContainer
+        pendingToken={pendingSwitchTodo?.token ?? null}
+        onConfirm={handleConfirmPendingSwitch}
       />
 
       <AnimatedToast

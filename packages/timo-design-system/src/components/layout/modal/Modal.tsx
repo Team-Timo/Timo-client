@@ -1,5 +1,6 @@
 "use client";
 
+import FocusTrap from "focus-trap-react";
 import {
   createContext,
   useContext,
@@ -175,20 +176,32 @@ const ModalPanel = ({ children, className }: ModalPanelProps) => {
 
   if (!isOpen) return null;
 
+  // 열릴 때 포커스를 패널 안으로 옮겨 가두고, 닫히면(언마운트) 열기 전 포커스 위치로 되돌린다.
+  // Escape·바깥 클릭 닫기는 ModalRoot가 처리하므로 focus-trap 쪽 동작은 끈다.
   return createPortal(
-    <div
-      ref={panelRef}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      style={{ zIndex: panelZIndex }}
-      className={cn(
-        "fixed top-1/2 left-1/2 flex w-100 max-w-[calc(100vw-0.5rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-4.5 md:max-w-none md:p-5.5",
-        className,
-      )}
+    <FocusTrap
+      focusTrapOptions={{
+        escapeDeactivates: false,
+        clickOutsideDeactivates: false,
+        allowOutsideClick: true,
+        fallbackFocus: () => panelRef.current ?? document.body,
+      }}
     >
-      {children}
-    </div>,
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        style={{ zIndex: panelZIndex }}
+        className={cn(
+          "fixed top-1/2 left-1/2 flex w-100 max-w-[calc(100vw-0.5rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-[4px] bg-white p-4.5 md:max-w-none md:p-5.5",
+          className,
+        )}
+      >
+        {children}
+      </div>
+    </FocusTrap>,
     document.body,
   );
 };

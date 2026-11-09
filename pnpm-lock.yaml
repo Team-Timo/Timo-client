@@ -186,6 +186,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      focus-trap-react:
+        specifier: ^12.0.3
+        version: 12.0.3(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -607,13 +610,13 @@ packages:
   '@formatjs/intl-localematcher@0.8.10':
     resolution: {integrity: sha512-P/IC3qws3jH+1fEs+o0RIFgXKRaQlFehjS5W0FPAqdo6hgzawLl+eD0q0JjheQ3XtoOe5n8WSYfX06KQZI/QJA==}
 
+  '@gerrit0/mini-shiki@3.23.0':
+    resolution: {integrity: sha512-bEMORlG0cqdjVyCEuU0cDQbORWX+kYCeo0kV1lbxF5bt4r7SID2l9bqsxJEM0zndaxpOUT7riCyIVEuqq/Ynxg==}
+
   '@hookform/resolvers@5.4.0':
     resolution: {integrity: sha512-EIsqr/t/qbinPIhGjMdtvutIN1Kk4uwbROE9/UQ93CAVGR7GkA7Y92+fX80OzXi/OB67jVFYwKGO1WzkxmkFZw==}
     peerDependencies:
       react-hook-form: ^7.55.0
-
-  '@gerrit0/mini-shiki@3.23.0':
-    resolution: {integrity: sha512-bEMORlG0cqdjVyCEuU0cDQbORWX+kYCeo0kV1lbxF5bt4r7SID2l9bqsxJEM0zndaxpOUT7riCyIVEuqq/Ynxg==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1598,9 +1601,6 @@ packages:
     peerDependencies:
       webpack: '>=5.0.0'
 
-  '@standard-schema/utils@0.3.0':
-    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
-
   '@shikijs/engine-oniguruma@3.23.0':
     resolution: {integrity: sha512-1nWINwKXxKKLqPibT5f4pAFLej9oZzQTsby8942OTlsJzOBZ0MWKiwzMsd+jhzu8YPCHAswGnnN1YtQfirL35g==}
 
@@ -1619,6 +1619,9 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@storybook/addon-a11y@8.6.14':
     resolution: {integrity: sha512-fozv6enO9IgpWq2U8qqS8MZ21Nt+MVHiRQe3CjnCpBOejTyo/ATm690PeYYRVHVG6M/15TVePb0h3ngKQbrrzQ==}
@@ -3964,11 +3967,6 @@ packages:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
 
-  overlay-kit@1.9.0:
-    resolution: {integrity: sha512-kwzAOhWEDsrmgJzQKuI0v3xCwyWTSaNe3qI0t+7OTTj05ciRpg3j+NWz8FRPVt7rHBFL/jAjKyQf4xGOHcRXfg==}
-    peerDependencies:
-      react: ^16.8 || ^17 || ^18 || ^19
-
   orval@8.20.0:
     resolution: {integrity: sha512-iL7aA/seKMxw1Ga7sJTqgT4+LXsE3JcPiYclJtjSTlPa9kai8cO39zX2U+6M1JeVftmjs/BDE2r7quE2nZqfjg==}
     engines: {node: '>=22.18.0'}
@@ -3978,6 +3976,11 @@ packages:
     peerDependenciesMeta:
       prettier:
         optional: true
+
+  overlay-kit@1.9.0:
+    resolution: {integrity: sha512-kwzAOhWEDsrmgJzQKuI0v3xCwyWTSaNe3qI0t+7OTTj05ciRpg3j+NWz8FRPVt7rHBFL/jAjKyQf4xGOHcRXfg==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18 || ^19
 
   own-keys@1.0.1:
     resolution: {integrity: sha512-qFOyK5PjiWZd+QQIh+1jhdb9LpxTF0qs7Pm8o5QHYZ0M3vKqSqzsZaEB6oWlxZ+q2sJBMI/Ktgd2N5ZwQoRHfg==}
@@ -5189,11 +5192,6 @@ snapshots:
     dependencies:
       '@formatjs/fast-memoize': 3.1.6
 
-  '@hookform/resolvers@5.4.0(react-hook-form@7.81.0(react@19.2.0))':
-    dependencies:
-      '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.81.0(react@19.2.0)
-
   '@gerrit0/mini-shiki@3.23.0':
     dependencies:
       '@shikijs/engine-oniguruma': 3.23.0
@@ -5201,6 +5199,11 @@ snapshots:
       '@shikijs/themes': 3.23.0
       '@shikijs/types': 3.23.0
       '@shikijs/vscode-textmate': 10.0.2
+
+  '@hookform/resolvers@5.4.0(react-hook-form@7.81.0(react@19.2.0))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.81.0(react@19.2.0)
 
   '@humanfs/core@0.19.1': {}
 
@@ -6109,8 +6112,6 @@ snapshots:
       - encoding
       - supports-color
 
-  '@standard-schema/utils@0.3.0': {}
-
   '@shikijs/engine-oniguruma@3.23.0':
     dependencies:
       '@shikijs/types': 3.23.0
@@ -6132,6 +6133,8 @@ snapshots:
   '@shikijs/vscode-textmate@10.0.2': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@standard-schema/utils@0.3.0': {}
 
   '@storybook/addon-a11y@8.6.14(storybook@8.6.14(prettier@3.7.4))':
     dependencies:
@@ -8646,10 +8649,6 @@ snapshots:
       type-check: 0.4.0
       word-wrap: 1.2.5
 
-  overlay-kit@1.9.0(react@19.2.0):
-    dependencies:
-      react: 19.2.0
-
   orval@8.20.0(prettier@3.7.4)(typescript@5.9.2):
     dependencies:
       '@commander-js/extra-typings': 15.0.0(commander@15.0.0)
@@ -8687,6 +8686,10 @@ snapshots:
       - '@faker-js/faker'
       - supports-color
       - typescript
+
+  overlay-kit@1.9.0(react@19.2.0):
+    dependencies:
+      react: 19.2.0
 
   own-keys@1.0.1:
     dependencies:

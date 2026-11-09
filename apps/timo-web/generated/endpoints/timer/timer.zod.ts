@@ -23,7 +23,7 @@ export const StartTimerQueryParams = zod.object({
   date: zod.iso
     .date()
     .optional()
-    .describe("타이머가 상태를 반영할 대상 날짜(미지정 시 오늘). ISO 형식"),
+    .describe("대상 날짜(쿼리 파라미터). 미지정 시 사용자 타임존 기준 오늘"),
 });
 
 export const StartTimerResponse = zod.object({
@@ -37,6 +37,47 @@ export const StartTimerResponse = zod.object({
       status: zod.string(),
       plannedSeconds: zod.number(),
       startedAt: zod.string(),
+    })
+    .optional(),
+});
+
+/**
+ * 진행 중인 타이머를 종료하고, 요청한 투두의 타이머를 바로 시작합니다.
+ * 종료되는 타이머는 중지(stop)와 동일하게 STOPPED 상태로 처리되며 해당 투두는 완료 처리됩니다. AI 피드백은 생성하지 않습니다.
+ * 종료와 시작은 하나의 트랜잭션으로 처리되어 한쪽만 반영되지 않습니다.
+ *
+ * 반복 투두는 여러 날짜에 같은 todoId로 노출되므로, body의 date(필수)로 새 타이머가 상태를 반영할 대상 날짜를 지정합니다.
+ * @summary 타이머 전환
+ */
+export const SwitchTimerParams = zod.object({
+  timerId: zod.number().describe("종료할(현재 진행 중인) 타이머 기록 ID"),
+});
+
+export const SwitchTimerBody = zod.object({
+  todoId: zod.number().describe("새로 타이머를 시작할 투두 ID"),
+  date: zod.string().describe("새 타이머가 상태를 반영할 대상 날짜"),
+});
+
+export const SwitchTimerResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      stopped: zod.object({
+        timerId: zod.number(),
+        todoId: zod.number(),
+        status: zod.string(),
+        plannedSeconds: zod.number(),
+        actualSeconds: zod.number(),
+      }),
+      started: zod.object({
+        timerId: zod.number(),
+        todoId: zod.number(),
+        date: zod.string(),
+        status: zod.string(),
+        plannedSeconds: zod.number(),
+        startedAt: zod.string(),
+      }),
     })
     .optional(),
 });

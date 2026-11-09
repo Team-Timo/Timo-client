@@ -162,7 +162,6 @@
     "languageChangeFailed": "Failed to change the language. Please try again.",
     "calendarConnectFailed": "Failed to integrate Google Calendar. Please try again.",
     "calendarDisconnectFailed": "Failed to disconnect the calendar. Please try again.",
-    "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first.",
     "timerStartFailed": "This to-do has no estimated duration set."
   },
   "Login": {
@@ -257,6 +256,12 @@
       "description": "The <blue>{minutes}</blue> completed so far will be recorded in the timebox.",
       "continueButton": "Continue",
       "switchButton": "Finish"
+    },
+    "switchModal": {
+      "title": "Switch to a new task?",
+      "description": "Starting a new task will stop the current timer.\nDo you want to start the new task?",
+      "cancelButton": "Cancel",
+      "switchButton": "Switch"
     },
     "completeModal": {
       "title": "The task has been completed!",

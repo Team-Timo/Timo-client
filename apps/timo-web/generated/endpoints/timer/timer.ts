@@ -16,10 +16,12 @@ import type {
   BaseResponseTimerFinishResponse,
   BaseResponseTimerStartResponse,
   BaseResponseTimerStatusResponse,
+  BaseResponseTimerSwitchResponse,
   ErrorDto,
   StartTimerParams,
   TimerActionRequest,
   TimerExtendRequest,
+  TimerSwitchRequest,
 } from "../../models";
 import type {
   DataTag,
@@ -146,6 +148,101 @@ export const useStartTimer = <TError = ErrorType<ErrorDto>, TContext = unknown>(
   TContext
 > => {
   return useMutation(getStartTimerMutationOptions(options), queryClient);
+};
+/**
+ * 진행 중인 타이머를 종료하고, 요청한 투두의 타이머를 바로 시작합니다.
+ * 종료되는 타이머는 중지(stop)와 동일하게 STOPPED 상태로 처리되며 해당 투두는 완료 처리됩니다. AI 피드백은 생성하지 않습니다.
+ * 종료와 시작은 하나의 트랜잭션으로 처리되어 한쪽만 반영되지 않습니다.
+ *
+ * 반복 투두는 여러 날짜에 같은 todoId로 노출되므로, body의 date(필수)로 새 타이머가 상태를 반영할 대상 날짜를 지정합니다.
+ * @summary 타이머 전환
+ */
+export const switchTimer = (
+  timerId: number,
+  timerSwitchRequest: BodyType<TimerSwitchRequest>,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<BaseResponseTimerSwitchResponse>(
+    {
+      url: `/api/v1/timers/${timerId}/switch`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: timerSwitchRequest,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getSwitchTimerMutationOptions = <
+  TError = ErrorType<ErrorDto>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof switchTimer>>,
+    TError,
+    { timerId: number; data: BodyType<TimerSwitchRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof switchTimer>>,
+  TError,
+  { timerId: number; data: BodyType<TimerSwitchRequest> },
+  TContext
+> => {
+  const mutationKey = ["switchTimer"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof switchTimer>>,
+    { timerId: number; data: BodyType<TimerSwitchRequest> }
+  > = (props) => {
+    const { timerId, data } = props ?? {};
+
+    return switchTimer(timerId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SwitchTimerMutationResult = NonNullable<
+  Awaited<ReturnType<typeof switchTimer>>
+>;
+export type SwitchTimerMutationBody = BodyType<TimerSwitchRequest>;
+export type SwitchTimerMutationError = ErrorType<ErrorDto>;
+
+/**
+ * @summary 타이머 전환
+ */
+export const useSwitchTimer = <
+  TError = ErrorType<ErrorDto>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof switchTimer>>,
+      TError,
+      { timerId: number; data: BodyType<TimerSwitchRequest> },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof switchTimer>>,
+  TError,
+  { timerId: number; data: BodyType<TimerSwitchRequest> },
+  TContext
+> => {
+  return useMutation(getSwitchTimerMutationOptions(options), queryClient);
 };
 /**
  * 사용자의 요청으로 타이머를 종료합니다.

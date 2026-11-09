@@ -21,11 +21,12 @@ import {
 } from "@/generated/endpoints/todo/todo";
 import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
+import { useTimerSwitch } from "@/hooks/timer/use-timer-switch";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
 
 export interface UseHomeTodosByDateOptions {
   onNeedStopConfirm: (dateKey: string, todoId: number) => void;
-  onTimerAlreadyRunning: () => void;
+  onNeedSwitchConfirm: (dateKey: string, todoId: number) => void;
   onStopFeedback: (feedbackText: string | undefined) => void;
   onPlayError: (message: string | undefined) => void;
   onUpdateError: (message: string | undefined) => void;
@@ -35,7 +36,7 @@ export const useHomeTodosByDate = (
   apiDays: HomeViewDay[],
   {
     onNeedStopConfirm,
-    onTimerAlreadyRunning,
+    onNeedSwitchConfirm,
     onStopFeedback,
     onPlayError,
     onUpdateError,
@@ -76,9 +77,13 @@ export const useHomeTodosByDate = (
     useStartTimer<ApiError>();
   const { mutate: changeStatus, isPending: isChangeStatusPending } =
     useChangeStatus();
+  const { isSwitchPending, handleSwitchTimer } = useTimerSwitch();
 
   const isTimerActionPending =
-    isStartTimerPending || isChangeStatusPending || isActiveTimerFetching;
+    isStartTimerPending ||
+    isChangeStatusPending ||
+    isSwitchPending ||
+    isActiveTimerFetching;
 
   useEffect(() => {
     setTodosByDate(
@@ -177,9 +182,9 @@ export const useHomeTodosByDate = (
       return;
     }
 
-    // 다른 투두의 타이머가 이미 실행/일시정지 중이면 새 타이머를 시작할 수 없다(409)
+    // 다른 투두의 타이머가 이미 실행/일시정지 중이면 전환 여부를 먼저 확인한다
     if (activeTimer) {
-      onTimerAlreadyRunning();
+      onNeedSwitchConfirm(dateKey, todoId);
       return;
     }
 
@@ -193,6 +198,26 @@ export const useHomeTodosByDate = (
         onError: (error: ApiError) => {
           onPlayError(error.message);
         },
+      },
+    );
+  };
+
+  const confirmSwitchTimer = (dateKey: string, todoId: number) => {
+    // 팝업이 열린 사이 기존 타이머가 끝났다면 전환 없이 바로 시작한다
+    if (!activeTimer) {
+      handleTogglePlay(dateKey, todoId);
+      return;
+    }
+
+    handleSwitchTimer(
+      { todoId, date: dateKey },
+      {
+        onPreviousCompleted: (previous) =>
+          updateTodo(previous.date, previous.todoId, (todo) => ({
+            ...todo,
+            completed: true,
+          })),
+        onError: onPlayError,
       },
     );
   };
@@ -277,5 +302,6 @@ export const useHomeTodosByDate = (
     handleDeleteTodo,
     handleReorderTodo,
     confirmStopAndComplete,
+    confirmSwitchTimer,
   };
 };
