@@ -19,13 +19,23 @@ export interface ReorderSubtaskSubmitHandlers {
 }
 
 export const useReorderSubtaskSubmit = () => {
-  const { mutate: reorderSubtask } = useReorderSubtask();
   const {
     invalidateHome,
     invalidateToday,
     invalidateTodoDetail,
     invalidateFocus,
   } = useTodoQueryInvalidation();
+  // 연속 재정렬 시 이전 호출의 mutate 콜백은 실행되지 않으므로 무효화는 mutation 옵션에서 처리합니다.
+  const { mutate: reorderSubtask } = useReorderSubtask({
+    mutation: {
+      onSuccess: (_data, { todoId, data }) => {
+        invalidateHome();
+        invalidateToday();
+        if (data.date) invalidateTodoDetail(todoId, data.date);
+        invalidateFocus();
+      },
+    },
+  });
 
   const handleReorder = (
     { todoId, subtaskId, date, newIndex }: ReorderSubtaskSubmitParams,
@@ -34,13 +44,7 @@ export const useReorderSubtaskSubmit = () => {
     reorderSubtask(
       { todoId, subtaskId, data: { newIndex, date } },
       {
-        onSuccess: () => {
-          invalidateHome();
-          invalidateToday();
-          invalidateTodoDetail(todoId, date);
-          invalidateFocus();
-          onSuccess?.();
-        },
+        onSuccess,
         onError,
       },
     );
