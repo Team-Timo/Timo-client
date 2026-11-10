@@ -133,6 +133,7 @@ export const TodayTodoListContainer = () => {
                   title={todo.title}
                   isCompleted={todo.completed}
                   icon={renderTodoIcon(todo.icon)}
+                  calendarSource={todo.calendarSource}
                   timerStatus={timerStatus}
                   isPlayHighlighted={isPlayHighlighted}
                   toolbar={{
