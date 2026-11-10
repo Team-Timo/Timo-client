@@ -23,8 +23,10 @@ import type {
   TodoPriorityTypes,
   TodoTimerStatusTypes,
 } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/todo-type";
+import type { CalendarSource } from "@/schemas/todo/todo-schema";
 import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
+import { CalendarSourceIcon } from "@/components/calendar/CalendarSourceIcon";
 import { convertDurationToTimeText } from "@/utils/todo/todo-time";
 
 const isInteractiveElement = (target: EventTarget | null) =>
@@ -39,6 +41,7 @@ export interface HomeTodoCardProps {
   tagName?: string;
   hasMemo: boolean;
   isRepeated: boolean;
+  calendarSource?: CalendarSource;
   timerStatus: TodoTimerStatusTypes;
   isPlayHighlighted: boolean;
   subtaskTitle?: string;
@@ -58,6 +61,7 @@ export const HomeTodoCard = ({
   tagName,
   hasMemo,
   isRepeated,
+  calendarSource,
   timerStatus,
   isPlayHighlighted,
   subtaskTitle,
@@ -118,6 +122,7 @@ export const HomeTodoCard = ({
     <div className="flex w-full items-center justify-between gap-2">
       <div className="flex min-w-0 flex-1 items-center gap-1">
         <Checkbox checked={isCompleted} onChange={onToggleCompleted} />
+        {calendarSource && <CalendarSourceIcon source={calendarSource} />}
         <p
           className={cn(
             "typo-body-sb-12 min-w-0 flex-1 truncate",

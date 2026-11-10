@@ -60,6 +60,15 @@ export const GetHomeResponse = zod.object({
                 .optional(),
               hasMemo: zod.boolean(),
               isRepeated: zod.boolean(),
+              isCalendarEvent: zod.boolean(),
+              calendarSource: zod
+                .enum(["GOOGLE", "APPLE"])
+                .optional()
+                .describe(
+                  "일정 출처 (GOOGLE/APPLE), 티모에서 만든 투두는 null",
+                ),
+              isDeletedFromCalendar: zod.boolean(),
+              isDisconnectedFromCalendar: zod.boolean(),
               timerStatus: zod.enum(["STOPPED", "RUNNING", "PAUSED"]),
               sortOrder: zod.number().optional(),
               subtasks: zod.array(
@@ -107,6 +116,13 @@ export const GetTodayResponse = zod.object({
             })
             .optional(),
           isRepeated: zod.boolean(),
+          isCalendarEvent: zod.boolean(),
+          calendarSource: zod
+            .enum(["GOOGLE", "APPLE"])
+            .optional()
+            .describe("일정 출처 (GOOGLE/APPLE), 티모에서 만든 투두는 null"),
+          isDeletedFromCalendar: zod.boolean(),
+          isDisconnectedFromCalendar: zod.boolean(),
           hasMemo: zod.boolean(),
           timerStatus: zod.enum(["STOPPED", "RUNNING", "PAUSED"]),
           sortOrder: zod.number().optional(),

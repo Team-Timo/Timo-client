@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { ROUTES } from "@/constants/routes";
-import { useConnectCalendar } from "@/generated/endpoints/calendar/calendar";
+import { useConnectCalendar } from "@/generated/endpoints/google-calendar/google-calendar";
 import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
 

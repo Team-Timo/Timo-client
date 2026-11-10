@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import type { TodoTimerStatusTypes } from "@/schemas/todo/todo-schema";
+import type {
+  CalendarSource,
+  TodoTimerStatusTypes,
+} from "@/schemas/todo/todo-schema";
 import type { ReactNode } from "react";
 
 import {
@@ -19,6 +22,7 @@ export interface TodayTodoCardContainerProps {
   timerStatus: TodoTimerStatusTypes;
   isPlayHighlighted: boolean;
   icon?: ReactNode;
+  calendarSource?: CalendarSource;
   onCardClick?: () => void;
   onToggleCompleted?: (completed: boolean) => void;
   onTogglePlay?: () => void;
@@ -29,6 +33,7 @@ export const TodayTodoCardContainer = ({
   title,
   isCompleted,
   icon,
+  calendarSource,
   subTodos,
   toolbar,
   timerStatus,
@@ -55,6 +60,7 @@ export const TodayTodoCardContainer = ({
       isPlaying={isPlaying}
       isPlayHighlighted={isPlayHighlighted}
       icon={icon}
+      calendarSource={calendarSource}
       subTodos={subTodos}
       toolbar={toolbar}
       onCardClick={onCardClick}

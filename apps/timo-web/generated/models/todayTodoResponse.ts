@@ -7,6 +7,7 @@
  */
 import type { SubtaskResponse } from "./subtaskResponse";
 import type { TagResponse } from "./tagResponse";
+import type { TodayTodoResponseCalendarSource } from "./todayTodoResponseCalendarSource";
 import type { TodayTodoResponseTimerStatus } from "./todayTodoResponseTimerStatus";
 
 export interface TodayTodoResponse {
@@ -19,6 +20,11 @@ export interface TodayTodoResponse {
   priority?: string;
   tag?: TagResponse;
   isRepeated: boolean;
+  isCalendarEvent: boolean;
+  /** 일정 출처 (GOOGLE/APPLE), 티모에서 만든 투두는 null */
+  calendarSource?: TodayTodoResponseCalendarSource;
+  isDeletedFromCalendar: boolean;
+  isDisconnectedFromCalendar: boolean;
   hasMemo: boolean;
   timerStatus: TodayTodoResponseTimerStatus;
   sortOrder?: number;
