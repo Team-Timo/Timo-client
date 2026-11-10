@@ -59,6 +59,11 @@ export interface DetailTodoModalContentProps {
     completed: boolean,
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
+  onReorderSubtask: (
+    subtaskId: number,
+    newIndex: number,
+    handlers?: UpdateTodoSubmitHandlers,
+  ) => void;
   timerStatus: TodoDetailResponseTimerStatus;
 }
 
@@ -74,6 +79,7 @@ export const DetailTodoModalContent = ({
   onUpdate,
   onUpdateMemo,
   onToggleSubtask,
+  onReorderSubtask,
   timerStatus,
 }: DetailTodoModalContentProps) => {
   const t = useTranslations("Home.detailModal");
@@ -97,6 +103,7 @@ export const DetailTodoModalContent = ({
     form: detailTodoForm,
     onUpdate,
     onToggleSubtask,
+    onReorderSubtask,
   });
   const iconField = useDetailTodoIconSubmit({
     icon: detailTodoForm.icon,
@@ -196,6 +203,7 @@ export const DetailTodoModalContent = ({
                 onToggleSubtaskCompleted={
                   patchHandlers.handleSubtaskCompletedChange
                 }
+                onReorderSubtask={patchHandlers.handleSubtaskReorder}
                 registerSubtaskInputRef={detailTodoForm.registerSubtaskInputRef}
                 onSubtaskInputKeyDown={detailTodoForm.handleSubtaskInputKeyDown}
               />

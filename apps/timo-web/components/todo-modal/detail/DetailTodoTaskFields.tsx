@@ -4,15 +4,13 @@ import {
   PlayDisabledIcon,
 } from "@repo/timo-design-system/icons";
 import { Checkbox, PlayButton } from "@repo/timo-design-system/ui";
+import { useId } from "react";
 
 import type { TodoDetailResponseTimerStatus } from "@/generated/models";
 import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
-const resizeTextarea = (element: HTMLTextAreaElement | null) => {
-  if (!element) return;
-  element.style.height = "auto";
-  element.style.height = `${element.scrollHeight}px`;
-};
+import { DetailTodoSubtaskItem } from "@/components/todo-modal/detail/DetailTodoSubtaskItem";
+import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 
 export interface DetailTodoSubtaskInput {
   id: number;
@@ -34,6 +32,7 @@ export interface DetailTodoTaskFieldsProps {
   onTogglePlay: () => void;
   onSubtaskInputChange: (id: number, value: string) => void;
   onToggleSubtaskCompleted: (id: number, completed: boolean) => void;
+  onReorderSubtask: (fromIndex: number, toIndex: number) => void;
   registerSubtaskInputRef: (
     index: number,
   ) => (element: HTMLTextAreaElement | null) => void;
@@ -56,9 +55,11 @@ export const DetailTodoTaskFields = ({
   onTogglePlay,
   onSubtaskInputChange,
   onToggleSubtaskCompleted,
+  onReorderSubtask,
   registerSubtaskInputRef,
   onSubtaskInputKeyDown,
 }: DetailTodoTaskFieldsProps) => {
+  const subtaskDndId = useId();
   const isRunning = timerStatus === "RUNNING";
 
   const stopInteractiveEvent = (
@@ -116,31 +117,26 @@ export const DetailTodoTaskFields = ({
       </div>
 
       {subtaskInputs.length > 0 && (
-        <div className="flex flex-col">
-          {subtaskInputs.map((subtask, index) => (
-            <div key={subtask.id} className="flex items-center gap-2">
-              <Checkbox
-                checked={subtask.completed}
-                disabled={isCompleted}
-                onChange={(completed) =>
-                  onToggleSubtaskCompleted(subtask.id, completed)
-                }
-              />
-              <textarea
-                value={subtask.value}
-                ref={registerSubtaskInputRef(index)}
-                onChange={(event) => {
-                  onSubtaskInputChange(subtask.id, event.target.value);
-                  resizeTextarea(event.currentTarget);
-                }}
-                onKeyDown={(event) => onSubtaskInputKeyDown(index, event)}
-                rows={1}
+        <DndSortableListProvider
+          dndId={subtaskDndId}
+          itemIds={subtaskInputs.map((subtask) => subtask.id)}
+          onReorder={onReorderSubtask}
+        >
+          <div className="flex flex-col">
+            {subtaskInputs.map((subtask, index) => (
+              <DetailTodoSubtaskItem
+                key={subtask.id}
+                subtask={subtask}
+                isTodoCompleted={isCompleted}
                 disabled={disabled}
-                className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 resize-none overflow-hidden wrap-break-word outline-none"
+                inputRef={registerSubtaskInputRef(index)}
+                onInputChange={onSubtaskInputChange}
+                onInputKeyDown={(event) => onSubtaskInputKeyDown(index, event)}
+                onToggleCompleted={onToggleSubtaskCompleted}
               />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </DndSortableListProvider>
       )}
     </div>
   );

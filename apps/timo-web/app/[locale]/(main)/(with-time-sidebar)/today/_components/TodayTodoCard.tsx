@@ -20,8 +20,12 @@ import {
 } from "@repo/timo-design-system/ui";
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
+import { useId } from "react";
 
 import type { KeyboardEvent, ReactNode } from "react";
+
+import { TodayTodoSubtaskItem } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_components/TodayTodoSubtaskItem";
+import { DndSortableListProvider } from "@/providers/dnd/DndSortableListProvider";
 
 const CARD_STYLE = {
   active: {
@@ -66,6 +70,7 @@ export interface TodayTodoCardProps {
   onCheck: () => void;
   onPlay: () => void;
   onSubTodoCheck: (id: number) => void;
+  onReorderSubTodo: (fromIndex: number, toIndex: number) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
@@ -86,9 +91,11 @@ export const TodayTodoCard = ({
   onCheck,
   onPlay,
   onSubTodoCheck,
+  onReorderSubTodo,
   onMouseEnter,
   onMouseLeave,
 }: TodayTodoCardProps) => {
+  const subTodoDndId = useId();
   const t = useTranslations("Home.createModal");
   const tCommon = useTranslations("Common");
   const style = CARD_STYLE[isDimmed ? "done" : "active"];
@@ -161,27 +168,22 @@ export const TodayTodoCard = ({
       </div>
 
       {subTodos.length > 0 && (
-        <ul className="flex flex-col gap-1">
-          {subTodos.map((sub) => (
-            <li key={sub.id} className="flex items-center gap-2">
-              <div
-                role="none"
-                className="inline-flex items-center"
-                onClick={stopPropagation}
-                onKeyDown={stopPropagation}
-              >
-                <Checkbox
-                  checked={sub.isDone ?? false}
-                  disabled={isDone}
-                  onChange={() => onSubTodoCheck(sub.id)}
-                />
-              </div>
-              <span className="typo-body-r-12 text-timo-gray-800">
-                {sub.text}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <DndSortableListProvider
+          dndId={subTodoDndId}
+          itemIds={subTodos.map((sub) => sub.id)}
+          onReorder={onReorderSubTodo}
+        >
+          <ul className="flex flex-col gap-1">
+            {subTodos.map((sub) => (
+              <TodayTodoSubtaskItem
+                key={sub.id}
+                subTodo={sub}
+                isTodoDone={isDone}
+                onCheck={onSubTodoCheck}
+              />
+            ))}
+          </ul>
+        </DndSortableListProvider>
       )}
 
       <div className="flex items-center justify-between gap-2 md:justify-end">

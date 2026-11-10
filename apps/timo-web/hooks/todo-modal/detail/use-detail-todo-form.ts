@@ -261,6 +261,8 @@ export const useDetailTodoForm = ({
     setSubtaskCompleted,
     handleSubtaskInputKeyDown: subtaskField.handleInputKeyDown,
     focusFirstSubtaskInput: subtaskField.focusFirstInput,
+    reorderSubtaskInputs: subtaskField.reorderInputs,
+    restoreSubtaskInputs: subtaskField.restoreInputs,
     memo: memoField.value,
     setMemo: memoField.onChange,
     icon: iconField.value,
