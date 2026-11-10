@@ -18,7 +18,14 @@ export interface ReorderSubtaskSubmitHandlers {
   onError?: (error: ErrorType<ErrorDto>) => void;
 }
 
-export const useReorderSubtaskSubmit = () => {
+export interface UseReorderSubtaskSubmitOptions {
+  /** 모든 실패 호출마다 실행됩니다. 연속 재정렬에서도 누락되지 않아야 하는 오류 안내에 사용합니다. */
+  onError?: (error: ErrorType<ErrorDto>) => void;
+}
+
+export const useReorderSubtaskSubmit = ({
+  onError: onReorderError,
+}: UseReorderSubtaskSubmitOptions = {}) => {
   const {
     invalidateHome,
     invalidateToday,
@@ -33,6 +40,12 @@ export const useReorderSubtaskSubmit = () => {
         invalidateToday();
         if (data.date) invalidateTodoDetail(todoId, data.date);
         invalidateFocus();
+      },
+      onError: (error, { todoId, data }) => {
+        // 이전 호출의 롤백이 누락될 수 있어 서버 순서로 다시 맞춥니다.
+        invalidateToday();
+        if (data.date) invalidateTodoDetail(todoId, data.date);
+        onReorderError?.(error);
       },
     },
   });

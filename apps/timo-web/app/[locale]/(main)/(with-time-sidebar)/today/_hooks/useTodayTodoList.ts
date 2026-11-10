@@ -64,7 +64,9 @@ export const useTodayTodoList = (
     },
   });
   const { mutate: changeSubtaskStatus } = useChangeSubtaskStatus();
-  const { handleReorder: reorderSubtask } = useReorderSubtaskSubmit();
+  const { handleReorder: reorderSubtask } = useReorderSubtaskSubmit({
+    onError: (error) => onUpdateError(error.response?.data.message),
+  });
   const { mutate: stopTimer } = useStopTimer();
 
   const { mutate: startTimer, isPending: isStartTimerPending } =
@@ -265,12 +267,7 @@ export const useTodayTodoList = (
         date: todo.date,
         newIndex: result.newIndex,
       },
-      {
-        onError: (error) => {
-          setTodos(previous);
-          onUpdateError(error.response?.data.message);
-        },
-      },
+      { onError: () => setTodos(previous) },
     );
   };
 

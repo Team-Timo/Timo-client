@@ -61,7 +61,9 @@ const DetailTodoModalQuery = ({
   const { handleUpdate } = useUpdateTodoSubmit();
   const { handleUpdateMemo } = useUpdateTodoMemoSubmit();
   const { handleToggle } = useToggleSubtaskSubmit();
-  const { handleReorder } = useReorderSubtaskSubmit();
+  const { handleReorder } = useReorderSubtaskSubmit({
+    onError: onActionError,
+  });
   const { data: activeTimer } = useActiveTimer();
   const todo = data?.data;
   const isPlayHighlighted =
@@ -154,16 +156,7 @@ const DetailTodoModalQuery = ({
     newIndex: number,
     handlers: UpdateTodoSubmitHandlers = {},
   ) => {
-    handleReorder(
-      { todoId, subtaskId, date: currentDate, newIndex },
-      {
-        onSuccess: handlers.onSuccess,
-        onError: (error) => {
-          handlers.onError?.(error);
-          onActionError(error);
-        },
-      },
-    );
+    handleReorder({ todoId, subtaskId, date: currentDate, newIndex }, handlers);
   };
 
   return (
