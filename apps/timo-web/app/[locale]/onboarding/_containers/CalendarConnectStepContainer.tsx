@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingButtonContainer";
 import { OnboardingGoogleButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingGoogleButtonContainer";
-import { authorize } from "@/generated/endpoints/calendar/calendar";
+import { authorize } from "@/generated/endpoints/google-calendar/google-calendar";
 
 interface CalendarConnectStepContainerProps {
   isPending?: boolean;
@@ -22,7 +22,9 @@ export const CalendarConnectStepContainer = ({
 
   const handleGoogleConnect = async () => {
     try {
-      const response = await authorize();
+      const response = await authorize({
+        redirectOrigin: window.location.origin,
+      });
       const url = response.data?.authorizationUrl;
       if (!url) return;
       localStorage.setItem("calendarConnectOrigin", "onboarding");

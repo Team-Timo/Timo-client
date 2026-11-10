@@ -7,11 +7,11 @@ import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/acc
 
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
 import { useLogoutMutation } from "@/app/[locale]/(main)/settings/_queries/account/use-logout-mutation";
+import { getGetCalendarEventsQueryKey } from "@/generated/endpoints/calendar/calendar";
 import {
   authorize,
   useDisconnectCalendar,
-  getGetCalendarEventsQueryKey,
-} from "@/generated/endpoints/calendar/calendar";
+} from "@/generated/endpoints/google-calendar/google-calendar";
 import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
@@ -99,7 +99,9 @@ export const useSettingsProfile = () => {
     }
 
     try {
-      const response = await authorize();
+      const response = await authorize({
+        redirectOrigin: window.location.origin,
+      });
       const url = response.data?.authorizationUrl;
       if (!url) {
         handlers.onConnectError?.();
