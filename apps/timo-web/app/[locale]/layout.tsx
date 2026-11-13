@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 
 import { SITE_URL } from "@/constants/site";
 import { routing } from "@/i18n/routing";
+import { MixpanelProvider } from "@/providers/analytics/MixpanelProvider";
 import { AuthProvider } from "@/providers/auth/AuthProvider";
 import { LanguageSyncProvider } from "@/providers/locale/LanguageSyncProvider";
 import { OverlayProvider } from "@/providers/overlay/OverlayProvider";
@@ -107,13 +108,15 @@ export default async function RootLayout({
     <html lang={locale} className={pretendard.variable}>
       <body>
         <NextIntlClientProvider>
-          <QueryProvider>
-            <AuthProvider>
-              <LanguageSyncProvider>
-                <OverlayProvider>{children}</OverlayProvider>
-              </LanguageSyncProvider>
-            </AuthProvider>
-          </QueryProvider>
+          <MixpanelProvider>
+            <QueryProvider>
+              <AuthProvider>
+                <LanguageSyncProvider>
+                  <OverlayProvider>{children}</OverlayProvider>
+                </LanguageSyncProvider>
+              </AuthProvider>
+            </QueryProvider>
+          </MixpanelProvider>
         </NextIntlClientProvider>
       </body>
     </html>

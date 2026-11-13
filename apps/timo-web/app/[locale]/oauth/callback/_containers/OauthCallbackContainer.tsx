@@ -8,6 +8,7 @@ import { useToken } from "@/generated/endpoints/auth/auth";
 import { useUpdateTimezone } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { identifyMixpanel } from "@/utils/analytics/mixpanel";
 
 export const OauthCallbackContainer = () => {
   const code = useSearchParams().get("code");
@@ -37,6 +38,7 @@ export const OauthCallbackContainer = () => {
             return;
           }
           setAccessToken(data.accessToken);
+          identifyMixpanel(String(data.user.id));
           setOnboardingCompleted(data.user.onboardingCompleted);
 
           const zoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
