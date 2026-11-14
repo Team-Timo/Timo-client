@@ -9,6 +9,7 @@
 
 - `docs/architecture/components.md` → 컴포넌트 계층
 - `docs/architecture/state.md` → 상태 관리 전략
+- `docs/architecture/responsive.md` → 반응형 구현 규칙 (모바일 대응이 필요한 경우)
 - `docs/conventions/naming.md` → 파일 네이밍
 - `docs/conventions/code-style.md` → 코드 스타일
 

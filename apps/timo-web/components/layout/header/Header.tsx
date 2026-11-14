@@ -20,7 +20,7 @@ const HeaderRoot = ({ left, right, className }: HeaderProps) => {
   return (
     <header
       className={cn(
-        "border-timo-gray-500 flex w-full items-center justify-between rounded-tl-lg border-b bg-white px-5 py-3",
+        "border-timo-gray-500 flex w-full items-center justify-between border-b bg-white px-5 py-3 md:rounded-tl-lg",
         className,
       )}
     >

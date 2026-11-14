@@ -20,10 +20,11 @@ export const useDeleteTodoSubmit = () => {
 
   const handleDelete = (
     todoId: number,
+    date: string,
     { onSuccess, onError }: DeleteTodoSubmitHandlers,
   ) => {
     deleteTodo(
-      { todoId },
+      { todoId, params: { date } },
       {
         onSuccess: () => {
           invalidateHome();

@@ -109,7 +109,9 @@ export const HomeTodoContainer = () => {
       ref={scrollRef}
       className={cn(
         "flex h-full overflow-x-auto scroll-smooth",
-        isWeekView ? "w-full gap-2.5" : "snap-x snap-proximity gap-5",
+        isWeekView
+          ? "w-full snap-x snap-mandatory gap-2.5 md:snap-none"
+          : "snap-x snap-proximity gap-5",
       )}
     >
       {days.map((day) => {
@@ -125,8 +127,8 @@ export const HomeTodoContainer = () => {
             className={cn(
               "flex h-full flex-col gap-2",
               isWeekView
-                ? "min-w-[150px] flex-1"
-                : "w-[230px] shrink-0 snap-start",
+                ? "w-full shrink-0 snap-start md:w-auto md:min-w-37.5 md:flex-1 md:shrink"
+                : "w-57.5 shrink-0 snap-start",
             )}
           >
             <HomeDayHeaderContainer

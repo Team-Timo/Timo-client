@@ -1,10 +1,15 @@
 import {
-  EndBlackIcon,
-  EndBlueIcon,
-  PlayTimerIcon,
-  PlusBlueIcon,
-  PlusIcon,
-  StopIcon,
+  ControlEndActiveIcon,
+  ControlEndDefaultIcon,
+  ControlEndDisabledIcon,
+  ControlPauseActiveIcon,
+  ControlPauseDisabledIcon,
+  ControlPlayActiveIcon,
+  ControlPlayDefaultIcon,
+  ControlPlayDisabledIcon,
+  ControlPlusActiveIcon,
+  ControlPlusDefaultIcon,
+  ControlPlusDisabledIcon,
 } from "@repo/timo-design-system/icons";
 import { Modal } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
@@ -39,17 +44,39 @@ export const TimerControls = ({
         disabled={disabled}
         className={MODAL_TRIGGER_CLASS}
       >
-        <span className="group-active:hidden">
-          <EndBlackIcon />
-        </span>
-        <span className="hidden group-active:block">
-          <EndBlueIcon />
-        </span>
+        {disabled ? (
+          <ControlEndDisabledIcon width={35} height={35} />
+        ) : (
+          <>
+            <span className="group-active:hidden">
+              <ControlEndDefaultIcon width={35} height={35} />
+            </span>
+            <span className="hidden group-active:block">
+              <ControlEndActiveIcon width={35} height={35} />
+            </span>
+          </>
+        )}
       </Modal.Trigger>
 
       <TimerControlButton
         icon={
-          isRunning ? <StopIcon width={24} height={24} /> : <PlayTimerIcon />
+          isRunning ? (
+            <ControlPauseActiveIcon width={35} height={35} />
+          ) : (
+            <ControlPlayDefaultIcon width={35} height={35} />
+          )
+        }
+        activeIcon={
+          isRunning ? undefined : (
+            <ControlPlayActiveIcon width={35} height={35} />
+          )
+        }
+        disabledIcon={
+          isRunning ? (
+            <ControlPauseDisabledIcon width={35} height={35} />
+          ) : (
+            <ControlPlayDisabledIcon width={35} height={35} />
+          )
         }
         label={isRunning ? t("pause") : t("play")}
         variant={isRunning ? "active" : "default"}
@@ -63,12 +90,18 @@ export const TimerControls = ({
         disabled={disabled}
         className={MODAL_TRIGGER_CLASS}
       >
-        <span className="group-active:hidden">
-          <PlusIcon width={27} height={27} />
-        </span>
-        <span className="hidden group-active:block">
-          <PlusBlueIcon />
-        </span>
+        {disabled ? (
+          <ControlPlusDisabledIcon width={35} height={35} />
+        ) : (
+          <>
+            <span className="group-active:hidden">
+              <ControlPlusDefaultIcon width={35} height={35} />
+            </span>
+            <span className="hidden group-active:block">
+              <ControlPlusActiveIcon width={35} height={35} />
+            </span>
+          </>
+        )}
       </Modal.Trigger>
     </div>
   );

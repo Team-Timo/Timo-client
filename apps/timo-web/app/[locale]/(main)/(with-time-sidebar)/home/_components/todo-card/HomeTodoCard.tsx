@@ -1,13 +1,13 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  ControlPauseActiveIcon,
+  ControlPlayActiveIcon,
   MemoDisableIcon,
   MemoOnIcon,
   PlayDisabledIcon,
-  PlayIcon,
   RepeatTodoDisableIcon,
   RepeatTodoOnIcon,
-  StopIcon,
 } from "@repo/timo-design-system/icons";
 import {
   Checkbox,
@@ -142,9 +142,9 @@ export const HomeTodoCard = ({
           {isCompleted ? (
             <PlayDisabledIcon />
           ) : isRunning ? (
-            <StopIcon />
+            <ControlPauseActiveIcon width={12} height={12} />
           ) : isPlayHighlighted ? (
-            <PlayIcon />
+            <ControlPlayActiveIcon width={12} height={12} />
           ) : (
             <PlayDisabledIcon />
           )}
@@ -177,9 +177,10 @@ export const HomeTodoCard = ({
           <div className="flex w-full min-w-0 items-center gap-2">
             <Checkbox
               checked={isSubtaskCompleted}
+              disabled={isCompleted}
               onChange={(checked) => onToggleSubtaskCompleted?.(checked)}
             />
-            <p className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 truncate">
+            <p className="typo-body-r-12 text-timo-gray-800 min-w-0 flex-1 truncate">
               {subtaskTitle}
             </p>
           </div>

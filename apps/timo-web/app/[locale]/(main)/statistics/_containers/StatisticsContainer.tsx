@@ -17,6 +17,17 @@ import { formatStatisticsSidePanelDate } from "@/app/[locale]/(main)/statistics/
 import { useTagLabel } from "@/hooks/todo/use-tag-label";
 import { formatDateKey } from "@/utils/date/date";
 
+const getMonthDisplayDate = (month: Date): Date => {
+  const today = new Date();
+  const isCurrentMonth =
+    month.getFullYear() === today.getFullYear() &&
+    month.getMonth() === today.getMonth();
+
+  return isCurrentMonth
+    ? today
+    : new Date(month.getFullYear(), month.getMonth(), 1);
+};
+
 export const StatisticsContainer = () => {
   const locale = useLocale();
   const getTagLabel = useTagLabel();
@@ -61,28 +72,42 @@ export const StatisticsContainer = () => {
   const handleChangeMonth = (updater: (prev: Date) => Date) => {
     const nextMonth = updater(currentMonth);
     setCurrentMonth(nextMonth);
-    setSelectedDate(new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 1));
+    setSelectedDate(getMonthDisplayDate(nextMonth));
+    setSidePanelVariant("month");
+  };
+
+  const handleDeselectDate = () => {
+    setSelectedDate(getMonthDisplayDate(currentMonth));
     setSidePanelVariant("month");
   };
 
   const handleSelectDate = (date: Date) => {
+    if (
+      sidePanelVariant === "day" &&
+      formatDateKey(selectedDate) === formatDateKey(date)
+    ) {
+      handleDeselectDate();
+      return;
+    }
+
     setSelectedDate(date);
     setSidePanelVariant("day");
   };
 
   return (
-    <div className="flex h-full overflow-hidden">
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-y-auto [scrollbar-gutter:stable] md:flex-row md:overflow-hidden md:[scrollbar-gutter:auto]">
+      <div className="flex min-w-0 shrink-0 flex-col md:flex-1 md:overflow-hidden">
         <StatisticsHeaderContainer
           currentMonth={currentMonth}
           onChangeMonth={handleChangeMonth}
         />
-        <div className="min-h-0 flex-1 overflow-auto">
+        <div className="md:min-h-0 md:flex-1 md:overflow-auto md:[scrollbar-gutter:stable]">
           <StatisticsCalendarContainer
             currentMonth={currentMonth}
             displayDate={selectedDate}
             selectedDate={sidePanelVariant === "day" ? selectedDate : null}
             onSelectDate={handleSelectDate}
+            onDeselectDate={handleDeselectDate}
           />
         </div>
       </div>

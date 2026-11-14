@@ -1,12 +1,8 @@
 "use client";
 
 import { Header } from "@/components/layout/header/Header";
-import { useNavigationSidebar } from "@/components/layout/sidebar/navigation/NavigationSidebarContext";
+import { NavigationSidebarToggle } from "@/components/layout/sidebar/navigation/NavigationSidebarToggle";
 
 export const FocusHeaderContainer = () => {
-  const { isOpen, toggle } = useNavigationSidebar();
-
-  return (
-    <Header left={<Header.SidebarButton isOpen={isOpen} onClick={toggle} />} />
-  );
+  return <Header left={<NavigationSidebarToggle />} />;
 };

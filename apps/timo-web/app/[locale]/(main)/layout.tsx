@@ -17,7 +17,7 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: Readonly<MainLayoutProps>) {
   return (
-    <div className="bg-timo-gray-300 h-screen overflow-hidden py-5">
+    <div className="md:bg-timo-gray-300 h-dvh overflow-hidden bg-white md:py-5">
       <AuthGuardProvider>
         <OnboardingRequiredGuardProvider>
           <MainShellContainer>{children}</MainShellContainer>

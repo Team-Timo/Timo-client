@@ -1,7 +1,7 @@
 "use client";
 
 import { DeleteIcon } from "@repo/timo-design-system/icons";
-import { CreateButton, TagNameInput } from "@repo/timo-design-system/ui";
+import { Button, TagNameInput } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -48,7 +48,7 @@ export const CreateTagModalContainer = ({
       onClose={onClose}
       onExited={onExited}
       ariaLabel={t("createTagModal.title")}
-      className="w-[490px] items-center gap-3 px-6 py-4"
+      className="m-1 w-[490px] items-center gap-3 px-5 py-3 md:m-0 md:px-6 md:py-4"
     >
       <div className="flex w-full items-center justify-between">
         <p className="typo-body-sb-12 text-timo-blue-300">
@@ -81,11 +81,16 @@ export const CreateTagModalContainer = ({
       </div>
 
       <div className="flex w-full items-center justify-end">
-        <CreateButton
-          label={t("createTagModal.create")}
+        <Button
+          variant="primary"
+          appearance="fill"
+          size="m"
+          className="w-auto px-4"
           disabled={!isValid}
           onClick={handleCreate}
-        />
+        >
+          {t("createTagModal.create")}
+        </Button>
       </div>
     </OverlayModal>
   );

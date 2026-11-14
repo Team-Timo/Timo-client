@@ -10,7 +10,6 @@ import type {
 } from "@repo/timo-design-system/ui";
 
 import { formatDateKey } from "@/utils/date/date";
-import { isTodoUpdateRepeatWeekday } from "@/utils/todo/detail-todo-update-request";
 import {
   convertApiDurationToSeconds,
   convertClockTimeTextToApiDuration,
@@ -94,37 +93,22 @@ export const useDetailTodoPatchHandlers = ({
   };
 
   const handleRepeatFrequencyChange = (repeatFrequency: RepeatFrequency) => {
-    updateTodo(
-      { repeatType: repeatFrequency },
-      { onSuccess: () => form.changeRepeatFrequency(repeatFrequency) },
-    );
+    form.changeRepeatFrequency(repeatFrequency);
   };
 
   const handleWeekdaysChange = (weekdayIds: string[]) => {
-    updateTodo(
-      {
-        repeatType: "WEEKLY",
-        repeatWeekdays: weekdayIds.filter(isTodoUpdateRepeatWeekday),
-      },
-      {
-        onSuccess: () => form.setSelectedWeekdayIds(weekdayIds),
-      },
-    );
+    form.setSelectedWeekdayIds(weekdayIds);
   };
 
   const handleRepeatDayChange = (repeatDay: string) => {
-    const repeatDayOfMonth = Number(repeatDay);
+    form.setRepeatDay(repeatDay);
+  };
 
-    if (
-      Number.isInteger(repeatDayOfMonth) &&
-      repeatDayOfMonth >= 1 &&
-      repeatDayOfMonth <= 31
-    ) {
-      updateTodo(
-        { repeatType: "MONTHLY", repeatDayOfMonth },
-        { onSuccess: () => form.setRepeatDay(repeatDay) },
-      );
-    }
+  const submitRepeatChange = (): boolean => {
+    const change = form.getRepeatChange();
+    if (!change.isValid) return false;
+    if (change.hasChanges) updateTodo(change.repeat);
+    return true;
   };
 
   const handleSubtaskCompletedChange = (id: number, completed: boolean) => {
@@ -147,6 +131,7 @@ export const useDetailTodoPatchHandlers = ({
     handleRepeatFrequencyChange,
     handleWeekdaysChange,
     handleRepeatDayChange,
+    submitRepeatChange,
     handleSubtaskCompletedChange,
   };
 };

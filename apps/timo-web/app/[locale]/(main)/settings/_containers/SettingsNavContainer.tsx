@@ -25,24 +25,24 @@ export const SettingsNavContainer = () => {
   ];
 
   return (
-    <nav className="border-timo-gray-500 flex w-37.5 shrink-0 flex-col gap-3 border-r bg-white px-2.5 pt-3.25">
+    <nav className="border-timo-gray-500 flex w-full shrink-0 flex-col gap-3 border-b bg-white px-4 py-3 md:w-37.5 md:border-r md:border-b-0 md:px-2.5 md:pt-3.25 md:pb-0">
       <Link
         href={ROUTES.SETTINGS}
-        className="typo-headline-m-16 text-timo-gray-900 block px-2.5 py-1.5"
+        className="typo-headline-m-16 text-timo-gray-900 hidden px-2.5 py-1.5 md:block"
       >
         {t("settings")}
       </Link>
 
-      <ul className="flex flex-col gap-2">
+      <ul className="flex gap-2 overflow-x-auto md:flex-col">
         {settingsNavItems.map((item) => {
           const isActive = activeTab === item.tab;
 
           return (
-            <li key={item.tab}>
+            <li key={item.tab} className="shrink-0">
               <Link
                 href={getSettingsTabHref(item.tab)}
                 className={cn(
-                  "typo-headline-m-14 block rounded-[4px] px-2.5 py-1",
+                  "typo-headline-m-14 block rounded-[4px] px-2.5 py-1 whitespace-nowrap",
                   isActive
                     ? "bg-timo-blue-65 text-timo-blue-300"
                     : "text-timo-gray-900",

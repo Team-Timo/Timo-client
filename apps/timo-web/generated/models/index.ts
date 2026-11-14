@@ -55,6 +55,7 @@ export * from "./dailyTodoResponse";
 export * from "./dayCompletionResponse";
 export * from "./dayResponse";
 export * from "./dayResponseDayOfWeek";
+export * from "./deleteTodoParams";
 export * from "./errorDto";
 export * from "./focusTodoDetailResponse";
 export * from "./focusTodoResponse";

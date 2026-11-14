@@ -12,9 +12,9 @@ export type Priority =
 const PRIORITY_COLOR: Record<Priority, string> = {
   VERY_HIGH: "bg-timo-red",
   HIGH: "bg-timo-orange",
-  MEDIUM: "bg-timo-gray-600",
-  LOW: "bg-timo-black",
-  Disable: "bg-timo-gray-500",
+  MEDIUM: "bg-timo-gray",
+  LOW: "bg-timo-gray-900",
+  Disable: "bg-timo-gray-700",
   white: "bg-white",
   blue: "bg-timo-blue-300",
 };
