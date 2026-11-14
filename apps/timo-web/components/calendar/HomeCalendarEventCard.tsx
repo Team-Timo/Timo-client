@@ -16,6 +16,7 @@ export const HomeCalendarEventCard = ({
         alt="Google Calendar"
         width={14}
         height={14}
+        unoptimized
       />
     </div>
     <p className="typo-body-sb-12 text-timo-black min-w-0 flex-1 truncate">

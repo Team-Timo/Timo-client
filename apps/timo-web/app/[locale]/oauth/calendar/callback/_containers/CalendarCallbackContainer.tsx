@@ -4,10 +4,24 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
+import type { CalendarConnectOrigin } from "@/constants/calendar";
+
+import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import { ROUTES } from "@/constants/routes";
 import { useConnectCalendar } from "@/generated/endpoints/calendar/calendar";
 import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
+import { markCalendarConnectFailed } from "@/utils/calendar/calendar-connect-failed";
+import { consumeCalendarConnectOrigin } from "@/utils/calendar/calendar-connect-origin";
+
+type Route = (typeof ROUTES)[keyof typeof ROUTES];
+
+const ACCESS_DENIED_ERROR = "access_denied";
+
+const CALENDAR_CONNECT_REDIRECT: Record<CalendarConnectOrigin, Route> = {
+  [CALENDAR_CONNECT_ORIGIN.ONBOARDING]: ROUTES.ONBOARDING,
+  [CALENDAR_CONNECT_ORIGIN.SETTINGS]: ROUTES.SETTINGS,
+};
 
 export const CalendarCallbackContainer = () => {
   const searchParams = useSearchParams();
@@ -21,16 +35,25 @@ export const CalendarCallbackContainer = () => {
   const hasRequested = useRef(false);
 
   useEffect(() => {
-    const origin = localStorage.getItem("calendarConnectOrigin");
-    const redirectTarget =
-      origin === "settings" ? ROUTES.SETTINGS : ROUTES.HOME;
+    if (hasRequested.current) return;
+    hasRequested.current = true;
+
+    const origin = consumeCalendarConnectOrigin();
+    const hasOrigin = origin !== null;
+    const redirectTarget = hasOrigin
+      ? CALENDAR_CONNECT_REDIRECT[origin]
+      : ROUTES.HOME;
+
+    const notifyConnectFailed = () => {
+      if (hasOrigin) markCalendarConnectFailed();
+    };
 
     if (error || !code || !state) {
+      // 사용자가 권한 동의를 취소한 경우(access_denied)는 실패로 보지 않습니다.
+      if (error !== ACCESS_DENIED_ERROR) notifyConnectFailed();
       router.replace(redirectTarget);
       return;
     }
-    if (hasRequested.current) return;
-    hasRequested.current = true;
 
     connectCalendar(
       { data: { authorizationCode: code, state } },
@@ -39,10 +62,10 @@ export const CalendarCallbackContainer = () => {
           await queryClient.invalidateQueries({
             queryKey: getGetMyProfileQueryKey(),
           });
-          localStorage.removeItem("calendarConnectOrigin");
           router.replace(redirectTarget);
         },
         onError: () => {
+          notifyConnectFailed();
           router.replace(redirectTarget);
         },
       },

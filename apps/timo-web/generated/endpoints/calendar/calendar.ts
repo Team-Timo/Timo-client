@@ -11,6 +11,7 @@ import { customInstance } from "../../../http/custom-instance";
 
 import type { ErrorType, BodyType } from "../../../http/custom-instance";
 import type {
+  AuthorizeParams,
   BaseResponseCalendarAuthorizeResponse,
   BaseResponseCalendarConnectResponse,
   BaseResponseCalendarDisconnectResponse,
@@ -412,38 +413,48 @@ export function useGetCalendarEvents<
  * 구글 캘린더 연동을 시작하는 구글 인증 URL을 발급합니다.
  *
  * 프론트는 이 응답의 authorizationUrl로 window.location.assign 등을 통해 직접 이동해야 합니다.
+ *
+ * redirectOrigin을 전달하면 {redirectOrigin}/oauth/calendar/callback을 redirect_uri로 사용합니다.
+ * 미입력이면 기본 프론트 주소로 redirect되고, 허용되지 않은 origin이면 400(COMMON_400)을 반환합니다.
  * @summary 구글 캘린더 연동 시작
  */
 export const authorize = (
+  params?: AuthorizeParams,
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
   return customInstance<BaseResponseCalendarAuthorizeResponse>(
-    { url: `/api/v1/users/calendar/authorize`, method: "GET", signal },
+    { url: `/api/v1/users/calendar/authorize`, method: "GET", params, signal },
     options,
   );
 };
 
-export const getAuthorizeQueryKey = () => {
-  return [`/api/v1/users/calendar/authorize`] as const;
+export const getAuthorizeQueryKey = (params?: AuthorizeParams) => {
+  return [
+    `/api/v1/users/calendar/authorize`,
+    ...(params ? [params] : []),
+  ] as const;
 };
 
 export const getAuthorizeQueryOptions = <
   TData = Awaited<ReturnType<typeof authorize>>,
   TError = ErrorType<ErrorDto>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<Awaited<ReturnType<typeof authorize>>, TError, TData>
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}) => {
+>(
+  params?: AuthorizeParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof authorize>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getAuthorizeQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getAuthorizeQueryKey(params);
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof authorize>>> = ({
     signal,
-  }) => authorize(requestOptions, signal);
+  }) => authorize(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof authorize>>,
@@ -461,6 +472,7 @@ export function useAuthorize<
   TData = Awaited<ReturnType<typeof authorize>>,
   TError = ErrorType<ErrorDto>,
 >(
+  params: undefined | AuthorizeParams,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof authorize>>, TError, TData>
@@ -483,6 +495,7 @@ export function useAuthorize<
   TData = Awaited<ReturnType<typeof authorize>>,
   TError = ErrorType<ErrorDto>,
 >(
+  params?: AuthorizeParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof authorize>>, TError, TData>
@@ -505,6 +518,7 @@ export function useAuthorize<
   TData = Awaited<ReturnType<typeof authorize>>,
   TError = ErrorType<ErrorDto>,
 >(
+  params?: AuthorizeParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof authorize>>, TError, TData>
@@ -523,6 +537,7 @@ export function useAuthorize<
   TData = Awaited<ReturnType<typeof authorize>>,
   TError = ErrorType<ErrorDto>,
 >(
+  params?: AuthorizeParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof authorize>>, TError, TData>
@@ -533,7 +548,7 @@ export function useAuthorize<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getAuthorizeQueryOptions(options);
+  const queryOptions = getAuthorizeQueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,

@@ -6,6 +6,7 @@
  * OpenAPI spec version: v1
  */
 
+export * from "./authorizeParams";
 export * from "./authReissueResponse";
 export * from "./authTokenRequest";
 export * from "./authTokenResponse";
