@@ -9,6 +9,8 @@ export const userProfileSchema = z.object({
   zoneId: z.string(),
   calendarConnected: z.boolean(),
   calendarEmail: z.string().nullish(),
+  appleCalendarConnected: z.boolean().default(false),
+  appleCalendarId: z.string().nullish(),
 });
 
 export type UserProfile = z.infer<typeof userProfileSchema>;
