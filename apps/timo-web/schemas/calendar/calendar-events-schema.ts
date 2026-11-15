@@ -4,6 +4,7 @@ export const calendarFilterSchema = z.enum(["DAY", "WEEK", "TWO_WEEK"]);
 
 export const calendarEventSchema = z.object({
   title: z.string(),
+  calendarSource: z.enum(["GOOGLE", "APPLE"]).optional(),
 });
 
 export const calendarDaySchema = z.object({

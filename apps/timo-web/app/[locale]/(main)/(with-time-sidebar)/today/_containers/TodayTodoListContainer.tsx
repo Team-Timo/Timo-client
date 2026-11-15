@@ -102,6 +102,7 @@ export const TodayTodoListContainer = () => {
           <TodayCalendarEventCard
             key={`${event.title}-${index}`}
             title={event.title}
+            calendarSource={event.calendarSource}
           />
         ))}
         {todos.map((todo) => {

@@ -152,6 +152,7 @@ export const HomeTodoContainer = () => {
                   <HomeCalendarEventCard
                     key={`${event.title}-${index}`}
                     title={event.title}
+                    calendarSource={event.calendarSource}
                   />
                 ))}
                 {todos.map((todo) => {
