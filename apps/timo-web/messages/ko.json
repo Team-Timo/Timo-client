@@ -34,7 +34,8 @@
       "LOW": "낮음"
     },
     "close": "닫기",
-    "delete": "삭제"
+    "delete": "삭제",
+    "dragHandle": "순서 변경"
   },
   "Home": {
     "today": "오늘",

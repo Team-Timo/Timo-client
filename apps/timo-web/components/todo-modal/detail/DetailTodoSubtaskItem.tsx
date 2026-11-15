@@ -6,6 +6,8 @@ import { cn } from "@repo/timo-design-system/utils";
 import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/DetailTodoTaskFields";
 import type { KeyboardEvent } from "react";
 
+import { DragHandle } from "@/components/dnd/DragHandle";
+
 const resizeTextarea = (element: HTMLTextAreaElement) => {
   element.style.height = "auto";
   element.style.height = `${element.scrollHeight}px`;
@@ -45,21 +47,20 @@ export const DetailTodoSubtaskItem = ({
 
   return (
     <div
-      ref={(element) => {
-        setNodeRef(element);
-        setActivatorNodeRef(element);
-      }}
-      {...attributes}
-      {...listeners}
-      role={attributes.role}
-      tabIndex={isDraggable ? 0 : -1}
+      ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={cn(
-        "flex items-center gap-2 rounded-[4px] bg-white",
-        isDraggable && "cursor-grab",
-        isDragging && "relative z-10 cursor-grabbing",
+        "group relative flex items-center gap-2 rounded-[4px] bg-white",
+        isDragging && "z-10",
       )}
     >
+      <DragHandle
+        isDraggable={isDraggable}
+        isDragging={isDragging}
+        attributes={attributes}
+        listeners={listeners}
+        setActivatorNodeRef={setActivatorNodeRef}
+      />
       <Checkbox
         checked={subtask.completed}
         disabled={isTodoCompleted}
@@ -73,8 +74,6 @@ export const DetailTodoSubtaskItem = ({
           resizeTextarea(event.currentTarget);
         }}
         onKeyDown={onInputKeyDown}
-        // 입력창에서 시작한 포인터 동작은 텍스트 선택에 쓰이도록 드래그로 넘기지 않는다
-        onPointerDown={(event) => event.stopPropagation()}
         rows={1}
         disabled={disabled}
         className="typo-body-r-12 text-timo-gray-700 min-w-0 flex-1 cursor-text resize-none overflow-hidden wrap-break-word outline-none"

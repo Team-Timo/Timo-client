@@ -34,7 +34,8 @@
       "LOW": "Low"
     },
     "close": "Close",
-    "delete": "Delete"
+    "delete": "Delete",
+    "dragHandle": "Reorder"
   },
   "Home": {
     "today": "Today",
