@@ -19,7 +19,10 @@ import { useActiveTimer } from "@/hooks/timer/use-active-timer";
 import { useTimerQueryInvalidation } from "@/hooks/timer/use-timer-query-invalidation";
 import { useReorderSubtaskSubmit } from "@/hooks/todo/use-reorder-subtask-submit";
 import { useTimeSidebarStore } from "@/stores/time-sidebar/useTimeSidebarStore";
-import { reorderSubtasks } from "@/utils/todo/subtask-order";
+import {
+  reorderSubtasks,
+  restoreMovedSubtask,
+} from "@/utils/todo/subtask-order";
 
 export interface UseTodayTodoListOptions {
   onNeedStopConfirm: (todoId: number) => void;
@@ -257,7 +260,7 @@ export const useTodayTodoList = (
     const movedSubtask = todo.subtasks[fromIndex];
     if (!result || !movedSubtask) return;
 
-    const previous = todos;
+    const previousSubtaskIds = todo.subtasks.map((s) => s.subtaskId);
     updateTodo(todoId, (t) => ({ ...t, subtasks: result.items }));
 
     reorderSubtask(
@@ -267,7 +270,19 @@ export const useTodayTodoList = (
         date: todo.date,
         newIndex: result.newIndex,
       },
-      { onError: () => setTodos(previous) },
+      {
+        // 응답을 기다리는 동안 바뀐 다른 투두·하위 태스크 상태가 사라지지 않도록 옮긴 항목의 순서만 되돌린다
+        onError: () =>
+          updateTodo(todoId, (t) => ({
+            ...t,
+            subtasks: restoreMovedSubtask(
+              t.subtasks,
+              movedSubtask.subtaskId,
+              previousSubtaskIds,
+              (s) => s.subtaskId,
+            ),
+          })),
+      },
     );
   };
 
