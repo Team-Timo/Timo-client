@@ -40,7 +40,7 @@ export const TodayTodoListContainer = () => {
   const { data: calendarEventsData } = useCalendarEventsQuery({
     filter: "DAY",
     baseDate: data.date.slice(0, 10),
-    enabled: profile.calendarConnected,
+    enabled: profile.calendarConnected || profile.appleCalendarConnected,
   });
   const calendarEvents = calendarEventsData?.days[0]?.events ?? [];
 

@@ -48,7 +48,7 @@ export const HomeTodoContainer = () => {
   const { data: calendarEventsData } = useCalendarEventsQuery({
     filter: calendarFilter,
     baseDate,
-    enabled: profile.calendarConnected,
+    enabled: profile.calendarConnected || profile.appleCalendarConnected,
   });
 
   const calendarEventsByDate = new Map(
