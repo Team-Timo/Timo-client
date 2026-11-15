@@ -32,3 +32,36 @@ export const reorderSubtasks = <T>(
 
   return { items: reordered, newIndex };
 };
+
+/**
+ * 순서 저장에 실패한 항목만 원래 자리로 되돌립니다.
+ * 응답을 기다리는 동안 바뀐 다른 항목의 내용·추가·삭제는 현재 목록 그대로 유지합니다.
+ *
+ * @param items - 현재 화면 순서의 하위 태스크 목록
+ * @param movedId - 순서 저장에 실패한 항목의 id
+ * @param previousIds - 옮기기 전 목록의 id 순서
+ * @param getId - 항목의 id를 꺼내는 함수
+ * @returns 옮긴 항목만 원래 자리로 되돌린 목록
+ */
+export const restoreMovedSubtask = <T>(
+  items: T[],
+  movedId: number,
+  previousIds: number[],
+  getId: (item: T) => number,
+): T[] => {
+  const moved = items.find((item) => getId(item) === movedId);
+  if (moved === undefined) return items;
+
+  const rest = items.filter((item) => getId(item) !== movedId);
+  // 원래 바로 뒤에 있던 항목 중 아직 남아 있는 첫 항목 앞에 다시 넣는다
+  const followingIds = previousIds.slice(previousIds.indexOf(movedId) + 1);
+  const nextId = followingIds.find((id) =>
+    rest.some((item) => getId(item) === id),
+  );
+  const insertIndex =
+    nextId === undefined
+      ? rest.length
+      : rest.findIndex((item) => getId(item) === nextId);
+
+  return [...rest.slice(0, insertIndex), moved, ...rest.slice(insertIndex)];
+};

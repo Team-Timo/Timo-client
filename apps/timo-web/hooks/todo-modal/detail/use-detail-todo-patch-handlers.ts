@@ -132,8 +132,8 @@ export const useDetailTodoPatchHandlers = ({
     const reorder = form.reorderSubtaskInputs(fromIndex, toIndex);
     if (!reorder) return;
 
-    const restoreOrder = () =>
-      form.restoreSubtaskInputs(reorder.previousInputs);
+    // 응답을 기다리는 동안 수정한 내용이 사라지지 않도록 옮긴 항목의 순서만 되돌린다
+    const restoreOrder = () => form.restoreSubtaskOrder(reorder);
 
     // 자동 저장 대기 중인 삭제·추가가 서버에 반영돼야 newIndex가 같은 위치를 가리키므로 먼저 저장한다
     submitTextUpdate({

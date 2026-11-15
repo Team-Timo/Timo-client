@@ -8,7 +8,10 @@ import {
   addSubtaskInputOnEnter,
   removeSubtaskInputOnBackspace,
 } from "@/utils/todo/subtask-input-list";
-import { reorderSubtasks } from "@/utils/todo/subtask-order";
+import {
+  reorderSubtasks,
+  restoreMovedSubtask,
+} from "@/utils/todo/subtask-order";
 
 const MAX_DETAIL_SUBTASK_COUNT = 10;
 
@@ -17,7 +20,8 @@ const isReorderableInput = (input: DetailTodoSubtaskInput) =>
   input.subtaskId !== null && !input.completed;
 
 export interface DetailSubtaskReorder {
-  previousInputs: DetailTodoSubtaskInput[];
+  inputId: number;
+  previousInputIds: number[];
   subtaskId: number;
   newIndex: number;
 }
@@ -124,14 +128,20 @@ export const useDetailSubtaskField = ({
 
     setSubtaskInputs(result.items);
     return {
-      previousInputs: subtaskInputs,
+      inputId: movedInput.id,
+      previousInputIds: subtaskInputs.map((input) => input.id),
       subtaskId: movedInput.subtaskId,
       newIndex: result.newIndex,
     };
   };
 
-  const restoreInputs = (inputs: DetailTodoSubtaskInput[]) => {
-    setSubtaskInputs(inputs);
+  const restoreInputOrder = ({
+    inputId,
+    previousInputIds,
+  }: Pick<DetailSubtaskReorder, "inputId" | "previousInputIds">) => {
+    setSubtaskInputs((prev) =>
+      restoreMovedSubtask(prev, inputId, previousInputIds, (input) => input.id),
+    );
   };
 
   const handleInputKeyDown = (
@@ -179,6 +189,6 @@ export const useDetailSubtaskField = ({
     handleInputKeyDown,
     focusFirstInput,
     reorderInputs,
-    restoreInputs,
+    restoreInputOrder,
   };
 };
