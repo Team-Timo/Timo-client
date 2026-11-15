@@ -7,6 +7,7 @@ import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/acc
 
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
 import { useLogoutMutation } from "@/app/[locale]/(main)/settings/_queries/account/use-logout-mutation";
+import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import {
   authorize,
   useDisconnectCalendar,
@@ -28,6 +29,7 @@ import {
   MAX_CUSTOM_TAG_COUNT,
   tagCreateDataSchema,
 } from "@/schemas/tag/tag-schema";
+import { setCalendarConnectOrigin } from "@/utils/calendar/calendar-connect-origin";
 import { getDefaultTagLabelKey, isDefaultTagId } from "@/utils/todo/tag-label";
 
 const LANGUAGE_REQUEST_MAP: Record<
@@ -110,7 +112,7 @@ export const useSettingsProfile = () => {
         handlers.onConnectError?.();
         return;
       }
-      localStorage.setItem("calendarConnectOrigin", "settings");
+      setCalendarConnectOrigin(CALENDAR_CONNECT_ORIGIN.SETTINGS);
       window.location.assign(url);
     } catch {
       handlers.onConnectError?.();
