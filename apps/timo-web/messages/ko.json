@@ -55,7 +55,9 @@
     "connectFailed": "Apple 캘린더를 연결하지 못했어요. 잠시 후 다시 시도해 주세요.",
     "cancel": "취소",
     "connect": "연결하기",
-    "connecting": "연결 중…"
+    "connecting": "연결 중…",
+    "disconnectTitle": "Apple 캘린더 연동을 해제할까요?",
+    "disconnectDescription": "연동을 해제하면 Apple 캘린더 일정의 동기화가 중단돼요. 해제 후에는 Apple 계정 페이지(account.apple.com)에서 앱 전용 암호도 삭제해 주세요."
   },
   "Home": {
     "today": "오늘",

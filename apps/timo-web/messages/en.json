@@ -55,7 +55,9 @@
     "connectFailed": "Could not connect Apple Calendar. Try again in a moment.",
     "cancel": "Cancel",
     "connect": "Connect",
-    "connecting": "Connecting…"
+    "connecting": "Connecting…",
+    "disconnectTitle": "Disconnect Apple Calendar?",
+    "disconnectDescription": "Apple Calendar events will stop syncing. After disconnecting, revoke the app-specific password on your Apple Account page (account.apple.com)."
   },
   "Home": {
     "today": "Today",
