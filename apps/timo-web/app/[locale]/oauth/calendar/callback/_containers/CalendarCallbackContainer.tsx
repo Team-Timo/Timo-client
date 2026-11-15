@@ -8,7 +8,7 @@ import type { CalendarConnectOrigin } from "@/constants/calendar";
 
 import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import { ROUTES } from "@/constants/routes";
-import { useConnectCalendar } from "@/generated/endpoints/calendar/calendar";
+import { useConnectCalendar } from "@/generated/endpoints/google-calendar/google-calendar";
 import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
 import { useRouter } from "@/i18n/navigation";
 import { markCalendarConnectFailed } from "@/utils/calendar/calendar-connect-failed";

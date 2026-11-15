@@ -21,7 +21,10 @@ import {
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
 
+import type { CalendarSource } from "@/schemas/todo/todo-schema";
 import type { KeyboardEvent, ReactNode } from "react";
+
+import { CalendarSourceIcon } from "@/components/calendar/CalendarSourceIcon";
 
 const CARD_STYLE = {
   active: {
@@ -60,6 +63,7 @@ export interface TodayTodoCardProps {
   isPlaying: boolean;
   isPlayHighlighted: boolean;
   icon?: ReactNode;
+  calendarSource?: CalendarSource;
   subTodos: SubTodo[];
   toolbar: TodayTodoCardToolbar;
   onCardClick?: () => void;
@@ -80,6 +84,7 @@ export const TodayTodoCard = ({
   isPlaying,
   isPlayHighlighted,
   icon,
+  calendarSource,
   subTodos,
   toolbar,
   onCardClick,
@@ -128,6 +133,7 @@ export const TodayTodoCard = ({
           >
             <Checkbox checked={isDone} onChange={() => onCheck()} />
           </div>
+          {calendarSource && <CalendarSourceIcon source={calendarSource} />}
           {icon && <span className="shrink-0">{icon}</span>}
           <span
             className={cn("typo-headline-b-14 min-w-0 truncate", style.title)}
