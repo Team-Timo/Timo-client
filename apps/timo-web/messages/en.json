@@ -41,6 +41,21 @@
       "appleCalendar": "Connect Apple Calendar"
     }
   },
+  "AppleCalendar": {
+    "connectTitle": "Connect Apple Calendar",
+    "passwordGuide": "Turn on two-factor authentication for your Apple Account. Then go to Sign-In and Security → App-Specific Passwords and enter the password you generate there.",
+    "appleAccountLink": "Generate an app-specific password",
+    "emailLabel": "Apple Account email",
+    "passwordLabel": "App-specific password",
+    "invalidEmail": "Check your Apple Account email.",
+    "passwordRequired": "Enter an app-specific password.",
+    "invalidCredentials": "Check your Apple Account email and app-specific password.",
+    "alreadyConnected": "Apple Calendar is already connected.",
+    "connectFailed": "Could not connect Apple Calendar. Try again in a moment.",
+    "cancel": "Cancel",
+    "connect": "Connect",
+    "connecting": "Connecting…"
+  },
   "Home": {
     "today": "Today",
     "viewBasic": "Basic",

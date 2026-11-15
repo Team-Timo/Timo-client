@@ -41,6 +41,21 @@
       "appleCalendar": "Apple 캘린더 연결하기"
     }
   },
+  "AppleCalendar": {
+    "connectTitle": "Apple 캘린더 연결",
+    "passwordGuide": "Apple 계정의 이중 인증을 켠 뒤, 로그인 및 보안 → 앱 전용 암호에서 발급한 암호를 입력해 주세요.",
+    "appleAccountLink": "Apple 계정에서 앱 전용 암호 만들기",
+    "emailLabel": "Apple 계정 이메일",
+    "passwordLabel": "앱 전용 암호",
+    "invalidEmail": "Apple 계정 이메일을 확인해 주세요.",
+    "passwordRequired": "앱 전용 암호를 입력해 주세요.",
+    "invalidCredentials": "Apple 계정 이메일과 앱 전용 암호를 확인해 주세요.",
+    "alreadyConnected": "이미 Apple 캘린더가 연결되어 있어요.",
+    "connectFailed": "Apple 캘린더를 연결하지 못했어요. 잠시 후 다시 시도해 주세요.",
+    "cancel": "취소",
+    "connect": "연결하기",
+    "connecting": "연결 중…"
+  },
   "Home": {
     "today": "오늘",
     "viewBasic": "기본",
