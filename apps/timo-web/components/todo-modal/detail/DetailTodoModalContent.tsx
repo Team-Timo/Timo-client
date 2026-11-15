@@ -99,25 +99,26 @@ export const DetailTodoModalContent = ({
   }));
   const displayTime = convertApiDurationToClockTimeText(detailTodoForm.time);
   const canUpdateTodo = !todo.completed && timerStatus == "STOPPED";
+  const { submitTextUpdate, submitPendingUpdates } = useDetailTodoTextAutoSave({
+    isOpen,
+    title: detailTodoForm.title,
+    memo: detailTodoForm.memo,
+    subtasks: detailTodoForm.subtaskInputs,
+    onUpdate,
+    onUpdateMemo,
+  });
   const patchHandlers = useDetailTodoPatchHandlers({
     form: detailTodoForm,
     onUpdate,
     onToggleSubtask,
     onReorderSubtask,
+    submitTextUpdate,
   });
   const iconField = useDetailTodoIconSubmit({
     icon: detailTodoForm.icon,
     selectIcon: detailTodoForm.selectIcon,
     removeIcon: detailTodoForm.removeIcon,
     onUpdate: patchHandlers.updateTodo,
-  });
-  const { submitPendingUpdates } = useDetailTodoTextAutoSave({
-    isOpen,
-    title: detailTodoForm.title,
-    memo: detailTodoForm.memo,
-    subtasks: detailTodoForm.subtaskInputs,
-    onUpdate: patchHandlers.updateTodo,
-    onUpdateMemo,
   });
 
   const handleClose = () => {

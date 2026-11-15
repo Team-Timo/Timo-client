@@ -31,6 +31,7 @@ export interface UseDetailTodoPatchHandlersParams {
     newIndex: number,
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
+  submitTextUpdate: (handlers?: UpdateTodoSubmitHandlers) => void;
 }
 
 export const useDetailTodoPatchHandlers = ({
@@ -38,6 +39,7 @@ export const useDetailTodoPatchHandlers = ({
   onUpdate,
   onToggleSubtask,
   onReorderSubtask,
+  submitTextUpdate,
 }: UseDetailTodoPatchHandlersParams) => {
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
 
@@ -130,8 +132,16 @@ export const useDetailTodoPatchHandlers = ({
     const reorder = form.reorderSubtaskInputs(fromIndex, toIndex);
     if (!reorder) return;
 
-    onReorderSubtask(reorder.subtaskId, reorder.newIndex, {
-      onError: () => form.restoreSubtaskInputs(reorder.previousInputs),
+    const restoreOrder = () =>
+      form.restoreSubtaskInputs(reorder.previousInputs);
+
+    // 자동 저장 대기 중인 삭제·추가가 서버에 반영돼야 newIndex가 같은 위치를 가리키므로 먼저 저장한다
+    submitTextUpdate({
+      onSuccess: () =>
+        onReorderSubtask(reorder.subtaskId, reorder.newIndex, {
+          onError: restoreOrder,
+        }),
+      onError: restoreOrder,
     });
   };
 
