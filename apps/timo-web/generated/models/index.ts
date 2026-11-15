@@ -6,11 +6,14 @@
  * OpenAPI spec version: v1
  */
 
+export * from "./appleCalendarConnectRequest";
+export * from "./appleCalendarConnectResponse";
 export * from "./authorizeParams";
 export * from "./authReissueResponse";
 export * from "./authTokenRequest";
 export * from "./authTokenResponse";
 export * from "./baseResponse";
+export * from "./baseResponseAppleCalendarConnectResponse";
 export * from "./baseResponseAuthReissueResponse";
 export * from "./baseResponseAuthTokenResponse";
 export * from "./baseResponseCalendarAuthorizeResponse";

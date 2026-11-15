@@ -15,4 +15,6 @@ export interface UserProfileResponse {
   zoneId: string;
   calendarConnected: boolean;
   calendarEmail?: string;
+  appleCalendarConnected: boolean;
+  appleCalendarId?: string;
 }
