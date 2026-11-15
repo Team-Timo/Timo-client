@@ -121,6 +121,7 @@ export const DetailTodoTaskFields = ({
           dndId={subtaskDndId}
           itemIds={subtaskInputs.map((subtask) => subtask.id)}
           onReorder={onReorderSubtask}
+          restrictToList
         >
           <div className="flex flex-col">
             {subtaskInputs.map((subtask, index) => (
