@@ -23,7 +23,6 @@ export interface TodayTodoCardContainerProps {
   onToggleCompleted?: (completed: boolean) => void;
   onTogglePlay?: () => void;
   onSubTodoCheck?: (id: number) => void;
-  onReorderSubTodo?: (fromIndex: number, toIndex: number) => void;
 }
 
 export const TodayTodoCardContainer = ({
@@ -38,7 +37,6 @@ export const TodayTodoCardContainer = ({
   onToggleCompleted,
   onTogglePlay,
   onSubTodoCheck,
-  onReorderSubTodo,
 }: TodayTodoCardContainerProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -63,9 +61,6 @@ export const TodayTodoCardContainer = ({
       onCheck={() => onToggleCompleted?.(!isCompleted)}
       onPlay={() => onTogglePlay?.()}
       onSubTodoCheck={(id) => onSubTodoCheck?.(id)}
-      onReorderSubTodo={(fromIndex, toIndex) =>
-        onReorderSubTodo?.(fromIndex, toIndex)
-      }
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     />

@@ -61,7 +61,6 @@ export const TodayTodoListContainer = () => {
     handleToggleCompleted,
     handleDelete,
     handleSubTodoCheck,
-    handleReorderSubtask,
     confirmStopAndComplete,
   } = useTodayTodoList(data.todos, {
     onNeedStopConfirm: (todoId) => {
@@ -157,9 +156,6 @@ export const TodayTodoListContainer = () => {
                     handleToggleCompleted(todo.todoId, completed)
                   }
                   onSubTodoCheck={(id) => handleSubTodoCheck(todo.todoId, id)}
-                  onReorderSubTodo={(fromIndex, toIndex) =>
-                    handleReorderSubtask(todo.todoId, fromIndex, toIndex)
-                  }
                 />
               )}
             </DetailTodoModalContainer>
