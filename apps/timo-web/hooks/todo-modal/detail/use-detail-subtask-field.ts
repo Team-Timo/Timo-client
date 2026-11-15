@@ -4,6 +4,7 @@ import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/Deta
 import type { TodoSubtask } from "@/schemas/todo/todo-schema";
 import type { KeyboardEvent } from "react";
 
+import { syncDetailSubtaskInputs } from "@/utils/todo/detail-subtask-inputs";
 import {
   addSubtaskInputOnEnter,
   removeSubtaskInputOnBackspace,
@@ -55,18 +56,9 @@ export const useDetailSubtaskField = ({
   const inputRefs = useRef<Array<HTMLTextAreaElement | null>>([]);
   const pendingFocusIndex = useRef<number | null>(null);
 
+  // 자동 저장으로 추가된 하위 태스크도 모달을 닫지 않고 바로 옮길 수 있도록 subtaskId를 연결한다
   useEffect(() => {
-    setSubtaskInputs((prev) =>
-      prev.map((input) => {
-        const serverSubtask = subtasks.find(
-          (subtask) => subtask.subtaskId === input.subtaskId,
-        );
-        if (!serverSubtask || serverSubtask.completed === input.completed) {
-          return input;
-        }
-        return { ...input, completed: serverSubtask.completed };
-      }),
-    );
+    setSubtaskInputs((prev) => syncDetailSubtaskInputs(prev, subtasks));
   }, [subtasks]);
 
   useEffect(() => {
