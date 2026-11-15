@@ -12,6 +12,7 @@ import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/toda
 import { useTodayQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today-query";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
+import { TimerSwitchModalContainer } from "@/containers/timer/TimerSwitchModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
 import { useCalendarSync } from "@/hooks/calendar/use-calendar-sync";
 import { useTagLabel } from "@/hooks/todo/use-tag-label";
@@ -48,8 +49,11 @@ export const TodayTodoListContainer = () => {
   const [pendingCompleteToken, setPendingCompleteToken] = useState<
     number | null
   >(null);
+  const [pendingSwitchTodo, setPendingSwitchTodo] = useState<{
+    token: number;
+    todoId: number;
+  } | null>(null);
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
-  const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
   const [playErrorMessage, setPlayErrorMessage] = useState<string | null>(null);
 
   const {
@@ -60,12 +64,14 @@ export const TodayTodoListContainer = () => {
     handleDelete,
     handleSubTodoCheck,
     confirmStopAndComplete,
+    confirmSwitchTimer,
   } = useTodayTodoList(data.todos, {
     onNeedStopConfirm: (todoId) => {
       setPendingCompleteTodoId(todoId);
       setPendingCompleteToken(Date.now());
     },
-    onTimerAlreadyRunning: () => setIsTimerRunningToastOpen(true),
+    onNeedSwitchConfirm: (todoId) =>
+      setPendingSwitchTodo({ token: Date.now(), todoId }),
     onStopFeedback: setFeedbackText,
     onPlayError: (message) =>
       setPlayErrorMessage(message ?? tToast("timerStartFailed")),
@@ -78,6 +84,13 @@ export const TodayTodoListContainer = () => {
 
     confirmStopAndComplete(pendingCompleteTodoId);
     setPendingCompleteTodoId(null);
+  };
+
+  const handleConfirmPendingSwitch = () => {
+    if (!pendingSwitchTodo) return;
+
+    confirmSwitchTimer(pendingSwitchTodo.todoId);
+    setPendingSwitchTodo(null);
   };
 
   const completedCount = todos.filter((todo) => todo.completed).length;
@@ -164,10 +177,9 @@ export const TodayTodoListContainer = () => {
         onConfirm={handleConfirmPendingComplete}
       />
 
-      <AnimatedToast
-        isOpen={isTimerRunningToastOpen}
-        onClose={() => setIsTimerRunningToastOpen(false)}
-        message={tToast("timerAlreadyRunning")}
+      <TimerSwitchModalContainer
+        pendingToken={pendingSwitchTodo?.token ?? null}
+        onConfirm={handleConfirmPendingSwitch}
       />
 
       <AnimatedToast
