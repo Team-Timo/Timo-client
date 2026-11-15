@@ -38,7 +38,8 @@
     "authButton": {
       "googleLogin": "Continue with your Google account",
       "googleCalendar": "Connect Google Calendar",
-      "appleCalendar": "Connect Apple Calendar"
+      "appleCalendar": "Connect Apple Calendar",
+      "appleCalendarConnected": "Apple Calendar connected"
     }
   },
   "AppleCalendar": {

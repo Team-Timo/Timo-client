@@ -16,6 +16,7 @@ interface AuthButtonProps {
   variant: AuthButtonVariant;
   label: string;
   isSelected?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
@@ -23,11 +24,13 @@ export const AuthButton = ({
   variant,
   label,
   isSelected = false,
+  disabled,
   onClick,
 }: AuthButtonProps) => {
   return (
     <button
       type="button"
+      disabled={disabled}
       onClick={onClick}
       className={cn(
         "flex w-full items-center justify-center rounded-[4px] border py-2.5",
