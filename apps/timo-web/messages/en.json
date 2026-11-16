@@ -35,6 +35,7 @@
     },
     "close": "Close",
     "delete": "Delete",
+    "dragHandle": "Reorder",
     "authButton": {
       "googleLogin": "Continue with your Google account",
       "googleCalendar": "Connect Google Calendar",
