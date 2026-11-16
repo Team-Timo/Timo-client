@@ -1,4 +1,3 @@
-import { Button } from "@repo/timo-design-system/ui";
 import Image from "next/image";
 
 import type {
@@ -7,6 +6,7 @@ import type {
   SettingsTagItem,
 } from "@/app/[locale]/(main)/settings/_types/account/profile-type";
 
+import { SettingsCalendar } from "@/app/[locale]/(main)/settings/_components/account/SettingsCalendar";
 import { SettingsLanguageSectionContainer } from "@/app/[locale]/(main)/settings/_containers/account/SettingsLanguageSectionContainer";
 import { SettingsLogoutModalContainer } from "@/app/[locale]/(main)/settings/_containers/account/SettingsLogoutModalContainer";
 import { SettingsTagsSectionContainer } from "@/app/[locale]/(main)/settings/_containers/account/SettingsTagsSectionContainer";
@@ -73,6 +73,7 @@ export const SettingsProfileView = ({
                   alt="Google"
                   width={20}
                   height={20}
+                  unoptimized
                 />
                 <span className="typo-headline-m-16 text-timo-gray-900">
                   {googleEmail}
@@ -88,31 +89,23 @@ export const SettingsProfileView = ({
           <h2 className="typo-headline-b-16 text-timo-gray-900">
             {labels.calendarSection}
           </h2>
-          <div className="bg-timo-gray-300 flex w-full items-center justify-between gap-4 self-start rounded-lg px-2.5 py-1.5 md:w-fit md:justify-start">
-            <div className="flex items-center gap-1.5">
-              <div className="flex size-6 shrink-0 items-center justify-center p-1">
-                <Image
-                  src="/images/google-calendar.png"
-                  alt=""
-                  width={20}
-                  height={20}
-                />
-              </div>
-              <span className="typo-headline-m-16 text-timo-gray-700 whitespace-nowrap">
-                Google Calendar
-              </span>
-            </div>
-
-            <Button
-              variant={isCalendarConnected ? "secondary" : "primary"}
-              appearance="fill"
-              size="m"
-              className="w-20"
-              onClick={onConnectCalendar}
-            >
-              {isCalendarConnected ? labels.disconnect : labels.connect}
-            </Button>
-          </div>
+          <SettingsCalendar
+            iconSrc="/images/google-calendar.png"
+            name="Google Calendar"
+            isConnected={isCalendarConnected}
+            connectLabel={labels.connect}
+            disconnectLabel={labels.disconnect}
+            onClick={onConnectCalendar}
+          />
+          {/* TODO: Apple 캘린더 연동 API 연결 후 연결 상태·onClick 연동 */}
+          <SettingsCalendar
+            iconSrc="/images/apple-calendar.png"
+            name="Apple Calendar"
+            isConnected={false}
+            connectLabel={labels.connect}
+            disconnectLabel={labels.disconnect}
+            onClick={() => {}}
+          />
         </section>
 
         <hr className="border-timo-gray-500" />

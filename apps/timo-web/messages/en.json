@@ -35,7 +35,12 @@
     },
     "close": "Close",
     "delete": "Delete",
-    "dragHandle": "Reorder"
+    "dragHandle": "Reorder",
+    "authButton": {
+      "googleLogin": "Continue with your Google account",
+      "googleCalendar": "Connect Google Calendar",
+      "appleCalendar": "Connect Apple Calendar"
+    }
   },
   "Home": {
     "today": "Today",
@@ -88,7 +93,7 @@
     "profile": {
       "title": "Personal information",
       "profileSection": "Profile",
-      "calendarSection": "Google Calendar integration",
+      "calendarSection": "Calendar integration",
       "connect": "Integrate",
       "disconnect": "Disconnect",
       "languageSection": "Language",
@@ -163,7 +168,6 @@
     "languageChangeFailed": "Failed to change the language. Please try again.",
     "calendarConnectFailed": "Failed to integrate Google Calendar. Please try again.",
     "calendarDisconnectFailed": "Failed to disconnect the calendar. Please try again.",
-    "timerAlreadyRunning": "Another to-do's timer is already running. Please stop it first.",
     "timerStartFailed": "This to-do has no estimated duration set."
   },
   "Login": {
@@ -194,10 +198,6 @@
       "next": "Next",
       "prev": "Previous",
       "start": "Get Started"
-    },
-    "onboardingGoogleButton": {
-      "login": "Continue with your Google account",
-      "connectCalendar": "Connect Google Calendar"
     },
     "language": {
       "title": "Please select a language to use.",
@@ -233,9 +233,9 @@
       "bedTimeError": "Please set different times for bedtime and wake-up."
     },
     "calendarConnect": {
-      "title": "Connect your Google Calendar.",
+      "title": "Connect your Calendar.",
       "description": "You can import your existing schedules into timo and manage them in one place.",
-      "connectLabel": "Google Calendar integration",
+      "connectLabel": "Calendar integration",
       "consentNotice": "Clicking will display the Google authentication and calendar access permission screen.",
       "permissionNotice": "timo only requests permission to view your schedules."
     }
@@ -258,6 +258,12 @@
       "description": "The <blue>{minutes}</blue> completed so far will be recorded in the timebox.",
       "continueButton": "Continue",
       "switchButton": "Finish"
+    },
+    "switchModal": {
+      "title": "Switch to a new task?",
+      "description": "Starting a new task will stop the current timer.\nDo you want to start the new task?",
+      "cancelButton": "Cancel",
+      "switchButton": "Switch"
     },
     "completeModal": {
       "title": "The task has been completed!",

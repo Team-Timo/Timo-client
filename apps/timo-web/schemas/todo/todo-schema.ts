@@ -77,6 +77,8 @@ export const dayOfWeekSchema = z.enum([
 
 export const todoTimerStatusSchema = z.enum(["RUNNING", "STOPPED", "PAUSED"]);
 
+export const calendarSourceSchema = z.enum(["GOOGLE", "APPLE"]);
+
 export const todoTagSchema = z.object({
   tagId: z.number(),
   name: z.string(),
@@ -102,6 +104,9 @@ export const todoSchema = z.object({
   hasMemo: z.boolean(),
   isRepeated: z.boolean(),
   timerStatus: todoTimerStatusSchema,
+  calendarSource: calendarSourceSchema
+    .nullish()
+    .transform((v) => v ?? undefined),
   sortOrder: z.number().default(0),
   subtasks: z.array(todoSubtaskSchema),
 });
@@ -124,6 +129,7 @@ export type TodoRepeatType = z.infer<typeof todoRepeatTypeSchema>;
 export type TodoRepeatWeekday = z.infer<typeof todoRepeatWeekdaySchema>;
 export type DayOfWeek = z.infer<typeof dayOfWeekSchema>;
 export type TodoTimerStatusTypes = z.infer<typeof todoTimerStatusSchema>;
+export type CalendarSource = z.infer<typeof calendarSourceSchema>;
 export type TodoTag = z.infer<typeof todoTagSchema>;
 export type TodoSubtask = z.infer<typeof todoSubtaskSchema>;
 export type Todo = z.infer<typeof todoSchema>;

@@ -1,21 +1,30 @@
-import googleLogo from "@repo/timo-design-system/assets/images/google-logo.svg";
 import { cn } from "@repo/timo-design-system/utils";
 import Image from "next/image";
 
-type OnboardingGoogleButtonVariant = "login" | "connectCalendar";
+export type AuthButtonVariant =
+  | "googleLogin"
+  | "googleCalendar"
+  | "appleCalendar";
 
-interface OnboardingGoogleButtonProps {
-  variant: OnboardingGoogleButtonVariant;
+const AUTH_BUTTON_LOGO_SRC: Record<AuthButtonVariant, string> = {
+  googleLogin: "/images/google-logo.png",
+  googleCalendar: "/images/google-calendar.png",
+  appleCalendar: "/images/apple-calendar.png",
+};
+
+interface AuthButtonProps {
+  variant: AuthButtonVariant;
   label: string;
   isSelected?: boolean;
   onClick?: () => void;
 }
 
-export const OnboardingGoogleButton = ({
+export const AuthButton = ({
+  variant,
   label,
   isSelected = false,
   onClick,
-}: OnboardingGoogleButtonProps) => {
+}: AuthButtonProps) => {
   return (
     <button
       type="button"
@@ -30,7 +39,13 @@ export const OnboardingGoogleButton = ({
     >
       <div className="flex items-center gap-2.5 px-2">
         <div className="flex size-[22px] items-center justify-center">
-          <Image src={googleLogo} alt="Google" width={18} height={18} />
+          <Image
+            src={AUTH_BUTTON_LOGO_SRC[variant]}
+            alt=""
+            width={18}
+            height={18}
+            unoptimized
+          />
         </div>
         <span className="typo-headline-m-16 text-timo-blue-300">{label}</span>
       </div>

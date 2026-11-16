@@ -6,9 +6,12 @@
  * OpenAPI spec version: v1
  */
 import type { CalendarDayResponse } from "./calendarDayResponse";
+import type { CalendarSourceFailureResponse } from "./calendarSourceFailureResponse";
 
 export interface CalendarEventsResponse {
   filter?: string;
   baseDate?: string;
   days?: CalendarDayResponse[];
+  /** 조회에 실패한 캘린더 목록 (모두 성공하면 빈 배열) */
+  failedSources: CalendarSourceFailureResponse[];
 }

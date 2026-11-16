@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
 import { SettingsCalendarDisconnectModal } from "@/app/[locale]/(main)/settings/_components/account/SettingsCalendarDisconnectModal";
@@ -12,6 +12,10 @@ import { useSettingsProfileLabels } from "@/app/[locale]/(main)/settings/_hooks/
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { MAX_CUSTOM_TAG_COUNT } from "@/schemas/tag/tag-schema";
+import {
+  clearCalendarConnectFailed,
+  hasCalendarConnectFailed,
+} from "@/utils/calendar/calendar-connect-failed";
 
 export const SettingsProfileContainer = () => {
   const tToast = useTranslations("Toast");
@@ -23,7 +27,7 @@ export const SettingsProfileContainer = () => {
     profileState.calendarConnected,
   );
   const [isCalendarConnectErrorToastOpen, setIsCalendarConnectErrorToastOpen] =
-    useState(false);
+    useState(hasCalendarConnectFailed);
   const [
     isCalendarDisconnectErrorToastOpen,
     setIsCalendarDisconnectErrorToastOpen,
@@ -32,6 +36,10 @@ export const SettingsProfileContainer = () => {
   const [isTagLimitToastOpen, setIsTagLimitToastOpen] = useState(false);
   const [isLanguageErrorToastOpen, setIsLanguageErrorToastOpen] =
     useState(false);
+
+  useEffect(() => {
+    clearCalendarConnectFailed();
+  }, []);
 
   const handleConnectCalendar = () => {
     if (isCalendarConnected) {
