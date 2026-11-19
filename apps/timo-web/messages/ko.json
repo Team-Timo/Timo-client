@@ -56,14 +56,14 @@
     "hidePassword": "앱 지정 비밀번호 숨기기",
     "invalidEmail": "Apple 계정 이메일을 확인해 주세요.",
     "passwordRequired": "앱 지정 비밀번호를 입력해 주세요.",
-    "invalidPasswordFormat": "앱 지점 비밀번호 형식은 다음과 같아야 합니다. xxxx-xxxx-xxxx-xxxx",
+    "invalidPasswordFormat": "앱 지정 비밀번호 형식은 다음과 같아야 합니다. xxxx-xxxx-xxxx-xxxx",
     "invalidCredentials": "Apple 계정 이메일과 앱 지정 비밀번호를 확인해 주세요.",
     "alreadyConnected": "이미 Apple 캘린더가 연결되어 있어요.",
     "connectFailed": "Apple 캘린더를 연결하지 못했어요. 잠시 후 다시 시도해 주세요.",
     "connect": "iCloud 계정 연결하기",
     "connecting": "연결 중…",
     "disconnectTitle": "Apple 캘린더 연동을 해제할까요?",
-    "disconnectDescription": "연동을 해제하면 Apple 캘린더 일정의 동기화가 중단돼요. 해제 후에는 Apple 계정 페이지(account.apple.com)에서 앱 전용 암호도 삭제해 주세요."
+    "disconnectDescription": "연동을 해제하면 Apple 캘린더 일정의 동기화가 중단돼요. 해제 후에는 Apple 계정 페이지(account.apple.com)에서 앱 지정 비밀번호도 삭제해 주세요."
   },
   "Home": {
     "today": "오늘",
