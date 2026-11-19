@@ -11,7 +11,7 @@ import { z } from "zod";
 import type { AppleCalendarConnectRequest } from "@/generated/models";
 
 import { OverlayModal } from "@/components/modal/OverlayModal";
-import { APPLE_CALENDAR_AUTH_ERROR } from "@/constants/calendar";
+import { APPLE_CALENDAR_ERROR } from "@/constants/calendar";
 import { useConnectAppleCalendar } from "@/hooks/calendar/use-connect-apple-calendar";
 import { ApiError } from "@/http/api-error";
 
@@ -71,14 +71,14 @@ export const AppleCalendarConnectModal = ({
       onClose();
     } catch (error) {
       const code = error instanceof ApiError ? error.errorCode : undefined;
-      if (code === APPLE_CALENDAR_AUTH_ERROR) {
+      if (code === APPLE_CALENDAR_ERROR.AUTH) {
         resetField("appPassword");
         setIsPasswordVisible(false);
         setError("appPassword", { message: t("invalidCredentials") });
       } else {
         setError("root", {
           message: t(
-            code === "APPLE_CALENDAR_409"
+            code === APPLE_CALENDAR_ERROR.ALREADY_CONNECTED
               ? "alreadyConnected"
               : "connectFailed",
           ),

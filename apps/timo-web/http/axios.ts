@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 
 import type { BaseResponseAuthReissueResponse } from "@/generated/models";
 
-import { APPLE_CALENDAR_AUTH_ERROR } from "@/constants/calendar";
+import { APPLE_CALENDAR_ERROR } from "@/constants/calendar";
 import { ROUTES } from "@/constants/routes";
 import { parseApiError } from "@/http/api-error";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
@@ -75,7 +75,7 @@ instance.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      apiError.errorCode !== APPLE_CALENDAR_AUTH_ERROR &&
+      apiError.errorCode !== APPLE_CALENDAR_ERROR.AUTH &&
       originalRequest &&
       !isReissueRequest &&
       !retriedRequests.has(originalRequest)
