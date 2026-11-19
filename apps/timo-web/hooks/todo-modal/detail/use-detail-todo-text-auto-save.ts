@@ -37,11 +37,14 @@ export const useDetailTodoTextAutoSave = ({
     () =>
       JSON.stringify({
         title,
-        subtasks: subtasks.map((subtask) => ({
-          id: subtask.id,
-          subtaskId: subtask.subtaskId,
-          value: subtask.value,
-        })),
+        // 수정 API는 배열 순서로 순서를 바꾸지 않으므로, 순서만 바뀐 경우 저장하지 않도록 id 순으로 비교한다
+        // subtaskId는 저장 후 서버 값과 연결될 때만 바뀌므로 비교에서 제외한다
+        subtasks: subtasks
+          .map((subtask) => ({
+            id: subtask.id,
+            value: subtask.value,
+          }))
+          .sort((a, b) => a.id - b.id),
       }),
     [subtasks, title],
   );
@@ -60,18 +63,26 @@ export const useDetailTodoTextAutoSave = ({
   );
   const latestBuildTextUpdateRequestRef = useRef(buildTextUpdateRequest);
 
-  const submitTextUpdate = useCallback(() => {
-    if (!title.trim()) return;
-    if (lastSubmittedTextUpdateSignatureRef.current === textUpdateSignature) {
-      return;
-    }
+  const submitTextUpdate = useCallback(
+    ({ onSuccess, onError }: UpdateTodoSubmitHandlers = {}) => {
+      if (
+        !title.trim() ||
+        lastSubmittedTextUpdateSignatureRef.current === textUpdateSignature
+      ) {
+        onSuccess?.();
+        return;
+      }
 
-    latestOnUpdateRef.current(latestBuildTextUpdateRequestRef.current(), {
-      onSuccess: () => {
-        lastSubmittedTextUpdateSignatureRef.current = textUpdateSignature;
-      },
-    });
-  }, [textUpdateSignature, title]);
+      latestOnUpdateRef.current(latestBuildTextUpdateRequestRef.current(), {
+        onSuccess: () => {
+          lastSubmittedTextUpdateSignatureRef.current = textUpdateSignature;
+          onSuccess?.();
+        },
+        onError,
+      });
+    },
+    [textUpdateSignature, title],
+  );
 
   const saveLatestMemo = useCallback(
     ({ force = false }: { force?: boolean } = {}) => {
@@ -137,6 +148,7 @@ export const useDetailTodoTextAutoSave = ({
   }, [isOpen, memo, saveLatestMemo, submitTextUpdate]);
 
   return {
+    submitTextUpdate,
     submitPendingUpdates,
   };
 };

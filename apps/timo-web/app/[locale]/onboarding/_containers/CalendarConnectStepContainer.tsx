@@ -10,7 +10,7 @@ import { setOnboardingAnswers } from "@/app/[locale]/onboarding/_utils/onboardin
 import { AppleCalendarConnectModal } from "@/components/calendar/AppleCalendarConnectModal";
 import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import { AuthButtonContainer } from "@/containers/auth/AuthButtonContainer";
-import { authorize } from "@/generated/endpoints/calendar/calendar";
+import { authorize } from "@/generated/endpoints/google-calendar/google-calendar";
 import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
 import { setCalendarConnectOrigin } from "@/utils/calendar/calendar-connect-origin";
 

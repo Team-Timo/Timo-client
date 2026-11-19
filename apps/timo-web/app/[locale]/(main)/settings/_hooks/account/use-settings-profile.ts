@@ -11,8 +11,11 @@ import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import {
   authorize,
   useDisconnectCalendar,
-  getGetCalendarEventsQueryKey,
-} from "@/generated/endpoints/calendar/calendar";
+} from "@/generated/endpoints/google-calendar/google-calendar";
+import {
+  getGetHomeQueryKey,
+  getGetTodayQueryKey,
+} from "@/generated/endpoints/home/home";
 import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
@@ -88,9 +91,9 @@ export const useSettingsProfile = () => {
           queryClient.invalidateQueries({
             queryKey: getGetMyProfileQueryKey(),
           });
-          queryClient.removeQueries({
-            queryKey: getGetCalendarEventsQueryKey(),
-          });
+          // 연동 해제 시 서버가 앞으로의 캘린더 투두를 삭제하므로 홈·오늘을 다시 불러옵니다.
+          queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+          queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
           handlers.onDisconnect();
         },
         onError: () => {

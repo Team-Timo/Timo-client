@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { SITE_URL } from "@/constants/site";
 import { routing } from "@/i18n/routing";
@@ -23,6 +23,10 @@ const pretendard = localFont({
 const OG_LOCALE: Record<(typeof routing.locales)[number], string> = {
   en: "en_US",
   ko: "ko_KR",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
 };
 
 interface RootLayoutProps {
@@ -56,6 +60,12 @@ export async function generateMetadata({
     description,
     icons: {
       icon: "/favicon.png",
+      apple: "/icons/apple-touch-icon.png",
+    },
+    appleWebApp: {
+      capable: true,
+      title,
+      statusBarStyle: "default",
     },
     openGraph: {
       type: "website",

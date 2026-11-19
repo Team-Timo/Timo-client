@@ -116,6 +116,9 @@ export const GetTodoDetailResponse = zod.object({
           .optional(),
         dayOfMonth: zod.number().optional(),
       }),
+      isGoogleEvent: zod.boolean(),
+      isDeletedFromGoogle: zod.boolean(),
+      isDisconnectedFromGoogle: zod.boolean(),
       timerStatus: zod.enum(["STOPPED", "RUNNING", "PAUSED"]),
       memo: zod.string().optional(),
       sortOrder: zod.number().optional(),
@@ -168,6 +171,10 @@ export const DeleteTodoResponse = zod.object({
  * 예상 소요 시간은 durationSeconds 필드에 초 단위 정수로 전달합니다.
  * subtasks를 전달하면 하위 태스크 목록 전체가 교체됩니다.
  * subtaskId가 있으면 기존 태스크를 수정하고, null이면 신규 태스크로 추가하며, 전달되지 않은 기존 태스크는 삭제됩니다.
+ * subtasks 배열 순서로 하위 태스크 순서를 바꾸지 않습니다. 신규 태스크는 맨 뒤에 추가되며, 순서 변경은 하위 태스크 순서 변경 API를 사용합니다.
+ *
+ * 구글 캘린더에서 가져온 일정은 구글이 원본이므로 제목, 날짜(반복 규칙 포함)를 수정할 수 없습니다.
+ * 소요 시간, 아이콘, 우선순위, 태그, 하위 태스크는 수정할 수 있습니다.
  *
  * Swagger UI 오른쪽 위의 Authorize 버튼을 눌러 유효한 Access Token을 입력해야 합니다.
  * @summary TODO 수정
@@ -211,7 +218,6 @@ export const UpdateTodoBody = zod.object({
       zod.object({
         subtaskId: zod.number().optional(),
         content: zod.string().min(1),
-        completed: zod.boolean(),
       }),
     )
     .optional(),
@@ -227,6 +233,8 @@ export const UpdateTodoResponse = zod.object({
  * 하위 태스크의 완료 여부를 변경합니다.
  *
  * todoId로 소유한 TODO를 확인한 뒤, 해당 TODO에 속한 subtaskId의 완료 상태를 변경합니다.
+ * 완료하면 해당 날짜 완료 그룹의 맨 아래로, 완료를 취소하면 미완료 그룹의 맨 위로 이동하며 해당 날짜의 하위 태스크 순서를 재계산합니다.
+ * 응답의 sortOrder는 해당 날짜에서 확정된 정렬 순서입니다.
  *
  * Swagger UI 오른쪽 위의 Authorize 버튼을 눌러 유효한 Access Token을 입력해야 합니다.
  * @summary 하위 태스크 완료 상태 변경
@@ -234,6 +242,14 @@ export const UpdateTodoResponse = zod.object({
 export const ChangeSubtaskStatusParams = zod.object({
   todoId: zod.number().describe("대상 TODO ID"),
   subtaskId: zod.number().describe("대상 하위 태스크 ID"),
+});
+
+export const ChangeSubtaskStatusQueryParams = zod.object({
+  date: zod.iso
+    .date()
+    .describe(
+      "완료 상태를 변경할 날짜 (ISO). 반복 TODO는 날짜별로 완료가 분리됩니다.",
+    ),
 });
 
 export const ChangeSubtaskStatusBody = zod.object({
@@ -247,6 +263,40 @@ export const ChangeSubtaskStatusResponse = zod.object({
     .object({
       subtaskId: zod.number(),
       completed: zod.boolean(),
+      sortOrder: zod.number(),
+    })
+    .optional(),
+});
+
+/**
+ * 드래그 앤 드롭으로 변경된 하위 태스크의 순서를 반영합니다.
+ *
+ * 하위 태스크 순서는 날짜별로 관리되며, 요청한 날짜에만 적용됩니다. 순서를 바꾸지 않은 날짜는 기본 순서를 따릅니다.
+ * 순서 변경은 같은 날짜의 미완료 하위 태스크 그룹 내부에서만 가능하며, 완료된 하위 태스크는 순서를 변경할 수 없습니다.
+ * newIndex는 해당 날짜 미완료 그룹 내에서 0부터 시작하는 목표 위치입니다.
+ * date를 생략하면 사용자 타임존 기준 오늘로 처리합니다.
+ * 서버는 대상 하위 태스크를 새 인덱스로 옮기고, 미완료 그룹을 0부터 재정렬한 뒤 완료 그룹을 그 아래에 배치합니다.
+ *
+ * Swagger UI 오른쪽 위의 Authorize 버튼을 눌러 유효한 Access Token을 입력해야 합니다.
+ * @summary 하위 태스크 순서 변경
+ */
+export const ReorderSubtaskParams = zod.object({
+  todoId: zod.number().describe("대상 TODO ID"),
+  subtaskId: zod.number().describe("이동할 하위 태스크 ID"),
+});
+
+export const ReorderSubtaskBody = zod.object({
+  newIndex: zod.number().optional(),
+  date: zod.iso.date().optional(),
+});
+
+export const ReorderSubtaskResponse = zod.object({
+  status: zod.number().optional(),
+  message: zod.string().optional(),
+  data: zod
+    .object({
+      subtaskId: zod.number(),
+      sortOrder: zod.number(),
     })
     .optional(),
 });

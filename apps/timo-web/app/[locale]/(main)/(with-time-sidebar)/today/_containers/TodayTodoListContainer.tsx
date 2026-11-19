@@ -10,13 +10,13 @@ import { TodayDateHeaderContainer } from "@/app/[locale]/(main)/(with-time-sideb
 import { TodayTodoCardContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_containers/TodayTodoCardContainer";
 import { useTodayTodoList } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_hooks/useTodayTodoList";
 import { useTodayQuery } from "@/app/[locale]/(main)/(with-time-sidebar)/today/_queries/use-today-query";
-import { TodayCalendarEventCard } from "@/components/calendar/TodayCalendarEventCard";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { StopCompleteModalContainer } from "@/containers/timer/StopCompleteModalContainer";
+import { TimerSwitchModalContainer } from "@/containers/timer/TimerSwitchModalContainer";
 import { DetailTodoModalContainer } from "@/containers/todo-modal/detail/DetailTodoModalContainer";
+import { useCalendarSync } from "@/hooks/calendar/use-calendar-sync";
 import { useTagLabel } from "@/hooks/todo/use-tag-label";
 import { useMyProfileQuery } from "@/queries/auth/use-my-profile-query";
-import { useCalendarEventsQuery } from "@/queries/calendar/use-calendar-events-query";
 import { formatShortDateLabel, parseDateKey } from "@/utils/date/date";
 import { convertDurationToMinutes } from "@/utils/duration/convert-duration-to-minutes";
 import { convertDurationToTimeText } from "@/utils/duration/convert-duration-to-time-text";
@@ -37,12 +37,11 @@ export const TodayTodoListContainer = () => {
   const getTagLabel = useTagLabel();
   const { data } = useTodayQuery();
   const { data: profile } = useMyProfileQuery();
-  const { data: calendarEventsData } = useCalendarEventsQuery({
-    filter: "DAY",
+  useCalendarSync({
+    filter: "WEEK",
     baseDate: data.date.slice(0, 10),
     enabled: profile.calendarConnected || profile.appleCalendarConnected,
   });
-  const calendarEvents = calendarEventsData?.days[0]?.events ?? [];
 
   const [pendingCompleteTodoId, setPendingCompleteTodoId] = useState<
     number | null
@@ -50,8 +49,11 @@ export const TodayTodoListContainer = () => {
   const [pendingCompleteToken, setPendingCompleteToken] = useState<
     number | null
   >(null);
+  const [pendingSwitchTodo, setPendingSwitchTodo] = useState<{
+    token: number;
+    todoId: number;
+  } | null>(null);
   const [feedbackText, setFeedbackText] = useState<string | undefined>();
-  const [isTimerRunningToastOpen, setIsTimerRunningToastOpen] = useState(false);
   const [playErrorMessage, setPlayErrorMessage] = useState<string | null>(null);
 
   const {
@@ -62,12 +64,14 @@ export const TodayTodoListContainer = () => {
     handleDelete,
     handleSubTodoCheck,
     confirmStopAndComplete,
+    confirmSwitchTimer,
   } = useTodayTodoList(data.todos, {
     onNeedStopConfirm: (todoId) => {
       setPendingCompleteTodoId(todoId);
       setPendingCompleteToken(Date.now());
     },
-    onTimerAlreadyRunning: () => setIsTimerRunningToastOpen(true),
+    onNeedSwitchConfirm: (todoId) =>
+      setPendingSwitchTodo({ token: Date.now(), todoId }),
     onStopFeedback: setFeedbackText,
     onPlayError: (message) =>
       setPlayErrorMessage(message ?? tToast("timerStartFailed")),
@@ -80,6 +84,13 @@ export const TodayTodoListContainer = () => {
 
     confirmStopAndComplete(pendingCompleteTodoId);
     setPendingCompleteTodoId(null);
+  };
+
+  const handleConfirmPendingSwitch = () => {
+    if (!pendingSwitchTodo) return;
+
+    confirmSwitchTimer(pendingSwitchTodo.todoId);
+    setPendingSwitchTodo(null);
   };
 
   const completedCount = todos.filter((todo) => todo.completed).length;
@@ -95,16 +106,9 @@ export const TodayTodoListContainer = () => {
     <div className="flex h-full flex-col gap-2">
       <TodayDateHeaderContainer
         completedCount={completedCount}
-        totalCount={todos.length + calendarEvents.length}
+        totalCount={todos.length}
       />
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 pb-4">
-        {calendarEvents.map((event, index) => (
-          <TodayCalendarEventCard
-            key={`${event.title}-${index}`}
-            title={event.title}
-            calendarSource={event.calendarSource}
-          />
-        ))}
         {todos.map((todo) => {
           const isActiveTodo =
             activeTimer &&
@@ -134,6 +138,7 @@ export const TodayTodoListContainer = () => {
                   title={todo.title}
                   isCompleted={todo.completed}
                   icon={renderTodoIcon(todo.icon)}
+                  calendarSource={todo.calendarSource}
                   timerStatus={timerStatus}
                   isPlayHighlighted={isPlayHighlighted}
                   toolbar={{
@@ -172,10 +177,9 @@ export const TodayTodoListContainer = () => {
         onConfirm={handleConfirmPendingComplete}
       />
 
-      <AnimatedToast
-        isOpen={isTimerRunningToastOpen}
-        onClose={() => setIsTimerRunningToastOpen(false)}
-        message={tToast("timerAlreadyRunning")}
+      <TimerSwitchModalContainer
+        pendingToken={pendingSwitchTodo?.token ?? null}
+        onConfirm={handleConfirmPendingSwitch}
       />
 
       <AnimatedToast

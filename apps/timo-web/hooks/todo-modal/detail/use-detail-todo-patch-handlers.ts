@@ -26,12 +26,20 @@ export interface UseDetailTodoPatchHandlersParams {
     completed: boolean,
     handlers?: UpdateTodoSubmitHandlers,
   ) => void;
+  onReorderSubtask: (
+    subtaskId: number,
+    newIndex: number,
+    handlers?: UpdateTodoSubmitHandlers,
+  ) => void;
+  submitTextUpdate: (handlers?: UpdateTodoSubmitHandlers) => void;
 }
 
 export const useDetailTodoPatchHandlers = ({
   form,
   onUpdate,
   onToggleSubtask,
+  onReorderSubtask,
+  submitTextUpdate,
 }: UseDetailTodoPatchHandlersParams) => {
   const [selectedTime, setSelectedTime] = useState<TimeSelection>();
 
@@ -120,6 +128,23 @@ export const useDetailTodoPatchHandlers = ({
     });
   };
 
+  const handleSubtaskReorder = (fromIndex: number, toIndex: number) => {
+    const reorder = form.reorderSubtaskInputs(fromIndex, toIndex);
+    if (!reorder) return;
+
+    // 응답을 기다리는 동안 수정한 내용이 사라지지 않도록 옮긴 항목의 순서만 되돌린다
+    const restoreOrder = () => form.restoreSubtaskOrder(reorder);
+
+    // 자동 저장 대기 중인 삭제·추가가 서버에 반영돼야 newIndex가 같은 위치를 가리키므로 먼저 저장한다
+    submitTextUpdate({
+      onSuccess: () =>
+        onReorderSubtask(reorder.subtaskId, reorder.newIndex, {
+          onError: restoreOrder,
+        }),
+      onError: restoreOrder,
+    });
+  };
+
   return {
     selectedTime,
     updateTodo,
@@ -133,5 +158,6 @@ export const useDetailTodoPatchHandlers = ({
     handleRepeatDayChange,
     submitRepeatChange,
     handleSubtaskCompletedChange,
+    handleSubtaskReorder,
   };
 };

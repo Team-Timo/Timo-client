@@ -4,12 +4,28 @@ import type { DetailTodoSubtaskInput } from "@/components/todo-modal/detail/Deta
 import type { TodoSubtask } from "@/schemas/todo/todo-schema";
 import type { KeyboardEvent } from "react";
 
+import { syncDetailSubtaskInputs } from "@/utils/todo/detail-subtask-inputs";
 import {
   addSubtaskInputOnEnter,
   removeSubtaskInputOnBackspace,
 } from "@/utils/todo/subtask-input-list";
+import {
+  reorderSubtasks,
+  restoreMovedSubtask,
+} from "@/utils/todo/subtask-order";
 
 const MAX_DETAIL_SUBTASK_COUNT = 10;
+
+// 서버에 저장된 미완료 하위 태스크만 순서 변경 API로 옮길 수 있다
+const isReorderableInput = (input: DetailTodoSubtaskInput) =>
+  input.subtaskId !== null && !input.completed;
+
+export interface DetailSubtaskReorder {
+  inputId: number;
+  previousInputIds: number[];
+  subtaskId: number;
+  newIndex: number;
+}
 
 export interface UseDetailSubtaskFieldParams {
   subtasks: TodoSubtask[];
@@ -40,18 +56,9 @@ export const useDetailSubtaskField = ({
   const inputRefs = useRef<Array<HTMLTextAreaElement | null>>([]);
   const pendingFocusIndex = useRef<number | null>(null);
 
+  // 자동 저장으로 추가된 하위 태스크도 모달을 닫지 않고 바로 옮길 수 있도록 subtaskId를 연결한다
   useEffect(() => {
-    setSubtaskInputs((prev) =>
-      prev.map((input) => {
-        const serverSubtask = subtasks.find(
-          (subtask) => subtask.subtaskId === input.subtaskId,
-        );
-        if (!serverSubtask || serverSubtask.completed === input.completed) {
-          return input;
-        }
-        return { ...input, completed: serverSubtask.completed };
-      }),
-    );
+    setSubtaskInputs((prev) => syncDetailSubtaskInputs(prev, subtasks));
   }, [subtasks]);
 
   useEffect(() => {
@@ -95,6 +102,37 @@ export const useDetailSubtaskField = ({
       prev.map((subtask) =>
         subtask.id === id ? { ...subtask, completed } : subtask,
       ),
+    );
+  };
+
+  const reorderInputs = (
+    fromIndex: number,
+    toIndex: number,
+  ): DetailSubtaskReorder | null => {
+    const movedInput = subtaskInputs[fromIndex];
+    const result = reorderSubtasks(
+      subtaskInputs,
+      fromIndex,
+      toIndex,
+      isReorderableInput,
+    );
+    if (!result || movedInput?.subtaskId == null) return null;
+
+    setSubtaskInputs(result.items);
+    return {
+      inputId: movedInput.id,
+      previousInputIds: subtaskInputs.map((input) => input.id),
+      subtaskId: movedInput.subtaskId,
+      newIndex: result.newIndex,
+    };
+  };
+
+  const restoreInputOrder = ({
+    inputId,
+    previousInputIds,
+  }: Pick<DetailSubtaskReorder, "inputId" | "previousInputIds">) => {
+    setSubtaskInputs((prev) =>
+      restoreMovedSubtask(prev, inputId, previousInputIds, (input) => input.id),
     );
   };
 
@@ -142,5 +180,7 @@ export const useDetailSubtaskField = ({
     handleCompletedChange,
     handleInputKeyDown,
     focusFirstInput,
+    reorderInputs,
+    restoreInputOrder,
   };
 };
