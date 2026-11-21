@@ -16,6 +16,7 @@ import {
   type TimeSidebarTab,
   useTimeSidebarStore,
 } from "@/stores/time-sidebar/useTimeSidebarStore";
+import { trackMixpanel } from "@/utils/analytics/mixpanel";
 
 const noop = () => {};
 
@@ -41,6 +42,17 @@ export const TimeSidebar = ({
   const isExpanded = isOpen || isMobileOpen;
 
   const timeboxScrollRef = useRef<HTMLDivElement>(null);
+
+  const isTimerVisible = isExpanded && activeTab === "timer";
+  const wasTimerVisibleRef = useRef(false);
+
+  // 탭 클릭·openTimerPanel 모두 Timer 탭이 보이게 되는 순간에만 한 번 전송합니다.
+  useEffect(() => {
+    if (isTimerVisible && !wasTimerVisibleRef.current) {
+      trackMixpanel("timer_viewed");
+    }
+    wasTimerVisibleRef.current = isTimerVisible;
+  }, [isTimerVisible]);
 
   useEffect(() => {
     if (!isExpanded || activeTab !== "timebox") return;

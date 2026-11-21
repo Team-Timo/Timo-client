@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { resetMixpanel } from "@/utils/analytics/mixpanel";
 
 export const useClearSession = () => {
   const router = useRouter();
@@ -13,6 +14,7 @@ export const useClearSession = () => {
 
   return () => {
     clearAccessToken();
+    resetMixpanel();
     queryClient.clear();
     router.replace(ROUTES.LOGIN);
   };

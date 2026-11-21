@@ -7,6 +7,7 @@ import { APPLE_CALENDAR_ERROR } from "@/constants/calendar";
 import { ROUTES } from "@/constants/routes";
 import { parseApiError } from "@/http/api-error";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
+import { resetMixpanel } from "@/utils/analytics/mixpanel";
 import { hasOtherTabsOpen } from "@/utils/auth/tab-presence";
 import { getAccessToken } from "@/utils/auth/token-manager";
 
@@ -30,6 +31,11 @@ instance.interceptors.request.use((config) => {
 const REISSUE_URL = "/api/v1/auth/reissue";
 const retriedRequests = new WeakSet<object>();
 let reissuePromise: Promise<string | undefined> | null = null;
+
+const redirectToLogin = () => {
+  resetMixpanel();
+  window.location.href = ROUTES.LOGIN;
+};
 
 const reissueAccessToken = () => {
   if (!reissuePromise) {
@@ -87,9 +93,9 @@ instance.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return instance(originalRequest);
         }
-        window.location.href = ROUTES.LOGIN;
+        redirectToLogin();
       } catch {
-        window.location.href = ROUTES.LOGIN;
+        redirectToLogin();
       }
     }
     return Promise.reject(apiError);

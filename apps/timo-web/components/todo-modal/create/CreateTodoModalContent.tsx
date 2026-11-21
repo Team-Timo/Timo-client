@@ -8,7 +8,6 @@ import { useState } from "react";
 import { useController, useForm } from "react-hook-form";
 
 import type { CreateTodoRequest } from "@/schemas/todo/todo-schema";
-import type { PriorityLevel } from "@repo/timo-design-system/ui";
 import type { FieldErrors } from "react-hook-form";
 
 import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
@@ -18,6 +17,7 @@ import { TodoIconField } from "@/components/todo-modal/common/TodoIconField";
 import { CreateTodoMemoField } from "@/components/todo-modal/create/CreateTodoMemoField";
 import { CreateTodoTaskFields } from "@/components/todo-modal/create/CreateTodoTaskFields";
 import { useTagField } from "@/hooks/todo-modal/common/use-tag-field";
+import { useCreateTodoTracking } from "@/hooks/todo-modal/create/use-create-todo-tracking";
 import { useIconField } from "@/hooks/todo-modal/create/use-icon-field";
 import { useRepeatField } from "@/hooks/todo-modal/create/use-repeat-field";
 import { useSubtaskField } from "@/hooks/todo-modal/create/use-subtask-field";
@@ -85,10 +85,30 @@ export const CreateTodoModalContent = ({
     ? new Date(`${dateField.value}T00:00:00`)
     : undefined;
 
+  const {
+    handleDateChange,
+    handleSelectPriority,
+    handleMemoChange,
+    handleRepeatFrequencyChange,
+    resetTrackedEvents,
+  } = useCreateTodoTracking({
+    memoValue: memoField.value ?? "",
+    onDateChange: (next) => dateField.onChange(formatDateKey(next)),
+    onSelectPriority: priorityField.onChange,
+    onMemoChange: memoField.onChange,
+    onRepeatFrequencyChange: repeatField.handleFrequencyChange,
+  });
+
+  const handleClose = () => {
+    resetTrackedEvents();
+    onClose();
+  };
+
   const handleFormSubmit = (data: CreateTodoRequest) => {
     onSubmit(data);
 
     reset(createDefaultValues(defaultDate));
+    resetTrackedEvents();
     subtaskField.reset();
     timeField.resetTime();
     onClose();
@@ -104,7 +124,7 @@ export const CreateTodoModalContent = ({
     <>
       <OverlayModal
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={handleClose}
         onExited={onExited}
         ariaLabel={t("createModal.title")}
         className="m-1 w-[490px] items-center gap-2.5 px-5 py-3 md:m-0 md:px-6 md:py-4"
@@ -123,7 +143,7 @@ export const CreateTodoModalContent = ({
           <button
             type="button"
             aria-label={tCommon("close")}
-            onClick={onClose}
+            onClick={handleClose}
             className="shrink-0"
           >
             <DeleteIcon />
@@ -158,7 +178,7 @@ export const CreateTodoModalContent = ({
           <CreateTodoMemoField
             value={memoField.value ?? ""}
             placeholder={t("createModal.notePlaceholder")}
-            onChange={memoField.onChange}
+            onChange={handleMemoChange}
           />
         </div>
 
@@ -170,7 +190,7 @@ export const CreateTodoModalContent = ({
                 : t("createModal.dateLabel")
             }
             date={dateValue}
-            onDateChange={(next) => dateField.onChange(formatDateKey(next))}
+            onDateChange={handleDateChange}
             timeLabel={timeField.timeDisplay}
             timeOptions={timeField.timeOptions}
             time={timeField.duration}
@@ -186,9 +206,7 @@ export const CreateTodoModalContent = ({
               MEDIUM: tCommon("priority.MEDIUM"),
               LOW: tCommon("priority.LOW"),
             }}
-            onSelectPriority={(level: PriorityLevel) =>
-              priorityField.onChange(level)
-            }
+            onSelectPriority={handleSelectPriority}
             tagLabel={tagField.selectedTagLabel ?? t("createModal.tagLabel")}
             tags={tagField.tagLabels}
             selectedTag={tagField.selectedTagLabel}
@@ -208,7 +226,7 @@ export const CreateTodoModalContent = ({
                 },
               ],
               frequency: repeatField.uiRepeatFrequency,
-              onFrequencyChange: repeatField.handleFrequencyChange,
+              onFrequencyChange: handleRepeatFrequencyChange,
               weekly: {
                 weekdays: repeatField.weekdays,
                 selectedWeekdayIds: repeatField.repeatWeekdays,
