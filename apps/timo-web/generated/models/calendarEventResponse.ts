@@ -5,7 +5,9 @@
  * Timo 서버 API 명세서
  * OpenAPI spec version: v1
  */
+import type { CalendarEventResponseCalendarSource } from "./calendarEventResponseCalendarSource";
 
 export interface CalendarEventResponse {
   title?: string;
+  calendarSource?: CalendarEventResponseCalendarSource;
 }

@@ -7,11 +7,15 @@ import type { SettingsLanguage } from "@/app/[locale]/(main)/settings/_types/acc
 
 import { useSettingsLanguageParam } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-language-param";
 import { useLogoutMutation } from "@/app/[locale]/(main)/settings/_queries/account/use-logout-mutation";
+import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import {
   authorize,
   useDisconnectCalendar,
-  getGetCalendarEventsQueryKey,
-} from "@/generated/endpoints/calendar/calendar";
+} from "@/generated/endpoints/google-calendar/google-calendar";
+import {
+  getGetHomeQueryKey,
+  getGetTodayQueryKey,
+} from "@/generated/endpoints/home/home";
 import {
   getGetMyProfileQueryKey,
   useUpdateLanguage,
@@ -25,6 +29,7 @@ import {
   MAX_CUSTOM_TAG_COUNT,
   tagCreateDataSchema,
 } from "@/schemas/tag/tag-schema";
+import { setCalendarConnectOrigin } from "@/utils/calendar/calendar-connect-origin";
 import { getDefaultTagLabelKey, isDefaultTagId } from "@/utils/todo/tag-label";
 
 const LANGUAGE_REQUEST_MAP: Record<
@@ -86,9 +91,9 @@ export const useSettingsProfile = () => {
           queryClient.invalidateQueries({
             queryKey: getGetMyProfileQueryKey(),
           });
-          queryClient.removeQueries({
-            queryKey: getGetCalendarEventsQueryKey(),
-          });
+          // 연동 해제 시 서버가 앞으로의 캘린더 투두를 삭제하므로 홈·오늘을 다시 불러옵니다.
+          queryClient.invalidateQueries({ queryKey: getGetHomeQueryKey() });
+          queryClient.invalidateQueries({ queryKey: getGetTodayQueryKey() });
           handlers.onDisconnect();
         },
         onError: () => {
@@ -99,13 +104,15 @@ export const useSettingsProfile = () => {
     }
 
     try {
-      const response = await authorize();
+      const response = await authorize({
+        redirectOrigin: window.location.origin,
+      });
       const url = response.data?.authorizationUrl;
       if (!url) {
         handlers.onConnectError?.();
         return;
       }
-      localStorage.setItem("calendarConnectOrigin", "settings");
+      setCalendarConnectOrigin(CALENDAR_CONNECT_ORIGIN.SETTINGS);
       window.location.assign(url);
     } catch {
       handlers.onConnectError?.();
@@ -179,6 +186,7 @@ export const useSettingsProfile = () => {
       googleEmail: profile.email,
       profileImageUrl: profile.profileImageUrl ?? undefined,
       calendarConnected: profile.calendarConnected,
+      appleCalendarConnected: profile.appleCalendarConnected,
       language: locale,
       tags: tagItems,
     },

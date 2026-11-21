@@ -8,53 +8,64 @@
 import * as zod from "zod";
 
 /**
- * 구글 OAuth 동의 완료 후 발급된 authorizationCode와 state로 구글 토큰을 교환하여 캘린더를 연동합니다.
+ * filter(DEFAULT/WEEK)와 baseDate 범위의 연동된 모든 캘린더(구글·애플) 일정을 투두로 저장/갱신합니다.
+ * 캘린더마다 따로 동기화하며, 각 투두는 calendarSource로 출처를 구분합니다.
+ * 한 캘린더 동기화가 실패해도(인증 만료, 캘린더 서버 장애 등) 나머지 캘린더는 계속 동기화하며 응답은 200입니다.
+ * 실패한 캘린더는 failedSources에 calendarSource와 errorCode(예: GOOGLE_CALENDAR_401, APPLE_CALENDAR_401)로 담기며, 해당 캘린더의 투두는 변경되지 않습니다.
+ * errorCode가 GOOGLE_CALENDAR_401이면 구글 캘린더 재연동을, APPLE_CALENDAR_401이면 앱 전용 암호가 삭제·변경된 것이므로 애플 캘린더 재연동을 안내해야 합니다.
  *
- * state는 authorize API 호출 시 발급받은 값을 그대로 전달해야 하며, 검증 후 즉시 만료됩니다.
+ * DEFAULT: baseDate-7일 ~ baseDate+7일 (총 15일)
  *
- * 가입 시 사용한 구글 계정과 다른 계정으로 연동을 시도하면 거부됩니다.
- * @summary 구글 캘린더 연동
+ * WEEK: baseDate ~ baseDate+6일 (총 7일)
+ *
+ * filter, baseDate 미입력 시 각각 DEFAULT, 오늘 날짜가 기본값으로 사용됩니다.
+ * 홈 조회(/api/v1/home, /api/v1/home/today)를 호출하기 전에 이 API를 먼저 호출해야 캘린더 일정이 함께 조회됩니다.
+ *
+ * 캘린더에 새로 생긴 일정은 투두로 저장되고, 제목이 바뀐 일정은 제목이 갱신됩니다.
+ * 날짜가 바뀐 일정은 기존 투두가 새 날짜로 이동하며, 티모에서 설정한 소요 시간·태그·아이콘·메모·하위 태스크·완료 상태와 타이머 기록은 그대로 유지됩니다.
+ * 해당 투두의 타이머가 실행 중이거나 일시정지 상태이면 이동하지 않고, 타이머를 종료한 뒤 다음 동기화 때 이동합니다.
+ *
+ * 캘린더에서 삭제된 일정은 타이머 기록이 없으면 삭제되고, 기록이 있으면 삭제되지 않고 isDeletedFromCalendar=true로 표시됩니다.
+ * 소요 시간은 0으로 저장되며, 제목이 30자를 넘으면 30자까지만 저장됩니다. (1차 스프린트 임시 해결책)
+ * @summary 캘린더 일정 동기화
  */
-
-export const ConnectCalendarBody = zod.object({
-  authorizationCode: zod
+export const SyncCalendarEventsBody = zod.object({
+  filter: zod
     .string()
-    .min(1)
-    .describe("구글 OAuth 동의 완료 후 발급된 authorization code"),
-  state: zod
+    .optional()
+    .describe(
+      "동기화 범위 필터 (DEFAULT: 기준일 ±7일, WEEK: 기준일부터 7일), 미입력 시 DEFAULT",
+    ),
+  baseDate: zod
     .string()
-    .min(1)
-    .describe("authorize API 호출 시 발급받은 state 값 (CSRF 방어용)"),
+    .optional()
+    .describe("기준 날짜 (yyyy-MM-dd), 미입력 시 오늘"),
 });
 
-export const ConnectCalendarResponse = zod.object({
+export const SyncCalendarEventsResponse = zod.object({
   status: zod.number().optional(),
   message: zod.string().optional(),
   data: zod
     .object({
-      calendarConnected: zod.boolean().optional(),
-      calendarEmail: zod.string().optional(),
-      connectedAt: zod.string().optional().describe("UTC 기준 연동 시각"),
+      failedSources: zod
+        .array(
+          zod.object({
+            calendarSource: zod
+              .enum(["GOOGLE", "APPLE"])
+              .optional()
+              .describe("처리에 실패한 캘린더 (GOOGLE/APPLE)"),
+            errorCode: zod.string().optional().describe("실패 원인 에러 코드"),
+            message: zod.string().optional().describe("실패 원인 메시지"),
+          }),
+        )
+        .describe("동기화에 실패한 캘린더 목록 (모두 성공하면 빈 배열)"),
     })
     .optional(),
 });
 
 /**
- * 연동된 구글 캘린더 정보를 삭제하고 구글 토큰을 revoke합니다.
- * @summary 구글 캘린더 연동 해제
- */
-export const DisconnectCalendarResponse = zod.object({
-  status: zod.number().optional(),
-  message: zod.string().optional(),
-  data: zod
-    .object({
-      calendarConnected: zod.boolean().optional(),
-    })
-    .optional(),
-});
-
-/**
- * filter(DAY/WEEK/TWO_WEEK)와 baseDate에 따라 연동된 구글 캘린더 일정을 일자별로 조회합니다.
+ * filter(DAY/WEEK/TWO_WEEK)와 baseDate에 따라 연동된 모든 캘린더(구글·애플)의 일정을 일자별로 합쳐 조회합니다.
+ * 일정마다 calendarSource(GOOGLE/APPLE)로 어느 캘린더의 일정인지 표시합니다.
  *
  * DAY: baseDate 하루
  *
@@ -63,7 +74,11 @@ export const DisconnectCalendarResponse = zod.object({
  * TWO_WEEK: baseDate-7일 ~ baseDate+7일 (총 15일)
  *
  * baseDate 미입력 시 오늘 날짜가 기본값으로 사용됩니다.
- * 별도 저장 없이 매 요청마다 구글 API를 직접 호출하여 최신 상태를 반환합니다.
+ * 별도 저장 없이 매 요청마다 각 캘린더 API를 직접 호출하여 최신 상태를 반환합니다.
+ * 한 캘린더만 연동되어 있으면 그 캘린더의 일정만 반환하고, 연동된 캘린더가 하나도 없으면 404(CALENDAR_404)를 반환합니다.
+ *
+ * 한 캘린더 조회가 실패해도(인증 만료, 캘린더 서버 장애 등) 나머지 캘린더는 계속 조회하며 응답은 200입니다.
+ * 실패한 캘린더는 failedSources에 calendarSource와 errorCode(예: GOOGLE_CALENDAR_401, APPLE_CALENDAR_401)로 담기며, 해당 캘린더의 일정은 응답에 포함되지 않습니다.
  * @summary 캘린더 일정 조회
  */
 export const GetCalendarEventsQueryParams = zod.object({
@@ -89,28 +104,25 @@ export const GetCalendarEventsResponse = zod.object({
               .array(
                 zod.object({
                   title: zod.string().optional(),
+                  calendarSource: zod.enum(["GOOGLE", "APPLE"]).optional(),
                 }),
               )
               .optional(),
           }),
         )
         .optional(),
-    })
-    .optional(),
-});
-
-/**
- * 구글 캘린더 연동을 시작하는 구글 인증 URL을 발급합니다.
- *
- * 프론트는 이 응답의 authorizationUrl로 window.location.assign 등을 통해 직접 이동해야 합니다.
- * @summary 구글 캘린더 연동 시작
- */
-export const AuthorizeResponse = zod.object({
-  status: zod.number().optional(),
-  message: zod.string().optional(),
-  data: zod
-    .object({
-      authorizationUrl: zod.string().optional(),
+      failedSources: zod
+        .array(
+          zod.object({
+            calendarSource: zod
+              .enum(["GOOGLE", "APPLE"])
+              .optional()
+              .describe("처리에 실패한 캘린더 (GOOGLE/APPLE)"),
+            errorCode: zod.string().optional().describe("실패 원인 에러 코드"),
+            message: zod.string().optional().describe("실패 원인 메시지"),
+          }),
+        )
+        .describe("조회에 실패한 캘린더 목록 (모두 성공하면 빈 배열)"),
     })
     .optional(),
 });

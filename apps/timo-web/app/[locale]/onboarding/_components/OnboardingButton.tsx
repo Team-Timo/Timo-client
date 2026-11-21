@@ -35,8 +35,6 @@ export const OnboardingButton = ({
     );
   }
 
-  const isDisabled = disabled || !isActive;
-
   if (variant === "start") {
     return (
       <Button
@@ -44,13 +42,15 @@ export const OnboardingButton = ({
         appearance="fill"
         size="m"
         className="w-auto px-4"
-        disabled={isDisabled}
+        disabled={disabled}
         onClick={onClick}
       >
         {label}
       </Button>
     );
   }
+
+  const isDisabled = disabled || !isActive;
 
   return (
     <Button

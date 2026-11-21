@@ -58,6 +58,9 @@ const withQueryKey = <T extends object, K>(
  *
  * Swagger UI 오른쪽 위의 Authorize 버튼을 눌러 유효한 Access Token을 입력해야 합니다.
  * Access Token의 사용자 ID와 일치하는 사용자의 정보가 반환됩니다.
+ *
+ * calendarConnected·calendarEmail은 구글 캘린더, appleCalendarConnected·appleCalendarId(Apple ID 이메일)는 애플 캘린더 연동 정보입니다.
+ * 연동하지 않은 캘린더의 이메일은 null입니다.
  * @summary 내 프로필 조회
  */
 export const getMyProfile = (

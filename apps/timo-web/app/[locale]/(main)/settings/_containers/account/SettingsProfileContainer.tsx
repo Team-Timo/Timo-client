@@ -2,28 +2,39 @@
 
 import { useTranslations } from "next-intl";
 import { overlay } from "overlay-kit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { TagLimitToastContainer } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_containers/toast/TagLimitToastContainer";
 import { SettingsCalendarDisconnectModal } from "@/app/[locale]/(main)/settings/_components/account/SettingsCalendarDisconnectModal";
 import { SettingsProfileView } from "@/app/[locale]/(main)/settings/_components/account/SettingsProfileView";
 import { useSettingsProfile } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile";
 import { useSettingsProfileLabels } from "@/app/[locale]/(main)/settings/_hooks/account/use-settings-profile-labels";
+import { useDisconnectAppleCalendarMutation } from "@/app/[locale]/(main)/settings/_queries/account/use-disconnect-apple-calendar-mutation";
+import { AppleCalendarConnectModal } from "@/components/calendar/AppleCalendarConnectModal";
 import { CreateTagModalContainer } from "@/components/tag/CreateTagModalContainer";
 import { AnimatedToast } from "@/components/toast/AnimatedToast";
 import { MAX_CUSTOM_TAG_COUNT } from "@/schemas/tag/tag-schema";
+import {
+  clearCalendarConnectFailed,
+  hasCalendarConnectFailed,
+} from "@/utils/calendar/calendar-connect-failed";
 
 export const SettingsProfileContainer = () => {
   const tToast = useTranslations("Toast");
+  const tAppleCalendar = useTranslations("AppleCalendar");
 
   const { profileState, profileActions } = useSettingsProfile();
   const labels = useSettingsProfileLabels();
+  const {
+    mutate: disconnectAppleCalendar,
+    isPending: isAppleDisconnectPending,
+  } = useDisconnectAppleCalendarMutation();
 
   const [isCalendarConnected, setIsCalendarConnected] = useState(
     profileState.calendarConnected,
   );
   const [isCalendarConnectErrorToastOpen, setIsCalendarConnectErrorToastOpen] =
-    useState(false);
+    useState(hasCalendarConnectFailed);
   const [
     isCalendarDisconnectErrorToastOpen,
     setIsCalendarDisconnectErrorToastOpen,
@@ -32,6 +43,10 @@ export const SettingsProfileContainer = () => {
   const [isTagLimitToastOpen, setIsTagLimitToastOpen] = useState(false);
   const [isLanguageErrorToastOpen, setIsLanguageErrorToastOpen] =
     useState(false);
+
+  useEffect(() => {
+    clearCalendarConnectFailed();
+  }, []);
 
   const handleConnectCalendar = () => {
     if (isCalendarConnected) {
@@ -66,6 +81,41 @@ export const SettingsProfileContainer = () => {
     profileActions.onChangeLanguage(next, {
       onError: () => setIsLanguageErrorToastOpen(true),
     });
+  };
+
+  const handleAppleCalendarClick = () => {
+    if (isAppleDisconnectPending) return;
+
+    if (profileState.appleCalendarConnected) {
+      overlay.open(({ isOpen, close, unmount }) => (
+        <SettingsCalendarDisconnectModal
+          isOpen={isOpen}
+          onClose={close}
+          onExited={unmount}
+          labels={{
+            ...labels,
+            calendarDisconnectConfirmTitle: tAppleCalendar("disconnectTitle"),
+            calendarDisconnectConfirmDescription: tAppleCalendar(
+              "disconnectDescription",
+            ),
+          }}
+          onDisconnect={() =>
+            disconnectAppleCalendar(undefined, {
+              onError: () => setIsCalendarDisconnectErrorToastOpen(true),
+            })
+          }
+        />
+      ));
+      return;
+    }
+
+    overlay.open(({ isOpen, close, unmount }) => (
+      <AppleCalendarConnectModal
+        isOpen={isOpen}
+        onClose={close}
+        onExited={unmount}
+      />
+    ));
   };
 
   const handleAddTag = () => {
@@ -109,10 +159,12 @@ export const SettingsProfileContainer = () => {
         googleEmail={profileState.googleEmail}
         profileImageUrl={profileState.profileImageUrl}
         isCalendarConnected={isCalendarConnected}
+        isAppleCalendarConnected={profileState.appleCalendarConnected}
         language={profileState.language}
         tags={profileState.tags}
         labels={labels}
         onConnectCalendar={handleConnectCalendar}
+        onAppleCalendarClick={handleAppleCalendarClick}
         onChangeLanguage={handleChangeLanguage}
         onAddTag={handleAddTag}
         onRemoveTag={handleRemoveTag}

@@ -86,9 +86,8 @@ export const LifePatternStepContainer = ({
 
       <div className="mt-auto flex justify-between">
         <OnboardingButtonContainer variant="prev" onClick={onPrev} />
-        {/* TODO: 구글 캘린더 연동 단계 재활성화 시 variant="next"로 복구 */}
         <OnboardingButtonContainer
-          variant="start"
+          variant="next"
           isActive={canProceed}
           disabled={!canProceed}
           onClick={onNext}
