@@ -6,16 +6,11 @@ import type { BaseResponseUserProfileResponse } from "@/generated/models";
 
 import { useDisconnectCalendar1 } from "@/generated/endpoints/apple-calendar/apple-calendar";
 import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
-import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
+import { useCalendarQueryInvalidation } from "@/hooks/calendar/use-calendar-query-invalidation";
 
 export const useDisconnectAppleCalendarMutation = () => {
   const queryClient = useQueryClient();
-  const {
-    invalidateHome,
-    invalidateToday,
-    invalidateFocus,
-    removeAllTodoDetails,
-  } = useTodoQueryInvalidation();
+  const invalidateCalendarData = useCalendarQueryInvalidation();
 
   return useDisconnectCalendar1({
     mutation: {
@@ -39,10 +34,7 @@ export const useDisconnectAppleCalendarMutation = () => {
         void queryClient.invalidateQueries({
           queryKey: ["calendar-sync"],
         });
-        invalidateHome();
-        invalidateToday();
-        invalidateFocus();
-        removeAllTodoDetails();
+        invalidateCalendarData();
       },
     },
   });

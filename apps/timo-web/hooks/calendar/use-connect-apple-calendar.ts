@@ -10,7 +10,7 @@ import type {
 
 import { connectCalendar1 } from "@/generated/endpoints/apple-calendar/apple-calendar";
 import { getGetMyProfileQueryKey } from "@/generated/endpoints/user/user";
-import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
+import { useCalendarQueryInvalidation } from "@/hooks/calendar/use-calendar-query-invalidation";
 
 const appleCalendarConnectionSchema = z.object({
   appleCalendarConnected: z.literal(true),
@@ -19,7 +19,7 @@ const appleCalendarConnectionSchema = z.object({
 
 export const useConnectAppleCalendar = () => {
   const queryClient = useQueryClient();
-  const { invalidateHome, invalidateToday } = useTodoQueryInvalidation();
+  const invalidateCalendarData = useCalendarQueryInvalidation();
 
   return async (credentials: AppleCalendarConnectRequest) => {
     const response = await connectCalendar1(credentials);
@@ -37,7 +37,6 @@ export const useConnectAppleCalendar = () => {
     void queryClient.invalidateQueries({
       queryKey: ["calendar-sync"],
     });
-    invalidateHome();
-    invalidateToday();
+    invalidateCalendarData();
   };
 };
