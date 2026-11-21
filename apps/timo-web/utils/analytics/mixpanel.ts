@@ -2,7 +2,10 @@ import mixpanel from "mixpanel-browser";
 
 import type { MixpanelEventName } from "@/types/analytics/mixpanel-event";
 
-const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
+const MIXPANEL_TOKEN =
+  process.env.NEXT_PUBLIC_APP_ENV === "production"
+    ? process.env.NEXT_PUBLIC_MIXPANEL_TOKEN_PROD
+    : process.env.NEXT_PUBLIC_MIXPANEL_TOKEN_DEV;
 
 let isInitialized = false;
 
@@ -10,7 +13,8 @@ const canUseMixpanel = () => typeof window !== "undefined" && isInitialized;
 
 /**
  * Mixpanel을 초기화합니다. 브라우저에서 한 번만 실행되며,
- * NEXT_PUBLIC_MIXPANEL_TOKEN이 없으면 건너뛰어 다른 함수도 동작하지 않습니다.
+ * NEXT_PUBLIC_APP_ENV(production/development)에 따라 서로 다른 Mixpanel 프로젝트 토큰을 사용합니다.
+ * 해당 토큰이 없으면 건너뛰어 다른 함수도 동작하지 않습니다.
  */
 export const initMixpanel = (): void => {
   if (typeof window === "undefined" || isInitialized || !MIXPANEL_TOKEN) {
