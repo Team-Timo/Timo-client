@@ -2,7 +2,7 @@
 
 import { IconGraphic, TODO_ICON_VALUES } from "@repo/timo-design-system/ui";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import type { TodoIconValue } from "@repo/timo-design-system/ui";
 
@@ -37,10 +37,17 @@ export const TodayTodoListContainer = () => {
   const getTagLabel = useTagLabel();
   const { data } = useTodayQuery();
   const { data: profile } = useMyProfileQuery();
+  const [isAppleAuthToastOpen, setIsAppleAuthToastOpen] = useState(false);
+  const hasShownAppleAuthToast = useRef(false);
   useCalendarSync({
     filter: "WEEK",
     baseDate: data.date.slice(0, 10),
     enabled: profile.calendarConnected || profile.appleCalendarConnected,
+    onAppleAuthRequired: () => {
+      if (hasShownAppleAuthToast.current) return;
+      hasShownAppleAuthToast.current = true;
+      setIsAppleAuthToastOpen(true);
+    },
   });
 
   const [pendingCompleteTodoId, setPendingCompleteTodoId] = useState<
@@ -186,6 +193,12 @@ export const TodayTodoListContainer = () => {
         isOpen={playErrorMessage !== null}
         onClose={() => setPlayErrorMessage(null)}
         message={playErrorMessage ?? ""}
+      />
+
+      <AnimatedToast
+        isOpen={isAppleAuthToastOpen}
+        onClose={() => setIsAppleAuthToastOpen(false)}
+        message={tToast("appleCalendarReconnectRequired")}
       />
     </div>
   );
