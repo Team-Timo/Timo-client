@@ -8,6 +8,7 @@ const MIXPANEL_TOKEN =
     : process.env.NEXT_PUBLIC_MIXPANEL_TOKEN_DEV;
 
 let isInitialized = false;
+let lastIdentifiedUserId: string | null = null;
 
 const canUseMixpanel = () => typeof window !== "undefined" && isInitialized;
 
@@ -30,18 +31,22 @@ export const initMixpanel = (): void => {
 
 /**
  * 서버와 같은 유저 ID로 식별해 클라이언트·서버 이벤트를 한 유저로 집계합니다.
+ * 로그인 직후뿐 아니라 세션 복구(새로고침·재방문) 시에도 호출될 수 있어,
+ * 마지막으로 식별한 유저 ID와 같으면 중복 호출을 건너뜁니다.
  *
  * @param userId - 서버 유저 ID 문자열
  */
 export const identifyMixpanel = (userId: string): void => {
-  if (!canUseMixpanel()) return;
+  if (!canUseMixpanel() || lastIdentifiedUserId === userId) return;
   mixpanel.identify(userId);
+  lastIdentifiedUserId = userId;
 };
 
 /** 로그아웃 시 식별 정보를 초기화합니다. */
 export const resetMixpanel = (): void => {
   if (!canUseMixpanel()) return;
   mixpanel.reset();
+  lastIdentifiedUserId = null;
 };
 
 /**
