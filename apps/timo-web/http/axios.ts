@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 
 import type { BaseResponseAuthReissueResponse } from "@/generated/models";
 
+import { APPLE_CALENDAR_ERROR } from "@/constants/calendar";
 import { ROUTES } from "@/constants/routes";
 import { parseApiError } from "@/http/api-error";
 import { useAuthStore } from "@/stores/auth/useAuthStore";
@@ -68,11 +69,13 @@ const reissueAccessToken = () => {
 instance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
+    const apiError = parseApiError(error);
     const originalRequest = error.config;
     const isReissueRequest = originalRequest?.url === REISSUE_URL;
 
     if (
       error.response?.status === 401 &&
+      apiError.errorCode !== APPLE_CALENDAR_ERROR.AUTH &&
       originalRequest &&
       !isReissueRequest &&
       !retriedRequests.has(originalRequest)
@@ -89,6 +92,6 @@ instance.interceptors.response.use(
         window.location.href = ROUTES.LOGIN;
       }
     }
-    return Promise.reject(parseApiError(error));
+    return Promise.reject(apiError);
   },
 );

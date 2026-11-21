@@ -8,7 +8,10 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  restrictToParentElement,
+  restrictToVerticalAxis,
+} from "@dnd-kit/modifiers";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
@@ -22,6 +25,8 @@ export interface DndSortableListProviderProps {
   dndId: string;
   itemIds: UniqueIdentifier[];
   onReorder: (fromIndex: number, toIndex: number) => void;
+  /** true면 드래그한 항목이 목록(부모 요소) 밖으로 나가지 않습니다. */
+  restrictToList?: boolean;
   children: ReactNode;
 }
 
@@ -29,6 +34,7 @@ export const DndSortableListProvider = ({
   dndId,
   itemIds,
   onReorder,
+  restrictToList = false,
   children,
 }: DndSortableListProviderProps) => {
   const sensors = useSensors(
@@ -58,7 +64,11 @@ export const DndSortableListProvider = ({
       id={dndId}
       sensors={sensors}
       collisionDetection={closestCenter}
-      modifiers={[restrictToVerticalAxis]}
+      modifiers={
+        restrictToList
+          ? [restrictToVerticalAxis, restrictToParentElement]
+          : [restrictToVerticalAxis]
+      }
       autoScroll={{ threshold: { x: 0, y: 0.2 } }}
       onDragEnd={handleDragEnd}
     >
