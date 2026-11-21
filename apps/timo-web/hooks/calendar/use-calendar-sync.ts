@@ -2,8 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { APPLE_CALENDAR_ERROR } from "@/constants/calendar";
 import { syncCalendarEvents } from "@/generated/endpoints/calendar/calendar";
-import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
+import { useCalendarQueryInvalidation } from "@/hooks/calendar/use-calendar-query-invalidation";
 
 const CALENDAR_SYNC_STALE_TIME = 60 * 1000;
 
@@ -11,6 +12,7 @@ export interface UseCalendarSyncParams {
   filter: "DEFAULT" | "WEEK";
   baseDate: string;
   enabled: boolean;
+  onAppleAuthRequired?: () => void;
 }
 
 /**
@@ -22,13 +24,9 @@ export const useCalendarSync = ({
   filter,
   baseDate,
   enabled,
+  onAppleAuthRequired,
 }: UseCalendarSyncParams) => {
-  const {
-    invalidateHome,
-    invalidateToday,
-    removeAllTodoDetails,
-    invalidateFocus,
-  } = useTodoQueryInvalidation();
+  const invalidateCalendarData = useCalendarQueryInvalidation();
 
   return useQuery({
     queryKey: ["calendar-sync", { filter, baseDate }],
@@ -38,11 +36,18 @@ export const useCalendarSync = ({
         undefined,
         signal,
       );
-      invalidateHome();
-      invalidateToday();
-      removeAllTodoDetails();
-      invalidateFocus();
-      return response.data ?? null;
+      const data = response.data ?? null;
+
+      const hasAppleAuthFailure = data?.failedSources.some(
+        (source) => source.errorCode === APPLE_CALENDAR_ERROR.AUTH,
+      );
+
+      if (hasAppleAuthFailure) {
+        onAppleAuthRequired?.();
+      }
+
+      invalidateCalendarData();
+      return data;
     },
     enabled,
     staleTime: CALENDAR_SYNC_STALE_TIME,

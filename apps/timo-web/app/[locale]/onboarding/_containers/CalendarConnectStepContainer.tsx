@@ -1,11 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { overlay } from "overlay-kit";
 
 import type { OnboardingFunnelSteps } from "@/app/[locale]/onboarding/_types/onboarding-funnel";
 
 import { OnboardingButtonContainer } from "@/app/[locale]/onboarding/_containers/OnboardingButtonContainer";
 import { setOnboardingAnswers } from "@/app/[locale]/onboarding/_utils/onboarding-answers-storage";
+import { AppleCalendarConnectModal } from "@/components/calendar/AppleCalendarConnectModal";
 import { CALENDAR_CONNECT_ORIGIN } from "@/constants/calendar";
 import { AuthButtonContainer } from "@/containers/auth/AuthButtonContainer";
 import { authorize } from "@/generated/endpoints/google-calendar/google-calendar";
@@ -29,6 +31,16 @@ export const CalendarConnectStepContainer = ({
 }: CalendarConnectStepContainerProps) => {
   const t = useTranslations("Onboarding");
   const { data: profile } = useMyProfileQuery();
+
+  const handleAppleConnect = () => {
+    overlay.open(({ isOpen, close, unmount }) => (
+      <AppleCalendarConnectModal
+        isOpen={isOpen}
+        onClose={close}
+        onExited={unmount}
+      />
+    ));
+  };
 
   const handleGoogleConnect = async () => {
     if (profile.calendarConnected) return;
@@ -73,8 +85,12 @@ export const CalendarConnectStepContainer = ({
                 isSelected={profile.calendarConnected}
                 onClick={handleGoogleConnect}
               />
-              {/* TODO: Apple 캘린더 연동 API 연결 후 onClick·isSelected 추가 */}
-              <AuthButtonContainer variant="appleCalendar" />
+              <AuthButtonContainer
+                variant="appleCalendar"
+                isSelected={profile.appleCalendarConnected}
+                disabled={profile.appleCalendarConnected}
+                onClick={handleAppleConnect}
+              />
             </div>
           </div>
 

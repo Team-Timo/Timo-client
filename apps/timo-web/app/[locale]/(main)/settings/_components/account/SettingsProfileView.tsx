@@ -16,10 +16,12 @@ export interface SettingsProfileViewProps {
   googleEmail: string;
   profileImageUrl?: string;
   isCalendarConnected: boolean;
+  isAppleCalendarConnected: boolean;
   language: SettingsLanguage;
   tags: SettingsTagItem[];
   labels: SettingsProfileLabels;
   onConnectCalendar: () => void;
+  onAppleCalendarClick: () => void;
   onChangeLanguage: (language: SettingsLanguage) => void;
   onAddTag: () => void;
   onRemoveTag: (tagId: number) => void;
@@ -31,10 +33,12 @@ export const SettingsProfileView = ({
   googleEmail,
   profileImageUrl,
   isCalendarConnected,
+  isAppleCalendarConnected,
   language,
   tags,
   labels,
   onConnectCalendar,
+  onAppleCalendarClick,
   onChangeLanguage,
   onAddTag,
   onRemoveTag,
@@ -97,14 +101,13 @@ export const SettingsProfileView = ({
             disconnectLabel={labels.disconnect}
             onClick={onConnectCalendar}
           />
-          {/* TODO: Apple 캘린더 연동 API 연결 후 연결 상태·onClick 연동 */}
           <SettingsCalendar
             iconSrc="/images/apple-calendar.png"
             name="Apple Calendar"
-            isConnected={false}
+            isConnected={isAppleCalendarConnected}
             connectLabel={labels.connect}
             disconnectLabel={labels.disconnect}
-            onClick={() => {}}
+            onClick={onAppleCalendarClick}
           />
         </section>
 

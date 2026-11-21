@@ -2,7 +2,7 @@
 
 import { cn } from "@repo/timo-design-system/utils";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { HomeViewFilter } from "@/app/[locale]/(main)/(with-time-sidebar)/home/_types/home-view-type";
 
@@ -44,10 +44,17 @@ export const HomeTodoContainer = () => {
 
   const { data: homeViewData } = useHomeViewQuery({ filter, baseDate });
   const { data: profile } = useMyProfileQuery();
+  const [isAppleAuthToastOpen, setIsAppleAuthToastOpen] = useState(false);
+  const hasShownAppleAuthToast = useRef(false);
   useCalendarSync({
     filter,
     baseDate,
-    enabled: profile.calendarConnected,
+    enabled: profile.calendarConnected || profile.appleCalendarConnected,
+    onAppleAuthRequired: () => {
+      if (hasShownAppleAuthToast.current) return;
+      hasShownAppleAuthToast.current = true;
+      setIsAppleAuthToastOpen(true);
+    },
   });
 
   const days = homeViewData.days;
@@ -251,6 +258,12 @@ export const HomeTodoContainer = () => {
         isOpen={playErrorMessage !== null}
         onClose={() => setPlayErrorMessage(null)}
         message={playErrorMessage ?? ""}
+      />
+
+      <AnimatedToast
+        isOpen={isAppleAuthToastOpen}
+        onClose={() => setIsAppleAuthToastOpen(false)}
+        message={tToast("appleCalendarReconnectRequired")}
       />
     </div>
   );

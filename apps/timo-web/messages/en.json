@@ -39,8 +39,31 @@
     "authButton": {
       "googleLogin": "Continue with your Google account",
       "googleCalendar": "Connect Google Calendar",
-      "appleCalendar": "Connect Apple Calendar"
+      "appleCalendar": "Connect Apple Calendar",
+      "appleCalendarConnected": "Apple Calendar connected"
     }
+  },
+  "AppleCalendar": {
+    "connectTitle": "Connect Apple iCloud",
+    "connectGuide": "Enter your Apple Account email and the app-specific password you just generated to connect iCloud Calendar.",
+    "signInStep": "Sign in to your Apple Account.",
+    "generatePasswordStep": "Go to App-Specific Passwords and generate a new password named ‘timo’.",
+    "hasAppPassword": "I have an app-specific password",
+    "emailLabel": "Apple Account email",
+    "emailPlaceholder": "Email",
+    "passwordLabel": "App-specific password",
+    "showPassword": "Show app-specific password",
+    "hidePassword": "Hide app-specific password",
+    "invalidEmail": "Check your Apple Account email.",
+    "passwordRequired": "Enter an app-specific password.",
+    "invalidPasswordFormat": "Use this app-specific password format: xxxx-xxxx-xxxx-xxxx.",
+    "invalidCredentials": "Check your Apple Account email and app-specific password.",
+    "alreadyConnected": "Apple Calendar is already connected.",
+    "connectFailed": "Could not connect Apple Calendar. Try again in a moment.",
+    "connect": "Connect iCloud account",
+    "connecting": "Connecting…",
+    "disconnectTitle": "Disconnect Apple Calendar?",
+    "disconnectDescription": "Apple Calendar events will stop syncing. After disconnecting, revoke the app-specific password on your Apple Account page (account.apple.com)."
   },
   "Home": {
     "today": "Today",
@@ -168,6 +191,7 @@
     "languageChangeFailed": "Failed to change the language. Please try again.",
     "calendarConnectFailed": "Failed to integrate Google Calendar. Please try again.",
     "calendarDisconnectFailed": "Failed to disconnect the calendar. Please try again.",
+    "appleCalendarReconnectRequired": "Your Apple Calendar connection was lost. Please reconnect it in Settings.",
     "timerStartFailed": "This to-do has no estimated duration set."
   },
   "Login": {
