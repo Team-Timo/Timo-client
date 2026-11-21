@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { APPLE_CALENDAR_ERROR } from "@/constants/calendar";
 import { syncCalendarEvents } from "@/generated/endpoints/calendar/calendar";
-import { useTodoQueryInvalidation } from "@/hooks/todo/use-todo-query-invalidation";
+import { useCalendarQueryInvalidation } from "@/hooks/calendar/use-calendar-query-invalidation";
 
 const CALENDAR_SYNC_STALE_TIME = 60 * 1000;
 
@@ -26,12 +26,7 @@ export const useCalendarSync = ({
   enabled,
   onAppleAuthRequired,
 }: UseCalendarSyncParams) => {
-  const {
-    invalidateHome,
-    invalidateToday,
-    removeAllTodoDetails,
-    invalidateFocus,
-  } = useTodoQueryInvalidation();
+  const invalidateCalendarData = useCalendarQueryInvalidation();
 
   return useQuery({
     queryKey: ["calendar-sync", { filter, baseDate }],
@@ -51,10 +46,7 @@ export const useCalendarSync = ({
         onAppleAuthRequired?.();
       }
 
-      invalidateHome();
-      invalidateToday();
-      removeAllTodoDetails();
-      invalidateFocus();
+      invalidateCalendarData();
       return data;
     },
     enabled,
